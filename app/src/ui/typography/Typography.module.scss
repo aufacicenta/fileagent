@@ -1,0 +1,137 @@
+@import "src/theme/base";
+
+.typography {
+  position: relative;
+
+  &__inline {
+    display: inline-block;
+  }
+
+  &__flat {
+    margin-bottom: 0 !important;
+  }
+
+  &__truncate {
+    @extend .typography__inline;
+    width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__headline1 {
+    @include font-properties($typography-headline-1);
+    @include normalizeTypography;
+    margin-bottom: $space-s;
+    color: var(--color-typography-headline-1);
+  }
+
+  &__headline2 {
+    @include font-properties($typography-headline-2);
+    @include normalizeTypography;
+    color: var(--color-typography-headline-2);
+  }
+
+  &__headline3 {
+    @include font-properties($typography-headline-3);
+    @include normalizeTypography;
+    margin-bottom: $space-s;
+    color: var(--color-typography-headline-3);
+  }
+
+  &__headline4 {
+    @include font-properties($typography-headline-4);
+    @include normalizeTypography;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-headline-4);
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+      font-size: $font-size-headline-4 * 0.75;
+    }
+  }
+
+  &__headline5 {
+    @include font-properties($typography-headline-5);
+    @include normalizeTypography;
+    margin-top: $space-default;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-headline-5);
+  }
+
+  &__headline6 {
+    @include font-properties($typography-headline-6);
+    @include normalizeTypography;
+    margin-top: $space-default;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-headline-6);
+  }
+
+  &__text {
+    @include font-properties($typography-text);
+    @include normalizeTypography;
+    margin-bottom: $space-m;
+    color: var(--color-typography-text);
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+      font-size: $font-size-text * 0.75;
+    }
+  }
+
+  &__text-lead {
+    @include font-properties($typography-text-lead);
+    @include normalizeTypography;
+    margin-bottom: $space-m;
+    color: var(--color-typography-text);
+  }
+
+  &__text-bold {
+    @include font-properties($typography-text-bold);
+    @include normalizeTypography;
+    color: var(--color-typography-text-bold);
+  }
+
+  &__subtitle {
+    @include font-properties($typography-subtitle);
+    @include normalizeTypography;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-subtitle);
+  }
+
+  &__button-label {
+    @include font-properties($typography-button-label);
+    @include normalizeTypography;
+    color: var(--color-typography-button-label);
+  }
+
+  &__mini-button-label {
+    @include font-properties($typography-mini-button-label);
+    @include normalizeTypography;
+    color: var(--color-typography-mini-button-label);
+  }
+
+  &__description {
+    @include font-properties($typography-description);
+    @include normalizeTypography;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-description);
+  }
+
+  &__mini-description {
+    @include font-properties($typography-mini-description);
+    @include normalizeTypography;
+    color: var(--color-typography-mini-description);
+  }
+
+  &__link {
+    @include font-properties($typography-link);
+    @include normalizeTypography;
+    font-size: inherit;
+    color: var(--color-typography-link);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

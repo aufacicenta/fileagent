@@ -1,0 +1,22 @@
+{
+  "navbar.businessCampaigns": "Investment Opportunities",
+  "navbar.businessCampaigns.map": "Map",
+  "navbar.businessCampaigns.grid": "Grid",
+  "navbar.businessCampaigns.table": "Table",
+  "navbar.howItWorks": "How It Works",
+  "navbar.apply": "Submit an Asset",
+  "navbar.logout": "Sign Out",
+  "navbar.signIn": "Sign In",
+  "privacyNotice": "Privacy Notice",
+  "termsAndConditions": "Terms & Conditions",
+  "checkoutContextController.error.getCheckoutURL": "We can't generate the BTC checkout page right now. Please try again.",
+  "authContextController.success.signInConfirmation": "Click on the link in your inbox to sign in.",
+  "authContextController.success.signInConfirmation.title": "Check your inbox",
+  "toast.cta.dismiss": "Dismiss",
+  "authContextController.error.signIn": "Something went wrong while sending your sign-in link. Please try again.",
+  "typeformEmbedForm.buttonLabel": "Submit an Asset",
+  "poweredBy": "Powered by",
+  "intro.bottomBanner.welcome": "NEAR Holdings, Real Estate for Everyone.",
+  "intro.bottomBanner.description": "NEAR Holdings is a Fractionalized Asset Trading dApp bringing the power of group investing to the masses.<br /><br />Buy & trade ownership from 1 Ⓝ.",
+  "intro.bottomBanner.cta": "Browse Properties"
+}

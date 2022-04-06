@@ -1,0 +1,6 @@
+// Calculate PX into REM
+// Use - width: rem(600px);
+// Output - width: 37.5rem;
+@function rem($pixels) {
+  @return ($pixels / $font-size-base * 1rem);
+}

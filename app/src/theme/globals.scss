@@ -1,0 +1,311 @@
+@import "src/theme/base";
+
+html {
+  @media (max-width: $mq-medium) {
+    font-size: 14px;
+  }
+  font-size: 16px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-display;
+}
+
+body {
+  position: relative;
+}
+
+a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.dropzone {
+  .dz-preview {
+    display: none;
+  }
+
+  &.dz-started {
+    .dz-message {
+      display: flex;
+    }
+  }
+}
+
+body[data-theme="dark"] {
+  // Status colors
+  --color-status-info: #0062ff;
+  --color-status-info-light: #d6f5ff;
+  --color-status-info-lighter: #f0fbff;
+  --color-status-success: #3dd598;
+  --color-status-success-light: #d6fff5;
+  --color-status-success-lighter: #e6fff9;
+  --color-status-warning: #fad105;
+  --color-status-warning-light: #fffdb8;
+  --color-status-warning-lighter: #fffeeb;
+  --color-status-critical: #bd2d00;
+  --color-status-critical-light: #ffe2e0;
+  --color-status-critical-lighter: #fff5f5;
+  --color-status-unknown: #f4f6f8;
+
+  //Gray dark
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-dark-11: #0f0f13;
+  --color-dark-10: #1e1e24;
+  --color-dark-9: #2c2c35;
+  --color-dark-8: #40404a;
+  --color-dark-7: #5b5b65;
+  --color-dark-6: #70707c;
+  --color-dark-5: #8a8a98;
+  --color-dark-4: #a9a9b7;
+  --color-dark-3: #d0d0da;
+  --color-dark-2: #f5f5ff;
+  --color-dark-1: #ffffff;
+
+  // Brand
+  --color-primary: #4807ea;
+  --color-secondary: var(--color-dark-4);
+
+  // Background
+  --color-background: var(--color-black);
+  --color-background-contrast: var(--color-dark-11);
+
+  // Sidebar
+  --color-sidebar-item: var(--color-white);
+
+  // Navbar
+  --color-navbar-logo: var(--color-primary);
+
+  // Button
+  --color-button-primary: var(--color-primary);
+  --color-button-primary-text: var(--color-white);
+  --color-button-primary-hover: var(--color-primary);
+  --color-button-primary-hover-text: var(--color-white);
+  --color-button-secondary: var(--color-dark-8);
+  --color-button-secondary-text: var(--color-dark-4);
+  --color-button-secondary-hover: var(--color-dark-10);
+  --color-button-secondary-hover-text: var(--color-white);
+
+  // Typography
+  --color-typography-headline-1: var(--color-white);
+  --color-typography-headline-2: var(--color-white);
+  --color-typography-headline-3: var(--color-white);
+  --color-typography-headline-4: var(--color-white);
+  --color-typography-headline-5: var(--color-white);
+  --color-typography-headline-6: var(--color-white);
+  --color-typography-text: var(--color-white);
+  --color-typography-text-bold: var(--color-white);
+  --color-typography-subtitle: var(--color-dark-5);
+  --color-typography-button-label: var(--color-white);
+  --color-typography-mini-button-label: var(--color-white);
+  --color-typography-description: var(--color-dark-5);
+  --color-typography-mini-description: var(--color-dark-4);
+  --color-typography-link: var(--color-primary);
+
+  // Tab
+  --color-tab-navigation-border: var(--color-dark-7);
+  --color-tab-item-default: var(--color-dark-7);
+  --color-tab-item-active: var(--color-white);
+
+  // Data Visualization colors
+  --color-value-increase: #00d3a1;
+  --color-value-increase-bright: #00bb8e;
+  --color-value-decrease: #ff7c35;
+  --color-value-decrease-bright: #e76823;
+
+  // Forms
+  --color-input-border: var(--color-black);
+}
+
+body[data-theme="light"] {
+  // Status colors
+  --color-status-info: #5234ff;
+  --color-status-info-light: rgba(21, 63, 189, 0.6);
+  --color-status-info-lighter: rgba(21, 63, 189, 0.3);
+  --color-status-success: #aad055;
+  --color-status-success-light: #d6fff5;
+  --color-status-success-lighter: #e6fff9;
+  --color-status-warning: #ffc860;
+  --color-status-warning-light: #fffdb8;
+  --color-status-warning-lighter: #fffeeb;
+  --color-status-critical: #db5555;
+  --color-status-critical-light: #ffe2e0;
+  --color-status-critical-lighter: #fff5f5;
+  --color-status-unknown: #f4f6f8;
+
+  //Gray dark
+  --color-white: #ffffff;
+  --color-black: #13111a;
+  --color-dark-9: rgba(4, 12, 36, 0.9);
+  --color-dark-8: #40404a;
+  --color-dark-7: #5b5b65;
+  --color-dark-6: #70707c;
+  --color-dark-5: #8a8a98;
+  --color-dark-4: #a9a9b7;
+  --color-dark-3: #d0d0da;
+  --color-dark-2: #f5f5ff;
+  --color-dark-1: #ffffff;
+
+  // Brand
+  --color-primary: var(--color-status-info);
+  --color-secondary: #7fbc94;
+
+  // Background
+  --color-background: var(--color-white);
+  --color-background-contrast: var(--color-dark-2);
+
+  // Sidebar
+  --color-sidebar-item: var(--color-white);
+
+  // Navbar
+  --color-navbar-logo: var(--color-primary);
+
+  // Button
+  --color-button-primary: var(--color-primary);
+  --color-button-primary-text: var(--color-white);
+  --color-button-primary-hover: var(--color-primary);
+  --color-button-primary-hover-text: var(--color-white);
+  --color-button-primary-disabled: var(--color-dark-5);
+  --color-button-secondary: var(--color-dark-9);
+  --color-button-secondary-text: var(--color-dark-9);
+  --color-button-secondary-hover: var(--color-black);
+  --color-button-secondary-hover-text: var(--color-black);
+
+  // Typography
+  --color-typography-headline-1: var(--color-black);
+  --color-typography-headline-2: var(--color-black);
+  --color-typography-headline-3: var(--color-black);
+  --color-typography-headline-4: var(--color-black);
+  --color-typography-headline-5: var(--color-black);
+  --color-typography-headline-6: var(--color-dark-6);
+  --color-typography-text: var(--color-black);
+  --color-typography-text-bold: var(--color-black);
+  --color-typography-subtitle: var(--color-dark-7);
+  --color-typography-button-label: var(--color-black);
+  --color-typography-mini-button-label: var(--color-black);
+  --color-typography-description: var(--color-dark-6);
+  --color-typography-mini-description: var(--color-dark-5);
+  --color-typography-link: var(--color-primary);
+
+  // Tab
+  --color-tab-navigation-border: var(--color-dark-7);
+  --color-tab-item-default: var(--color-dark-7);
+  --color-tab-item-active: var(--color-black);
+
+  // Data Visualization colors
+  --color-value-increase: var(--color-status-info);
+  --color-value-increase-bright: var(--color-status-info);
+  --color-value-decrease: #e3935b;
+  --color-value-decrease-bright: #e3935b;
+
+  // Forms
+  --color-input-border: var(--color-black);
+}
+
+hr {
+  height: 1px;
+  margin-bottom: $space-default;
+  border: none;
+  background-color: var(--color-dark-2);
+}
+
+code {
+  background-color: var(--color-background-contrast);
+}
+
+// Typeform EMBED
+
+.tf-v1-sidetab-button {
+  @media (min-width: $mq-medium) {
+    width: 200px !important;
+    height: 48px !important;
+  }
+  width: 160px !important;
+  height: 38px !important;
+}
+
+.tf-v1-sidetab-button-text {
+  @media (min-width: $mq-medium) {
+    font-size: 18px !important;
+  }
+  font-size: 15px !important;
+}
+
+.tf-v1-sidetab-button-icon[data-testid="default-icon"] {
+  display: none;
+}
+
+// Wordpress Cool Blocks Timeline
+
+.story-time p,
+.story-content h3 {
+  font-family: $font-family-display;
+}
+
+.story-content p {
+  @include font-properties($typography-text);
+  @include normalizeTypography;
+  margin-bottom: $space-s;
+  color: var(--color-typography-text);
+}
+
+.story-image {
+  margin-bottom: $space-default;
+}
+
+.story-details {
+  border-color: var(--color-status-critical) !important;
+
+  &:before {
+    border-right-color: var(--color-status-critical) !important;
+  }
+}
+
+.timeline-block-icon {
+  border-color: var(--color-status-critical) !important;
+  background-color: var(--color-status-critical) !important;
+}
+
+.cool-vertical-timeline-body::before {
+  background: var(--color-status-critical);
+}
+
+#property-content {
+  // @TODO create @mixins to share with Typography.modoule.scss
+
+  h2 {
+    @include font-properties($typography-headline-2);
+    @include normalizeTypography;
+    margin-top: $space-l;
+    margin-bottom: $space-default;
+    color: var(--color-typography-headline-2);
+  }
+
+  p {
+    @include font-properties($typography-text);
+    @include normalizeTypography;
+    margin-bottom: $space-m;
+    font-size: rem(18);
+    color: var(--color-typography-text);
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+      font-size: $font-size-text * 0.75;
+    }
+  }
+}
+
+.web3modal-modal-lightbox {
+  z-index: 3;
+}
+
+@import "./forms/forms";
+@import "./icons";

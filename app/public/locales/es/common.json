@@ -1,0 +1,22 @@
+{
+  "navbar.businessCampaigns": "Sala de Inversión",
+  "navbar.businessCampaigns.map": "Mapa",
+  "navbar.businessCampaigns.grid": "Lista",
+  "navbar.businessCampaigns.table": "Tabla",
+  "navbar.howItWorks": "Cómo Funciona",
+  "navbar.apply": "Publica tus propiedades",
+  "navbar.logout": "Cerrar Sesión",
+  "navbar.signIn": "Iniciar Sesión",
+  "privacyNotice": "Aviso de Privacidad",
+  "termsAndConditions": "Términos y Condiciones",
+  "checkoutContextController.error.getCheckoutURL": "No pudimos generar un link de depósito de BTC. Intenta de nuevo.",
+  "authContextController.success.signInConfirmation": "Enviamos un link de ingreso sin contraseña a tu bandeja de entrada. Da click en él para iniciar sesión.",
+  "authContextController.success.signInConfirmation.title": "Revisa tu correo",
+  "toast.cta.dismiss": "Entendido",
+  "authContextController.error.signIn": "No pudimos enviar un correo de ingreso. Intenta de nuevo.",
+  "typeformEmbedForm.buttonLabel": "Publica tus propiedades",
+  "poweredBy": "Hecho con",
+  "intro.bottomBanner.welcome": "NEAR Holdings, Bienes Raíces para todos.",
+  "intro.bottomBanner.description": "near.holdings es una dApp de inversión en FIBRAS (Fideicomisos de Inversión en Bienes Raíces) que atrae capital de todo el mundo.<br />Invierte en Bienes Raíces desde 1 NEAR.",
+  "intro.bottomBanner.cta": "Explorar Propiedades"
+}

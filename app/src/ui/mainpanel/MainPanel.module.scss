@@ -1,0 +1,13 @@
+@import "../../theme/base";
+
+.main-panel {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: var(--color-background);
+
+  &__container {
+    padding: 0 $main-panel-container-space-x;
+  }
+}

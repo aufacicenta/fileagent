@@ -1,0 +1,10 @@
+@import "src/theme/base";
+
+.horizontal-line {
+  display: block;
+
+  &__flat {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

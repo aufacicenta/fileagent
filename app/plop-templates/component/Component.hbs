@@ -1,0 +1,11 @@
+import clsx from 'clsx';
+import { {{pascalCase name}}Props } from './{{pascalCase name}}.types';
+import styles from './{{pascalCase name}}.module.scss';
+
+export const {{pascalCase name}}: React.FC<{{pascalCase name}}Props> = ({ children, className }) => {
+  return (
+    <div className={clsx(styles['{{kebabCase name}}'], className)}>
+      {children}
+    </div>
+  );
+};

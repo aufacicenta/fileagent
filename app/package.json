@@ -1,0 +1,52 @@
+{
+  "name": "@pulsemarkets/aurora-airdrop",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aufacicenta/near.holdings-web.git"
+  },
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "dev:debug": "NODE_OPTIONS='--inspect=9300' next dev -p 3002 & npm run scss:class-types:watch",
+    "build": "next build",
+    "start": "next start",
+    "scss:class-types": "tsm 'src/**/**/*.scss' --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass src --logLevel silent",
+    "scss:class-types:watch": "npm run scss:class-types -- --watch",
+    "plop": "plop"
+  },
+  "dependencies": {
+    "@walletconnect/web3-provider": "^1.7.4",
+    "bn.js": "^5.2.0",
+    "clsx": "^1.1.1",
+    "final-form": "^4.20.4",
+    "lodash": "^4.17.21",
+    "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.29.1",
+    "near-api-js": "^0.44.2",
+    "next": "12.0.1",
+    "next-i18next": "^8.2.0",
+    "react": "^17.0.2",
+    "react-dom": "17.0.1",
+    "react-final-form": "^6.5.7",
+    "react-grid-system": "^7.1.2",
+    "react-transition-group": "^4.4.1",
+    "rxjs": "^6.6.6",
+    "web3": "^1.7.1",
+    "web3-eth-contract": "^1.7.1",
+    "web3modal": "^1.9.5"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.0",
+    "@types/lodash": "^4.14.177",
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-transition-group": "^4.4.3",
+    "inquirer-directory": "^2.2.0",
+    "node-sass": "^6.0.0",
+    "plop": "^2.7.4",
+    "sass-loader": "^12.3.0",
+    "typed-scss-modules": "^4.1.1",
+    "typescript": "^4.3.2"
+  }
+}

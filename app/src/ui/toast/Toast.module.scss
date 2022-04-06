@@ -1,0 +1,57 @@
+@import "src/theme/base";
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 512px;
+  border-radius: $border-radius;
+  padding: $space-default;
+  background-color: var(--color-background);
+  @extend .z-depth-1;
+
+  &__icon {
+    display: flex;
+    margin-right: $space-m;
+    color: var(--color-status-info);
+    font-size: $font-size-headline-3;
+  }
+
+  &__content {
+    padding: 0 $space-default;
+  }
+
+  &--error {
+    .toast__icon {
+      color: var(--color-status-critical);
+    }
+  }
+
+  &--confirmation {
+    .toast__icon {
+      margin-right: 10px;
+      color: var(--color-status-success);
+
+      svg {
+        width: $space-ml;
+        height: $space-ml;
+      }
+    }
+  }
+
+  &__title {
+    margin-right: $space-xl;
+    word-break: break-word;
+    font-weight: $font-weight-bold;
+  }
+
+  &__close-button {
+    border: 0;
+    padding: 0;
+    font-weight: $font-weight-medium;
+    color: var(--color-primary);
+    background: transparent;
+    cursor: pointer;
+  }
+}
