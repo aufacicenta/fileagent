@@ -1,5 +1,9 @@
 export type Styles = {
   "latest-trends": string;
+  "latest-trends__card--actions": string;
+  "latest-trends__filters": string;
+  "latest-trends__filters--actions": string;
+  "latest-trends__filters--desktop": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

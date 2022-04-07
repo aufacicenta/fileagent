@@ -91,24 +91,13 @@ $HALF_LOADER_SIZE: 15px;
   // "m" on desktop and "xs" on mobile
 
   &--auto-size {
-    // default values from .button size "m"
-    @include atTablet {
-      padding: 13px $space-ml;
-      font-size: $font-size-4;
-      font-weight: $font-weight-bold;
-      line-height: 1.47;
-
-      &.button--outlined {
-        padding: 11px 22px;
-      }
-    }
-    padding: $space-s 20px;
-    font-size: $font-size-3;
-    font-weight: $font-weight-medium;
-    line-height: 1.75;
+    padding: 12px 27px;
+    font-size: $font-size-4;
+    font-weight: $font-weight-bold;
+    line-height: 1.47;
 
     &.button--outlined {
-      padding: 6px 20px;
+      padding: 11px 22px;
     }
   }
 

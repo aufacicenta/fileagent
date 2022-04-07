@@ -78,7 +78,8 @@ $border-radius-medium: 5px !default;
 $border-radius-large: 8px !default;
 $border-radius-circle: 50% !default;
 $border-radius-pill: 32px !default;
-$border-radius-button: 21px !default;
+$border-radius-card: 23px !default;
+$border-radius-button: 9px !default;
 
 // Typography
 //
@@ -93,7 +94,7 @@ $font-family-base: $font-family-text !default;
 $font-size-base: 16 !default;
 $font-weight-regular: 400 !default;
 $font-weight-medium: 500 !default;
-$font-weight-bold: 600 !default;
+$font-weight-bold: 700 !default;
 
 // Eclipse font sizes
 $font-size-headline-1: rem(31);
@@ -391,10 +392,6 @@ $checkbox-size: $form-radio !default;
 // Switch
 $switch-height: 32px !default;
 $switch-min-width: 60px !default;
-
-// Main Panel
-$main-panel-container-space-x: $space-xxl;
-$main-panel-container-space-y: $space-xxl;
 
 // Opacity
 $opacity-high: 0.9;
