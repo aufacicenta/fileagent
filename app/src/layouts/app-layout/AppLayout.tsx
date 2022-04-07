@@ -1,15 +1,20 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 import { ToastContextController } from "context/toast/ToastContextController";
-import { EVMWalletSelectorContextController } from "context/evm-wallet-selector/EVMWalletContextController";
 
 import { AppLayoutProps } from "./AppLayout.types";
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { t } = useTranslation("head");
   const { locale } = useRouter();
+
+  useEffect(() => {
+    // @todo set with a toggle button from navbar or footer
+    document.body.dataset.theme = "dark";
+  }, []);
 
   return (
     <>
@@ -32,10 +37,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <link rel="preload" href="/icons/icomoon.svg" as="font" crossOrigin="" />
       </Head>
       <ToastContextController>
-        <EVMWalletSelectorContextController>
-          <div id="modal-root" />
-          <main>{children}</main>
-        </EVMWalletSelectorContextController>
+        <div id="modal-root" />
+        <main>{children}</main>
       </ToastContextController>
     </>
   );

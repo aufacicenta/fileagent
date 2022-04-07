@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aufacicenta/near.holdings-web.git"
+    "url": "https://github.com/aufacicenta/pulsemarkets-v2-web.git"
   },
   "scripts": {
     "prepare": "husky install",
@@ -15,7 +15,7 @@
     "eslint": "^7.22.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.3.2",
     "eslint-plugin-jest-dom": "^3.8.1",

@@ -1,13 +1,13 @@
 import { GetStaticPropsContext, NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { i18n } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { HomeContainer } from "app/home/home/HomeContainer";
 import { AppLayout } from "layouts/app-layout/AppLayout";
+import { LatestTrendsContainer } from "app/dashboard/latest-trends/latest-trends/LatestTrendsContainer";
 
 const Index: NextPage = () => (
   <AppLayout>
-    <HomeContainer />
+    <LatestTrendsContainer />
   </AppLayout>
 );
 
