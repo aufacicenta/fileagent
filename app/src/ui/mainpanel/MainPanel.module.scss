@@ -1,6 +1,7 @@
 @import "src/theme/base";
 
 .main-panel {
+  @include withNavbar;
   position: relative;
   width: 100%;
   height: 100vh;
