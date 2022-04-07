@@ -1,13 +1,13 @@
 {
-  "name": "@pulsemarkets/aurora-airdrop",
+  "name": "@pulsemarkets/v2",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aufacicenta/near.holdings-web.git"
+    "url": "https://github.com/aufacicenta/pulsemarkets-v2-web.git"
   },
   "scripts": {
-    "dev": "next dev -p 3002",
-    "dev:debug": "NODE_OPTIONS='--inspect=9300' next dev -p 3002 & npm run scss:class-types:watch",
+    "dev": "next dev -p 3003",
+    "dev:debug": "NODE_OPTIONS='--inspect=9300' next dev -p 3003 & npm run scss:class-types:watch",
     "build": "next build",
     "start": "next start",
     "scss:class-types": "tsm 'src/**/**/*.scss' --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass src --logLevel silent",
