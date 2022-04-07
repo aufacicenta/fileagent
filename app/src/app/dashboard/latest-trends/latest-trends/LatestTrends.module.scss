@@ -2,4 +2,32 @@
 
 .latest-trends {
   display: block;
+
+  &__filters {
+    margin-bottom: $space-ml;
+
+    &--desktop {
+      @include atLargeTablet {
+        display: none;
+      }
+    }
+
+    &--actions {
+      @include atLargeTablet {
+        display: none;
+      }
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &__card {
+    &--actions {
+      @include atLargeTablet {
+        display: flex;
+        justify-content: flex-end;
+      }
+      display: none;
+    }
+  }
 }

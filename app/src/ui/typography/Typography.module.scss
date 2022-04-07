@@ -22,7 +22,11 @@
   &__headline1 {
     @include font-properties($typography-headline-1);
     @include normalizeTypography;
+    @include atLargeTablet {
+      font-size: $font-size-headline-1;
+    }
     margin-bottom: $space-s;
+    font-size: rem(18);
     color: var(--color-typography-headline-1);
   }
 

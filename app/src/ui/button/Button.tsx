@@ -12,7 +12,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       color = "primary",
       type = "button",
       variant = "contained",
-      size = "s",
+      size = "auto",
       disabled = false,
       leftIcon,
       rightIcon,

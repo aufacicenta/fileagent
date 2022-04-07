@@ -9,6 +9,9 @@
   background-color: var(--color-background);
 
   &__container {
-    padding: 0 $main-panel-container-space-x;
+    @include atLargeTablet {
+      padding: 0 $space-xxl;
+    }
+    padding: 0 $space-default;
   }
 }
