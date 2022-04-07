@@ -59,8 +59,8 @@ body[data-theme="dark"] {
   --color-white: #ffffff;
   --color-black: #161b1c;
   --color-dark-11: #222529;
-  --color-dark-10: #283132;
-  --color-dark-9: #2c2c35;
+  --color-dark-10: #2c3035;
+  --color-dark-9: #2c3035;
   --color-dark-8: #40404a;
   --color-dark-7: #5b5b65;
   --color-dark-6: #70707c;
@@ -123,6 +123,8 @@ body[data-theme="dark"] {
 
   // Forms
   --color-input-border: var(--color-black);
+  --color-input-label: rgba(255, 255, 255, 0.7);
+  --color-input-placeholder: rgba(255, 255, 255, 0.22);
 }
 
 body[data-theme="light"] {

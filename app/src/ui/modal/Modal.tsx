@@ -5,6 +5,7 @@ import { CSSTransition } from "react-transition-group";
 
 import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
+import { Icon } from "ui/icon/Icon";
 import { IconButton } from "../iconButton/IconButton";
 import { CloseIcon } from "../icons/CloseIcon";
 
@@ -131,8 +132,14 @@ Modal.Header = ({ children, className, onClose, ...props }: ModalHeaderProps) =>
           </Grid.Col>
           <Grid.Col lg={4} xs={4}>
             <div className={styles["modal__header--on-close"]}>
-              <Button size="xs" onClick={onClose} color="secondary" variant="text">
-                Close
+              <Button
+                size="xs"
+                onClick={onClose}
+                color="secondary"
+                variant="text"
+                className={styles["modal__header--on-close-icon"]}
+              >
+                <Icon name="icon-cross" />
               </Button>
             </div>
           </Grid.Col>

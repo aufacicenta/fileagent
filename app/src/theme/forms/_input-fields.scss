@@ -4,10 +4,12 @@
 /* Style Placeholders */
 
 ::placeholder {
+  font-size: $font-size-input-text;
   color: $placeholder-text-color;
 }
 
 /* Text inputs */
+
 input:not([type]),
 input[type="text"]:not(.browser-default),
 input[type="password"]:not(.browser-default),
@@ -21,46 +23,48 @@ input[type="tel"]:not(.browser-default),
 input[type="number"]:not(.browser-default),
 input[type="search"]:not(.browser-default),
 textarea.materialize-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: $input-height;
+  margin: $input-margin;
+  border: none;
+  border-radius: $border-radius-input;
+  padding: 0px $space-default;
+  font-size: $input-font-size;
+  color: var(--color-typography-text);
   // General Styles
   background-color: var(--color-background-contrast);
-  border: none;
-  border-bottom: $input-border;
-  border-radius: $border-radius;
   outline: none;
-  height: $input-height;
-  width: 100%;
-  font-size: $input-font-size;
-  margin: $input-margin;
-  padding: 0px $space-s;
-  box-sizing: border-box;
-  transition: box-shadow 0.3s, border 0.3s;
-  color: var(--color-typography-text);
-  @include boxShadowInset;
 
   // Disabled input style
+
   &:disabled,
   &[readonly="readonly"] {
-    color: $input-disabled-color;
     border-bottom: $input-disabled-border;
+    color: $input-disabled-color;
   }
 
   // Disabled label style
+
   &:disabled + label,
   &[readonly="readonly"] + label {
     color: $input-disabled-color;
   }
 
   // Focused input style
+
   &:focus:not([readonly]) {
     border-bottom: 2px solid $input-focus-color;
   }
 
   // Focused label style
+
   &:focus:not([readonly]) + label {
     color: $input-focus-color;
   }
 
   // Hide helper text on data message
+
   &.valid ~ .helper-text[data-success],
   &:focus.valid ~ .helper-text[data-success],
   &.invalid ~ .helper-text[data-error],
@@ -69,41 +73,49 @@ textarea.materialize-textarea {
   }
 
   // Valid Input Style
+
   &.valid,
   &:focus.valid {
     @extend %valid-input-style;
   }
 
   // Custom Success Message
+
   &.valid ~ .helper-text:after,
   &:focus.valid ~ .helper-text:after {
     @extend %custom-success-message;
   }
+
   &:focus.valid ~ label {
     color: var(--color-typography-text);
   }
 
   // Invalid Input Style
+
   &.invalid,
   &:focus.invalid {
     @extend %invalid-input-style;
   }
 
   // Custom Error message
+
   &.invalid ~ .helper-text:after,
   &:focus.invalid ~ .helper-text:after {
     @extend %custom-error-message;
   }
+
   &:focus.invalid ~ label {
     color: $input-error-color;
   }
 
   // Full width label when using validate for error messages
+
   &.validate + label {
     width: 100%;
   }
 
   // Form Message Shared Styles
+
   & + label:after {
     @extend %input-after-style;
   }
@@ -124,30 +136,45 @@ textarea.materialize-textarea {
   pointer-events: none;
 }
 %custom-success-message {
-  content: attr(data-success);
   color: $input-success-color;
+  content: attr(data-success);
 }
 %custom-error-message {
-  content: attr(data-error);
   color: $input-error-color;
+  content: attr(data-error);
 }
 %input-after-style {
-  display: block;
-  content: "";
   position: absolute;
   top: 100%;
   left: 0;
+  display: block;
   opacity: 0;
   transition: 0.2s opacity ease-out, 0.2s color ease-out;
+  content: "";
 }
 
 // Styling for input field wrapper
+
 .input-field {
+  @include atLargeTablet {
+    .prefix ~ input {
+      width: 86%;
+      width: calc(100% - 3rem);
+    }
+  }
+  @include atMobile {
+    .prefix ~ input {
+      width: 80%;
+      width: calc(100% - 3rem);
+    }
+  }
+  position: relative;
   // Inline styles
+
   &.inline {
     display: inline-block;
-    vertical-align: middle;
     margin-left: 5px;
+    vertical-align: middle;
 
     input,
     .select-dropdown {
@@ -156,6 +183,7 @@ textarea.materialize-textarea {
   }
 
   // Gutter spacing
+
   &.col {
     label {
       left: $gutter-width / 2;
@@ -167,28 +195,18 @@ textarea.materialize-textarea {
     }
   }
 
-  position: relative;
-
   & > label {
     @include font-properties($typography-description);
-    color: var(--color-typography-subtitle);
-    position: absolute;
-    top: 0;
-    left: $space-s;
-    font-size: $font-size-text;
-    cursor: text;
-    transition: transform 0.2s ease-out, color 0.2s ease-out;
-    transform-origin: 0% 100%;
+    display: block;
+    margin-bottom: $space-s;
+    font-size: $font-size-input-label;
     text-align: initial;
-    transform: translateY(12px);
-
-    &:not(.label-icon).active {
-      transform: translateY(-21px) translateX(-$space-s) scale(0.8);
-      transform-origin: 0 0;
-    }
+    color: var(--color-input-label);
+    cursor: text;
   }
 
   // Autofill + date + time inputs
+
   & > input[type]:-webkit-autofill:not(.browser-default):not([type="search"]) + label,
   & > input[type="date"]:not(.browser-default) + label,
   & > input[type="time"]:not(.browser-default) + label {
@@ -197,27 +215,28 @@ textarea.materialize-textarea {
   }
 
   .helper-text {
+    position: relative;
+    display: block;
+    min-height: 18px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.54);
+
     &::after {
-      opacity: 1;
       position: absolute;
       top: 0;
       left: 0;
+      opacity: 1;
     }
-
-    position: relative;
-    min-height: 18px;
-    display: block;
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.54);
   }
 
   // Prefix Icons
+
   .prefix {
     position: absolute;
+    top: ($input-height - $input-icon-size) / 2;
     width: $input-height;
     font-size: $input-icon-size;
     transition: color 0.2s;
-    top: ($input-height - $input-icon-size) / 2;
 
     &.active {
       color: $input-focus-color;
@@ -230,27 +249,13 @@ textarea.materialize-textarea {
   .prefix ~ .validate ~ label,
   .prefix ~ .helper-text,
   .prefix ~ .autocomplete-content {
-    margin-left: 3rem;
     width: 92%;
     width: calc(100% - 3rem);
+    margin-left: 3rem;
   }
 
   .prefix ~ label {
     margin-left: 3rem;
-  }
-
-  @include atLargeTablet {
-    .prefix ~ input {
-      width: 86%;
-      width: calc(100% - 3rem);
-    }
-  }
-
-  @include atMobile {
-    .prefix ~ input {
-      width: 80%;
-      width: calc(100% - 3rem);
-    }
   }
 }
 
@@ -262,18 +267,18 @@ textarea.materialize-textarea {
   transition: 0.3s background-color;
 
   .nav-wrapper & {
-    height: inherit;
-    padding-left: 4rem;
     width: calc(100% - 4rem);
+    height: inherit;
     border: 0;
+    padding-left: 4rem;
     box-shadow: none;
   }
 
   &:focus:not(.browser-default) {
-    background-color: $input-background;
     border: 0;
-    box-shadow: none;
     color: #444;
+    background-color: $input-background;
+    box-shadow: none;
 
     & + label i,
     & ~ .mdi-navigation-close,
@@ -283,8 +288,8 @@ textarea.materialize-textarea {
   }
 
   & + .label-icon {
-    transform: none;
     left: 1rem;
+    transform: none;
   }
 
   & ~ .mdi-navigation-close,
@@ -292,9 +297,9 @@ textarea.materialize-textarea {
     position: absolute;
     top: 0;
     right: 1rem;
+    font-size: $input-icon-size;
     color: transparent;
     cursor: pointer;
-    font-size: $input-icon-size;
     transition: 0.3s color;
   }
 }
@@ -302,36 +307,38 @@ textarea.materialize-textarea {
 /* Textarea */
 
 // Default textarea
+
 textarea {
   width: 100%;
   height: $input-height;
   background-color: transparent;
 
   &.materialize-textarea {
-    line-height: normal;
-    overflow-y: hidden; /* prevents scroll bar flash */
-    padding: 0.8rem 0 0.8rem 0; /* prevents text jump on Enter keypress */
-    resize: none;
-    min-height: $input-height;
     box-sizing: border-box;
+    min-height: $input-height;
+    padding: 0.8rem 0 0.8rem 0; /* prevents text jump on Enter keypress */
+    overflow-y: hidden; /* prevents scroll bar flash */
+    line-height: normal;
+    resize: none;
   }
 }
 
 // For textarea autoresize
-.hiddendiv {
-  visibility: hidden;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word; /* future version of deprecated 'word-wrap' */
-  padding-top: 1.2rem; /* prevents text jump on Enter keypress */
 
+.hiddendiv {
   // Reduces repaints
   position: absolute;
   top: 0;
   z-index: -1;
+  padding-top: 1.2rem; /* prevents text jump on Enter keypress */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word; /* future version of deprecated 'word-wrap' */
+  visibility: hidden;
 }
 
 /* Autocomplete */
+
 .autocomplete-content {
   li {
     .highlight {
@@ -339,14 +346,15 @@ textarea {
     }
 
     img {
-      height: $dropdown-item-height - 10;
       width: $dropdown-item-height - 10;
+      height: $dropdown-item-height - 10;
       margin: 5px 15px;
     }
   }
 }
 
 /* Character Counter */
+
 .character-counter {
   min-height: 18px;
 }

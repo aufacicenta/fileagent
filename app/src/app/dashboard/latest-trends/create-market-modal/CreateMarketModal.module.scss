@@ -1,0 +1,18 @@
+@import "src/theme/base";
+
+.create-market-modal {
+  display: block;
+
+  &__modal-content {
+    padding-top: 0;
+  }
+
+  &__categories {
+    margin-bottom: $space-ml;
+  }
+
+  &__market-details-card {
+    border-radius: 14px;
+    background-color: var(--color-dark-10);
+  }
+}

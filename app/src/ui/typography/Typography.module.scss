@@ -33,13 +33,21 @@
   &__headline2 {
     @include font-properties($typography-headline-2);
     @include normalizeTypography;
+    @include atLargeTablet {
+      font-size: $font-size-headline-2;
+    }
+    font-size: rem(20);
     color: var(--color-typography-headline-2);
   }
 
   &__headline3 {
     @include font-properties($typography-headline-3);
     @include normalizeTypography;
-    margin-bottom: $space-s;
+    @include atLargeTablet {
+      font-size: $font-size-headline-3;
+    }
+    margin-bottom: $space-default;
+    font-size: rem(16);
     color: var(--color-typography-headline-3);
   }
 

@@ -80,6 +80,8 @@ $border-radius-circle: 50% !default;
 $border-radius-pill: 32px !default;
 $border-radius-card: 23px !default;
 $border-radius-button: 9px !default;
+$border-radius-input: 7px !default;
+$border-radius-modal: 23px !default;
 
 // Typography
 //
@@ -98,13 +100,15 @@ $font-weight-bold: 700 !default;
 
 // Eclipse font sizes
 $font-size-headline-1: rem(31);
-$font-size-headline-2: rem(40);
-$font-size-headline-3: rem(28);
+$font-size-headline-2: rem(20);
+$font-size-headline-3: rem(16);
 $font-size-headline-4: rem(26);
 $font-size-headline-5: rem(23);
 $font-size-headline-6: rem(20);
 $font-size-headline-7: rem(18);
 $font-size-text: rem(16);
+$font-size-input-label: rem(13);
+$font-size-input-text: rem(12);
 $font-size-text-lead: 1.25rem;
 $font-size-text-bold: $font-size-text;
 $font-size-subtitle: rem(16);

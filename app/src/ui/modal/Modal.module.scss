@@ -52,7 +52,7 @@
     max-width: 100%;
     height: auto;
     max-height: 90vh;
-    border-radius: $border-radius-medium;
+    border-radius: $border-radius-modal;
     background-color: var(--color-background);
     box-shadow: $shadow-fluffy;
 
@@ -90,20 +90,28 @@
   }
 
   &__header {
-    @include font-properties($typography-headline-1);
-    border-bottom: $border-divider;
+    @include font-properties($typography-headline-2);
+    border-top-left-radius: $border-radius-modal;
+    border-top-right-radius: $border-radius-modal;
     padding: $space-ml;
     color: var(--color-typography-text);
+    background-color: var(--color-background-contrast);
 
     &--on-close {
       display: flex;
       justify-content: flex-end;
     }
+
+    &--on-close-icon span {
+      font-size: 21px;
+    }
   }
 
   &__content {
     @include font-properties($typography-text);
-    max-height: 50vh;
+    max-height: 70vh;
+    border-bottom-right-radius: $border-radius-modal;
+    border-bottom-left-radius: $border-radius-modal;
     padding: $space-ml;
     overflow-y: auto;
     background-color: var(--color-background-contrast);
@@ -125,6 +133,8 @@
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
+    border-bottom-right-radius: $border-radius-modal;
+    border-bottom-left-radius: $border-radius-modal;
     padding: $space-ml;
 
     > *:not(:first-child) {
