@@ -9,7 +9,7 @@ module.exports = {
     },
     project: ["./tsconfig.eslint.json", "./cypress/tsconfig.eslint.json"],
   },
-  plugins: ["react", "react-hooks", "import", "@typescript-eslint", "testing-library", "jest", "jest-dom"],
+  plugins: ["react", "react-hooks", "import", "@typescript-eslint", "testing-library", "jest", "jest-dom", "prettier"],
   extends: [
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -25,6 +25,7 @@ module.exports = {
     "airbnb-typescript",
     "plugin:jest-formatting/recommended",
     "plugin:prettier/recommended",
+    "prettier",
   ],
   env: {
     browser: true,
@@ -158,6 +159,8 @@ module.exports = {
     // jest-formatting
     "jest-formatting/padding-around-describe-blocks": 2,
     "jest-formatting/padding-around-test-blocks": 2,
+
+    "prettier/prettier": "error",
   },
   overrides: [
     {
