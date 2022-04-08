@@ -29,11 +29,11 @@ textarea.materialize-textarea {
   margin: $input-margin;
   border: none;
   border-radius: $border-radius-input;
-  padding: 0px $space-default;
+  padding: $input-padding;
   font-size: $input-font-size;
-  color: var(--color-typography-text);
+  color: $input-text-color;
   // General Styles
-  background-color: var(--color-background-contrast);
+  background-color: $input-background;
   outline: none;
 
   // Disabled input style

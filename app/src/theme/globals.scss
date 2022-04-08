@@ -122,6 +122,7 @@ body[data-theme="dark"] {
   --color-value-decrease-bright: #e76823;
 
   // Forms
+  --color-input-text: var(--color-typography-text);
   --color-input-border: var(--color-black);
   --color-input-label: rgba(255, 255, 255, 0.7);
   --color-input-placeholder: rgba(255, 255, 255, 0.22);

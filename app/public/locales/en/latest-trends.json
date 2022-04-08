@@ -8,5 +8,7 @@
   "latestTrends.createMarketModal.input.resolutionInfo": "Info to resolute the market",
   "latestTrends.createMarketModal.input.resolutionInfo.placeholder": "Info",
   "latestTrends.createMarketModal.input.marketEndDatetime": "When does this market end?",
-  "latestTrends.createMarketModal.input.marketEndDatetime.placeholder": "dd.mm.year | UTC time"
+  "latestTrends.createMarketModal.input.marketEndDatetime.placeholder": "dd.mm.year | UTC time",
+  "latestTrends.createMarketModal.input.collateralToken": "Collateral token",
+  "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.year | UTC time"
 }

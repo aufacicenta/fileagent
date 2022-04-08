@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { FormProps } from "./Form.types";
 import styles from "./Form.module.scss";
 import { TextInput } from "./text-input/TextInput";
+import { Select } from "./select/Select";
 
 export const Form = ({ children, className, onSubmit, validate }: FormProps) => (
   <div className={clsx(styles.form, className, "form")}>
@@ -18,3 +19,4 @@ export const Form = ({ children, className, onSubmit, validate }: FormProps) => 
 );
 
 Form.TextInput = TextInput;
+Form.Select = Select;
