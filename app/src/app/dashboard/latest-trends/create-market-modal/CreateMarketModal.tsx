@@ -110,11 +110,11 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                 </div>
               </div>
             </Card.Content>
-            <Card.Actions>
-              <Button type="submit">Submit</Button>
-            </Card.Actions>
           </Card>
         </Modal.Content>
+        <Modal.Actions>
+          <Button type="submit">Submit</Button>
+        </Modal.Actions>
       </Form>
     </Modal>
   );

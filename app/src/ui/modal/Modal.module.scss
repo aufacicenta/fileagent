@@ -109,9 +109,7 @@
 
   &__content {
     @include font-properties($typography-text);
-    max-height: 70vh;
-    border-bottom-right-radius: $border-radius-modal;
-    border-bottom-left-radius: $border-radius-modal;
+    max-height: 50vh;
     padding: $space-ml;
     overflow-y: auto;
     background-color: var(--color-background-contrast);
@@ -136,6 +134,7 @@
     border-bottom-right-radius: $border-radius-modal;
     border-bottom-left-radius: $border-radius-modal;
     padding: $space-ml;
+    background-color: var(--color-background-contrast);
 
     > *:not(:first-child) {
       width: 100%;
