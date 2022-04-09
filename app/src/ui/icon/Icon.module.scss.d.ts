@@ -391,7 +391,6 @@ export type Styles = {
   "icon-eye-minus": string;
   "icon-eye-plus": string;
   "icon-face-detection": string;
-  "icon-facebook2": string;
   "icon-factory": string;
   "icon-factory2": string;
   "icon-fan": string;
@@ -481,7 +480,6 @@ export type Styles = {
   "icon-ghost": string;
   "icon-ghost-hipster": string;
   "icon-gift": string;
-  "icon-github": string;
   "icon-glass": string;
   "icon-glass-cocktail": string;
   "icon-glass2": string;
@@ -546,7 +544,6 @@ export type Styles = {
   "icon-inbox2": string;
   "icon-indent-decrease": string;
   "icon-indent-increase": string;
-  "icon-instagram": string;
   "icon-intersect": string;
   "icon-italic": string;
   "icon-joystick": string;
@@ -583,7 +580,6 @@ export type Styles = {
   "icon-linearicons": string;
   "icon-link": string;
   "icon-link2": string;
-  "icon-linkedin2": string;
   "icon-list": string;
   "icon-list2": string;
   "icon-list3": string;
@@ -645,6 +641,7 @@ export type Styles = {
   "icon-mustache-glasses": string;
   "icon-mustache2": string;
   "icon-mute": string;
+  "icon-near": string;
   "icon-network": string;
   "icon-network-lock": string;
   "icon-neutral": string;
@@ -857,7 +854,6 @@ export type Styles = {
   "icon-speed-medium": string;
   "icon-speed-slow": string;
   "icon-spell-check": string;
-  "icon-spotify": string;
   "icon-spotlights": string;
   "icon-spray": string;
   "icon-square": string;
@@ -897,7 +893,6 @@ export type Styles = {
   "icon-taxi": string;
   "icon-teacup": string;
   "icon-teapot": string;
-  "icon-telegram": string;
   "icon-telephone": string;
   "icon-telephone2": string;
   "icon-tennis": string;
@@ -952,7 +947,6 @@ export type Styles = {
   "icon-truck": string;
   "icon-trumpet": string;
   "icon-tv": string;
-  "icon-twitter": string;
   "icon-typewriter": string;
   "icon-umbrella": string;
   "icon-umbrella2": string;
@@ -987,7 +981,6 @@ export type Styles = {
   "icon-warning": string;
   "icon-watch": string;
   "icon-weight": string;
-  "icon-whatsapp": string;
   "icon-wheelchair": string;
   "icon-wifi": string;
   "icon-wifi-alert": string;
@@ -1007,7 +1000,6 @@ export type Styles = {
   "icon-wondering": string;
   "icon-wow": string;
   "icon-wrench": string;
-  "icon-youtube": string;
   "icon-zipped": string;
   "icon-zoom-in": string;
   "icon-zoom-out": string;

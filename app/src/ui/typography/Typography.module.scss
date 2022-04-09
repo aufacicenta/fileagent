@@ -84,11 +84,6 @@
     @include normalizeTypography;
     margin-bottom: $space-m;
     color: var(--color-typography-text);
-
-    [class^="icon-"],
-    [class*=" icon-"] {
-      font-size: $font-size-text * 0.75;
-    }
   }
 
   &__text-lead {

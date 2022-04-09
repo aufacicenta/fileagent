@@ -15,4 +15,26 @@
     border-radius: 14px;
     background-color: var(--color-dark-10);
   }
+
+  &__token {
+    display: flex;
+
+    &--icon-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      width: 18px;
+      height: 18px;
+      margin-right: $space-s;
+      border-radius: 50%;
+      background-color: var(--color-status-critical);
+    }
+
+    &--icon {
+      font-size: 9px;
+      color: var(--color-background);
+    }
+  }
 }

@@ -9,12 +9,13 @@ import { Form } from "ui/form/Form";
 import { Grid } from "ui/grid/Grid";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
+import pulse from "providers/pulse";
 
 import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
 
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
-  const [collateralToken, setCollateralToken] = useState("token1");
+  const [collateralToken, setCollateralToken] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
 
   const { t } = useTranslation(["latest-trends", "common"]);
 
@@ -70,16 +71,16 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                       value: collateralToken,
                     }}
                   >
-                    <Form.Select.Item value="token1" key="token1">
-                      <Typography.Text flat>
-                        <Icon name="icon-abacus" /> token1
-                      </Typography.Text>
-                    </Form.Select.Item>
-                    <Form.Select.Item value="token2" key="token2">
-                      <Typography.Text flat>
-                        <Icon name="icon-abacus" /> token2
-                      </Typography.Text>
-                    </Form.Select.Item>
+                    {pulse.getConfig().COLLATERAL_TOKENS.map((token) => (
+                      <Form.Select.Item value={token.symbol} key={token.symbol}>
+                        <Typography.Text flat inherit className={styles["create-market-modal__token"]}>
+                          <div className={styles["create-market-modal__token--icon-box"]}>
+                            <Icon name={token.icon} className={styles["create-market-modal__token--icon"]} />
+                          </div>{" "}
+                          {token.symbol}
+                        </Typography.Text>
+                      </Form.Select.Item>
+                    ))}
                   </Form.Select>
                 </Grid.Col>
               </Grid.Row>
