@@ -20,7 +20,6 @@ export const Select = ({
   id,
   inputProps,
   isNotOutlined,
-  label,
   listboxClassName,
   onClear,
   placeholder,
@@ -60,7 +59,6 @@ export const Select = ({
       )}
       style={style}
     >
-      {label && <label htmlFor={id}>{label}</label>}
       <SelectContext.Provider
         value={{
           value: inputProps.value,
@@ -70,7 +68,6 @@ export const Select = ({
         <Dropdown
           id={id}
           aria-describedby={`${ariaDescribedby} ${hintMessageId}`}
-          aria-label={label}
           listboxClassName={clsx(listboxClassName)}
           disabled={disabled}
           listboxStyle={{

@@ -44,27 +44,33 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
               <Typography.Headline3>{t("latestTrends.createMarketModal.marketDetails")}</Typography.Headline3>
               <Grid.Row>
                 <Grid.Col lg={6} xs={12}>
+                  <Form.Label htmlFor="marketDescription">
+                    {t("latestTrends.createMarketModal.input.descriptionOfTheMarket")}
+                  </Form.Label>
                   <Form.TextInput
                     id="marketDescription"
                     type="text"
-                    label={t("latestTrends.createMarketModal.input.descriptionOfTheMarket")}
                     placeholder={t("latestTrends.createMarketModal.input.descriptionOfTheMarket.placeholder")}
                   />
                 </Grid.Col>
                 <Grid.Col lg={6} xs={12}>
+                  <Form.Label htmlFor="marketEndtime">
+                    {t("latestTrends.createMarketModal.input.marketEndDatetime")}
+                  </Form.Label>
                   <Form.TextInput
                     id="marketEndtime"
                     type="text"
-                    label={t("latestTrends.createMarketModal.input.marketEndDatetime")}
                     placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
                   />
                 </Grid.Col>
               </Grid.Row>
               <Grid.Row>
                 <Grid.Col lg={6} xs={12}>
+                  <Form.Label htmlFor="collateralToken">
+                    {t("latestTrends.createMarketModal.input.collateralToken")}
+                  </Form.Label>
                   <Form.Select
                     id="collateralToken"
-                    label={t("latestTrends.createMarketModal.input.collateralToken")}
                     inputProps={{
                       onChange: (value) => {
                         setCollateralToken(value as string);
@@ -88,6 +94,21 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                   </Form.Select>
                 </Grid.Col>
               </Grid.Row>
+              <div className={styles["create-market-modal__market-options"]}>
+                <Form.Label id="marketOptions">{t("latestTrends.createMarketModal.input.marketOptions")}</Form.Label>
+                <div className={styles["create-market-modal__market-options--option"]}>
+                  <div className={styles["create-market-modal__market-options--option-input"]}>
+                    <Form.TextInput
+                      id="marketOption_1"
+                      type="text"
+                      placeholder={t("latestTrends.createMarketModal.input.marketOptions.placeholder")}
+                    />
+                  </div>
+                  <div className={styles["create-market-modal__market-options--option-add-remove"]}>
+                    <Icon name="icon-plus-circle" onClick={() => undefined} />
+                  </div>
+                </div>
+              </div>
             </Card.Content>
             <Card.Actions>
               <Button type="submit">Submit</Button>

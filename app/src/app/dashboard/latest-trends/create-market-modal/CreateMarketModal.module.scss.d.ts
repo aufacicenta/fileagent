@@ -2,6 +2,10 @@ export type Styles = {
   "create-market-modal": string;
   "create-market-modal__categories": string;
   "create-market-modal__market-details-card": string;
+  "create-market-modal__market-options": string;
+  "create-market-modal__market-options--option": string;
+  "create-market-modal__market-options--option-add-remove": string;
+  "create-market-modal__market-options--option-input": string;
   "create-market-modal__modal-content": string;
   "create-market-modal__token": string;
   "create-market-modal__token--icon": string;

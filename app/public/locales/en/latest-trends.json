@@ -10,5 +10,7 @@
   "latestTrends.createMarketModal.input.marketEndDatetime": "When does this market end?",
   "latestTrends.createMarketModal.input.marketEndDatetime.placeholder": "dd.mm.year | UTC time",
   "latestTrends.createMarketModal.input.collateralToken": "Collateral token",
-  "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.year | UTC time"
+  "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.year | UTC time",
+  "latestTrends.createMarketModal.input.marketOptions": "Market options",
+  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Option"
 }

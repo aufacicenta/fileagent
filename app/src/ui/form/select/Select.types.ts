@@ -12,7 +12,6 @@ export type SelectProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTML
   hintMessage?: string;
   listboxClassName?: string;
   disabled?: boolean;
-  label?: string;
   prefix?: string;
   "aria-describedby"?: string;
   size?: "s" | "m" | "l";

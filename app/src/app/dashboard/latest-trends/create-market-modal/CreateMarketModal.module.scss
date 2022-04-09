@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/theme/forms/variables";
 
 .create-market-modal {
   display: block;
@@ -35,6 +36,36 @@
     &--icon {
       font-size: 9px;
       color: var(--color-background);
+    }
+  }
+
+  &__market-options {
+    display: block;
+
+    &--option {
+      display: flex;
+      justify-content: space-between;
+
+      &-input {
+        width: 90%;
+      }
+
+      &-add-remove {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: $input-height;
+        border-radius: $border-radius-input;
+        padding: $input-padding;
+        color: var(--color-typography-text);
+        background-color: $input-background;
+
+        &:hover {
+          background-color: var(--color-background);
+          cursor: pointer;
+        }
+      }
     }
   }
 }
