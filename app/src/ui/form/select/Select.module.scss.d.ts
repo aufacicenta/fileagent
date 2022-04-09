@@ -7,7 +7,6 @@ export type Styles = {
   "select__field--error": string;
   "select__field--icon": string;
   "select__field--small": string;
-  select__listbox: string;
   select__placeholder: string;
   select__value: string;
   "select--disabled": string;

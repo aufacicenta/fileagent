@@ -10,6 +10,7 @@ import { Grid } from "ui/grid/Grid";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import pulse from "providers/pulse";
+import { Styles } from "ui/icon/Icon.module.scss";
 
 import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
@@ -73,10 +74,13 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                   >
                     {pulse.getConfig().COLLATERAL_TOKENS.map((token) => (
                       <Form.Select.Item value={token.symbol} key={token.symbol}>
-                        <Typography.Text flat inherit className={styles["create-market-modal__token"]}>
-                          <div className={styles["create-market-modal__token--icon-box"]}>
-                            <Icon name={token.icon} className={styles["create-market-modal__token--icon"]} />
-                          </div>{" "}
+                        <Typography.Text flat className={styles["create-market-modal__token"]}>
+                          <span className={styles["create-market-modal__token--icon-box"]}>
+                            <Icon
+                              name={token.icon as keyof Styles}
+                              className={styles["create-market-modal__token--icon"]}
+                            />
+                          </span>{" "}
                           {token.symbol}
                         </Typography.Text>
                       </Form.Select.Item>

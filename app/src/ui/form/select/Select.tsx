@@ -71,7 +71,7 @@ export const Select = ({
           id={id}
           aria-describedby={`${ariaDescribedby} ${hintMessageId}`}
           aria-label={label}
-          listboxClassName={clsx(styles.select__listbox, listboxClassName)}
+          listboxClassName={clsx(listboxClassName)}
           disabled={disabled}
           listboxStyle={{
             width: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().width : undefined,
