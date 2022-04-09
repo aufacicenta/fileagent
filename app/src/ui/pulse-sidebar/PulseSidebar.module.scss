@@ -1,0 +1,142 @@
+@import "src/theme/base";
+
+.pulse-sidebar {
+  @extend .z-depth-1-half;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: $z-index-navigation;
+  width: $sidebar-width;
+  height: 100vh;
+  transition: width $duration-default;
+
+  &__layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: $space-default;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--color-background);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $space-m;
+
+    div {
+      width: 12%;
+    }
+
+    svg {
+      width: 45px;
+      height: 40px;
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: $space-s;
+  }
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+
+    div {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #ff5710;
+    }
+  }
+
+  &--avatar {
+    &:hover {
+      text-decoration: none;
+      background-color: var(--color-secondary);
+      cursor: pointer;
+    }
+  }
+
+  &__item {
+    margin-bottom: $space-s;
+    border-radius: $border-radius-medium;
+    padding: $space-default;
+    text-decoration: none;
+    color: var(--color-typography-text);
+
+    &:hover {
+      text-decoration: none;
+      background-color: var(--color-secondary);
+      cursor: pointer;
+    }
+
+    &-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    &-text {
+      display: none;
+    }
+  }
+
+  &__divider {
+    width: 80%;
+    margin-bottom: $space-s;
+    background-color: var(--color-dark-7);
+  }
+
+  &__footer {
+    position: absolute;
+    right: 50%;
+    bottom: 5%;
+    display: flex;
+    justify-content: center;
+    transform: translate(50%);
+
+    > :nth-child(1) {
+      transform: rotate(90deg);
+    }
+  }
+
+  &--open {
+    width: $sidebar-width-open;
+
+    .pulse-sidebar__header {
+      justify-content: flex-start;
+
+      svg {
+        width: 120px;
+      }
+    }
+
+    .pulse-sidebar__item {
+      display: flex;
+      justify-content: left;
+
+      &-icon {
+        width: 20%;
+      }
+
+      &-text {
+        display: block;
+        width: 60%;
+        margin: 0 auto;
+        font-size: $font-size-description;
+      }
+    }
+
+    .pulse-sidebar__avatar {
+      justify-content: start;
+    }
+  }
+}

@@ -53,7 +53,7 @@
     ],
     "./app/src/**/*.module.scss": [
       "stylelint --config ./app/.stylelintrc --fix",
-      "tsm --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass --aliasPrefixes./src src",
+      "typed-scss-modules --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass --aliasPrefixes./src src",
       "prettier --list-different --write",
       "git add **/*.module.scss.d.ts"
     ]
