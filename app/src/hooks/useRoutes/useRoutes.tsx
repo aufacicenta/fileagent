@@ -13,9 +13,22 @@ type RouteMap = {
     bets: string;
     profile: string;
   };
-
   home: string;
   notFound: string;
+  invest: {
+    grid: string;
+    map: string;
+    data: string;
+  };
+  campaign: (campaignSlug: string) => string;
+  property: {
+    details: (propertySlug: string) => string;
+    preview: (responseId: string) => string;
+    index: (contractAddress: string) => string;
+  };
+  properties: {
+    explorer: () => string;
+  };
 };
 
 export const routes: RouteMap = {
@@ -27,6 +40,11 @@ export const routes: RouteMap = {
     auth: `/api/auth`,
     graphql: `/api/graphql`,
   },
+  invest: {
+    grid: "/i",
+    map: "/i/map",
+    data: "/i/data",
+  },
   app: {
     dashboard: "/app/dashboard",
     sports: "/app/sports",
@@ -35,6 +53,15 @@ export const routes: RouteMap = {
   },
   home: "/",
   notFound: "/404",
+  campaign: (campaignSlug) => `/c/${campaignSlug}`,
+  property: {
+    details: (propertySlug) => `/p/${propertySlug}`,
+    preview: (responseId) => `/p/preview?responseId=${responseId}`,
+    index: (contractAddress: string) => `/p?contractAddress=${contractAddress}`,
+  },
+  properties: {
+    explorer: () => `/p/explorer`,
+  },
 };
 
 export const useRoutes: () => RouteMap = () => routes;
