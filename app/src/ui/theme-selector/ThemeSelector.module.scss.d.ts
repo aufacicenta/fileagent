@@ -1,9 +1,9 @@
 export type Styles = {
   "theme-selector": string;
-  "theme-selector__wrapper": string;
+  "theme-selector__divider": string;
   "theme-selector__switch": string;
   "theme-selector__switch--active": string;
-  "theme-selector__divider": string;
+  "theme-selector__wrapper": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
