@@ -25,8 +25,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
     setTheme(localTheme);
   }, [localStorage, theme]);
 
-  const handleOnThemeChange = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
+  const handleOnThemeChange = (newTheme: Theme) => {
     localStorage.set("theme", newTheme);
     setTheme(newTheme);
   };
@@ -38,8 +37,8 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
           className={clsx(styles["theme-selector__switch"], {
             [styles["theme-selector__switch--active"]]: theme === "dark",
           })}
-          onClick={handleOnThemeChange}
-          onKeyDown={handleOnThemeChange}
+          onClick={() => handleOnThemeChange("dark")}
+          onKeyDown={() => handleOnThemeChange("dark")}
           role="button"
           tabIndex={0}
         >
@@ -50,8 +49,8 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
           className={clsx(styles["theme-selector__switch"], {
             [styles["theme-selector__switch--active"]]: theme === "light",
           })}
-          onClick={handleOnThemeChange}
-          onKeyDown={handleOnThemeChange}
+          onClick={() => handleOnThemeChange("light")}
+          onKeyDown={() => handleOnThemeChange("light")}
           role="button"
           tabIndex={0}
         >
