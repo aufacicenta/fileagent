@@ -7,11 +7,11 @@ type RouteMap = {
     auth: string;
     graphql: string;
   };
-  app: {
-    dashboard: string;
-    sports: string;
-    bets: string;
-    profile: string;
+  dashboard: {
+    latestTrends: (pageSlug: string) => string;
+    sports: (pageSlug: string) => string;
+    bets: (pageSlug: string) => string;
+    profile: (pageSlug: string) => string;
   };
   home: string;
   notFound: string;
@@ -45,11 +45,11 @@ export const routes: RouteMap = {
     map: "/i/map",
     data: "/i/data",
   },
-  app: {
-    dashboard: "/app/dashboard",
-    sports: "/app/sports",
-    bets: "/app/bets",
-    profile: "/app/profile",
+  dashboard: {
+    latestTrends: () => `/`,
+    sports: () => `/sports`,
+    bets: () => `/bets`,
+    profile: () => `/profile`,
   },
   home: "/",
   notFound: "/404",

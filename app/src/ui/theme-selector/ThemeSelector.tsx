@@ -1,12 +1,13 @@
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 
-import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 
+import styles from "./ThemeSelector.module.scss";
 import { ThemeSelectorProps, Theme } from "./ThemeSelector.types";
 
-export const ThemeSelector: React.FC<ThemeSelectorProps> = () => {
+export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
   const localStorage = useLocalStorage();
   const [theme, setTheme] = useState<Theme>("dark");
 
@@ -31,8 +32,32 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = () => {
   };
 
   return (
-    <Button variant="gradient" color="secondary" onClick={handleOnThemeChange}>
-      {theme === "light" ? <Icon name="icon-moon" /> : <Icon name="icon-sun" />}
-    </Button>
+    <div className={clsx(className, styles["theme-selector"])}>
+      <div className={styles["theme-selector__wrapper"]}>
+        <div
+          className={clsx(styles["theme-selector__switch"], {
+            [styles["theme-selector__switch--active"]]: theme === "dark",
+          })}
+          onClick={handleOnThemeChange}
+          onKeyDown={handleOnThemeChange}
+          role="button"
+          tabIndex={0}
+        >
+          <Icon name="icon-moon" />
+        </div>
+        <div className={styles["theme-selector__divider"]} />
+        <div
+          className={clsx(styles["theme-selector__switch"], {
+            [styles["theme-selector__switch--active"]]: theme === "light",
+          })}
+          onClick={handleOnThemeChange}
+          onKeyDown={handleOnThemeChange}
+          role="button"
+          tabIndex={0}
+        >
+          <Icon name="icon-sun" />
+        </div>
+      </div>
+    </div>
   );
 };

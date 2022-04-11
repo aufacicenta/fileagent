@@ -1,121 +1,125 @@
 @import "src/theme/base";
 
 .pulse-sidebar {
-  @extend .z-depth-1-half;
-  position: relative;
-  top: 0;
-  left: 0;
-  z-index: $z-index-navigation;
+  flex-shrink: 0;
+  align-self: auto;
   width: $sidebar-width;
   height: 100vh;
-  transition: width $duration-default;
+  background-color: var(--color-background);
+  transition: width $duration-default $ease-in-fast $duration-none;
 
   &__layout {
-    display: flex;
-    flex-direction: column;
+    @extend .z-depth-1-half;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z-index-navigation;
+    width: $sidebar-width;
+    min-width: $sidebar-width;
     height: 100%;
-    padding: $space-default;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     background-color: var(--color-background);
-  }
+    transition: all $duration-default $ease-in-fast $duration-none;
 
-  &__header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: $space-m;
-
-    div {
-      width: 12%;
-    }
-
-    svg {
-      width: 45px;
-      height: 40px;
-      color: var(--color-typography-text);
+    &--inner {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      width: $sidebar-width-open;
+      max-width: $sidebar-width-open;
     }
   }
 
   &__content {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
-    justify-content: center;
-    padding: $space-s;
+    margin-bottom: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
-  &__avatar {
-    display: flex;
-    justify-content: center;
+  &__header {
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    padding: $space-default;
 
-    div {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: #ff5710;
-    }
-  }
-
-  &--avatar {
-    &:hover {
-      text-decoration: none;
-      background-color: var(--color-secondary);
-      cursor: pointer;
+    svg {
+      height: 35px;
+      color: var(--color-typography-text);
     }
   }
 
   &__item {
-    margin-bottom: $space-s;
-    border-radius: $border-radius-medium;
-    padding: $space-default;
-    text-decoration: none;
-    color: var(--color-typography-text);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding: $space-xs $space-default;
+    cursor: pointer;
 
-    &:hover {
-      text-decoration: none;
-      background-color: var(--color-secondary);
-      cursor: pointer;
+    &--link,
+    &--icon {
+      > p,
+      span {
+        color: var(--color-typography-text);
+      }
     }
 
-    &-icon {
+    &--link {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      width: 100%;
+      border-radius: $border-radius-medium;
+      padding: $space-default;
+      text-align: left;
+      text-decoration: none;
+
+      &:active,
+      &:hover {
+        text-decoration: none;
+        background-color: var(--color-secondary);
+      }
+
+      p {
+        opacity: 0;
+      }
     }
 
-    &-text {
-      display: none;
+    &--icon {
+      margin-right: $space-m;
     }
   }
 
   &__divider {
-    width: 80%;
-    margin-bottom: $space-s;
-    background-color: var(--color-dark-7);
+    padding: $space-default ($space-xl / 2);
+
+    &--bar {
+      width: 16px;
+      height: 1px;
+      background-color: var(--color-dark-3);
+    }
   }
 
   &__footer {
     position: absolute;
     right: 50%;
     bottom: 5%;
-    display: flex;
-    justify-content: center;
     transform: translate(50%);
 
     > :nth-child(1) {
-      transform: rotate(90deg);
+      transition: transform $duration-default $ease-in-fast $duration-none;
     }
   }
 
   &--open {
-    width: $sidebar-width-open;
+    .pulse-sidebar__layout {
+      width: $sidebar-width-open;
+    }
 
     .pulse-sidebar__header {
-      justify-content: flex-start;
-
       svg {
-        width: 120px;
+        width: 100%;
       }
     }
 
@@ -123,20 +127,23 @@
       display: flex;
       justify-content: left;
 
-      &-icon {
-        width: 20%;
-      }
-
-      &-text {
-        display: block;
-        width: 60%;
-        margin: 0 auto;
-        font-size: $font-size-description;
+      &--link {
+        p {
+          opacity: 1;
+        }
       }
     }
 
-    .pulse-sidebar__avatar {
-      justify-content: start;
+    .pulse-sidebar__divider {
+      &--bar {
+        width: 100%;
+      }
+    }
+
+    .pulse-sidebar__footer {
+      > :nth-child(1) {
+        transform: rotate(90deg);
+      }
     }
   }
 }
