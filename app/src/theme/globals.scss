@@ -80,6 +80,7 @@ body[data-theme="dark"] {
 
   // Sidebar
   --color-sidebar-item: var(--color-white);
+  --color-sidebar-divider: var(--color-dark-8);
 
   // Navbar
   --color-navbar-logo: var(--color-primary);
@@ -93,6 +94,10 @@ body[data-theme="dark"] {
   --color-button-secondary-text: var(--color-dark-4);
   --color-button-secondary-hover: var(--color-dark-10);
   --color-button-secondary-hover-text: var(--color-white);
+
+  //Theme Selector
+  --color-theme-button-border: linear-gradient(#ffffff40, #ffffff00);
+  --color-theme-button-divider: var(--color-background-contrast);
 
   // Typography
   --color-typography-headline-1: var(--color-white);
@@ -147,6 +152,8 @@ body[data-theme="light"] {
   //Gray dark
   --color-white: #ffffff;
   --color-black: #13111a;
+  --color-dark-11: #e9e9f0;
+  --color-dark-10: #fffffff7;
   --color-dark-9: rgba(4, 12, 36, 0.9);
   --color-dark-8: #40404a;
   --color-dark-7: #5b5b65;
@@ -158,8 +165,8 @@ body[data-theme="light"] {
   --color-dark-1: #ffffff;
 
   // Brand
-  --color-primary: var(--color-status-info);
-  --color-secondary: #7fbc94;
+  --color-primary: #ff2fdd;
+  --color-secondary: #5356fc;
 
   // Background
   --color-background: var(--color-white);
@@ -167,6 +174,7 @@ body[data-theme="light"] {
 
   // Sidebar
   --color-sidebar-item: var(--color-white);
+  --color-sidebar-divider: var(--color-dark-3);
 
   // Navbar
   --color-navbar-logo: var(--color-primary);
@@ -181,6 +189,10 @@ body[data-theme="light"] {
   --color-button-secondary-text: var(--color-dark-9);
   --color-button-secondary-hover: var(--color-black);
   --color-button-secondary-hover-text: var(--color-black);
+
+  //Theme Selector
+  --color-theme-button-border: linear-gradient(#00000000, #00000040);
+  --color-theme-button-divider: var(--color-dark-11);
 
   // Typography
   --color-typography-headline-1: var(--color-black);

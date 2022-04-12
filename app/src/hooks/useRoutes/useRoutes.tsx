@@ -1,11 +1,4 @@
 type RouteMap = {
-  realEstate: {
-    solana: {
-      properties: string;
-      property: (tokenMetadataId: string) => string;
-      listProperty: string;
-    };
-  };
   auth: {
     signIn: string;
   };
@@ -14,6 +7,14 @@ type RouteMap = {
     auth: string;
     graphql: string;
   };
+  dashboard: {
+    latestTrends: (pageSlug: string) => string;
+    sports: (pageSlug: string) => string;
+    bets: (pageSlug: string) => string;
+    profile: (pageSlug: string) => string;
+  };
+  home: string;
+  notFound: string;
   invest: {
     grid: string;
     map: string;
@@ -28,18 +29,9 @@ type RouteMap = {
   properties: {
     explorer: () => string;
   };
-  home: string;
-  notFound: string;
 };
 
 export const routes: RouteMap = {
-  realEstate: {
-    solana: {
-      properties: "/real-estate/solana",
-      property: (tokenMetadataId: string) => `/real-estate/solana/property?tokenMetadataId=${tokenMetadataId}`,
-      listProperty: "/real-estate/solana/list-property",
-    },
-  },
   auth: {
     signIn: "/a",
   },
@@ -52,6 +44,12 @@ export const routes: RouteMap = {
     grid: "/i",
     map: "/i/map",
     data: "/i/data",
+  },
+  dashboard: {
+    latestTrends: () => `/`,
+    sports: () => `/sports`,
+    bets: () => `/bets`,
+    profile: () => `/profile`,
   },
   home: "/",
   notFound: "/404",
