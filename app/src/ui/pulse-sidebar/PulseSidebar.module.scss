@@ -53,14 +53,6 @@
     padding: $space-xs $space-default;
     cursor: pointer;
 
-    &--link,
-    &--icon {
-      > p,
-      span {
-        color: var(--color-typography-text);
-      }
-    }
-
     &--link {
       display: flex;
       align-items: center;
@@ -73,10 +65,20 @@
       &:hover {
         text-decoration: none;
         background-color: var(--color-secondary);
+
+        > p,
+        span {
+          color: var(--color-dark-1);
+        }
       }
 
       p {
+        color: var(--color-typography-text);
         opacity: 0;
+      }
+
+      span {
+        color: var(--color-dark-3);
       }
     }
 
@@ -91,7 +93,7 @@
     &--bar {
       width: 16px;
       height: 1px;
-      background-color: var(--color-dark-3);
+      background-color: var(--color-sidebar-divider);
     }
   }
 

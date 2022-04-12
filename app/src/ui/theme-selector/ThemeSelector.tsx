@@ -34,20 +34,20 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
     <div className={clsx(className, styles["theme-selector"])}>
       <div className={styles["theme-selector__wrapper"]}>
         <div
-          className={clsx(styles["theme-selector__switch"], {
-            [styles["theme-selector__switch--active"]]: theme === "dark",
+          className={clsx(styles["theme-selector__moon"], {
+            [styles["theme-selector__moon--active"]]: theme === "dark",
           })}
           onClick={() => handleOnThemeChange("dark")}
           onKeyDown={() => handleOnThemeChange("dark")}
           role="button"
           tabIndex={0}
         >
-          <Icon name="icon-moon" />
+          <Icon name="icon-moon-2" />
         </div>
         <div className={styles["theme-selector__divider"]} />
         <div
-          className={clsx(styles["theme-selector__switch"], {
-            [styles["theme-selector__switch--active"]]: theme === "light",
+          className={clsx(styles["theme-selector__sun"], {
+            [styles["theme-selector__sun--active"]]: theme === "light",
           })}
           onClick={() => handleOnThemeChange("light")}
           onKeyDown={() => handleOnThemeChange("light")}

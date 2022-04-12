@@ -3,8 +3,8 @@
 .theme-selector {
   position: relative;
   border-radius: $border-radius-pill;
-  padding: 0.5px;
-  background: linear-gradient(to top, var(--color-dark-3), var(--color-dark-8));
+  padding: 1px;
+  background: var(--color-theme-button-border);
 
   &__wrapper {
     display: flex;
@@ -15,12 +15,20 @@
     height: 100px;
     border: none;
     border-radius: inherit;
-    padding: $space-s;
-    background-color: var(--color-background);
+    padding: $space-xs;
+    background-color: var(--color-dark-10);
   }
 
-  &__switch {
-    color: var(--color-dark-5);
+  &__moon {
+    color: var(--color-dark-3);
+
+    &--active {
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__sun {
+    color: var(--color-dark-7);
 
     &--active {
       color: var(--color-typography-text);
@@ -28,8 +36,8 @@
   }
 
   &__divider {
-    width: 100%;
+    width: 80%;
     height: 1px;
-    background-color: var(--color-dark-5);
+    background-color: var(--color-theme-button-divider);
   }
 }

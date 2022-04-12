@@ -32,7 +32,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-menu-square" />
+                  <Icon name="icon-dashboard" />
                 </div>
                 <Typography.Description flat>Dashboard</Typography.Description>
               </Typography.Link>
@@ -40,7 +40,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-tv" />
+                  <Icon name="icon-sports" />
                 </div>
                 <Typography.Description flat>Sport & Betting</Typography.Description>
               </Typography.Link>
@@ -48,7 +48,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-checkmark-circle" />
+                  <Icon name="icon-bets" />
                 </div>
                 <Typography.Description flat>Bets</Typography.Description>
               </Typography.Link>
@@ -56,7 +56,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-user" />
+                  <Icon name="icon-profile" />
                 </div>
                 <Typography.Description flat>Profile</Typography.Description>
               </Typography.Link>
@@ -67,7 +67,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-exit" />
+                  <Icon name="icon-logout" />
                 </div>
                 <Typography.Description flat>Close</Typography.Description>
               </Typography.Link>
