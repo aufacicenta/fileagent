@@ -1011,6 +1011,15 @@ export type Styles = {
   "icon-zipped": string;
   "icon-zoom-in": string;
   "icon-zoom-out": string;
+  "icon-bell": string;
+  "icon-search": string;
+  "icon-near": string;
+  "icon-logout": string;
+  "icon-profile-2": string;
+  "icon-bets": string;
+  "icon-sports": string;
+  "icon-dashboard": string;
+  "icon-moon-2": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
