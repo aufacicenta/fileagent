@@ -120,9 +120,13 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                           placeholder={`${t("latestTrends.createMarketModal.input.marketOptions.placeholder")} 1`}
                         />
                       </div>
-                      <div className={styles["create-market-modal__market-options--option-add-remove"]}>
-                        <Icon name="icon-plus-square" onClick={() => push("marketOptions", undefined)} />
-                      </div>
+                      <Button
+                        color="secondary"
+                        className={styles["create-market-modal__market-options--option-add-remove"]}
+                        onClick={() => push("marketOptions", undefined)}
+                      >
+                        <Icon name="icon-plus-square" />
+                      </Button>
                     </div>
                     <FieldArray name="marketOptions">
                       {({ fields }) =>
@@ -137,9 +141,13 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                                 }`}
                               />
                             </div>
-                            <div className={styles["create-market-modal__market-options--option-add-remove"]}>
-                              <Icon name="icon-minus-square" onClick={() => remove("marketOptions", name)} />
-                            </div>
+                            <Button
+                              color="secondary"
+                              className={styles["create-market-modal__market-options--option-add-remove"]}
+                              onClick={() => remove("marketOptions", name)}
+                            >
+                              <Icon name="icon-minus-square" />
+                            </Button>
                           </div>
                         ))
                       }

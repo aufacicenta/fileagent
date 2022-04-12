@@ -60,10 +60,10 @@
         border-radius: $border-radius-input;
         padding: $input-padding;
         color: var(--color-typography-text);
-        background-color: $input-background;
+        background: $input-background;
 
         &:hover {
-          background-color: var(--color-background);
+          background: var(--color-background);
           cursor: pointer;
         }
       }
