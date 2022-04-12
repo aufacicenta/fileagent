@@ -19,14 +19,18 @@ import timezones from "providers/date/timezones.json";
 import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
 
+const generateTimezoneOffsetString = (offset: number, suffix: string) => `${offset}_${suffix}`;
+
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
   const [collateralToken, setCollateralToken] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
-  const [marketEndTimezoneOffset, setMarketEndTimezoneOffset] = useState(timezones[0].offset);
+  const [marketEndTimezoneOffset, setMarketEndTimezoneOffset] = useState(
+    generateTimezoneOffsetString(timezones[0].offset, timezones[0].value),
+  );
 
   const { t } = useTranslation(["latest-trends", "common"]);
 
   const onSubmit = (values: Record<string, unknown>) => {
-    console.log({ ...values, collateralToken });
+    console.log({ ...values, collateralToken, marketEndTimezoneOffset });
   };
 
   return (
@@ -170,13 +174,17 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                         id="marketEndTimezone"
                         inputProps={{
                           onChange: (value) => {
-                            setMarketEndTimezoneOffset(value as number);
+                            setMarketEndTimezoneOffset(value as string);
                           },
                           value: marketEndTimezoneOffset,
                         }}
                       >
-                        {timezones.map((timezone) => (
-                          <Form.Select.Item value={timezone.offset} key={timezone.abbr}>
+                        {timezones.map((timezone, index) => (
+                          <Form.Select.Item
+                            value={generateTimezoneOffsetString(timezone.offset, timezone.value)}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`${timezone.abbr}-${index}`}
+                          >
                             <Typography.Text flat className={styles["create-market-modal__token"]}>
                               {timezone.text}
                             </Typography.Text>
