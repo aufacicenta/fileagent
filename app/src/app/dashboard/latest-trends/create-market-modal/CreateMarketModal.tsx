@@ -153,23 +153,21 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                   </Typography.Headline3>
                   <Grid.Row>
                     <Grid.Col lg={4} xs={12}>
-                      <Form.Label htmlFor="marketEndDate">Date</Form.Label>
-                      <Form.TextInput
-                        id="marketEndDate"
-                        type="date"
-                        placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
-                      />
+                      <Form.Label htmlFor="marketEndDate">
+                        {t("latestTrends.createMarketModal.input.marketEndDate")}
+                      </Form.Label>
+                      <Form.TextInput id="marketEndDate" type="date" />
                     </Grid.Col>
                     <Grid.Col lg={3} xs={12}>
-                      <Form.Label htmlFor="marketEndTime">Time</Form.Label>
-                      <Form.TextInput
-                        id="marketEndTime"
-                        type="time"
-                        placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
-                      />
+                      <Form.Label htmlFor="marketEndTime">
+                        {t("latestTrends.createMarketModal.input.marketEndTime")}
+                      </Form.Label>
+                      <Form.TextInput id="marketEndTime" type="time" />
                     </Grid.Col>
                     <Grid.Col lg={5} xs={12}>
-                      <Form.Label htmlFor="marketEndTimezone">Timezone</Form.Label>
+                      <Form.Label htmlFor="marketEndTimezone">
+                        {t("latestTrends.createMarketModal.input.marketEndTimezone")}
+                      </Form.Label>
                       <Form.Select
                         id="marketEndTimezone"
                         inputProps={{
@@ -197,7 +195,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
               </Card>
             </Modal.Content>
             <Modal.Actions>
-              <Button type="submit">Submit</Button>
+              <Button type="submit">{t("latestTrends.createMarketModal.form.submit")}</Button>
             </Modal.Actions>
           </form>
         )}

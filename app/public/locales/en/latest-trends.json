@@ -12,5 +12,9 @@
   "latestTrends.createMarketModal.input.collateralToken": "Collateral token",
   "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.year | UTC time",
   "latestTrends.createMarketModal.input.marketOptions": "Market options",
-  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Option"
+  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Option",
+  "latestTrends.createMarketModal.form.submit": "Submit",
+  "latestTrends.createMarketModal.input.marketEndDate": "Date",
+  "latestTrends.createMarketModal.input.marketEndTime": "Time",
+  "latestTrends.createMarketModal.input.marketEndTimezone": "Timezone"
 }
