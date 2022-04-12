@@ -98,7 +98,9 @@ export type Styles = {
   "icon-battery-power": string;
   "icon-beaker": string;
   "icon-bed": string;
+  "icon-bell": string;
   "icon-bench-press": string;
+  "icon-bets": string;
   "icon-bicycle": string;
   "icon-bicycle2": string;
   "icon-binoculars": string;
@@ -305,6 +307,7 @@ export type Styles = {
   "icon-crown": string;
   "icon-cube": string;
   "icon-dagger": string;
+  "icon-dashboard": string;
   "icon-database": string;
   "icon-database-add": string;
   "icon-database-check": string;
@@ -593,6 +596,7 @@ export type Styles = {
   "icon-loading3": string;
   "icon-location": string;
   "icon-lock": string;
+  "icon-logout": string;
   "icon-lollipop": string;
   "icon-lotus": string;
   "icon-loudspeaker": string;
@@ -633,6 +637,7 @@ export type Styles = {
   "icon-minus": string;
   "icon-minus-square": string;
   "icon-moon": string;
+  "icon-moon-2": string;
   "icon-mouse": string;
   "icon-mouse-both": string;
   "icon-mouse-left": string;
@@ -645,6 +650,7 @@ export type Styles = {
   "icon-mustache-glasses": string;
   "icon-mustache2": string;
   "icon-mute": string;
+  "icon-near": string;
   "icon-network": string;
   "icon-network-lock": string;
   "icon-neutral": string;
@@ -740,6 +746,7 @@ export type Styles = {
   "icon-previous-circle": string;
   "icon-printer": string;
   "icon-profile": string;
+  "icon-profile-2": string;
   "icon-prohibited": string;
   "icon-pulse": string;
   "icon-pushpin": string;
@@ -796,6 +803,7 @@ export type Styles = {
   "icon-scissors": string;
   "icon-screen": string;
   "icon-screwdriver": string;
+  "icon-search": string;
   "icon-select": string;
   "icon-select2": string;
   "icon-self-timer": string;
@@ -857,6 +865,7 @@ export type Styles = {
   "icon-speed-medium": string;
   "icon-speed-slow": string;
   "icon-spell-check": string;
+  "icon-sports": string;
   "icon-spotify": string;
   "icon-spotlights": string;
   "icon-spray": string;
@@ -1011,15 +1020,6 @@ export type Styles = {
   "icon-zipped": string;
   "icon-zoom-in": string;
   "icon-zoom-out": string;
-  "icon-bell": string;
-  "icon-search": string;
-  "icon-near": string;
-  "icon-logout": string;
-  "icon-profile-2": string;
-  "icon-bets": string;
-  "icon-sports": string;
-  "icon-dashboard": string;
-  "icon-moon-2": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
