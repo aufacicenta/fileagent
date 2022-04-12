@@ -7,6 +7,7 @@ export type Styles = {
   "create-market-modal__market-options--option-add-remove": string;
   "create-market-modal__market-options--option-input": string;
   "create-market-modal__modal-content": string;
+  "create-market-modal__spacer": string;
   "create-market-modal__token": string;
   "create-market-modal__token--icon": string;
   "create-market-modal__token--icon-box": string;

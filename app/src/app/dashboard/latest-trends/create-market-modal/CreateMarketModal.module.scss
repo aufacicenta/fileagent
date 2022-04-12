@@ -17,8 +17,13 @@
     background-color: var(--color-dark-10);
   }
 
+  &__spacer {
+    margin-top: $space-m;
+  }
+
   &__token {
     display: flex;
+    font-size: $input-font-size;
 
     &--icon-box {
       display: flex;

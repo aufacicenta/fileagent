@@ -14,12 +14,14 @@ import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import pulse from "providers/pulse";
 import { Styles } from "ui/icon/Icon.module.scss";
+import timezones from "providers/date/timezones.json";
 
 import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
 
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
   const [collateralToken, setCollateralToken] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
+  const [marketEndTimezoneOffset, setMarketEndTimezoneOffset] = useState(timezones[0].offset);
 
   const { t } = useTranslation(["latest-trends", "common"]);
 
@@ -57,7 +59,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                 <Card.Content>
                   <Typography.Headline3>{t("latestTrends.createMarketModal.marketDetails")}</Typography.Headline3>
                   <Grid.Row>
-                    <Grid.Col lg={6} xs={12}>
+                    <Grid.Col lg={8} xs={12}>
                       <Form.Label htmlFor="marketDescription">
                         {t("latestTrends.createMarketModal.input.descriptionOfTheMarket")}
                       </Form.Label>
@@ -67,19 +69,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                         placeholder={t("latestTrends.createMarketModal.input.descriptionOfTheMarket.placeholder")}
                       />
                     </Grid.Col>
-                    <Grid.Col lg={6} xs={12}>
-                      <Form.Label htmlFor="marketEndtime">
-                        {t("latestTrends.createMarketModal.input.marketEndDatetime")}
-                      </Form.Label>
-                      <Form.TextInput
-                        id="marketEndtime"
-                        type="text"
-                        placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
-                      />
-                    </Grid.Col>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Grid.Col lg={6} xs={12}>
+                    <Grid.Col lg={4} xs={12}>
                       <Form.Label htmlFor="collateralToken">
                         {t("latestTrends.createMarketModal.input.collateralToken")}
                       </Form.Label>
@@ -153,6 +143,48 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                       }
                     </FieldArray>
                   </div>
+                  <div className={styles["create-market-modal__spacer"]} />
+                  <Typography.Headline3>
+                    {t("latestTrends.createMarketModal.input.marketEndDatetime")}
+                  </Typography.Headline3>
+                  <Grid.Row>
+                    <Grid.Col lg={4} xs={12}>
+                      <Form.Label htmlFor="marketEndDate">Date</Form.Label>
+                      <Form.TextInput
+                        id="marketEndDate"
+                        type="date"
+                        placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col lg={3} xs={12}>
+                      <Form.Label htmlFor="marketEndTime">Time</Form.Label>
+                      <Form.TextInput
+                        id="marketEndTime"
+                        type="time"
+                        placeholder={t("latestTrends.createMarketModal.input.marketEndDatetime.placeholder")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col lg={5} xs={12}>
+                      <Form.Label htmlFor="marketEndTimezone">Timezone</Form.Label>
+                      <Form.Select
+                        id="marketEndTimezone"
+                        inputProps={{
+                          onChange: (value) => {
+                            setMarketEndTimezoneOffset(value as number);
+                          },
+                          value: marketEndTimezoneOffset,
+                        }}
+                      >
+                        {timezones.map((timezone) => (
+                          <Form.Select.Item value={timezone.offset} key={timezone.abbr}>
+                            <Typography.Text flat className={styles["create-market-modal__token"]}>
+                              {timezone.text}
+                            </Typography.Text>
+                          </Form.Select.Item>
+                        ))}
+                      </Form.Select>
+                    </Grid.Col>
+                  </Grid.Row>
                 </Card.Content>
               </Card>
             </Modal.Content>
