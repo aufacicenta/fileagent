@@ -5,6 +5,7 @@ import { Button } from "ui/button/Button";
 import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
 import { MainPanel } from "ui/mainpanel/MainPanel";
+import { PulseSidebar } from "ui/pulse-sidebar/PulseSidebar";
 import { Typography } from "ui/typography/Typography";
 
 import styles from "./LatestTrends.module.scss";
@@ -15,6 +16,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
 
   return (
     <div className={clsx(styles["latest-trends"], className)}>
+      <PulseSidebar />
       <MainPanel>
         <MainPanel.Container>
           <div className={styles["latest-trends__filters"]}>

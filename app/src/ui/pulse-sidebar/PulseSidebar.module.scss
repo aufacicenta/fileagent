@@ -1,0 +1,143 @@
+@import "src/theme/base";
+
+.pulse-sidebar {
+  &__layout {
+    @extend .z-depth-1-half;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z-index-navigation;
+    width: $sidebar-width;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--color-background);
+    transition: all $duration-default $ease-in-fast $duration-none;
+
+    &--inner {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      width: $sidebar-width-open;
+      max-width: $sidebar-width-open;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    margin-bottom: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  &__header {
+    padding: $space-ml $space-default;
+    transition: padding $duration-default $ease-in-fast $duration-none;
+
+    > a {
+      padding-left: 8px;
+    }
+
+    svg {
+      height: 33px;
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding: $space-xs $space-default;
+    cursor: pointer;
+
+    &--link {
+      display: flex;
+      align-items: center;
+      border-radius: $border-radius-medium;
+      padding: $space-default;
+      text-align: left;
+      text-decoration: none;
+
+      &:active,
+      &:hover {
+        text-decoration: none;
+        background-color: var(--color-secondary);
+
+        > p,
+        span {
+          color: var(--color-dark-1);
+        }
+      }
+
+      p {
+        color: var(--color-typography-text);
+        opacity: 0;
+      }
+
+      span {
+        color: var(--color-dark-3);
+      }
+    }
+
+    &--icon {
+      margin-right: $space-m;
+    }
+  }
+
+  &__divider {
+    padding: $space-default ($space-xl / 2);
+
+    &--bar {
+      width: 16px;
+      height: 1px;
+      background-color: var(--color-sidebar-divider);
+    }
+  }
+
+  &__footer {
+    position: absolute;
+    right: 50%;
+    bottom: 5%;
+    transform: translate(50%);
+
+    > :nth-child(1) {
+      transition: transform $duration-default $ease-in-fast $duration-none;
+    }
+  }
+
+  &--open {
+    .pulse-sidebar__layout {
+      width: $sidebar-width-open;
+    }
+
+    .pulse-sidebar__header {
+      padding-left: 24px;
+    }
+
+    .pulse-sidebar__item {
+      display: flex;
+      justify-content: left;
+
+      &--link {
+        p {
+          opacity: 1;
+        }
+      }
+    }
+
+    .pulse-sidebar__divider {
+      &--bar {
+        width: 100%;
+      }
+    }
+
+    .pulse-sidebar__footer {
+      > :nth-child(1) {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}

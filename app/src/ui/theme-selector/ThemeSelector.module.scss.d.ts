@@ -1,5 +1,11 @@
 export type Styles = {
   "theme-selector": string;
+  "theme-selector__divider": string;
+  "theme-selector__moon": string;
+  "theme-selector__moon--active": string;
+  "theme-selector__sun": string;
+  "theme-selector__sun--active": string;
+  "theme-selector__wrapper": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
