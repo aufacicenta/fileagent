@@ -1,20 +1,22 @@
 /* Select Field
    ========================================================================== */
+
 .form {
   select {
     display: none;
   }
+
   select.browser-default {
     display: block;
   }
 
   select {
-    background-color: $select-background;
     width: 100%;
-    padding: $select-padding;
+    height: $input-height;
     border: $select-border;
     border-radius: $select-radius;
-    height: $input-height;
+    padding: $select-padding;
+    background-color: $select-background;
   }
 
   .select-label {
@@ -22,6 +24,8 @@
   }
 
   .select-wrapper {
+    position: relative;
+
     &.valid .helper-text[data-success],
     &.invalid ~ .helper-text[data-error] {
       @extend %hidden-text;
@@ -58,36 +62,35 @@
       @extend %input-after-style;
     }
 
-    position: relative;
-
     input.select-dropdown {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: $input-height;
+      margin: $input-margin;
+      border: none;
+      border-bottom: $input-border;
+      padding: 0;
+      font-size: $input-font-size;
+      line-height: $input-height;
+      background-color: transparent;
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+
       &:focus {
         border-bottom: 1px solid $input-focus-color;
       }
-      position: relative;
-      cursor: pointer;
-      background-color: transparent;
-      border: none;
-      border-bottom: $input-border;
-      outline: none;
-      height: $input-height;
-      line-height: $input-height;
-      width: 100%;
-      font-size: $input-font-size;
-      margin: $input-margin;
-      padding: 0;
-      display: block;
-      user-select: none;
-      z-index: 1;
     }
 
     .caret {
       position: absolute;
-      right: 0;
       top: 0;
+      right: 0;
       bottom: 0;
-      margin: auto 0;
       z-index: 0;
+      margin: auto 0;
       fill: rgba(0, 0, 0, 0.87);
     }
 
@@ -99,6 +102,7 @@
   }
 
   // Disabled styles
+
   select:disabled {
     color: $input-disabled-color;
   }
@@ -107,6 +111,7 @@
     + label {
       color: $input-disabled-color;
     }
+
     .caret {
       fill: $input-disabled-color;
     }
@@ -148,10 +153,11 @@
   }
 
   // Prefix Icons
+
   .prefix ~ .select-wrapper {
-    margin-left: 3rem;
     width: 92%;
     width: calc(100% - 3rem);
+    margin-left: 3rem;
   }
 
   .prefix ~ label {
@@ -159,16 +165,18 @@
   }
 
   // Icons
+
   .select-dropdown li {
     img {
-      height: $dropdown-item-height - 10;
-      width: $dropdown-item-height - 10;
-      margin: 5px 15px;
       float: right;
+      width: $dropdown-item-height - 10;
+      height: $dropdown-item-height - 10;
+      margin: 5px 15px;
     }
   }
 
   // Optgroup styles
+
   .select-dropdown li.optgroup {
     border-top: 1px solid var(--color-background-contrast);
 

@@ -81,5 +81,3 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
     </div>
   );
 };
-
-export default PulseSidebar;

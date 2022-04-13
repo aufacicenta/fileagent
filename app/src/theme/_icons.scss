@@ -1,24 +1,24 @@
 @font-face {
-  font-family: "icomoon";
-  src: url("/icons/icomoon.eot?yz01lr");
-  src: url("/icons/icomoon.eot?yz01lr#iefix") format("embedded-opentype"),
-    url("/icons/icomoon.ttf?yz01lr") format("truetype"), url("/icons/icomoon.woff?yz01lr") format("woff"),
-    url("/icons/icomoon.svg?yz01lr#icomoon") format("svg");
   font-weight: normal;
+  font-family: "icomoon";
   font-style: normal;
+  src: url("/icons/icomoon.eot?keanfb");
+  src: url("/icons/icomoon.eot?keanfb#iefix") format("embedded-opentype"),
+    url("/icons/icomoon.ttf?keanfb") format("truetype"), url("/icons/icomoon.woff?keanfb") format("woff"),
+    url("/icons/icomoon.svg?keanfb#icomoon") format("svg");
   font-display: block;
 }
 
 [class^="icon-"],
 [class*=" icon-"] {
+  font-weight: normal;
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "icomoon" !important;
-  speak: never;
   font-style: normal;
-  font-weight: normal;
   font-variant: normal;
-  text-transform: none;
   line-height: 1;
+  text-transform: none;
+  speak: never;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;

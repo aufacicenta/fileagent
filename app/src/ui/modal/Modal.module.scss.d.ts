@@ -6,6 +6,7 @@ export type Styles = {
   modal__content: string;
   modal__header: string;
   "modal__header--on-close": string;
+  "modal__header--on-close-icon": string;
   modal__overlay: string;
   modal__wrapper: string;
   "modal__wrapper--fullscreen": string;

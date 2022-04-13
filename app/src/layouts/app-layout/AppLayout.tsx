@@ -38,6 +38,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       </Head>
       <ToastContextController>
         <div id="modal-root" />
+        <div id="dropdown-portal" />
         <main>{children}</main>
       </ToastContextController>
     </>
