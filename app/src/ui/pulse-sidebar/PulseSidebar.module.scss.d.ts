@@ -4,6 +4,7 @@ export type Styles = {
   "pulse-sidebar__divider--bar": string;
   "pulse-sidebar__footer": string;
   "pulse-sidebar__header": string;
+  "pulse-sidebar__header--exit": string;
   "pulse-sidebar__item": string;
   "pulse-sidebar__item--icon": string;
   "pulse-sidebar__item--link": string;
