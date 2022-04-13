@@ -3,11 +3,16 @@
 .pulse-sidebar {
   &__layout {
     @extend .z-depth-1-half;
+
+    @include atLargeTablet {
+      display: block;
+    }
     position: relative;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: $z-index-navigation;
+    display: none;
     width: $sidebar-width;
     height: 100%;
     overflow: hidden;
@@ -21,6 +26,19 @@
       width: $sidebar-width-open;
       max-width: $sidebar-width-open;
     }
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z-index-modal;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   &__content {
@@ -110,7 +128,21 @@
 
   &--open {
     .pulse-sidebar__layout {
+      @include atLargeTablet {
+        position: relative;
+        width: $sidebar-width-open;
+      }
+      position: absolute;
+      z-index: $z-index-modal;
+      display: block;
       width: $sidebar-width-open;
+    }
+
+    .pulse-sidebar__overlay {
+      @include atLargeTablet {
+        display: none;
+      }
+      display: block;
     }
 
     .pulse-sidebar__header {

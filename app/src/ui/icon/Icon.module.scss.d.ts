@@ -745,6 +745,7 @@ export type Styles = {
   "icon-profile-2": string;
   "icon-prohibited": string;
   "icon-pulse": string;
+  "icon-pulse-menu": string;
   "icon-pushpin": string;
   "icon-pushpin2": string;
   "icon-puzzle": string;

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useState } from "react";
 
 import { PulseSymbolIcon } from "ui/icons/PulseSymbolIcon";
 import { PulseIcon } from "ui/icons/PulseIcon";
@@ -11,21 +10,21 @@ import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import styles from "./PulseSidebar.module.scss";
 import { PulseSidebarProps } from "./PulseSidebar.types";
 
-export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
+export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, handleOpen, handleClose }) => {
   const routes = useRoutes();
-  const [open, setIsOpen] = useState(false);
 
   return (
     <div
-      className={clsx({ [styles["pulse-sidebar--open"]]: open }, className)}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      className={clsx({ [styles["pulse-sidebar--open"]]: isOpen }, className)}
+      onMouseEnter={handleOpen}
+      onMouseLeave={handleClose}
     >
+      <div className={styles["pulse-sidebar__overlay"]} aria-hidden onClick={handleClose} />
       <div className={styles["pulse-sidebar__layout"]}>
         <div className={styles["pulse-sidebar__layout--inner"]}>
           <div className={styles["pulse-sidebar__header"]}>
             <Typography.Link href={routes.home}>
-              {open ? <PulseIcon variant="desktop" /> : <PulseSymbolIcon />}
+              {isOpen ? <PulseIcon variant="desktop" /> : <PulseSymbolIcon />}
             </Typography.Link>
           </div>
           <div className={styles["pulse-sidebar__content"]}>
@@ -56,7 +55,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className }) => {
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-profile" />
+                  <Icon name="icon-profile-2" />
                 </div>
                 <Typography.Description flat>Profile</Typography.Description>
               </Typography.Link>
