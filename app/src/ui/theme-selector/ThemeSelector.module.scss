@@ -4,7 +4,7 @@
   position: relative;
   border-radius: $border-radius-pill;
   padding: 1px;
-  background: var(--color-theme-button-border);
+  background: linear-gradient(var(--color-theme-button-dark), var(--color-theme-button-light));
 
   &__wrapper {
     display: flex;
