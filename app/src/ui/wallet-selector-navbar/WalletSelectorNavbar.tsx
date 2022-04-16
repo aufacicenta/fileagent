@@ -1,9 +1,6 @@
 import { Hidden } from "react-grid-system";
 
 import { Grid } from "ui/grid/Grid";
-import { WalletSelector } from "ui/wallet-selector/WalletSelector";
-import { Icon } from "ui/icon/Icon";
-import { Notifications } from "ui/notifications/Notifications";
 
 import { WalletSelectorNavbarProps } from "./WalletSelectorNavbar.types";
 import styles from "./WalletSelectorNavbar.module.scss";
@@ -20,19 +17,6 @@ export const WalletSelectorNavbar: React.FC<WalletSelectorNavbarProps> = ({ chil
             <div className={styles["wallet-selector-navbar__center"]} />
           </Grid.Col>
         </Hidden>
-        <Grid.Col lg={5} sm={5} xs={6}>
-          <div className={styles["wallet-selector-navbar__right"]}>
-            <div className={styles["wallet-selector-navbar__right--item"]}>
-              <Icon name="icon-search" />
-            </div>
-            <div className={styles["wallet-selector-navbar__right--item"]}>
-              <Notifications />
-            </div>
-            <div className={styles["wallet-selector-navbar__right--item"]}>
-              <WalletSelector />
-            </div>
-          </div>
-        </Grid.Col>
       </Grid.Row>
     </Grid.Container>
   </div>
