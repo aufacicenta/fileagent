@@ -1,6 +1,8 @@
 @import "src/theme/base";
 
 .latest-trends {
+  display: block;
+
   &__filters {
     margin-bottom: $space-ml;
 

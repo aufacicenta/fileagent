@@ -10,8 +10,8 @@ export type Styles = {
   "pulse-sidebar__item--link": string;
   "pulse-sidebar__layout": string;
   "pulse-sidebar__layout--inner": string;
-  "pulse-sidebar--open": string;
   "pulse-sidebar__overlay": string;
+  "pulse-sidebar--open": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
