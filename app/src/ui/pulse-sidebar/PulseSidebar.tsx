@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 
 import { PulseSymbolIcon } from "ui/icons/PulseSymbolIcon";
 import { PulseIcon } from "ui/icons/PulseIcon";
@@ -12,6 +13,7 @@ import { PulseSidebarProps } from "./PulseSidebar.types";
 
 export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, handleOpen, handleClose }) => {
   const routes = useRoutes();
+  const { t } = useTranslation(["common"]);
 
   return (
     <div
@@ -34,7 +36,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-dashboard" />
                 </div>
-                <Typography.Description flat>Dashboard</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.dashboard")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
@@ -42,7 +44,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-sports" />
                 </div>
-                <Typography.Description flat>Sport & Betting</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.sportAndBetting")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
@@ -50,7 +52,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-bets" />
                 </div>
-                <Typography.Description flat>Bets</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.bets")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
@@ -58,7 +60,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-profile-2" />
                 </div>
-                <Typography.Description flat>Profile</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.profile")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__divider"]}>
@@ -69,7 +71,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-logout" />
                 </div>
-                <Typography.Description flat>Close</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.close")}</Typography.Description>
               </Typography.Link>
             </div>
           </div>

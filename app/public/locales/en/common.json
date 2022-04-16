@@ -1,11 +1,7 @@
 {
-  "navbar.businessCampaigns": "Investment Opportunities",
-  "navbar.businessCampaigns.map": "Map",
-  "navbar.businessCampaigns.grid": "Grid",
-  "navbar.businessCampaigns.table": "Table",
-  "navbar.howItWorks": "How It Works",
-  "navbar.apply": "Submit an Asset",
-  "navbar.logout": "Sign Out",
-  "navbar.signIn": "Sign In",
-  "button.createMarket": "Create Market"
+  "pulseSidebar.item.dashboard": "Dashboard",
+  "pulseSidebar.item.sportAndBetting": "Sport & Betting",
+  "pulseSidebar.item.bets": "Bets",
+  "pulseSidebar.item.profile": "Profile",
+  "pulseSidebar.item.close": "Close"
 }
