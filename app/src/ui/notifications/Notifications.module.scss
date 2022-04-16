@@ -7,6 +7,10 @@
   padding: 1px;
   background: linear-gradient(to left, var(--color-theme-button-dark), var(--color-theme-button-light));
 
+  &__list {
+    display: block;
+  }
+
   &__badge {
     position: absolute;
     top: 10%;
@@ -47,6 +51,10 @@
       p {
         padding: $space-s;
       }
+    }
+
+    &--actions {
+      display: block;
     }
   }
 

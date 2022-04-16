@@ -4,7 +4,9 @@ export type Styles = {
   notifications__content: string;
   "notifications__content--empty": string;
   notifications__header: string;
+  "notifications__header--actions": string;
   "notifications__header--title": string;
+  notifications__list: string;
   notifications__trigger: string;
   "z-depth-0": string;
   "z-depth-1": string;
