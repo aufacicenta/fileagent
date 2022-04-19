@@ -6,6 +6,9 @@
   overflow-x: scroll;
 
   &__scroll-icon {
+    @include atLargeTablet {
+      display: none;
+    }
     position: sticky;
     top: 0;
     right: 0;
