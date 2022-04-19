@@ -1,7 +1,7 @@
 {
   "latestTrends.title": "Latest Trends",
   "latestTrends.createMarketModal.title": "Create Market",
-  "latestTrends.createMarketModal.selectCategories": "Select one or more categories",
+  "latestTrends.createMarketModal.selectCategories": "Select a market category",
   "latestTrends.createMarketModal.marketDetails": "Market details",
   "latestTrends.createMarketModal.input.descriptionOfTheMarket": "Description of the market",
   "latestTrends.createMarketModal.input.descriptionOfTheMarket.placeholder": "Description",
