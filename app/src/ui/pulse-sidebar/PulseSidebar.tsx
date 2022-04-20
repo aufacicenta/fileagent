@@ -28,7 +28,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <Typography.Link href={routes.home}>
               {isOpen ? <PulseIcon variant="desktop" /> : <PulseSymbolIcon />}
             </Typography.Link>
-            <Icon name="icon-cross" onClick={handleClose} className={styles["pulse-sidebar__header--exit"]} />
+            <Icon name="icon-cross2" onClick={handleClose} className={styles["pulse-sidebar__header--exit"]} />
           </div>
           <div className={styles["pulse-sidebar__content"]}>
             <div className={styles["pulse-sidebar__item"]}>

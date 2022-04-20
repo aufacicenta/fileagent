@@ -78,7 +78,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               handleClose={() => setSidebarVisibility(false)}
             />
             <WalletSelectorNavbar>
-              <Icon name="icon-pulse-menu" onClick={() => setSidebarVisibility(true)} />
+              <Icon
+                name="icon-pulse-menu-2"
+                onClick={() => setSidebarVisibility(true)}
+                className={styles["dashboard-layout__sidebar--trigger"]}
+              />
             </WalletSelectorNavbar>
             <MainPanel>{children}</MainPanel>
           </div>

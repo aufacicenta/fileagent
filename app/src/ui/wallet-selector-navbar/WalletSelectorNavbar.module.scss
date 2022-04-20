@@ -198,6 +198,12 @@
         margin-left: $space-l;
         color: var(--color-typography-text);
       }
+
+      &:last-child {
+        @include atLargeTablet {
+          display: none;
+        }
+      }
     }
 
     &--cta {

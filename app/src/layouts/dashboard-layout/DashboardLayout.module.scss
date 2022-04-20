@@ -1,3 +1,13 @@
+@import "src/theme/base";
+
 .dashboard-layout {
   display: flex;
+
+  &__sidebar {
+    &--trigger {
+      padding-top: $space-default;
+      font-size: $font-size-headline-2;
+      color: var(--color-typography-text);
+    }
+  }
 }
