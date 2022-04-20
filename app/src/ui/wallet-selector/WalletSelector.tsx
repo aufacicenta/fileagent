@@ -19,7 +19,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
 
   return (
     <div className={clsx(styles["wallet-selector"], className)}>
-      <Button size="xs" variant="gradient" color="secondary" onClick={handleOnConnectWalletClick}>
+      <Button color="primary" onClick={handleOnConnectWalletClick}>
         {wallet.isConnected ? (
           <Typography.Text inline truncate>
             {wallet.address}

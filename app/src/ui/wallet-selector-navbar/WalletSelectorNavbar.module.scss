@@ -6,7 +6,7 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: $z-index-navigation;
+  z-index: $z-index-content;
   width: 100%;
   background-color: var(--color-background);
 
@@ -72,6 +72,8 @@
 
   &__logo-mobile,
   &__logo-desktop {
+    padding-top: $space-m;
+
     a {
       @include atLargeTablet {
         height: $navbar-height;
@@ -82,8 +84,13 @@
       height: $navbar-height-mobile;
     }
 
-    svg {
+    svg,
+    span {
       color: var(--color-typography-text);
+    }
+
+    span {
+      padding-top: $space-s;
     }
   }
 
@@ -187,8 +194,15 @@
         font-weight: $font-weight-bold;
       }
 
-      &:nth-child(n + 2) {
-        margin-left: $space-default;
+      &:nth-child(n) {
+        margin-left: $space-l;
+        color: var(--color-typography-text);
+      }
+
+      &:last-child {
+        @include atLargeTablet {
+          display: none;
+        }
       }
     }
 

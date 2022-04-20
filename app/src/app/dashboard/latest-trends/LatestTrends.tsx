@@ -9,7 +9,6 @@ import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
-import { PulseSidebar } from "ui/pulse-sidebar/PulseSidebar";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import pulse from "providers/pulse";
 
@@ -40,7 +39,6 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   return (
     <>
       <div className={clsx(styles["latest-trends"], className)}>
-        <PulseSidebar />
         <MainPanel>
           <MainPanel.Container>
             <RFForm

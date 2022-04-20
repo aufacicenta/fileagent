@@ -626,6 +626,7 @@ export type Styles = {
   "icon-menu-square": string;
   "icon-menu2": string;
   "icon-menu3": string;
+  "icon-menu4": string;
   "icon-mic": string;
   "icon-mic-mute": string;
   "icon-mic2": string;
@@ -745,6 +746,8 @@ export type Styles = {
   "icon-profile-2": string;
   "icon-prohibited": string;
   "icon-pulse": string;
+  "icon-pulse-menu": string;
+  "icon-pulse-menu-2": string;
   "icon-pushpin": string;
   "icon-pushpin2": string;
   "icon-puzzle": string;
