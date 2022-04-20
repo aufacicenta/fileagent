@@ -1,7 +1,7 @@
 @import "src/theme/base";
 
 .latest-trends {
-  display: flex;
+  display: block;
 
   &__filters {
     margin-bottom: $space-ml;
