@@ -3,5 +3,6 @@
   "pulseSidebar.item.sportAndBetting": "Sport & Betting",
   "pulseSidebar.item.bets": "Bets",
   "pulseSidebar.item.profile": "Profile",
-  "pulseSidebar.item.close": "Close"
+  "pulseSidebar.item.close": "Close",
+  "button.createMarket": "Create Market"
 }

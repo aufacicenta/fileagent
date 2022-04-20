@@ -626,7 +626,6 @@ export type Styles = {
   "icon-menu-square": string;
   "icon-menu2": string;
   "icon-menu3": string;
-  "icon-menu4": string;
   "icon-mic": string;
   "icon-mic-mute": string;
   "icon-mic2": string;
