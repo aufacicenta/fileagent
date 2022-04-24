@@ -29,11 +29,13 @@
     transition: all $duration-default $ease-in-fast $duration-none;
 
     &--inner {
+      @include atLargeTablet {
+        width: $sidebar-width-open;
+      }
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
-      width: $sidebar-width-open;
-      max-width: $sidebar-width-open;
+      max-width: $sidebar-width-mobile-open;
     }
   }
 
@@ -86,9 +88,13 @@
   }
 
   &__item {
+    @include atLargeTablet {
+      max-width: 100%;
+    }
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    max-width: 90%;
     padding: $space-xs $space-default;
     cursor: pointer;
 
@@ -121,6 +127,14 @@
       }
     }
 
+    &--pill {
+      @include atLargeTablet {
+        display: none;
+      }
+      display: block;
+      padding: 0 $space-default $space-default;
+    }
+
     &--icon {
       margin-right: $space-m;
     }
@@ -137,8 +151,11 @@
   }
 
   &__footer {
+    @include atLargeTablet {
+      right: 50%;
+    }
     position: absolute;
-    right: 50%;
+    right: 70%;
     bottom: 5%;
     transform: translate(50%);
 
@@ -152,7 +169,7 @@
       @include atLargeTablet {
         width: $sidebar-width-open;
       }
-      @include visible($sidebar-width-open);
+      @include visible($sidebar-width-mobile-open);
       z-index: $z-index-modal;
     }
 

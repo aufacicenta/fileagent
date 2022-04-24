@@ -10,6 +10,7 @@ import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 
 import styles from "./PulseSidebar.module.scss";
 import { PulseSidebarProps } from "./PulseSidebar.types";
+import { BalancePill } from "./balance-pill/BalancePill";
 
 export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, handleOpen, handleClose }) => {
   const routes = useRoutes();
@@ -31,6 +32,9 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <Icon name="icon-cross2" onClick={handleClose} className={styles["pulse-sidebar__header--exit"]} />
           </div>
           <div className={styles["pulse-sidebar__content"]}>
+            <div className={styles["pulse-sidebar__item--pill"]}>
+              <BalancePill />
+            </div>
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
                 <div className={styles["pulse-sidebar__item--icon"]}>

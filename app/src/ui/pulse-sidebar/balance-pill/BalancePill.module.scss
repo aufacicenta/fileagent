@@ -1,0 +1,34 @@
+@import "src/theme/base";
+
+.balance-pill {
+  position: relative;
+  max-width: 90%;
+  border-radius: $border-radius-pill;
+  padding: 1px;
+  background: linear-gradient(to left, var(--color-theme-button-dark), var(--color-theme-button-light));
+
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: $border-radius-pill;
+    padding: $space-s $space-default;
+    background-color: var(--color-dark-10);
+
+    div {
+      padding: $space-xs;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    &--amount {
+      p {
+        padding-left: $space-xs;
+        font-weight: bold;
+        color: var(--color-typography-text);
+      }
+    }
+  }
+}
