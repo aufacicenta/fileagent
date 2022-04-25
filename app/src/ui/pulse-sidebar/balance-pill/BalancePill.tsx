@@ -6,7 +6,7 @@ import { BalancePillProps } from "./BalancePill.types";
 import styles from "./BalancePill.module.scss";
 
 export const BalancePill: React.FC<BalancePillProps> = ({ className }) => {
-  // Will be replaced by balance coming from wallet context
+  // @TODO Will be replaced by balance coming from wallet context
   const balance = 25.99;
 
   return (

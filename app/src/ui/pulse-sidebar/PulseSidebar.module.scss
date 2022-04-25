@@ -62,15 +62,16 @@
   }
 
   &__header {
+    @include atLargeTablet {
+      > a {
+        padding-left: 8px;
+      }
+    }
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: $space-ml $space-default;
     transition: padding $duration-default $ease-in-fast $duration-none;
-
-    > a {
-      padding-left: 8px;
-    }
 
     svg {
       height: 33px;
