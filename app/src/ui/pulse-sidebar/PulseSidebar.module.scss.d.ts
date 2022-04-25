@@ -8,6 +8,7 @@ export type Styles = {
   "pulse-sidebar__item": string;
   "pulse-sidebar__item--icon": string;
   "pulse-sidebar__item--link": string;
+  "pulse-sidebar__item--pill": string;
   "pulse-sidebar__layout": string;
   "pulse-sidebar__layout--inner": string;
   "pulse-sidebar__overlay": string;
