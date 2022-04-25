@@ -15,6 +15,7 @@ import { Icon } from "ui/icon/Icon";
 import pulse from "providers/pulse";
 import { Styles } from "ui/icon/Icon.module.scss";
 import timezones from "providers/date/timezones.json";
+import { CategoryPills } from "ui/category-pills/CategoryPills";
 
 import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
@@ -58,6 +59,22 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
             <Modal.Content className={styles["create-market-modal__modal-content"]}>
               <div className={styles["create-market-modal__categories"]}>
                 <Typography.Headline3>{t("latestTrends.createMarketModal.selectCategories")}</Typography.Headline3>
+                <CategoryPills>
+                  {pulse.getConfig().MARKET_CATEGORIES.map((category) => (
+                    <CategoryPills.Pill
+                      name="marketCategory"
+                      type="radio"
+                      id={category.value}
+                      label={category.label}
+                      key={category.value}
+                      icon={
+                        <Typography.Text inline flat>
+                          {category.icon}
+                        </Typography.Text>
+                      }
+                    />
+                  ))}
+                </CategoryPills>
               </div>
               <Card className={styles["create-market-modal__market-details-card"]}>
                 <Card.Content>

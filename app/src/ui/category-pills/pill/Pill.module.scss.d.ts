@@ -1,6 +1,8 @@
 export type Styles = {
-  "dashboard-layout": string;
-  "dashboard-layout__sidebar--trigger": string;
+  pill: string;
+  pill__checkbox: string;
+  pill__label: string;
+  "pill__label--icon": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
