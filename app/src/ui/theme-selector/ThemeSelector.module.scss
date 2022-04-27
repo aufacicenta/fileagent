@@ -22,6 +22,10 @@
   &__moon {
     color: var(--color-dark-3);
 
+    &:hover {
+      cursor: pointer;
+    }
+
     &--active {
       color: var(--color-typography-text);
     }
@@ -29,6 +33,10 @@
 
   &__sun {
     color: var(--color-dark-7);
+
+    &:hover {
+      cursor: pointer;
+    }
 
     &--active {
       color: var(--color-typography-text);

@@ -11,6 +11,7 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import pulse from "providers/pulse";
+import { MarketCard } from "ui/pulse/market-card/MarketCard";
 
 import styles from "./LatestTrends.module.scss";
 import { LatestTrendsProps } from "./LatestTrends.types";
@@ -90,6 +91,13 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                         />
                       ))}
                     </CategoryPills>
+                    <div className={styles["latest-trends__market-cards-grid"]}>
+                      <Grid.Row>
+                        <Grid.Col lg={4}>
+                          <MarketCard />
+                        </Grid.Col>
+                      </Grid.Row>
+                    </div>
                   </Card.Content>
                 </Card>
               </form>
