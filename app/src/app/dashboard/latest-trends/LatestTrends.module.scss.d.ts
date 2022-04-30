@@ -5,6 +5,7 @@ export type Styles = {
   "latest-trends__filters--actions": string;
   "latest-trends__filters--desktop": string;
   "latest-trends__market-cards-grid": string;
+  "latest-trends__market-cards-grid--item": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

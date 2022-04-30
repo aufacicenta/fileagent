@@ -3,6 +3,7 @@ import { Form as RFForm } from "react-final-form";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 import { Button } from "ui/button/Button";
 import { Card } from "ui/card/Card";
@@ -12,6 +13,7 @@ import { Typography } from "ui/typography/Typography";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import pulse from "providers/pulse";
 import { MarketCard } from "ui/pulse/market-card/MarketCard";
+import { useRoutes } from "hooks/useRoutes/useRoutes";
 
 import styles from "./LatestTrends.module.scss";
 import { LatestTrendsProps } from "./LatestTrends.types";
@@ -26,6 +28,8 @@ const onApplyFilters = () => undefined;
 
 export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   const [isCreateMarketModalVisible, setIsCreateMarketModalVisible] = useState(false);
+
+  const routes = useRoutes();
 
   const { t } = useTranslation(["latest-trends", "common"]);
 
@@ -94,7 +98,11 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                     <div className={styles["latest-trends__market-cards-grid"]}>
                       <Grid.Row>
                         <Grid.Col lg={4}>
-                          <MarketCard />
+                          <Link href={routes.dashboard.market()}>
+                            <a className={styles["latest-trends__market-cards-grid--item"]}>
+                              <MarketCard />
+                            </a>
+                          </Link>
                         </Grid.Col>
                       </Grid.Row>
                     </div>

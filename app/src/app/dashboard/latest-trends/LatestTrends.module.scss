@@ -5,6 +5,10 @@
 
   &__market-cards-grid {
     margin-top: $space-ml;
+
+    &--item {
+      text-decoration: none;
+    }
   }
 
   &__filters {

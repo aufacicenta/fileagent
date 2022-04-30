@@ -6,6 +6,10 @@
   &__title {
     font-weight: $font-weight-medium;
     color: var(--color-market-card-title);
+
+    &--expanded {
+      @include font-properties($typography-headline-1);
+    }
   }
 
   &__start-end-time {
@@ -72,6 +76,8 @@
       justify-content: space-between;
 
       > button {
+        padding: 12px 3px;
+
         &:first-child {
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;

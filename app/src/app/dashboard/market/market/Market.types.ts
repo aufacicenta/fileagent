@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 
-export type MarketCardProps = {
-  expanded?: boolean;
+export type MarketProps = {
   children?: ReactNode;
   className?: string;
 };
