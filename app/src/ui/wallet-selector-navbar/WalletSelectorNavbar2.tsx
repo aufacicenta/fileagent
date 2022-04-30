@@ -17,12 +17,12 @@ export const WalletSelectorNavbar2: React.FC<WalletSelectorNavbarProps> = () => 
         <Grid.Row>
           <Grid.Col lg={3} sm={3} xs={6}>
             <div className={styles["wallet-selector-navbar__logo-mobile"]}>
-              <Typography.Link href={routes.home}>
+              <Typography.Link href={routes.dashboard.latestTrends()}>
                 <NearHoldingsIcon />
               </Typography.Link>
             </div>
             <div className={styles["wallet-selector-navbar__logo-desktop"]}>
-              <Typography.Link href={routes.home}>
+              <Typography.Link href={routes.dashboard.latestTrends()}>
                 <NearHoldingsIcon />
               </Typography.Link>
             </div>
