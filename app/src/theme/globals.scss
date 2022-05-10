@@ -112,7 +112,7 @@ body[data-theme="dark"] {
   --color-typography-subtitle: var(--color-dark-5);
   --color-typography-button-label: var(--color-white);
   --color-typography-mini-button-label: var(--color-white);
-  --color-typography-description: var(--color-dark-5);
+  --color-typography-description: #585858;
   --color-typography-mini-description: var(--color-dark-4);
   --color-typography-link: var(--color-primary);
 
@@ -120,6 +120,15 @@ body[data-theme="dark"] {
   --color-tab-navigation-border: var(--color-dark-7);
   --color-tab-item-default: var(--color-dark-7);
   --color-tab-item-active: var(--color-white);
+
+  // Market Card
+  --color-market-card-background: rgba(22, 27, 28, 0.4);
+  --color-market-card-background-contrast: var(--color-background);
+  --color-market-card-title: #fff;
+  --color-market-card-stat: #b1b1b1;
+
+  // Horizontal Line
+  --color-horizontal-line-background: #3c3c3c;
 
   // Data Visualization colors
   --color-value-increase: #00d3a1;
@@ -186,12 +195,12 @@ body[data-theme="light"] {
   --color-button-primary-hover: var(--color-primary);
   --color-button-primary-hover-text: var(--color-white);
   --color-button-primary-disabled: var(--color-dark-5);
-  --color-button-secondary: var(--color-dark-9);
-  --color-button-secondary-text: var(--color-dark-9);
-  --color-button-secondary-hover: var(--color-black);
-  --color-button-secondary-hover-text: var(--color-black);
+  --color-button-secondary: var(--color-dark-3);
+  --color-button-secondary-text: var(--color-dark-8);
+  --color-button-secondary-hover: var(--color-white);
+  --color-button-secondary-hover-text: var(--color-text);
 
-  //Theme Selector
+  // Theme Selector
   --color-theme-button-light: #d0ddff;
   --color-theme-button-dark: var(--color-dark-1);
   --color-theme-button-divider: var(--color-dark-11);
@@ -208,7 +217,7 @@ body[data-theme="light"] {
   --color-typography-subtitle: var(--color-dark-7);
   --color-typography-button-label: var(--color-black);
   --color-typography-mini-button-label: var(--color-black);
-  --color-typography-description: var(--color-dark-6);
+  --color-typography-description: #8a8a8a;
   --color-typography-mini-description: var(--color-dark-5);
   --color-typography-link: var(--color-primary);
 
@@ -216,6 +225,15 @@ body[data-theme="light"] {
   --color-tab-navigation-border: var(--color-dark-7);
   --color-tab-item-default: var(--color-dark-7);
   --color-tab-item-active: var(--color-black);
+
+  // Market Card
+  --color-market-card-background: #fff;
+  --color-market-card-background-contrast: #f5f6fd;
+  --color-market-card-title: #161515;
+  --color-market-card-stat: #626161;
+
+  // Horizontal Line
+  --color-horizontal-line-background: #e7e7e7;
 
   // Data Visualization colors
   --color-value-increase: var(--color-status-info);
@@ -225,13 +243,6 @@ body[data-theme="light"] {
 
   // Forms
   --color-input-border: var(--color-black);
-}
-
-hr {
-  height: 1px;
-  margin-bottom: $space-default;
-  border: none;
-  background-color: var(--color-dark-2);
 }
 
 code {

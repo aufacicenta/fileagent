@@ -26,7 +26,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
       <div className={styles["pulse-sidebar__layout"]}>
         <div className={styles["pulse-sidebar__layout--inner"]}>
           <div className={styles["pulse-sidebar__header"]}>
-            <Typography.Link href={routes.home}>
+            <Typography.Link href={routes.dashboard.latestTrends()}>
               {isOpen ? <PulseIcon variant="desktop" /> : <PulseSymbolIcon />}
             </Typography.Link>
             <Icon name="icon-cross2" onClick={handleClose} className={styles["pulse-sidebar__header--exit"]} />
@@ -36,7 +36,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               <BalancePill />
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-dashboard" />
                 </div>
@@ -44,7 +44,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-sports" />
                 </div>
@@ -52,7 +52,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-bets" />
                 </div>
@@ -60,7 +60,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-profile-2" />
                 </div>
@@ -71,7 +71,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               <div className={styles["pulse-sidebar__divider--bar"]} />
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.home}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
                   <Icon name="icon-logout" />
                 </div>

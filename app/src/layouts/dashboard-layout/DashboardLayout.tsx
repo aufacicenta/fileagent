@@ -6,13 +6,13 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
-import { PulseSidebar } from "ui/pulse-sidebar/PulseSidebar";
 import { WalletSelectorNavbar } from "ui/wallet-selector-navbar/WalletSelectorNavbar";
 import { WalletSelectorContextController } from "context/wallet-selector/WalletSelectorContextController";
 import { useWalletState } from "hooks/useWalletState/useWalletState";
 import { WalletSelectorContextType } from "context/wallet-selector/WalletSelectorContext.types";
 import { Icon } from "ui/icon/Icon";
 import { ToastContextController } from "context/toast/ToastContextController";
+import { PulseSidebar } from "ui/pulse/sidebar/PulseSidebar";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";

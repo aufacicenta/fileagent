@@ -3,6 +3,14 @@
 .latest-trends {
   display: block;
 
+  &__market-cards-grid {
+    margin-top: $space-ml;
+
+    &--item {
+      text-decoration: none;
+    }
+  }
+
   &__filters {
     margin-bottom: $space-ml;
 
