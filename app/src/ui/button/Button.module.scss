@@ -2,6 +2,14 @@
 @import "src/theme/button/primary";
 @import "src/theme/button/button-outline";
 
+@mixin buttonGradientPrimary {
+  background-image: linear-gradient(90deg, #6f86ff, #b372ce 49%, #ff7586);
+
+  &:hover {
+    background-image: linear-gradient(90deg, #ff7586, #b372ce 49%, #6f86ff);
+  }
+}
+
 $LOADER_SIZE: 30px;
 $HALF_LOADER_SIZE: 15px;
 
@@ -436,9 +444,9 @@ $HALF_LOADER_SIZE: 15px;
   }
 
   &--gradient {
+    @include buttonGradientPrimary();
     border: none;
     padding: 3px;
-    background-image: linear-gradient(90deg, #6f86ff, #b372ce 49%, #ff7586);
     transform-style: preserve-3d;
 
     > div {

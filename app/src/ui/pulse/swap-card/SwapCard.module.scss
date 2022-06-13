@@ -1,0 +1,122 @@
+@import "src/theme/base";
+@import "src/ui/button/Button.module";
+
+.swap-card {
+  @include atLargeTablet {
+    margin-top: 0;
+  }
+  display: block;
+  margin-top: $space-ml;
+
+  &__balance,
+  &__overview {
+    padding: 0 $space-default;
+    text-align: right;
+    color: var(--color-typography-text);
+  }
+
+  &__overview {
+    text-align: left;
+  }
+
+  &__buy-sell {
+    text-align: left;
+  }
+
+  &__from,
+  &__to {
+    position: relative;
+    margin-bottom: $space-ml;
+    border-radius: $border-radius-card;
+    padding: $space-default;
+    background-color: var(--color-market-card-background);
+
+    &--name-price {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &--token-amount {
+      position: relative;
+      margin-bottom: $space-ml;
+    }
+
+    &--label {
+      position: absolute;
+      top: 6px;
+      left: $space-default;
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+
+      span {
+        margin-right: $space-s;
+        border-radius: 50%;
+        padding: $space-xs;
+        font-size: 9px;
+        color: white;
+        background-color: var(--color-primary);
+      }
+    }
+
+    &--amount-input {
+      input {
+        margin-bottom: 0;
+        font-size: 18px;
+        text-align: right;
+        background-color: var(--color-market-card-background);
+
+        &::placeholder {
+          font-size: 18px;
+        }
+      }
+    }
+
+    &--switch {
+      position: absolute;
+      bottom: -$space-default;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      > div {
+        @include buttonGradientPrimary;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 43px;
+        height: 43px;
+        border-radius: $border-radius-button;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        span {
+          color: white;
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  &__to {
+    &--token-amount {
+      margin-bottom: 0;
+    }
+  }
+
+  &__overview-card {
+    margin-bottom: $space-default;
+    border-radius: $border-radius-card;
+    padding: $space-default;
+    background-color: var(--color-market-card-background);
+
+    &--row {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

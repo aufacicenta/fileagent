@@ -26,14 +26,11 @@ textarea.materialize-textarea {
   box-sizing: border-box;
   width: 100%;
   height: $input-height;
-  margin: $input-margin;
   border: none;
   border-radius: $border-radius-input;
   padding: $input-padding;
-  font-size: $input-font-size;
   color: $input-text-color;
   // General Styles
-  background-color: $input-background;
   outline: none;
 
   // Disabled input style
