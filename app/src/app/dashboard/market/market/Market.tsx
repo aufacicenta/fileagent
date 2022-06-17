@@ -6,6 +6,7 @@ import { Grid } from "ui/grid/Grid";
 import { MarketCard } from "ui/pulse/market-card/MarketCard";
 import { Card } from "ui/card/Card";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
+import { MarketTransactionsTable } from "ui/pulse/market-transactions-table/MarketTransactionsTable";
 
 import styles from "./Market.module.scss";
 import { MarketProps } from "./Market.types";
@@ -32,6 +33,7 @@ export const Market: React.FC<MarketProps> = ({ className }) => (
           <SwapCard onSubmit={onSubmitSwapForm} />
         </Grid.Col>
       </Grid.Row>
+      <MarketTransactionsTable />
     </MainPanel.Container>
   </div>
 );

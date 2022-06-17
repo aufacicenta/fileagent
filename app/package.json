@@ -17,6 +17,8 @@
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "@walletconnect/web3-provider": "^1.7.4",
+    "ag-grid-community": "^27.3.0",
+    "ag-grid-react": "^27.3.0",
     "bn.js": "^5.2.0",
     "clsx": "^1.1.1",
     "final-form": "^4.20.4",
