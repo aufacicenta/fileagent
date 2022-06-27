@@ -1,24 +1,20 @@
 import clsx from "clsx";
 import Head from "next/head";
-import { Near } from "near-api-js";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { WalletSelectorNavbar } from "ui/wallet-selector-navbar/WalletSelectorNavbar";
-import { WalletSelectorContextController } from "context/wallet-selector/WalletSelectorContextController";
-import { useWalletState } from "hooks/useWalletState/useWalletState";
-import { WalletSelectorContextType } from "context/wallet-selector/WalletSelectorContext.types";
-import { Icon } from "ui/icon/Icon";
 import { ToastContextController } from "context/toast/ToastContextController";
 import { PulseSidebar } from "ui/pulse/sidebar/PulseSidebar";
+import { WalletStateContextController } from "context/wallet/state/WalletStateContextController";
+import { WalletSelectorContextController } from "context/wallet/selector/WalletSelectorContextController";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const walletState = useWalletState();
   const [isSidebarOpen, setSidebarVisibility] = useState(false);
   const { t } = useTranslation("head");
   const { locale } = useRouter();
@@ -27,25 +23,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     // @todo set with a toggle button from navbar or footer
     document.body.dataset.theme = "dark";
   }, []);
-
-  // Leaving here just for now
-  const props: WalletSelectorContextType = {
-    onClickConnect: () => null,
-    isConnected: walletState.isConnected.get(),
-    network: walletState.network.get(),
-    explorer: walletState.explorer.get(),
-    chain: walletState.chain.get(),
-    address: walletState.address.get(),
-    balance: walletState.balance.get(),
-    onSetChain: () => null,
-    context: {
-      connection: undefined,
-      provider: {} as Near,
-      guest: {
-        address: "",
-      },
-    },
-  };
 
   return (
     <>
@@ -67,27 +44,23 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <link rel="preload" href="/icons/icomoon.woff" as="font" crossOrigin="" />
         <link rel="preload" href="/icons/icomoon.svg" as="font" crossOrigin="" />
       </Head>
-      <WalletSelectorContextController {...props}>
-        <ToastContextController>
-          <div id="modal-root" />
-          <div id="dropdown-portal" />
-          <div className={clsx(styles["dashboard-layout"])}>
-            <PulseSidebar
-              isOpen={isSidebarOpen}
-              handleOpen={() => setSidebarVisibility(true)}
-              handleClose={() => setSidebarVisibility(false)}
-            />
-            <WalletSelectorNavbar>
-              <Icon
-                name="icon-pulse-menu-2"
-                onClick={() => setSidebarVisibility(true)}
-                className={styles["dashboard-layout__sidebar--trigger"]}
+      <WalletStateContextController>
+        <WalletSelectorContextController>
+          <ToastContextController>
+            <div id="modal-root" />
+            <div id="dropdown-portal" />
+            <div className={clsx(styles["dashboard-layout"])}>
+              <PulseSidebar
+                isOpen={isSidebarOpen}
+                handleOpen={() => setSidebarVisibility(true)}
+                handleClose={() => setSidebarVisibility(false)}
               />
-            </WalletSelectorNavbar>
-            <MainPanel>{children}</MainPanel>
-          </div>
-        </ToastContextController>
-      </WalletSelectorContextController>
+              <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
+              <MainPanel>{children}</MainPanel>
+            </div>
+          </ToastContextController>
+        </WalletSelectorContextController>
+      </WalletStateContextController>
     </>
   );
 };

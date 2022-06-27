@@ -1,8 +1,11 @@
 @import "src/theme/base";
 
 .wallet-selector {
+  @include atLargeTablet {
+    display: flex;
+  }
   position: relative;
-  display: flex;
+  display: none;
   align-items: center;
   height: $navbar-height;
 

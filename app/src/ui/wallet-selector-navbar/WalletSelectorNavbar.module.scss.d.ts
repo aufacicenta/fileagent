@@ -22,6 +22,7 @@ export type Styles = {
   "wallet-selector-navbar__right": string;
   "wallet-selector-navbar__right--cta": string;
   "wallet-selector-navbar__right--item": string;
+  "wallet-selector-navbar__right--trigger": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

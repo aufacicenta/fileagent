@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { WalletSelectorContext } from "../../context/wallet-selector/WalletSelectorContext";
+import { WalletSelectorContext } from "../../context/wallet/selector/WalletSelectorContext";
 
 export const useWalletSelectorContext = () => {
   const context = useContext(WalletSelectorContext);
