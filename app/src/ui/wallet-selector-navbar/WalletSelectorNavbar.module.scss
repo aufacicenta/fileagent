@@ -72,8 +72,6 @@
 
   &__logo-mobile,
   &__logo-desktop {
-    padding-top: $space-m;
-
     a {
       @include atLargeTablet {
         height: $navbar-height;
@@ -179,6 +177,14 @@
     display: flex;
     justify-content: flex-end;
 
+    &--trigger {
+      @include atLargeTablet {
+        display: none;
+      }
+      font-size: $font-size-headline-2;
+      color: var(--color-typography-text);
+    }
+
     &--item {
       @include atLargeTablet {
         height: $navbar-height;
@@ -197,12 +203,6 @@
       &:nth-child(n) {
         margin-left: $space-l;
         color: var(--color-typography-text);
-      }
-
-      &:last-child {
-        @include atLargeTablet {
-          display: none;
-        }
       }
     }
 

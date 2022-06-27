@@ -13,7 +13,7 @@
   background-color: var(--color-background);
 
   &__container {
-    @include withNavbar(2);
+    @include withNavbar(5);
     @include atLargeTablet {
       padding-right: $space-xxl;
       padding-left: $space-xxl;
