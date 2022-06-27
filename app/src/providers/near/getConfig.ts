@@ -1,45 +1,18 @@
 export const DEFAULT_NETWORK_ENV = "testnet";
+export const DEFAULT_FEE_RATIO = 0.02;
+export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 
 const CONTRACT_NAME = process.env.CONTRACT_NAME || "testnet";
 
 const TESTNET_GUEST_WALLET_ID = "nearholdings.testnet";
 const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
 
-const TESTNET_DAO_CONTRACT_NAME = "sputnikv2.testnet";
-const MAINNET_DAO_CONTRACT_NAME = "sputnik-dao.near";
-
-const TESTNET_ESCROWFACTORY_CONTRACT_NAME = "escrowfactory.nearholdings.testnet";
-const MAINNET_ESCROWFACTORY_CONTRACT_NAME = "escrowfactory.communitycapital.near";
-
-const TESTNET_DAOFACTORY_CONTRACT_NAME = "daofactory2.nearholdings.testnet";
-const MAINNET_DAOFACTORY_CONTRACT_NAME = "daofactory.communitycapital.near";
-
-const TESTNET_FTFACTORY_CONTRACT_NAME = "ftfactory2.nearholdings.testnet";
-const MAINNET_FTFACTORY_CONTRACT_NAME = "ftfactory.communitycapital.near";
-
-const TESTNET_SKFACTORY_CONTRACT_NAME = "stakingfactory.nearholdings.testnet";
-const MAINNET_SKFACTORY_CONTRACT_NAME = "stakingfactory.communitycapital.near";
-
-const TESTNET_ASTRODAO_URL_ORIGIN = "https://dev.app.astrodao.com";
-const MAINNET_ASTRODAO_URL_ORIGIN = "https://app.astrodao.com";
-
-const TESTNET_FEATURED_ACTIVE_HOLDINGS = [
-  "ce_eay7eydcxk8nwp8rvo6zpo.escrowfactory.nearholdings.testnet",
-  "ce_1t0tchrruu9l8zmkknpi1t.escrowfactory.nearholdings.testnet",
-  "ce_fjfpt2dryzyfyfjsf597lq.escrowfactory.nearholdings.testnet",
-];
-const MAINNET_FEATURED_ACTIVE_HOLDINGS = ["ce_k95zme9rxsppqvjfw2gyvj.escrowfactory12.nearholdings.testnet"];
+const TESTNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.testnet";
+const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.near";
 
 const TESTNET_CONFIG = {
+  marketDaoAccountId: TESTNET_DAO_ACCOUNT_ID,
   guestWalletId: TESTNET_GUEST_WALLET_ID,
-  contractName: CONTRACT_NAME,
-  daoContractName: TESTNET_DAO_CONTRACT_NAME,
-  escrowFactoryContractName: TESTNET_ESCROWFACTORY_CONTRACT_NAME,
-  daoFactoryContractName: TESTNET_DAOFACTORY_CONTRACT_NAME,
-  ftFactoryContractName: TESTNET_FTFACTORY_CONTRACT_NAME,
-  skFactoryContractName: TESTNET_SKFACTORY_CONTRACT_NAME,
-  featuredActiveHoldings: TESTNET_FEATURED_ACTIVE_HOLDINGS,
-  astroDaoURLOrigin: TESTNET_ASTRODAO_URL_ORIGIN,
 };
 
 export default (network: string | undefined) => {
@@ -48,18 +21,12 @@ export default (network: string | undefined) => {
       return {
         networkId: "mainnet",
         nodeUrl: "https://rpc.mainnet.near.org",
-        guestWalletId: MAINNET_GUEST_WALLET_ID,
-        contractName: CONTRACT_NAME,
-        daoContractName: MAINNET_DAO_CONTRACT_NAME,
-        escrowFactoryContractName: MAINNET_ESCROWFACTORY_CONTRACT_NAME,
-        daoFactoryContractName: MAINNET_DAOFACTORY_CONTRACT_NAME,
-        ftFactoryContractName: MAINNET_FTFACTORY_CONTRACT_NAME,
-        skFactoryContractName: MAINNET_SKFACTORY_CONTRACT_NAME,
-        featuredActiveHoldings: MAINNET_FEATURED_ACTIVE_HOLDINGS,
-        astroDaoURLOrigin: MAINNET_ASTRODAO_URL_ORIGIN,
         walletUrl: "https://wallet.near.org",
         helperUrl: "https://helper.mainnet.near.org",
         explorerUrl: "https://explorer.near.org",
+        marketDaoAccountId: MAINNET_DAO_ACCOUNT_ID,
+        guestWalletId: MAINNET_GUEST_WALLET_ID,
+        contractName: CONTRACT_NAME,
       };
     case "test":
     case "testnet":
