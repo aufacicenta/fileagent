@@ -25,7 +25,17 @@ export const Market: React.FC<MarketProps> = ({ className }) => (
         <Grid.Col lg={8} xs={12}>
           <Card>
             <Card.Content>
-              <MarketCard expanded />
+              <MarketCard
+                expanded
+                marketData={{
+                  description: "Market description",
+                  info: "info",
+                  category: "category",
+                  options: ["option 1", "option 2"],
+                  starts_at: 1656709020000000000,
+                  ends_at: 1656709020000000000,
+                }}
+              />
             </Card.Content>
           </Card>
         </Grid.Col>
