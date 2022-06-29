@@ -149,7 +149,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                           <Grid.Col lg={4} key={market.id}>
                             <Link href={routes.dashboard.market({ marketId: market.id })}>
                               <a className={styles["latest-trends__market-cards-grid--item"]}>
-                                <MarketCard />
+                                <MarketCard marketData={market} />
                               </a>
                             </Link>
                           </Grid.Col>

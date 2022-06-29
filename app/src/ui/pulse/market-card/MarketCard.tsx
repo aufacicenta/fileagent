@@ -5,11 +5,12 @@ import { Typography } from "ui/typography/Typography";
 import { HorizontalLine } from "ui/horizontal-line/HorizontalLine";
 import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
+import date from "providers/date";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 
-export const MarketCard: React.FC<MarketCardProps> = ({ className, expanded }) => (
+export const MarketCard: React.FC<MarketCardProps> = ({ className, expanded, marketData }) => (
   <Card className={clsx(styles["market-card"], className)}>
     <Card.Content>
       {!expanded && (
@@ -22,11 +23,16 @@ export const MarketCard: React.FC<MarketCardProps> = ({ className, expanded }) =
               [styles["market-card__title--expanded"]]: expanded,
             })}
           >
-            Which team will win the International 2022 in China?
+            {marketData.description}
           </Typography.Text>
           <HorizontalLine />
           <div className={styles["market-card__start-end-time"]}>
-            <Typography.Description>Market started - October 21, 2021 09:13 GMT-6</Typography.Description>
+            <Typography.Description>
+              Market started - {date.fromTimestampWithOffset(marketData.starts_at)}
+            </Typography.Description>
+            <Typography.Description>
+              Market ends - {date.fromTimestampWithOffset(marketData.ends_at)}
+            </Typography.Description>
             <Typography.Description>Resolution date - October 26, 2021 09:13 GMT-6</Typography.Description>
           </div>
         </Grid.Col>
