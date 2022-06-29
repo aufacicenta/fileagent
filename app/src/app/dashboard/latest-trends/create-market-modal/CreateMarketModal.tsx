@@ -20,14 +20,15 @@ import date from "providers/date";
 import near from "providers/near";
 import { DEFAULT_FEE_RATIO, DEFAULT_NETWORK_ENV, DEFAULT_RESOLUTION_WINDOW_DAY_SPAN } from "providers/near/getConfig";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
-import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
+import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 
 import styles from "./CreateMarketModal.module.scss";
 import { CreateMarketModalForm, CreateMarketModalProps } from "./CreateMarketModal.types";
 
 const generateTimezoneOffsetString = (offset: number, suffix: string) => `${offset}_${suffix}`;
 const getTimezoneOffsetString = (input: string) => input.match(/.*?(?=_|$)/i)![0];
-const getCollateralTokenAccountId = (symbol: string) =>
+const getCollateralTokenAccountId = (symbol: string): string =>
   pulse.getConfig().COLLATERAL_TOKENS.filter((token) => token.symbol === symbol)[0].accountId;
 
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
@@ -38,10 +39,11 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
 
   const { t } = useTranslation(["latest-trends", "common"]);
   const toast = useToastContext();
+  const wallet = useWalletStateContext();
 
-  const { contract: marketContract } = useNearMarketContract();
+  const { contract: marketFactoryContract } = useNearMarketFactoryContract();
 
-  const onSubmit = (values: CreateMarketModalForm) => {
+  const onSubmit = async (values: CreateMarketModalForm) => {
     try {
       const startsAt = date.parseFromFormat(
         `${values.marketStartDate} ${values.marketStartTime} ${getTimezoneOffsetString(marketEndTimezoneOffset)}`,
@@ -75,7 +77,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
         resolution_window: date.toNanoseconds(resolutionWindow.valueOf()),
       };
 
-      marketContract.deploy(args);
+      await marketFactoryContract.createMarket(wallet.context.get().connection!, args);
     } catch {
       toast.trigger({
         variant: "error",

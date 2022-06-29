@@ -10,7 +10,11 @@ const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
 const TESTNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.testnet";
 const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.near";
 
+const TESTNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-2.aufacicenta.testnet";
+const MAINNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-2.aufacicenta.near";
+
 const TESTNET_CONFIG = {
+  marketFactoryAccountId: TESTNET_AMM_FACTORY_ACCOUNT_ID,
   marketDaoAccountId: TESTNET_DAO_ACCOUNT_ID,
   guestWalletId: TESTNET_GUEST_WALLET_ID,
 };
@@ -24,6 +28,7 @@ export default (network: string | undefined) => {
         walletUrl: "https://wallet.near.org",
         helperUrl: "https://helper.mainnet.near.org",
         explorerUrl: "https://explorer.near.org",
+        marketFactoryAccountId: MAINNET_AMM_FACTORY_ACCOUNT_ID,
         marketDaoAccountId: MAINNET_DAO_ACCOUNT_ID,
         guestWalletId: MAINNET_GUEST_WALLET_ID,
         contractName: CONTRACT_NAME,

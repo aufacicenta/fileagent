@@ -1,12 +1,11 @@
 import { Contract } from "near-api-js";
 import * as nearAPI from "near-api-js";
 
-import nearUtils from "providers/near";
-import date from "providers/date";
+import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 
-import { DeployMarketContractArgs, MarketContractMethods, MarketContractValues } from "./market.types";
-import { VIEW_METHODS } from "./constants";
+import { MarketContractMethods, MarketContractValues } from "./market.types";
+import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class MarketContract {
   values: MarketContractValues | undefined;
@@ -20,40 +19,32 @@ export class MarketContract {
     this.contractAddress = contract.contractId;
   }
 
-  static getDefaultContractValues = (): MarketContractValues => ({
-    totalFunds: "0",
-    fundingAmountLimit: nearUtils.formatAccountBalance("0"),
-    unpaidFundingAmount: nearUtils.formatAccountBalance("0"),
-    depositsOf: "0",
-    depositsOfPercentage: 0,
-    currentCoinPrice: 0,
-    priceEquivalence: 0,
-    totalFundedPercentage: 0,
-    expirationDate: date.toNanoseconds(date.now().toDate().getTime()),
-    daoFactoryAccountId: "",
-    ftFactoryAccountId: "",
-    daoName: "",
-    metadataURL: "",
-    isDepositAllowed: false,
-    isWithdrawalAllowed: false,
-    deposits: [],
-  });
+  static getDefaultContractValues = (): MarketContractValues => ({});
 
-  static async deploy(args: DeployMarketContractArgs) {
-    // @TODO impl
-    return args;
-  }
-
-  static async getFromConnection(contractAddress: string) {
-    const near = await nearAPI.connect({
+  static async loadFromGuestConnection(contractAddress: string) {
+    const connection = await nearAPI.connect({
       keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
       headers: {},
-      ...nearUtils.getConfig(DEFAULT_NETWORK_ENV),
+      ...near.getConfig(DEFAULT_NETWORK_ENV),
     });
 
-    const account = await near.account(nearUtils.getConfig(DEFAULT_NETWORK_ENV).guestWalletId);
-    const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: [] };
+    const account = await connection.account(near.getConfig(DEFAULT_NETWORK_ENV).guestWalletId);
+    const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
-    return nearUtils.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+    const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+
+    return new MarketContract(contract);
+  }
+
+  async getMarketData() {
+    try {
+      const result = await this.contract.get_market_data();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
   }
 }

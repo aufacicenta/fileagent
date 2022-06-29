@@ -4,6 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { DashboardLayout } from "layouts/dashboard-layout/DashboardLayout";
 import { MarketContainer } from "app/dashboard/market/market/MarketContainer";
+import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 
 const Market: NextPage = () => (
   <DashboardLayout>
@@ -12,8 +13,12 @@ const Market: NextPage = () => (
 );
 
 export async function getStaticPaths() {
+  const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
+  const marketsList = await marketFactory.getMarketsList();
+  const paths = marketsList?.map((marketId) => ({ params: { marketId } }));
+
   return {
-    paths: [{ params: { marketId: "id" } }],
+    paths,
     fallback: false,
   };
 }
