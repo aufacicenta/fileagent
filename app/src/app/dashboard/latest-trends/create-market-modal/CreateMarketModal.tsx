@@ -77,6 +77,8 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
         resolution_window: date.toNanoseconds(resolutionWindow.valueOf()),
       };
 
+      // @TODO validate args, highlight fields if something's missing
+
       await marketFactoryContract.createMarket(wallet.context.get().connection!, args);
     } catch {
       toast.trigger({

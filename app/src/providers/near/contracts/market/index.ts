@@ -4,7 +4,7 @@ import * as nearAPI from "near-api-js";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 
-import { MarketContractMethods, MarketContractValues } from "./market.types";
+import { AccountId, MarketContractMethods, MarketContractValues } from "./market.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class MarketContract {
@@ -12,14 +12,12 @@ export class MarketContract {
 
   contract: Contract & MarketContractMethods;
 
-  contractAddress: string;
+  contractAddress: AccountId;
 
   constructor(contract: Contract & MarketContractMethods) {
     this.contract = contract;
     this.contractAddress = contract.contractId;
   }
-
-  static getDefaultContractValues = (): MarketContractValues => ({});
 
   static async loadFromGuestConnection(contractAddress: string) {
     const connection = await nearAPI.connect({
@@ -39,6 +37,18 @@ export class MarketContract {
   async getMarketData() {
     try {
       const result = await this.contract.get_market_data();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
+  }
+
+  async getResolutionWindow() {
+    try {
+      const result = await this.contract.resolution_window();
 
       return result;
     } catch (error) {

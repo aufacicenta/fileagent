@@ -27,7 +27,7 @@ export const Market: React.FC<MarketProps> = ({ className }) => (
             <Card.Content>
               <MarketCard
                 expanded
-                marketData={{
+                marketContractValues={{
                   description: "Market description",
                   info: "info",
                   category: "category",

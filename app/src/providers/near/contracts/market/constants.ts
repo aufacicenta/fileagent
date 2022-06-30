@@ -8,6 +8,7 @@ export const VIEW_METHODS = [
   "get_collateral_token_metadata",
   "dao_account_id",
   "published_at",
+  "resolution_window",
   "resolved_at",
   "is_published",
   "is_resolved",

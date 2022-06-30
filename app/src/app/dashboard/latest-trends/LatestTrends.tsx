@@ -12,11 +12,9 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import pulse from "providers/pulse";
-import { MarketCard } from "ui/pulse/market-card/MarketCard";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
-import { MarketData } from "providers/near/contracts/market/market.types";
-import { MarketContract } from "providers/near/contracts/market";
+import { MarketCardContainer } from "ui/pulse/market-card/MarketCardContainer";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 
 import styles from "./LatestTrends.module.scss";
@@ -32,7 +30,7 @@ const onApplyFilters = () => undefined;
 
 export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   const [isCreateMarketModalVisible, setIsCreateMarketModalVisible] = useState(false);
-  const [markets, setMarkets] = useState<Array<{ id: string } & MarketData>>([]);
+  const [markets, setMarkets] = useState<Array<string>>([]);
 
   const routes = useRoutes();
   const toast = useToastContext();
@@ -50,29 +48,12 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
           throw new Error("Failed to fetch markets");
         }
 
-        const getMarketData = async (list: Array<string>) => {
-          if (list.length === 0) {
-            return;
-          }
-
-          setTimeout(async () => {
-            const address = list.pop()!;
-            const contract = await MarketContract.loadFromGuestConnection(address);
-            const marketData = await contract.getMarketData();
-
-            if (marketData) {
-              setMarkets((prev) => [{ id: address, ...marketData }, ...prev]);
-            }
-
-            getMarketData(list);
-          }, 1500);
-        };
-
-        getMarketData(marketsList.reverse());
+        setMarkets(marketsList?.reverse());
       } catch {
         toast.trigger({
           variant: "error",
           withTimeout: true,
+          // @TODO i18n
           title: "Failed to fetch recent markets",
           children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
         });
@@ -117,7 +98,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                 </div>
                 <Card>
                   <Card.Content>
-                    <Grid.Row>
+                    <Grid.Row className={styles["latest-trends__card--actions-row"]}>
                       <Grid.Col lg={6}>.</Grid.Col>
                       <Grid.Col lg={6}>
                         <div className={styles["latest-trends__card--actions"]}>
@@ -145,11 +126,11 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                     </CategoryPills>
                     <div className={styles["latest-trends__market-cards-grid"]}>
                       <Grid.Row>
-                        {markets.map((market) => (
-                          <Grid.Col lg={4} key={market.id}>
-                            <Link href={routes.dashboard.market({ marketId: market.id })}>
+                        {markets.map((marketId) => (
+                          <Grid.Col lg={4} key={marketId} className={styles["latest-trends__market-cards-grid--col"]}>
+                            <Link href={routes.dashboard.market({ marketId })}>
                               <a className={styles["latest-trends__market-cards-grid--item"]}>
-                                <MarketCard marketData={market} />
+                                <MarketCardContainer marketId={marketId} />
                               </a>
                             </Link>
                           </Grid.Col>
