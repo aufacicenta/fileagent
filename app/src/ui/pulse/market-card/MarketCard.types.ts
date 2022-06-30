@@ -4,6 +4,7 @@ import { MarketContractValues } from "providers/near/contracts/market/market.typ
 
 export type MarketCardProps = {
   marketContractValues: MarketContractValues;
+  onClickPublishMarket: () => void;
   expanded?: boolean;
   children?: ReactNode;
   className?: string;

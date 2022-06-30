@@ -32,6 +32,9 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   const [isCreateMarketModalVisible, setIsCreateMarketModalVisible] = useState(false);
   const [markets, setMarkets] = useState<Array<string>>([]);
 
+  // @TODO when a create_market transaction succeeds, it returns to this page with this query: http://localhost:3003/?transactionHashes=DCaUjKV84GTSgGkwedb3MbEKxon3fSEzi5hhKjsTAFhW
+  // @TODO we need to read the query on router.ready and display a success toast with the tx hash and a link to the tx
+
   const routes = useRoutes();
   const toast = useToastContext();
 

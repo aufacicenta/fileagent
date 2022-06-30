@@ -9,6 +9,6 @@ export const toNanoseconds = (date: number) => date * 1000000;
 export const fromNanoseconds = (date: number) => date / 1000000;
 
 export const fromTimestampWithOffset = (timestamp: number) =>
-  moment(fromNanoseconds(timestamp)).format("dddd, MMM DD YYYY hh:mm:ss A [GMT]Z");
+  moment(fromNanoseconds(timestamp)).format("ddd, MMM DD YYYY hh:mm A [GMT]Z");
 
 export default (date?: Date | string | number) => moment(date || undefined).format("MMM DD, YYYY");

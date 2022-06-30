@@ -41,7 +41,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
   const toast = useToastContext();
   const wallet = useWalletStateContext();
 
-  const { contract: marketFactoryContract } = useNearMarketFactoryContract();
+  const { contract: MarketFactoryContract } = useNearMarketFactoryContract();
 
   const onSubmit = async (values: CreateMarketModalForm) => {
     try {
@@ -57,7 +57,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
         false,
       );
 
-      const resolutionWindow = endsAt.add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
+      const resolutionWindow = endsAt.clone().add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
 
       const daoAccountId = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
       const collateralTokenAccountId = getCollateralTokenAccountId(collateralTokenSymbol);
@@ -79,7 +79,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
 
       // @TODO validate args, highlight fields if something's missing
 
-      await marketFactoryContract.createMarket(wallet.context.get().connection!, args);
+      await MarketFactoryContract.createMarket(wallet.context.get().connection!, args);
     } catch {
       toast.trigger({
         variant: "error",

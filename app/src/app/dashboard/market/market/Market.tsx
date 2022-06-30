@@ -27,13 +27,18 @@ export const Market: React.FC<MarketProps> = ({ className }) => (
             <Card.Content>
               <MarketCard
                 expanded
+                onClickPublishMarket={() => undefined}
                 marketContractValues={{
-                  description: "Market description",
-                  info: "info",
-                  category: "category",
-                  options: ["option 1", "option 2"],
-                  starts_at: 1656709020000000000,
-                  ends_at: 1656709020000000000,
+                  market: {
+                    description: "Market description",
+                    info: "info",
+                    category: "category",
+                    options: ["option 1", "option 2"],
+                    starts_at: 1656709020000000000,
+                    ends_at: 1656709020000000000,
+                  },
+                  resolutionWindow: 1656709020000000000,
+                  isPublished: false,
                 }}
               />
             </Card.Content>

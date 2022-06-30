@@ -14,71 +14,128 @@ import styles from "./MarketCard.module.scss";
 export const MarketCard: React.FC<MarketCardProps> = ({
   className,
   expanded,
-  marketContractValues: { market, resolutionWindow },
-}) => (
-  <Card className={clsx(styles["market-card"], className)}>
-    <Card.Content>
-      {!expanded && (
-        <div className={styles["market-card__image"]} style={{ backgroundImage: `url(/shared/market-card-img.jpg)` }} />
-      )}
-      <Grid.Row>
-        <Grid.Col lg={expanded ? 7 : 12}>
-          <Typography.Text
-            className={clsx(styles["market-card__title"], className, {
-              [styles["market-card__title--expanded"]]: expanded,
-            })}
+  marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens },
+  onClickPublishMarket,
+}) => {
+  const getMarketOptions = () =>
+    market.options.map((option, id) => {
+      if (!isPublished && !outcomeTokens) {
+        return (
+          <Button
+            color="secondary"
+            fullWidth
+            className={styles["market-card__market-options--actions-button"]}
+            key={option}
+            disabled
           >
-            {market.description}
-          </Typography.Text>
-          <HorizontalLine />
-          <div className={styles["market-card__start-end-time"]}>
-            <Typography.Description>
-              Market starts - {date.fromTimestampWithOffset(market.starts_at)}
-            </Typography.Description>
-            <Typography.Description>
-              Market ends - {date.fromTimestampWithOffset(market.ends_at)}
-            </Typography.Description>
-            <Typography.Description>Resolution date - {resolutionWindow}</Typography.Description>
-          </div>
-        </Grid.Col>
-        <Grid.Col lg={expanded ? 5 : 12}>
-          <Card className={styles["market-card__market-options"]}>
-            <Card.Content className={styles["market-card__market-options--card-content"]}>
-              <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
-                What does the market think?
-              </Typography.Headline5>
-              <div className={styles["market-card__market-options--progres-bar"]}>
-                <div
-                  className={styles["market-card__market-options--progres-bar-width"]}
-                  style={{ width: "80%", backgroundColor: "#FC59FF" }}
-                />
-                <div
-                  className={styles["market-card__market-options--progres-bar-width"]}
-                  style={{ width: "20%", backgroundColor: "#5356FC" }}
-                />
-              </div>
-              <div className={styles["market-card__market-options--actions"]}>
-                {market.options.map((option) => (
-                  <Button color="secondary" fullWidth className={styles["market-card__market-options--actions-button"]}>
-                    <span
-                      className={styles["market-card__market-options--actions-button-dot"]}
-                      style={{ backgroundColor: "#FC59FF" }}
-                    />{" "}
-                    {option}{" "}
-                    <span className={styles["market-card__market-options--actions-button-percentage"]}>80%</span>
-                  </Button>
-                ))}
-              </div>
-              <div className={styles["market-card__market-options--stats"]}>
-                <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
-                  <span>Liquidity:</span>
-                  <span>407.78 DAI</span>
-                </Typography.Description>
-              </div>
-            </Card.Content>
-          </Card>
-        </Grid.Col>
-      </Grid.Row>
-    </Card.Content>
-  </Card>
-);
+            <span
+              className={styles["market-card__market-options--actions-button-dot"]}
+              style={{ backgroundColor: "#FC59FF" }}
+            />{" "}
+            {option}{" "}
+            <span className={styles["market-card__market-options--actions-button-percentage"]}>
+              {100 / market.options.length}%
+            </span>
+          </Button>
+        );
+      }
+
+      const outcomeToken = outcomeTokens![id];
+
+      return (
+        <Button
+          color="secondary"
+          fullWidth
+          className={styles["market-card__market-options--actions-button"]}
+          key={option}
+        >
+          <span
+            className={styles["market-card__market-options--actions-button-dot"]}
+            style={{ backgroundColor: "#FC59FF" }}
+          />{" "}
+          {option}{" "}
+          <span className={styles["market-card__market-options--actions-button-percentage"]}>
+            {outcomeToken.price * 100}%
+          </span>
+        </Button>
+      );
+    });
+
+  return (
+    <Card className={clsx(styles["market-card"], className)}>
+      <Card.Content>
+        {!expanded && (
+          <div
+            className={styles["market-card__image"]}
+            style={{ backgroundImage: `url(/shared/market-card-img.jpg)` }}
+          />
+        )}
+        <Grid.Row>
+          <Grid.Col lg={expanded ? 7 : 12}>
+            <Typography.Text
+              className={clsx(styles["market-card__title"], className, {
+                [styles["market-card__title--expanded"]]: expanded,
+              })}
+            >
+              {market.description}
+            </Typography.Text>
+            <HorizontalLine />
+            <div className={styles["market-card__start-end-time"]}>
+              <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                <span>Market starts</span> <span>{date.fromTimestampWithOffset(market.starts_at)}</span>
+              </Typography.Description>
+              <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at)}</span>
+              </Typography.Description>
+              <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                <span>Resolution date</span> <span>{date.fromTimestampWithOffset(resolutionWindow)}</span>
+              </Typography.Description>
+            </div>
+          </Grid.Col>
+          <Grid.Col lg={expanded ? 5 : 12}>
+            <Card className={styles["market-card__market-options"]}>
+              <Card.Content className={styles["market-card__market-options--card-content"]}>
+                {isPublished && (
+                  <>
+                    <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
+                      What does the market think?
+                    </Typography.Headline5>
+                    <div className={styles["market-card__market-options--progres-bar"]}>
+                      <div
+                        className={styles["market-card__market-options--progres-bar-width"]}
+                        style={{ width: "80%", backgroundColor: "#FC59FF" }}
+                      />
+                      <div
+                        className={styles["market-card__market-options--progres-bar-width"]}
+                        style={{ width: "20%", backgroundColor: "#5356FC" }}
+                      />
+                    </div>
+                  </>
+                )}
+                <div className={styles["market-card__market-options--actions"]}>
+                  {!isPublished && (
+                    <Button
+                      color="primary"
+                      fullWidth
+                      className={styles["market-card__market-options--actions-button"]}
+                      onClick={onClickPublishMarket}
+                    >
+                      Publish Market
+                    </Button>
+                  )}
+                  {getMarketOptions()}
+                </div>
+                <div className={styles["market-card__market-options--stats"]}>
+                  <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
+                    <span>Liquidity:</span>
+                    <span>407.78 DAI</span>
+                  </Typography.Description>
+                </div>
+              </Card.Content>
+            </Card>
+          </Grid.Col>
+        </Grid.Row>
+      </Card.Content>
+    </Card>
+  );
+};

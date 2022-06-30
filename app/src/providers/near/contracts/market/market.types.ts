@@ -1,4 +1,4 @@
-export type OutcomeId = string;
+export type OutcomeId = number;
 export type WrappedBalance = number;
 export type AccountId = string;
 export type Timestamp = number;
@@ -27,7 +27,11 @@ export type OutcomeToken = {
 export type MarketContractValues = {
   market: MarketData;
   resolutionWindow: Timestamp;
+  isPublished: boolean;
+  outcomeTokens?: Array<OutcomeToken>;
 };
+
+export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
 
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
@@ -42,8 +46,9 @@ export type MarketContractMethods = {
   is_over: () => Promise<boolean>;
   is_resolution_window_expired: () => Promise<boolean>;
   balance_of: (args: { outcome_id: OutcomeId; account_id: AccountId }) => Promise<WrappedBalance>;
-  get_outcome_token: (args: { outcome_id: OutcomeId }) => Promise<OutcomeToken>;
+  get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
   get_fee_ratio: () => Promise<OutcomeToken>;
   get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<OutcomeToken>;
   get_balance_boost_ratio: () => Promise<OutcomeToken>;
+  publish: (args: Record<string, unknown>, gas?: number) => Promise<void>;
 };

@@ -1,10 +1,11 @@
-import { Contract } from "near-api-js";
+import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
+import { BN } from "bn.js";
 
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 
-import { AccountId, MarketContractMethods, MarketContractValues } from "./market.types";
+import { AccountId, GetOutcomeTokenArgs, MarketContractMethods, MarketContractValues } from "./market.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class MarketContract {
@@ -34,6 +35,27 @@ export class MarketContract {
     return new MarketContract(contract);
   }
 
+  static async loadFromWalletConnection(connection: WalletConnection, contractAddress: string) {
+    const account = await connection.account();
+    const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
+
+    return near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+  }
+
+  static async publish(connection: WalletConnection, contractAddress: string) {
+    try {
+      const contract = await MarketContract.loadFromWalletConnection(connection, contractAddress);
+
+      await contract.publish({}, new BN("60000000000000").toNumber());
+
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
+  }
+
   async getMarketData() {
     try {
       const result = await this.contract.get_market_data();
@@ -56,5 +78,29 @@ export class MarketContract {
     }
 
     return null;
+  }
+
+  async getOutcomeToken(args: GetOutcomeTokenArgs) {
+    try {
+      const result = await this.contract.get_outcome_token(args);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
+  }
+
+  async isPublished() {
+    try {
+      const result = await this.contract.is_published();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
   }
 }

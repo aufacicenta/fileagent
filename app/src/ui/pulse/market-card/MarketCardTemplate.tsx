@@ -9,7 +9,7 @@ import { Grid } from "ui/grid/Grid";
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 
-export const MarketCardTemplate: React.FC<Omit<MarketCardProps, "marketContractValues">> = ({
+export const MarketCardTemplate: React.FC<Omit<MarketCardProps, "marketContractValues" | "onClickPublishMarket">> = ({
   className,
   expanded,
 }) => (
