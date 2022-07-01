@@ -19,7 +19,7 @@ export const Typography: React.FC<TypographyProps> & {
   MiniButtonLabel: React.FC<TypographyProps>;
   Description: React.FC<TypographyProps>;
   MiniDescription: React.FC<TypographyProps>;
-  Link: React.FC<TypographyProps & LinkProps>;
+  Link: React.FC<AnchorProps & LinkProps>;
   Anchor: React.FC<AnchorProps>;
 } = ({ children, className }) => <div className={clsx(styles.typography, className)}>{children}</div>;
 
@@ -124,7 +124,7 @@ const MiniDescription: React.FC<TypographyProps> = ({ children, className, flat,
   </p>
 );
 
-const Link: React.FC<TypographyProps & LinkProps> = ({ children, className, href, ...props }) => (
+const Link: React.FC<AnchorProps & LinkProps> = ({ children, className, href, ...props }) => (
   <NextLink href={href} {...props}>
     <a className={clsx(styles.typography__link, className)}>{children}</a>
   </NextLink>
