@@ -6,6 +6,7 @@ import { HorizontalLine } from "ui/horizontal-line/HorizontalLine";
 import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
+import pulse from "providers/pulse";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -14,12 +15,12 @@ import styles from "./MarketCard.module.scss";
 export const MarketCard: React.FC<MarketCardProps> = ({
   className,
   expanded,
-  marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens },
+  marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens, collateralTokenMetadata },
   onClickPublishMarket,
 }) => {
   const getMarketOptions = () =>
     market.options.map((option, id) => {
-      if (!isPublished && !outcomeTokens) {
+      if (!isPublished && outcomeTokens?.length === 0) {
         return (
           <Button
             color="secondary"
@@ -128,7 +129,10 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Liquidity:</span>
-                    <span>407.78 DAI</span>
+                    <span>
+                      {collateralTokenMetadata.balance}{" "}
+                      {pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id).symbol}
+                    </span>
                   </Typography.Description>
                 </div>
               </Card.Content>

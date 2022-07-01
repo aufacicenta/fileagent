@@ -28,8 +28,6 @@ import { CreateMarketModalForm, CreateMarketModalProps } from "./CreateMarketMod
 
 const generateTimezoneOffsetString = (offset: number, suffix: string) => `${offset}_${suffix}`;
 const getTimezoneOffsetString = (input: string) => input.match(/.*?(?=_|$)/i)![0];
-const getCollateralTokenAccountId = (symbol: string): string =>
-  pulse.getConfig().COLLATERAL_TOKENS.filter((token) => token.symbol === symbol)[0].accountId;
 
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
   const [collateralTokenSymbol, setCollateralTokenSymbol] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
@@ -60,7 +58,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
       const resolutionWindow = endsAt.clone().add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
 
       const daoAccountId = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
-      const collateralTokenAccountId = getCollateralTokenAccountId(collateralTokenSymbol);
+      const collateralTokenAccountId = pulse.getCollateralTokenBySymbol(collateralTokenSymbol).accountId;
 
       const args = {
         market: {

@@ -24,13 +24,14 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ classN
         const market = await contract.getMarketData();
         const resolutionWindow = await contract.getResolutionWindow();
         const isPublished = await contract.isPublished();
+        const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
 
-        if (!market || !resolutionWindow) {
+        if (!market || !resolutionWindow || !collateralTokenMetadata) {
           throw new Error("Failed to fetch market data");
         }
 
         const outcomeTokens = !isPublished
-          ? undefined
+          ? []
           : (
               await Promise.all(
                 market.options.map((_option, outcomeId) => contract.getOutcomeToken({ outcome_id: outcomeId })),
@@ -45,6 +46,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ classN
           market,
           resolutionWindow,
           isPublished,
+          collateralTokenMetadata,
           outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         });
       } catch {

@@ -39,6 +39,7 @@ export const Market: React.FC<MarketProps> = ({ className }) => (
                   },
                   resolutionWindow: 1656709020000000000,
                   isPublished: false,
+                  collateralTokenMetadata: { balance: 0, id: "usdt.fakes.testnet" },
                 }}
               />
             </Card.Content>

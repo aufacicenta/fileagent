@@ -103,4 +103,18 @@ export class MarketContract {
 
     return false;
   }
+
+  async getCollateralTokenMetadata() {
+    try {
+      const result = await this.contract.get_collateral_token_metadata();
+
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
+  }
 }
