@@ -18,30 +18,14 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSubmitSwapForm = (_values: Record<string, unknown>) => undefined;
 
-export const Market: React.FC<MarketProps> = ({ className }) => (
+export const Market: React.FC<MarketProps> = ({ className, marketContractValues }) => (
   <div className={clsx(styles.market, className)}>
     <MainPanel.Container>
       <Grid.Row>
         <Grid.Col lg={8} xs={12}>
           <Card>
             <Card.Content>
-              <MarketCard
-                expanded
-                onClickPublishMarket={() => undefined}
-                marketContractValues={{
-                  market: {
-                    description: "Market description",
-                    info: "info",
-                    category: "category",
-                    options: ["option 1", "option 2"],
-                    starts_at: 1656709020000000000,
-                    ends_at: 1656709020000000000,
-                  },
-                  resolutionWindow: 1656709020000000000,
-                  isPublished: false,
-                  collateralTokenMetadata: { balance: 0, id: "usdt.fakes.testnet" },
-                }}
-              />
+              <MarketCard expanded onClickPublishMarket={() => undefined} marketContractValues={marketContractValues} />
             </Card.Content>
           </Card>
         </Grid.Col>
