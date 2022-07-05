@@ -34,7 +34,7 @@ export class MarketFactoryContract {
       await contract.create_market(
         { args: base64args },
         new BN("60000000000000").toNumber(),
-        new BN(near.parseNearAmount("1")!).toString(),
+        new BN(near.parseNearAmount("3.5")!).toString(),
       );
 
       return contract;

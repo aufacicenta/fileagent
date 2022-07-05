@@ -9,3 +9,8 @@ export type SwapCardProps = {
   children?: ReactNode;
   className?: string;
 };
+
+export type SwapCardForm = {
+  fromTokenAmount: number;
+  toTokenAmount: number;
+};

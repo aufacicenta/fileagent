@@ -29,6 +29,7 @@ export type MarketContractValues = {
   resolutionWindow: Timestamp;
   isPublished: boolean;
   collateralTokenMetadata: CollateralTokenMetadata;
+  feeRatio: number;
   outcomeTokens?: Array<OutcomeToken>;
 };
 

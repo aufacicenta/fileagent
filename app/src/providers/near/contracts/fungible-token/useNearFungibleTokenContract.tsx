@@ -2,6 +2,7 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { Typography } from "ui/typography/Typography";
 import { AccountId } from "../market/market.types";
+import currency from "providers/currency";
 
 import { FungibleTokenContract } from ".";
 
@@ -31,7 +32,9 @@ export default () => {
       return balance;
     }
 
-    return (Number(balance) / Number("1".padEnd(metadata.decimals + 1, "0"))).toFixed(5);
+    return (Number(balance) / Number("1".padEnd(metadata.decimals + 1, "0"))).toFixed(
+      currency.constants.DEFAULT_DECIMALS_PRECISION,
+    );
   };
 
   return {

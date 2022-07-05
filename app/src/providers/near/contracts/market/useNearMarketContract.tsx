@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 
 import { MarketContract } from ".";
 import { AccountId, MarketContractValues, OutcomeToken } from "./market.types";
@@ -10,6 +11,7 @@ export default ({ marketId }: { marketId: AccountId }) => {
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
 
   const toast = useToastContext();
+  const wallet = useWalletStateContext();
 
   useEffect(() => {
     (async () => {
@@ -19,8 +21,9 @@ export default ({ marketId }: { marketId: AccountId }) => {
         const resolutionWindow = await contract.getResolutionWindow();
         const isPublished = await contract.isPublished();
         const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
+        const feeRatio = await contract.getFeeRatio();
 
-        if (!market || !resolutionWindow || !collateralTokenMetadata) {
+        if (!market || !resolutionWindow || !collateralTokenMetadata || !feeRatio) {
           throw new Error("Failed to fetch market data");
         }
 
@@ -42,6 +45,7 @@ export default ({ marketId }: { marketId: AccountId }) => {
           isPublished,
           collateralTokenMetadata,
           outcomeTokens: outcomeTokens as Array<OutcomeToken>,
+          feeRatio,
         });
       } catch {
         toast.trigger({
@@ -55,8 +59,24 @@ export default ({ marketId }: { marketId: AccountId }) => {
     })();
   }, [marketId, toast]);
 
+  const onClickPublishMarket = async () => {
+    // @TODO check if wallet is connected or display wallet connect modal
+    try {
+      await MarketContract.publish(wallet.context.get().connection!, marketId);
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to publish market",
+        children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
+      });
+    }
+  };
+
   return {
     contract: MarketContract,
     marketContractValues,
+    onClickPublishMarket,
   };
 };

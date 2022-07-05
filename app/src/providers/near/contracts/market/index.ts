@@ -115,4 +115,16 @@ export class MarketContract {
 
     return null;
   }
+
+  async getFeeRatio() {
+    try {
+      const result = await this.contract.get_fee_ratio();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
+  }
 }

@@ -9,6 +9,7 @@ import { Card } from "ui/card/Card";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
 import { MarketTransactionsTable } from "ui/pulse/market-transactions-table/MarketTransactionsTable";
 import { OutcomeToken } from "providers/near/contracts/market/market.types";
+import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 
 import styles from "./Market.module.scss";
 import { MarketProps } from "./Market.types";
@@ -20,8 +21,10 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSubmitSwapForm = (_values: Record<string, unknown>) => undefined;
 
-export const Market: React.FC<MarketProps> = ({ className, marketContractValues }) => {
+export const Market: React.FC<MarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
+
+  const { onClickPublishMarket } = useNearMarketContract({ marketId });
 
   useEffect(() => {
     if (marketContractValues.outcomeTokens) {
@@ -42,9 +45,9 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues 
               <Card.Content>
                 <MarketCard
                   expanded
-                  onClickPublishMarket={() => undefined}
                   onClickOutcomeToken={onClickOutcomeToken}
                   marketContractValues={marketContractValues}
+                  onClickPublishMarket={onClickPublishMarket}
                 />
               </Card.Content>
             </Card>
