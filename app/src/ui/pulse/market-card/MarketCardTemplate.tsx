@@ -9,10 +9,9 @@ import { Grid } from "ui/grid/Grid";
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 
-export const MarketCardTemplate: React.FC<Omit<MarketCardProps, "marketContractValues" | "onClickPublishMarket">> = ({
-  className,
-  expanded,
-}) => (
+export const MarketCardTemplate: React.FC<
+  Omit<MarketCardProps, "marketContractValues" | "onClickPublishMarket" | "onClickOutcomeToken">
+> = ({ className, expanded }) => (
   <Card className={clsx(styles["market-card"], className)}>
     <Card.Content>
       {!expanded && (

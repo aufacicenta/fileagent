@@ -1,10 +1,10 @@
 export default () => ({
   COLLATERAL_TOKENS: [
-    { icon: "icon-near", price: "1.00", symbol: "USDT", accountId: "usdt.fakes.testnet" },
-    { icon: "icon-near", price: "1.00", symbol: "PULSE", accountId: "pulse.fakes.testnet" },
-    { icon: "icon-near", price: "1.00", symbol: "REF", accountId: "ref.fakes.testnet" },
-    { icon: "icon-near", price: "1.00", symbol: "CHEDDAR", accountId: "cheddar.fakes.testnet" },
-    { icon: "icon-near", price: "1.00", symbol: "NEAR", accountId: "near.fakes.testnet" },
+    { icon: "icon-near", price: 1, symbol: "USDT", accountId: "usdt.fakes.testnet" },
+    { icon: "icon-near", price: 1, symbol: "PULSE", accountId: "pulse.fakes.testnet" },
+    { icon: "icon-near", price: 1, symbol: "REF", accountId: "ref.fakes.testnet" },
+    { icon: "icon-near", price: 1, symbol: "CHEDDAR", accountId: "cheddar.fakes.testnet" },
+    { icon: "icon-near", price: 1, symbol: "NEAR", accountId: "near.fakes.testnet" },
   ],
   MARKET_CATEGORIES: [
     // @TODO icons should be PNG images paths

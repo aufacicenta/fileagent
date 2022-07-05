@@ -7,6 +7,9 @@ import { MarketCardContainerProps } from "./MarketCard.types";
 import { MarketCard } from "./MarketCard";
 import { MarketCardTemplate } from "./MarketCardTemplate";
 
+// @TODO redirect to market page
+const onClickOutcomeToken = () => undefined;
+
 export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ className, expanded, marketId }) => {
   const toast = useToastContext();
   const wallet = useWalletStateContext();
@@ -37,6 +40,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ classN
       marketContractValues={marketContractValues}
       className={className}
       onClickPublishMarket={onClickPublishMarket}
+      onClickOutcomeToken={onClickOutcomeToken}
     />
   );
 };
