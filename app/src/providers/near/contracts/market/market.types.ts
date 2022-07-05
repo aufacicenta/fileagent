@@ -18,9 +18,9 @@ export type CollateralTokenMetadata = {
 };
 
 export type OutcomeToken = {
-  accountsLength: number;
-  totalSupply: WrappedBalance;
-  outcomeId: OutcomeId;
+  accounts_length: number;
+  total_supply: WrappedBalance;
+  outcome_id: OutcomeId;
   price: WrappedBalance;
 };
 
@@ -48,8 +48,8 @@ export type MarketContractMethods = {
   is_resolution_window_expired: () => Promise<boolean>;
   balance_of: (args: { outcome_id: OutcomeId; account_id: AccountId }) => Promise<WrappedBalance>;
   get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
-  get_fee_ratio: () => Promise<OutcomeToken>;
-  get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<OutcomeToken>;
-  get_balance_boost_ratio: () => Promise<OutcomeToken>;
+  get_fee_ratio: () => Promise<WrappedBalance>;
+  get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<WrappedBalance>;
+  get_balance_boost_ratio: () => Promise<WrappedBalance>;
   publish: (args: Record<string, unknown>, gas?: number) => Promise<void>;
 };

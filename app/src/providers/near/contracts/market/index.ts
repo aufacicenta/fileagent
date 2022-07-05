@@ -108,8 +108,6 @@ export class MarketContract {
     try {
       const result = await this.contract.get_collateral_token_metadata();
 
-      console.log(result);
-
       return result;
     } catch (error) {
       console.log(error);

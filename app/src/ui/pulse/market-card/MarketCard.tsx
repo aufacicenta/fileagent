@@ -17,6 +17,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   expanded,
   marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens, collateralTokenMetadata },
   onClickPublishMarket,
+  onClickOutcomeToken,
 }) => {
   const getMarketOptions = () =>
     market.options.map((option, id) => {
@@ -49,6 +50,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
           fullWidth
           className={styles["market-card__market-options--actions-button"]}
           key={option}
+          onClick={() => onClickOutcomeToken(outcomeToken)}
         >
           <span
             className={styles["market-card__market-options--actions-button-dot"]}
