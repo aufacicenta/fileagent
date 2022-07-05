@@ -73,4 +73,16 @@ export class FungibleTokenContract {
 
     return "0.00";
   }
+
+  async ftMetadata() {
+    try {
+      const result = await this.contract.ft_metadata();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return null;
+  }
 }

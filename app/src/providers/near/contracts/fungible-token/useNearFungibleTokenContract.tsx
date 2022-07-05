@@ -25,8 +25,13 @@ export default () => {
     );
 
     const balance = await contract.ftBalanceOf({ account_id: wallet.address.get()! });
+    const metadata = await contract.ftMetadata();
 
-    return balance;
+    if (!metadata) {
+      return balance;
+    }
+
+    return (Number(balance) / Number("1".padEnd(metadata.decimals + 1, "0"))).toFixed(5);
   };
 
   return {
