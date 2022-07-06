@@ -16,6 +16,9 @@ export const VIEW_METHODS = [
   "is_over",
   "is_resolution_window_expired",
   "balance_of",
+  "get_cumulative_weight",
+  "get_amount_mintable",
+  "get_amount_payable",
 ];
 
 export const CHANGE_METHODS = ["publish", "buy", "sell", "new"];

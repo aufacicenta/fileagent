@@ -58,6 +58,7 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues,
                 onSubmit={onSubmitSwapForm}
                 marketContractValues={marketContractValues}
                 selectedOutcomeToken={selectedOutcomeToken}
+                marketId={marketId}
               />
             )}
           </Grid.Col>

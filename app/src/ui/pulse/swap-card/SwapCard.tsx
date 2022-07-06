@@ -13,6 +13,7 @@ import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import currency from "providers/currency";
+import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 
 import { SwapCardForm, SwapCardProps } from "./SwapCard.types";
 import styles from "./SwapCard.module.scss";
@@ -41,6 +42,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   className,
   marketContractValues: { market, collateralTokenMetadata, feeRatio },
   selectedOutcomeToken,
+  marketId,
 }) => {
   const [fromToken, setFromToken] = useState({ price: 0, symbol: "", amount: 0 });
   const [toToken, setToToken] = useState({ price: 0, symbol: "", amount: 0 });
@@ -49,11 +51,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const [fee, setFee] = useState("0.00");
 
   const { t } = useTranslation(["swap-card"]);
-  const { getWalletBalance } = useNearFungibleTokenContract();
+  const FungibleTokenContract = useNearFungibleTokenContract();
+  const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
 
   const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
 
-  const isCollateralTokenSource = () => fromToken.symbol === collateralToken.symbol;
+  const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
 
   const setCollateralAsSource = useCallback(async () => {
     setFromToken({
@@ -68,19 +71,19 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    const walletBalance = await getWalletBalance(collateralTokenMetadata.id);
-    setBalance(walletBalance);
+    const collateralTokenBalance = await FungibleTokenContract.getWalletBalance(collateralTokenMetadata.id);
+    setBalance(collateralTokenBalance);
   }, [
     collateralToken.price,
     collateralToken.symbol,
-    collateralTokenMetadata.id,
-    getWalletBalance,
-    market.options,
-    selectedOutcomeToken.outcome_id,
     selectedOutcomeToken.price,
+    selectedOutcomeToken.outcome_id,
+    market.options,
+    FungibleTokenContract,
+    collateralTokenMetadata.id,
   ]);
 
-  const setOutcomeAsSource = useCallback(() => {
+  const setOutcomeAsSource = useCallback(async () => {
     setFromToken({
       price: selectedOutcomeToken.price,
       symbol: market.options[selectedOutcomeToken.outcome_id],
@@ -95,8 +98,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     // @TODO get balance of outcome token
-    setBalance("0.00");
+    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
+    setBalance(outcomeTokenBalance.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
   }, [
+    MarketContract,
     collateralToken.price,
     collateralToken.symbol,
     market.options,
@@ -107,32 +112,46 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   useEffect(() => {
     setCollateralAsSource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setCollateralAsSource();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken]);
 
   const onClickFlip = () => {
-    if (isCollateralTokenSource()) {
+    if (isCollateralSourceToken()) {
       setOutcomeAsSource();
     } else {
       setCollateralAsSource();
     }
   };
 
-  const getRate = (amount: number) => {
-    const newFee = amount * feeRatio;
-    setFee(newFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+  // @TODO fetch rate from MarketContract.getAmountMintable
+  const getBuyRate = async (amount: number) => {
+    const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
+      amount,
+      outcome_id: selectedOutcomeToken.outcome_id,
+    });
 
-    return (amount - newFee) * selectedOutcomeToken.price;
+    setFee(exchangeFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    setRate(amountMintable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+  };
+
+  // @TODO fetch rate from MarketContract.getAmountPayable
+  const getSellRate = async (amount: number) => {
+    const [, amountPayable] = await MarketContract.getAmountPayable({
+      amount,
+      outcome_id: selectedOutcomeToken.outcome_id,
+    });
+
+    setRate(amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
   };
 
   const onFromTokenChange = (value: string) => {
-    setRate(getRate(Number(value)).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    if (isCollateralSourceToken()) {
+      getBuyRate(Number(value));
+    } else {
+      getSellRate(Number(value));
+    }
   };
 
+  // @TODO i18n
   return (
     <RFForm
       onSubmit={onSubmit}
@@ -151,7 +170,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__from--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
                   <Typography.Text>
-                    {fromToken.symbol} {fromToken.price}
+                    {fromToken.symbol}:{" "}
+                    {Number(fromToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
                   </Typography.Text>
                 </div>
                 <div className={styles["swap-card__from--token-amount"]}>
@@ -177,7 +197,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__to--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
                   <Typography.Text>
-                    {toToken.symbol} {selectedOutcomeToken.price}
+                    {toToken.symbol}:{" "}
+                    {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
                   </Typography.Text>
                 </div>
                 <div className={styles["swap-card__to--token-amount"]}>
@@ -218,7 +239,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 </div>
               </div>
               <Button fullWidth type="submit">
-                {t("swapCard.swap")}
+                {isCollateralSourceToken() ? t("swapCard.buy") : t("swapCard.sell")}
               </Button>
             </Card.Content>
           </Card>

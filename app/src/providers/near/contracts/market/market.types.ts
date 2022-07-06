@@ -34,6 +34,9 @@ export type MarketContractValues = {
 };
 
 export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
+export type BalanceOfArgs = { outcome_id: OutcomeId; account_id: AccountId };
+export type GetAmountMintableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
+export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
 
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
@@ -47,10 +50,13 @@ export type MarketContractMethods = {
   is_open: () => Promise<boolean>;
   is_over: () => Promise<boolean>;
   is_resolution_window_expired: () => Promise<boolean>;
-  balance_of: (args: { outcome_id: OutcomeId; account_id: AccountId }) => Promise<WrappedBalance>;
+  balance_of: (args: BalanceOfArgs) => Promise<WrappedBalance>;
   get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
   get_fee_ratio: () => Promise<WrappedBalance>;
   get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<WrappedBalance>;
   get_balance_boost_ratio: () => Promise<WrappedBalance>;
   publish: (args: Record<string, unknown>, gas?: number) => Promise<void>;
+  get_cumulative_weight: () => Promise<WrappedBalance>;
+  get_amount_mintable: (args: GetAmountMintableArgs) => Promise<Array<number>>;
+  get_amount_payable: (args: GetAmountPayableArgs) => Promise<Array<number>>;
 };

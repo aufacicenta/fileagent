@@ -7,6 +7,7 @@ import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import pulse from "providers/pulse";
+import currency from "providers/currency";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -36,7 +37,10 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             />{" "}
             {option}{" "}
             <span className={styles["market-card__market-options--actions-button-percentage"]}>
-              {100 / market.options.length}%
+              {Number(100 / market.options.length)
+                .toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION)
+                .toString()}
+              %
             </span>
           </Button>
         );

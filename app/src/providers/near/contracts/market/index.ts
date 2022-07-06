@@ -5,7 +5,15 @@ import { BN } from "bn.js";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 
-import { AccountId, GetOutcomeTokenArgs, MarketContractMethods, MarketContractValues } from "./market.types";
+import {
+  AccountId,
+  BalanceOfArgs,
+  GetAmountMintableArgs,
+  GetAmountPayableArgs,
+  GetOutcomeTokenArgs,
+  MarketContractMethods,
+  MarketContractValues,
+} from "./market.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class MarketContract {
@@ -35,25 +43,27 @@ export class MarketContract {
     return new MarketContract(contract);
   }
 
-  static async loadFromWalletConnection(connection: WalletConnection, contractAddress: string) {
+  static async loadFromWalletConnection(
+    connection: WalletConnection,
+    contractAddress: string,
+  ): Promise<[MarketContract, Contract & MarketContractMethods]> {
     const account = await connection.account();
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
-    return near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+    const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+
+    return [new MarketContract(contract), contract];
   }
 
-  static async publish(connection: WalletConnection, contractAddress: string) {
+  async publish() {
     try {
-      const contract = await MarketContract.loadFromWalletConnection(connection, contractAddress);
+      const result = await this.contract.publish({}, new BN("60000000000000").toNumber());
 
-      await contract.publish({}, new BN("60000000000000").toNumber());
-
-      return true;
+      return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_PUBLISH");
     }
-
-    return false;
   }
 
   async getMarketData() {
@@ -63,9 +73,8 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_MARKET_DATA");
     }
-
-    return null;
   }
 
   async getResolutionWindow() {
@@ -75,9 +84,8 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_RESOLUTION_WINDOW");
     }
-
-    return null;
   }
 
   async getOutcomeToken(args: GetOutcomeTokenArgs) {
@@ -87,9 +95,8 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_OUTCOME_TOKEN");
     }
-
-    return null;
   }
 
   async isPublished() {
@@ -99,9 +106,8 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_IS_PUBLISHED");
     }
-
-    return false;
   }
 
   async getCollateralTokenMetadata() {
@@ -111,9 +117,8 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_COLLATERAL_TOKEN_METADATA");
     }
-
-    return null;
   }
 
   async getFeeRatio() {
@@ -123,8 +128,42 @@ export class MarketContract {
       return result;
     } catch (error) {
       console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_FEE_RATIO");
     }
+  }
 
-    return null;
+  async balanceOf(args: BalanceOfArgs) {
+    try {
+      const result = await this.contract.balance_of(args);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_BALANCE_OF");
+    }
+  }
+
+  async getAmountMintable(args: GetAmountMintableArgs) {
+    try {
+      const result = await this.contract.get_amount_mintable(args);
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_AMOUNT_MINTABLE");
+    }
+  }
+
+  async getAmountPayable(args: GetAmountPayableArgs) {
+    try {
+      const result = await this.contract.get_amount_payable(args);
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_AMOUNT_PAYABLE");
+    }
   }
 }
