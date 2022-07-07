@@ -43,17 +43,11 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
 
   const onSubmit = async (values: CreateMarketModalForm) => {
     try {
-      const startsAt = date.parseFromFormat(
-        `${values.marketStartDate} ${values.marketStartTime} ${getTimezoneOffsetString(marketEndTimezoneOffset)}`,
-        "YYYY-MM-DD HH:mm Z",
-        false,
-      );
+      const timezoneOffset = Number(getTimezoneOffsetString(marketEndTimezoneOffset));
 
-      const endsAt = date.parseFromFormat(
-        `${values.marketEndDate} ${values.marketEndTime} ${getTimezoneOffsetString(marketEndTimezoneOffset)}`,
-        "YYYY-MM-DD HH:mm Z",
-        false,
-      );
+      const startsAt = date.parseFromFormat(`${values.marketStartDate} ${values.marketStartTime}`, "YYYY-MM-DD HH:mm");
+
+      const endsAt = date.parseFromFormat(`${values.marketEndDate} ${values.marketEndTime}`, "YYYY-MM-DD HH:mm");
 
       const resolutionWindow = endsAt.clone().add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
 
@@ -68,6 +62,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
           options: [values.defaultMarketOption, ...values.marketOptions],
           starts_at: date.toNanoseconds(startsAt.valueOf()),
           ends_at: date.toNanoseconds(endsAt.valueOf()),
+          utc_offset: timezoneOffset,
         },
         dao_account_id: daoAccountId,
         collateral_token_account_id: collateralTokenAccountId,

@@ -10,7 +10,7 @@ import getDefaultDateFormat, {
   fromTimestampWithOffset,
 } from "./getDefaultDateFormat";
 
-const parseFromFormat = (inp?: MomentInput, format?: MomentFormatSpecification, strict?: boolean) =>
+const parseFromFormat = (inp?: MomentInput, format?: MomentFormatSpecification, strict: boolean = false) =>
   client(inp, format, strict);
 
 export default {

@@ -89,13 +89,15 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             <HorizontalLine />
             <div className={styles["market-card__start-end-time"]}>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Market starts</span> <span>{date.fromTimestampWithOffset(market.starts_at)}</span>
+                <span>Market starts</span>{" "}
+                <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at)}</span>
+                <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution date</span> <span>{date.fromTimestampWithOffset(resolutionWindow)}</span>
+                <span>Resolution date</span>{" "}
+                <span>{date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)}</span>
               </Typography.Description>
             </div>
           </Grid.Col>

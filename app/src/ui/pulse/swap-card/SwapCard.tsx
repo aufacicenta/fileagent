@@ -138,6 +138,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
+      balance: amount,
     });
 
     setRate(amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());

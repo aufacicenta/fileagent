@@ -10,6 +10,7 @@ export type MarketData = {
   options: Array<string>;
   starts_at: Timestamp;
   ends_at: Timestamp;
+  utc_offset: number;
 };
 
 export type CollateralTokenMetadata = {
@@ -36,7 +37,7 @@ export type MarketContractValues = {
 export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
 export type BalanceOfArgs = { outcome_id: OutcomeId; account_id: AccountId };
 export type GetAmountMintableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
-export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
+export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance; balance: WrappedBalance };
 
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
