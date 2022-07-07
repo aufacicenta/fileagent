@@ -4,10 +4,13 @@ import { MarketCardContainerProps } from "./MarketCard.types";
 import { MarketCard } from "./MarketCard";
 import { MarketCardTemplate } from "./MarketCardTemplate";
 
-// @TODO redirect to market page
-const onClickOutcomeToken = () => undefined;
-
-export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ className, expanded, marketId }) => {
+export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({
+  className,
+  expanded,
+  marketId,
+  onClickOutcomeToken,
+  onClickMarketTitle,
+}) => {
   const { marketContractValues, onClickPublishMarket } = useNearMarketContract({ marketId });
 
   if (!marketContractValues) {
@@ -21,6 +24,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ classN
       className={className}
       onClickPublishMarket={onClickPublishMarket}
       onClickOutcomeToken={onClickOutcomeToken}
+      onClickMarketTitle={onClickMarketTitle}
       marketId={marketId}
     />
   );

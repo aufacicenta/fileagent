@@ -10,6 +10,13 @@
     &--expanded {
       @include font-properties($typography-headline-1);
     }
+
+    &--hover {
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
   }
 
   &__start-end-time {

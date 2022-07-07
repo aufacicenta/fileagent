@@ -22,6 +22,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   marketId,
   onClickPublishMarket,
   onClickOutcomeToken,
+  onClickMarketTitle,
 }) => {
   const getMarketOptions = () =>
     market.options.map((option, id) => {
@@ -111,7 +112,9 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             <Typography.Text
               className={clsx(styles["market-card__title"], className, {
                 [styles["market-card__title--expanded"]]: expanded,
+                [styles["market-card__title--hover"]]: !!onClickMarketTitle,
               })}
+              onClick={onClickMarketTitle}
             >
               {market.description}
             </Typography.Text>
