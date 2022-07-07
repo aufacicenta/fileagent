@@ -15,6 +15,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   value,
   children,
   autoFocus,
+  disabled,
+  defaultValue,
 }) => (
   <div className={clsx(styles["text-input"], "input-field", className)}>
     <Field
@@ -25,10 +27,11 @@ export const TextInput: React.FC<TextInputProps> = ({
       autoFocus={autoFocus}
       placeholder={placeholder}
       value={value}
+      defaultValue={defaultValue}
     >
       {({ input, meta }) => (
         <>
-          <input className={clsx(styles["text-input__field"], "validate")} {...input} />
+          <input className={clsx(styles["text-input__field"], "validate")} disabled={disabled} {...input} />
           {meta.error && meta.touched && <Typography.Description flat>{meta.error}</Typography.Description>}
         </>
       )}

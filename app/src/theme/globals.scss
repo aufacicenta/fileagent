@@ -138,6 +138,7 @@ body[data-theme="dark"] {
 
   // Forms
   --color-input-text: var(--color-typography-text);
+  --color-input-text-disabled: var(--color-typography-description);
   --color-input-border: var(--color-black);
   --color-input-label: rgba(255, 255, 255, 0.7);
   --color-input-placeholder: rgba(255, 255, 255, 0.22);
@@ -242,7 +243,11 @@ body[data-theme="light"] {
   --color-value-decrease-bright: #e3935b;
 
   // Forms
+  --color-input-text: var(--color-typography-text);
+  --color-input-text-disabled: var(--color-typography-description);
   --color-input-border: var(--color-black);
+  --color-input-label: rgba(255, 255, 255, 0.7);
+  --color-input-placeholder: rgba(255, 255, 255, 0.22);
 }
 
 code {

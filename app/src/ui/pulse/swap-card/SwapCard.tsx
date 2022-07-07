@@ -28,10 +28,6 @@ const onSubmit = (values: SwapCardForm) => {
   // }
 };
 
-const onToTokenChange = (value: string, previous: string) => {
-  console.log(value, previous);
-};
-
 // @TODO let's try https://www.npmjs.com/package/@lemoncode/fonk: required, valid number, enough balance
 const validate = () => ({
   fromTokenAmount: undefined,
@@ -123,32 +119,41 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   // @TODO fetch rate from MarketContract.getAmountMintable
-  const getBuyRate = async (amount: number) => {
+  const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
     });
 
-    setFee(exchangeFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
-    setRate(amountMintable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const feeString = exchangeFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
+    const rateString = amountMintable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
+
+    setFee(feeString);
+    setRate(rateString);
+
+    setToTokenInputValue(rateString);
   };
 
   // @TODO fetch rate from MarketContract.getAmountPayable
-  const getSellRate = async (amount: number) => {
+  const getSellRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
       balance: amount,
     });
 
-    setRate(amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const rateString = amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
+
+    setRate(rateString);
+
+    setToTokenInputValue(rateString);
   };
 
-  const onFromTokenChange = (value: string) => {
+  const onFromTokenChange = (value: string, mutator: (value: string) => void) => {
     if (isCollateralSourceToken()) {
-      getBuyRate(Number(value));
+      getBuyRate(Number(value), mutator);
     } else {
-      getSellRate(Number(value));
+      getSellRate(Number(value), mutator);
     }
   };
 
@@ -157,7 +162,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     <RFForm
       onSubmit={onSubmit}
       validate={validate}
-      render={({ handleSubmit }) => (
+      mutators={{
+        setToTokenInputValue: (_args, state, utils) => (value: string) => {
+          utils.changeValue(state, "toTokenAmount", () => value);
+        },
+      }}
+      render={({ handleSubmit, form }) => (
         <form onSubmit={handleSubmit}>
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
@@ -183,10 +193,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   <Form.TextInput
                     id="fromTokenAmount"
                     type="text"
-                    placeholder="0.00"
+                    defaultValue="0.00"
                     className={styles["swap-card__from--amount-input"]}
                   />
-                  <OnChange name="fromTokenAmount">{_.debounce(onFromTokenChange, DEFAULT_DEBOUNCE_TIME)}</OnChange>
+                  <OnChange name="fromTokenAmount">
+                    {_.debounce(
+                      (value) => onFromTokenChange(value, form.mutators.setToTokenInputValue()),
+                      DEFAULT_DEBOUNCE_TIME,
+                    )}
+                  </OnChange>
                 </div>
                 <div className={styles["swap-card__from--switch"]}>
                   <Button onClick={onClickFlip}>
@@ -210,10 +225,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   <Form.TextInput
                     id="toTokenAmount"
                     type="text"
-                    placeholder="0.00"
+                    defaultValue="0.00"
                     className={styles["swap-card__to--amount-input"]}
+                    disabled
                   />
-                  <OnChange name="toTokenAmount">{_.debounce(onToTokenChange, DEFAULT_DEBOUNCE_TIME)}</OnChange>
                 </div>
               </div>
               <Typography.Description className={styles["swap-card__overview"]}>
