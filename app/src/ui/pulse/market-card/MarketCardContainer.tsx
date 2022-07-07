@@ -21,6 +21,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({ classN
       className={className}
       onClickPublishMarket={onClickPublishMarket}
       onClickOutcomeToken={onClickOutcomeToken}
+      marketId={marketId}
     />
   );
 };

@@ -6,6 +6,7 @@ export type MarketCardProps = {
   marketContractValues: MarketContractValues;
   onClickPublishMarket: () => void;
   onClickOutcomeToken: (outcomeToken: OutcomeToken) => void;
+  marketId: string;
   expanded?: boolean;
   children?: ReactNode;
   className?: string;

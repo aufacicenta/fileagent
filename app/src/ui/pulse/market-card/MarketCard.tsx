@@ -8,6 +8,8 @@ import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import pulse from "providers/pulse";
 import currency from "providers/currency";
+import near from "providers/near";
+import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -17,6 +19,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   className,
   expanded,
   marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens, collateralTokenMetadata },
+  marketId,
   onClickPublishMarket,
   onClickOutcomeToken,
 }) => {
@@ -115,15 +118,24 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             <HorizontalLine />
             <div className={styles["market-card__start-end-time"]}>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Market starts</span>{" "}
+                <span>Market starts</span>
                 <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution date</span>{" "}
+                <span>Resolution date</span>
                 <span>{date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)}</span>
+              </Typography.Description>
+              <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                <span>Contract</span>
+                <Typography.Anchor
+                  href={`${near.getConfig(DEFAULT_NETWORK_ENV).explorerUrl}/accounts/${marketId}`}
+                  target="_blank"
+                >
+                  {marketId}
+                </Typography.Anchor>
               </Typography.Description>
             </div>
           </Grid.Col>
