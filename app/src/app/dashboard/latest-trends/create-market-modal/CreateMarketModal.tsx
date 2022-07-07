@@ -16,22 +16,71 @@ import pulse from "providers/pulse";
 import { Styles } from "ui/icon/Icon.module.scss";
 import timezones from "providers/date/timezones.json";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
+import date from "providers/date";
+import near from "providers/near";
+import { DEFAULT_FEE_RATIO, DEFAULT_NETWORK_ENV, DEFAULT_RESOLUTION_WINDOW_DAY_SPAN } from "providers/near/getConfig";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
+import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 
-import { CreateMarketModalProps } from "./CreateMarketModal.types";
 import styles from "./CreateMarketModal.module.scss";
+import { CreateMarketModalForm, CreateMarketModalProps } from "./CreateMarketModal.types";
 
 const generateTimezoneOffsetString = (offset: number, suffix: string) => `${offset}_${suffix}`;
+const getTimezoneOffsetString = (input: string) => input.match(/.*?(?=_|$)/i)![0];
 
 export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className, onClose }) => {
-  const [collateralToken, setCollateralToken] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
+  const [collateralTokenSymbol, setCollateralTokenSymbol] = useState(pulse.getConfig().COLLATERAL_TOKENS[0].symbol);
   const [marketEndTimezoneOffset, setMarketEndTimezoneOffset] = useState(
     generateTimezoneOffsetString(timezones[0].offset, timezones[0].value),
   );
 
   const { t } = useTranslation(["latest-trends", "common"]);
+  const toast = useToastContext();
+  const wallet = useWalletStateContext();
 
-  const onSubmit = (values: Record<string, unknown>) => {
-    console.log({ ...values, collateralToken, marketEndTimezoneOffset });
+  const { contract: MarketFactoryContract } = useNearMarketFactoryContract();
+
+  const onSubmit = async (values: CreateMarketModalForm) => {
+    try {
+      const timezoneOffset = Number(getTimezoneOffsetString(marketEndTimezoneOffset));
+
+      const startsAt = date.parseFromFormat(`${values.marketStartDate} ${values.marketStartTime}`, "YYYY-MM-DD HH:mm");
+
+      const endsAt = date.parseFromFormat(`${values.marketEndDate} ${values.marketEndTime}`, "YYYY-MM-DD HH:mm");
+
+      const resolutionWindow = endsAt.clone().add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
+
+      const daoAccountId = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
+      const collateralTokenAccountId = pulse.getCollateralTokenBySymbol(collateralTokenSymbol).accountId;
+
+      const args = {
+        market: {
+          description: values.marketDescription,
+          info: "market info",
+          category: values.marketCategory,
+          options: [values.defaultMarketOption, ...values.marketOptions],
+          starts_at: date.toNanoseconds(startsAt.valueOf()),
+          ends_at: date.toNanoseconds(endsAt.valueOf()),
+          utc_offset: timezoneOffset,
+        },
+        dao_account_id: daoAccountId,
+        collateral_token_account_id: collateralTokenAccountId,
+        fee_ratio: DEFAULT_FEE_RATIO,
+        resolution_window: date.toNanoseconds(resolutionWindow.valueOf()),
+      };
+
+      // @TODO validate args, highlight fields if something's missing
+
+      await MarketFactoryContract.createMarket(wallet.context.get().connection!, args);
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        title: "Oops, our bad.",
+        children: <Typography.Text>While creating the market. Try again?</Typography.Text>,
+      });
+    }
   };
 
   return (
@@ -98,9 +147,9 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                         id="collateralToken"
                         inputProps={{
                           onChange: (value) => {
-                            setCollateralToken(value as string);
+                            setCollateralTokenSymbol(value as string);
                           },
-                          value: collateralToken,
+                          value: collateralTokenSymbol,
                         }}
                       >
                         {pulse.getConfig().COLLATERAL_TOKENS.map((token) => (
@@ -166,6 +215,24 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                   </div>
                   <div className={styles["create-market-modal__spacer"]} />
                   <Typography.Headline3>
+                    {t("latestTrends.createMarketModal.input.marketStartDatetime")}
+                  </Typography.Headline3>
+                  <Grid.Row>
+                    <Grid.Col lg={4} xs={12}>
+                      <Form.Label htmlFor="marketStartDate">
+                        {t("latestTrends.createMarketModal.input.marketStartDate")}
+                      </Form.Label>
+                      <Form.TextInput id="marketStartDate" type="date" />
+                    </Grid.Col>
+                    <Grid.Col lg={3} xs={12}>
+                      <Form.Label htmlFor="marketStartTime">
+                        {t("latestTrends.createMarketModal.input.marketStartTime")}
+                      </Form.Label>
+                      <Form.TextInput id="marketStartTime" type="time" />
+                    </Grid.Col>
+                  </Grid.Row>
+                  <div className={styles["create-market-modal__spacer"]} />
+                  <Typography.Headline3>
                     {t("latestTrends.createMarketModal.input.marketEndDatetime")}
                   </Typography.Headline3>
                   <Grid.Row>
@@ -181,7 +248,9 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                       </Form.Label>
                       <Form.TextInput id="marketEndTime" type="time" />
                     </Grid.Col>
-                    <Grid.Col lg={5} xs={12}>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Col lg={12} xs={12}>
                       <Form.Label htmlFor="marketEndTimezone">
                         {t("latestTrends.createMarketModal.input.marketEndTimezone")}
                       </Form.Label>

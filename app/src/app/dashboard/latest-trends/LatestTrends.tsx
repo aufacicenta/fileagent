@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Form as RFForm } from "react-final-form";
 import { useTranslation } from "next-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -12,8 +12,10 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import pulse from "providers/pulse";
-import { MarketCard } from "ui/pulse/market-card/MarketCard";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { MarketFactoryContract } from "providers/near/contracts/market-factory";
+import { MarketCardContainer } from "ui/pulse/market-card/MarketCardContainer";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
 
 import styles from "./LatestTrends.module.scss";
 import { LatestTrendsProps } from "./LatestTrends.types";
@@ -28,16 +30,46 @@ const onApplyFilters = () => undefined;
 
 export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   const [isCreateMarketModalVisible, setIsCreateMarketModalVisible] = useState(false);
+  const [markets, setMarkets] = useState<Array<string>>([]);
+
+  // @TODO when a create_market transaction succeeds, it returns to this page with this query: http://localhost:3003/?transactionHashes=DCaUjKV84GTSgGkwedb3MbEKxon3fSEzi5hhKjsTAFhW
+  // @TODO we need to read the query on router.ready and display a success toast with the tx hash and a link to the tx
 
   const routes = useRoutes();
+  const toast = useToastContext();
 
   const { t } = useTranslation(["latest-trends", "common"]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
+        // @TODO use pagination method get_markets
+        const marketsList = await marketFactory.getMarketsList();
+
+        if (!marketsList) {
+          throw new Error("Failed to fetch markets");
+        }
+
+        setMarkets(marketsList?.reverse());
+      } catch {
+        toast.trigger({
+          variant: "error",
+          withTimeout: true,
+          // @TODO i18n
+          title: "Failed to fetch recent markets",
+          children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
+        });
+      }
+    })();
+  }, [toast]);
 
   const onClickCloseCreateMarketModal = () => {
     setIsCreateMarketModalVisible(false);
   };
 
   const onClickCreateMarketButton = () => {
+    // @TODO check if there's a connected wallet, otherwise display the "connect wallet modal"
     setIsCreateMarketModalVisible(true);
   };
 
@@ -69,7 +101,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                 </div>
                 <Card>
                   <Card.Content>
-                    <Grid.Row>
+                    <Grid.Row className={styles["latest-trends__card--actions-row"]}>
                       <Grid.Col lg={6}>.</Grid.Col>
                       <Grid.Col lg={6}>
                         <div className={styles["latest-trends__card--actions"]}>
@@ -97,13 +129,15 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                     </CategoryPills>
                     <div className={styles["latest-trends__market-cards-grid"]}>
                       <Grid.Row>
-                        <Grid.Col lg={4}>
-                          <Link href={routes.dashboard.market()}>
-                            <a className={styles["latest-trends__market-cards-grid--item"]}>
-                              <MarketCard />
-                            </a>
-                          </Link>
-                        </Grid.Col>
+                        {markets.map((marketId) => (
+                          <Grid.Col lg={4} key={marketId} className={styles["latest-trends__market-cards-grid--col"]}>
+                            <Link href={routes.dashboard.market({ marketId })}>
+                              <a className={styles["latest-trends__market-cards-grid--item"]}>
+                                <MarketCardContainer marketId={marketId} />
+                              </a>
+                            </Link>
+                          </Grid.Col>
+                        ))}
                       </Grid.Row>
                     </div>
                   </Card.Content>

@@ -5,5 +5,7 @@
   "swapCard.rate": "Rate",
   "swapCard.inverseRate": "Inverse Rate",
   "swapCard.estimatedFee": "Estimated Fee",
-  "swapCard.swap": "Swap"
+  "swapCard.swap": "Swap",
+  "swapCard.buy": "Buy",
+  "swapCard.sell": "Sell"
 }
