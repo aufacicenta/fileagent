@@ -33,7 +33,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
           >
             <span
               className={styles["market-card__market-options--actions-button-dot"]}
-              style={{ backgroundColor: "#FC59FF" }}
+              style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
             />{" "}
             {option}{" "}
             <span className={styles["market-card__market-options--actions-button-percentage"]}>
@@ -58,13 +58,39 @@ export const MarketCard: React.FC<MarketCardProps> = ({
         >
           <span
             className={styles["market-card__market-options--actions-button-dot"]}
-            style={{ backgroundColor: "#FC59FF" }}
+            style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
           />{" "}
           {option}{" "}
           <span className={styles["market-card__market-options--actions-button-percentage"]}>
             {outcomeToken.price * 100}%
           </span>
         </Button>
+      );
+    });
+
+  const getMarketOptionsProgress = () =>
+    market.options.map((option, id) => {
+      if (!isPublished && outcomeTokens?.length === 0) {
+        return (
+          <div
+            className={styles["market-card__market-options--progres-bar-width"]}
+            style={{
+              width: `${100 / market.options.length}%`,
+              backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id],
+            }}
+            key={option}
+          />
+        );
+      }
+
+      const outcomeToken = outcomeTokens![id];
+
+      return (
+        <div
+          className={styles["market-card__market-options--progres-bar-width"]}
+          style={{ width: `${outcomeToken.price * 100}%`, backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
+          key={option}
+        />
       );
     });
 
@@ -110,14 +136,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                       What does the market think?
                     </Typography.Headline5>
                     <div className={styles["market-card__market-options--progres-bar"]}>
-                      <div
-                        className={styles["market-card__market-options--progres-bar-width"]}
-                        style={{ width: "80%", backgroundColor: "#FC59FF" }}
-                      />
-                      <div
-                        className={styles["market-card__market-options--progres-bar-width"]}
-                        style={{ width: "20%", backgroundColor: "#5356FC" }}
-                      />
+                      {getMarketOptionsProgress()}
                     </div>
                   </>
                 )}

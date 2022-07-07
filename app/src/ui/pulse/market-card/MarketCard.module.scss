@@ -81,13 +81,10 @@
       flex-direction: column;
       justify-content: space-between;
 
-      > button {
-        padding: 12px 3px;
-        text-transform: capitalize;
-      }
-
       &-button {
         border: 1px solid var(--color-background);
+        padding: 12px 3px;
+        text-transform: capitalize;
 
         &-dot {
           display: inline-block;
