@@ -13,6 +13,7 @@ export type Styles = {
   "wallet-selector__icon-connected--wrapper": string;
   "wallet-selector__widget": string;
   "wallet-selector__widget--backdrop": string;
+  "wallet-selector--mobile": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

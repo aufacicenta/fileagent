@@ -19,6 +19,7 @@ export type Styles = {
   "wallet-selector-navbar__logo": string;
   "wallet-selector-navbar__logo-desktop": string;
   "wallet-selector-navbar__logo-mobile": string;
+  "wallet-selector-navbar__pill": string;
   "wallet-selector-navbar__right": string;
   "wallet-selector-navbar__right--cta": string;
   "wallet-selector-navbar__right--item": string;

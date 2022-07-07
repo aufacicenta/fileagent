@@ -6,6 +6,7 @@ import { Icon } from "ui/icon/Icon";
 import { WalletSelector } from "ui/wallet-selector/WalletSelector";
 import { Typography } from "ui/typography/Typography";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
 
 import { WalletSelectorNavbarProps } from "./WalletSelectorNavbar.types";
 import styles from "./WalletSelectorNavbar.module.scss";
@@ -31,6 +32,9 @@ export const WalletSelectorNavbar: React.FC<WalletSelectorNavbarProps> = ({ onCl
           </Hidden>
           <Grid.Col lg={5} sm={5} xs={6}>
             <div className={styles["wallet-selector-navbar__right"]}>
+              <div className={styles["wallet-selector-navbar__right--item"]}>
+                <BalancePill className={styles["wallet-selector-navbar__pill"]} />
+              </div>
               <div className={styles["wallet-selector-navbar__right--item"]}>
                 <Icon
                   name="icon-pulse-menu-2"

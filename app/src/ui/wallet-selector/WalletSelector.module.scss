@@ -130,4 +130,11 @@
       cursor: default;
     }
   }
+
+  &--mobile {
+    button {
+      width: 100%;
+      margin: $space-m 0;
+    }
+  }
 }

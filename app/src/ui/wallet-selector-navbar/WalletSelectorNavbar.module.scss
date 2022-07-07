@@ -259,4 +259,11 @@
       background-color: var(--color-background-contrast);
     }
   }
+
+  &__pill {
+    @include atLargeTablet {
+      display: block;
+    }
+    display: none;
+  }
 }

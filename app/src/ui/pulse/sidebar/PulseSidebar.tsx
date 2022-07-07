@@ -7,10 +7,10 @@ import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { Icon } from "ui/icon/Icon";
 import { Typography } from "ui/typography/Typography";
 import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
+import { WalletSelectorMobile } from "ui/wallet-selector/WalletSelectorMobile";
 
 import styles from "./PulseSidebar.module.scss";
 import { PulseSidebarProps } from "./PulseSidebar.types";
-import { BalancePill } from "./balance-pill/BalancePill";
 
 export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, handleOpen, handleClose }) => {
   const routes = useRoutes();
@@ -33,7 +33,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
           </div>
           <div className={styles["pulse-sidebar__content"]}>
             <div className={styles["pulse-sidebar__item--pill"]}>
-              <BalancePill />
+              <WalletSelectorMobile />
             </div>
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>

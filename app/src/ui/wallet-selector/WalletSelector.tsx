@@ -27,13 +27,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
   return (
     <div className={clsx(styles["wallet-selector"], className)}>
       <Button color="primary" onClick={() => setIsWidgetVisible(!isWidgetVisible)}>
-        {wallet.isConnected.get() ? (
-          <Typography.Text inline truncate>
-            {wallet.address.get()}
-          </Typography.Text>
-        ) : (
-          "Connect Wallet"
-        )}
+        {wallet.isConnected.get() ? "Disconnect Wallet" : "Connect Wallet"}
       </Button>
       {isWidgetVisible && (
         <>
