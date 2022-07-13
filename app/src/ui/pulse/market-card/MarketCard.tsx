@@ -7,96 +7,25 @@ import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import pulse from "providers/pulse";
-import currency from "providers/currency";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
+import { MarketOptions } from "./market-options/MarketOptions";
+import { MarketOptionsProgress } from "./market-options-progress/MarketOptionsProgress";
 
 // @TODO i18n
 export const MarketCard: React.FC<MarketCardProps> = ({
   className,
   expanded,
-  marketContractValues: { market, resolutionWindow, isPublished, outcomeTokens, collateralTokenMetadata },
+  marketContractValues,
   marketId,
   onClickPublishMarket,
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const getMarketOptions = () =>
-    market.options.map((option, id) => {
-      if (!isPublished && outcomeTokens?.length === 0) {
-        return (
-          <Button
-            color="secondary"
-            fullWidth
-            className={styles["market-card__market-options--actions-button"]}
-            key={option}
-            disabled
-          >
-            <span
-              className={styles["market-card__market-options--actions-button-dot"]}
-              style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
-            />{" "}
-            {option}{" "}
-            <span className={styles["market-card__market-options--actions-button-percentage"]}>
-              {Number(100 / market.options.length)
-                .toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION)
-                .toString()}
-              %
-            </span>
-          </Button>
-        );
-      }
-
-      const outcomeToken = outcomeTokens![id];
-
-      return (
-        <Button
-          color="secondary"
-          fullWidth
-          className={styles["market-card__market-options--actions-button"]}
-          key={option}
-          onClick={() => onClickOutcomeToken(outcomeToken)}
-        >
-          <span
-            className={styles["market-card__market-options--actions-button-dot"]}
-            style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
-          />{" "}
-          {option}{" "}
-          <span className={styles["market-card__market-options--actions-button-percentage"]}>
-            {outcomeToken.price * 100}%
-          </span>
-        </Button>
-      );
-    });
-
-  const getMarketOptionsProgress = () =>
-    market.options.map((option, id) => {
-      if (!isPublished && outcomeTokens?.length === 0) {
-        return (
-          <div
-            className={styles["market-card__market-options--progres-bar-width"]}
-            style={{
-              width: `${100 / market.options.length}%`,
-              backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id],
-            }}
-            key={option}
-          />
-        );
-      }
-
-      const outcomeToken = outcomeTokens![id];
-
-      return (
-        <div
-          className={styles["market-card__market-options--progres-bar-width"]}
-          style={{ width: `${outcomeToken.price * 100}%`, backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
-          key={option}
-        />
-      );
-    });
+  const { market, resolutionWindow, isPublished, collateralTokenMetadata } = marketContractValues;
 
   return (
     <Card className={clsx(styles["market-card"], className)}>
@@ -151,7 +80,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                       What does the market think?
                     </Typography.Headline5>
                     <div className={styles["market-card__market-options--progres-bar"]}>
-                      {getMarketOptionsProgress()}
+                      <MarketOptionsProgress marketContractValues={marketContractValues} />
                     </div>
                   </>
                 )}
@@ -166,7 +95,10 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                       Publish Market
                     </Button>
                   )}
-                  {getMarketOptions()}
+                  <MarketOptions
+                    onClickOutcomeToken={onClickOutcomeToken}
+                    marketContractValues={marketContractValues}
+                  />
                 </div>
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>

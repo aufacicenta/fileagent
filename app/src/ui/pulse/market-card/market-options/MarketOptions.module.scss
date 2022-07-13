@@ -1,0 +1,51 @@
+@import "src/theme/base";
+
+.market-options {
+  background-color: var(--color-market-card-background-contrast);
+
+  &__card-content {
+    padding-top: $space-default;
+    padding-bottom: $space-default;
+  }
+
+  &__title {
+    margin-top: 0;
+    font-weight: $font-weight-medium;
+    color: var(--color-market-card-title);
+  }
+
+  &__stats {
+    margin-top: $space-default;
+
+    &-stat {
+      display: flex;
+      justify-content: space-between;
+      color: var(--color-market-card-stat);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &-button {
+      border: 1px solid var(--color-background);
+      padding: 12px 3px;
+      text-transform: capitalize;
+
+      &-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: $space-default;
+        border-radius: 50%;
+      }
+
+      &-percentage {
+        display: inline-block;
+        margin-left: $space-default;
+      }
+    }
+  }
+}
