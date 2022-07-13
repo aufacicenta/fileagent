@@ -57,7 +57,7 @@ export class MarketContract {
 
   async publish() {
     try {
-      const result = await this.contract.publish({}, new BN("60000000000000").toNumber());
+      const result = await this.contract.publish({}, new BN("100000000000000").toNumber());
 
       return result;
     } catch (error) {

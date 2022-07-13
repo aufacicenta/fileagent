@@ -20,14 +20,6 @@ import styles from "./SwapCard.module.scss";
 
 const DEFAULT_DEBOUNCE_TIME = 500;
 
-const onSubmit = (values: SwapCardForm) => {
-  console.log(values);
-
-  // if (isCollateralTokenSource()) {
-  // } else {
-  // }
-};
-
 // @TODO let's try https://www.npmjs.com/package/@lemoncode/fonk: required, valid number, enough balance
 const validate = () => ({
   fromTokenAmount: undefined,
@@ -93,7 +85,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    // @TODO get balance of outcome token
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
     setBalance(outcomeTokenBalance.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
   }, [
@@ -118,7 +109,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
   };
 
-  // @TODO fetch rate from MarketContract.getAmountMintable
   const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
       amount,
@@ -134,7 +124,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setToTokenInputValue(rateString);
   };
 
-  // @TODO fetch rate from MarketContract.getAmountPayable
   const getSellRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
@@ -154,6 +143,19 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       getBuyRate(Number(value), mutator);
     } else {
       getSellRate(Number(value), mutator);
+    }
+  };
+
+  const onSubmit = async ({ fromTokenAmount }: SwapCardForm) => {
+    if (isCollateralSourceToken()) {
+      await FungibleTokenContract.ftTransferCall(
+        collateralToken.accountId,
+        marketId,
+        fromTokenAmount.toString(),
+        selectedOutcomeToken.outcome_id,
+      );
+    } else {
+      // sell
     }
   };
 
