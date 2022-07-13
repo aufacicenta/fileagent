@@ -135,7 +135,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
-      balance: amount,
+      balance: collateralTokenMetadata.balance,
     });
 
     const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
