@@ -4,6 +4,7 @@ import { CollateralTokenMetadata } from "providers/near/contracts/market/market.
 
 export type CollateralTokenBalanceProps = {
   collateralTokenMetadata: CollateralTokenMetadata;
+  marketId: string;
   children?: ReactNode;
   className?: string;
 };

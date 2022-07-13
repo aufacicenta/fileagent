@@ -104,7 +104,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Liquidity:</span>
                     <span>
-                      <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} />
+                      <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} marketId={marketId} />
                     </span>
                   </Typography.Description>
                 </div>

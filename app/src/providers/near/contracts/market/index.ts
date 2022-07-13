@@ -13,6 +13,7 @@ import {
   GetOutcomeTokenArgs,
   MarketContractMethods,
   MarketContractValues,
+  SellArgs,
 } from "./market.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
@@ -63,6 +64,17 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_PUBLISH");
+    }
+  }
+
+  async sell(args: SellArgs) {
+    try {
+      const result = await this.contract.sell(args);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_SELL");
     }
   }
 

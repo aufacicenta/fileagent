@@ -86,8 +86,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    setBalance(outcomeTokenBalance.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    setBalance(currency.convert.fromUIntAmount(outcomeTokenBalance, decimals).toString());
   }, [
+    FungibleTokenContract.fungibleTokenMetadata?.decimals,
     MarketContract,
     collateralToken.price,
     collateralToken.symbol,
@@ -110,13 +112,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
-      amount,
+      amount: currency.convert.toUIntAmount(amount, decimals),
       outcome_id: selectedOutcomeToken.outcome_id,
     });
 
-    const feeString = exchangeFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
-    const rateString = amountMintable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
+    const feeString = currency.convert.fromUIntAmount(exchangeFee, decimals).toString();
+    const rateString = currency.convert.fromUIntAmount(amountMintable, decimals).toString();
 
     setFee(feeString);
     setRate(rateString);
@@ -124,14 +128,17 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setToTokenInputValue(rateString);
   };
 
-  const getSellRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
+  const getSellRate = async (sellAmount: number, setToTokenInputValue: (value: string) => void) => {
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const amount = currency.convert.toUIntAmount(sellAmount, decimals);
+
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
       balance: amount,
     });
 
-    const rateString = amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString();
+    const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
 
     setRate(rateString);
 
@@ -147,16 +154,20 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const onSubmit = async ({ fromTokenAmount }: SwapCardForm) => {
-    if (isCollateralSourceToken()) {
-      await FungibleTokenContract.ftTransferCall(
-        collateralToken.accountId,
-        marketId,
-        fromTokenAmount.toString(),
-        selectedOutcomeToken.outcome_id,
-      );
-    } else {
-      // sell
-    }
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
+
+    await (isCollateralSourceToken()
+      ? FungibleTokenContract.ftTransferCall(
+          collateralToken.accountId,
+          marketId,
+          amount,
+          selectedOutcomeToken.outcome_id,
+        )
+      : MarketContract.sell({
+          outcome_id: selectedOutcomeToken.outcome_id,
+          amount,
+        }));
   };
 
   // @TODO i18n
