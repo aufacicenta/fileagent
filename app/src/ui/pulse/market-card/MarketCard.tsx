@@ -6,7 +6,6 @@ import { HorizontalLine } from "ui/horizontal-line/HorizontalLine";
 import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
-import pulse from "providers/pulse";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 
@@ -14,6 +13,7 @@ import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 import { MarketOptions } from "./market-options/MarketOptions";
 import { MarketOptionsProgress } from "./market-options-progress/MarketOptionsProgress";
+import { CollateralTokenBalance } from "./collateral-token-balance/CollateralTokenBalance";
 
 // @TODO i18n
 export const MarketCard: React.FC<MarketCardProps> = ({
@@ -104,8 +104,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Liquidity:</span>
                     <span>
-                      {collateralTokenMetadata.balance}{" "}
-                      {pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id).symbol}
+                      <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} />
                     </span>
                   </Typography.Description>
                 </div>
