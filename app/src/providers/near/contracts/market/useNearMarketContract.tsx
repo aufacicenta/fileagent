@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
@@ -21,7 +21,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   const toast = useToastContext();
   const wallet = useWalletStateContext();
 
-  const fetchMarketContractValues = useCallback(async () => {
+  const fetchMarketContractValues = async () => {
     try {
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
@@ -63,13 +63,14 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
       });
     }
-  }, [marketId, toast]);
+  };
 
   useEffect(() => {
     if (!preventLoad) {
       fetchMarketContractValues();
     }
-  }, [fetchMarketContractValues, preventLoad]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketId, preventLoad]);
 
   const assertWalletConnection = () => {
     if (!wallet.isConnected.get()) {

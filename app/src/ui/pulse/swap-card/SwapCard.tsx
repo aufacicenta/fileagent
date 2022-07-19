@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Form as RFForm } from "react-final-form";
 import { OnChange } from "react-final-form-listeners";
 import { useTranslation } from "next-i18next";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 
 import { Card } from "ui/card/Card";
@@ -39,6 +39,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const [fee, setFee] = useState("0.00");
 
   const { t } = useTranslation(["swap-card"]);
+
   const FungibleTokenContract = useNearFungibleTokenContract();
   const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
 
@@ -46,7 +47,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
 
-  const setCollateralAsSource = useCallback(async () => {
+  const setCollateralAsSource = async () => {
     setFromToken({
       price: collateralToken.price,
       symbol: collateralToken.symbol,
@@ -61,17 +62,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
     const collateralTokenBalance = await FungibleTokenContract.getWalletBalance(collateralTokenMetadata.id);
     setBalance(collateralTokenBalance);
-  }, [
-    collateralToken.price,
-    collateralToken.symbol,
-    selectedOutcomeToken.price,
-    selectedOutcomeToken.outcome_id,
-    market.options,
-    FungibleTokenContract,
-    collateralTokenMetadata.id,
-  ]);
+  };
 
-  const setOutcomeAsSource = useCallback(async () => {
+  const setOutcomeAsSource = async () => {
     setFromToken({
       price: selectedOutcomeToken.price,
       symbol: market.options[selectedOutcomeToken.outcome_id],
@@ -88,20 +81,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
     const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
     setBalance(currency.convert.fromUIntAmount(outcomeTokenBalance, decimals).toString());
-  }, [
-    FungibleTokenContract.fungibleTokenMetadata?.decimals,
-    MarketContract,
-    collateralToken.price,
-    collateralToken.symbol,
-    market.options,
-    selectedOutcomeToken.outcome_id,
-    selectedOutcomeToken.price,
-  ]);
+  };
 
   useEffect(() => {
     setCollateralAsSource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOutcomeToken]);
+  }, [selectedOutcomeToken.outcome_id]);
 
   const onClickFlip = () => {
     if (isCollateralSourceToken()) {

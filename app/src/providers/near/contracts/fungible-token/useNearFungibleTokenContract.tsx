@@ -41,21 +41,12 @@ export default () => {
 
       return currency.convert.toDecimalsPrecisionString(balance, metadata.decimals);
     } catch {
-      toast.trigger({
-        variant: "error",
-        // @TODO i18n
-        title: "Failed to fetch collateral token balance",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
-      });
+      return "0.00";
     }
-
-    return "0.00";
   };
 
   const getBalanceOf = async (contractAddress: AccountId, accountId: AccountId) => {
     try {
-      assertWalletConnection();
-
       const contract = await FungibleTokenContract.loadFromGuestConnection(contractAddress);
 
       const balance = await contract.ftBalanceOf({ account_id: accountId });
@@ -108,7 +99,7 @@ export default () => {
         variant: "error",
         // @TODO i18n
         title: "Failed to make transfer call",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
+        children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
       });
     }
   };

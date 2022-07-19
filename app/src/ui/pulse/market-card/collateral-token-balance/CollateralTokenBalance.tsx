@@ -18,7 +18,8 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
       const collateralTokenBalance = await FungibleTokenContract.getBalanceOf(collateralTokenMetadata.id, marketId);
       setBalance(collateralTokenBalance);
     })();
-  }, [FungibleTokenContract, collateralTokenMetadata.id, marketId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collateralTokenMetadata.id, marketId]);
 
   return (
     <>
