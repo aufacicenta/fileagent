@@ -14,7 +14,7 @@ $input-padding: 0px $space-default;
 $input-margin-bottom: $space-default;
 $input-margin: 0 0 $input-margin-bottom 0 !default;
 $label-font-size: $font-size-text !default;
-$input-disabled-color: rgba(0, 0, 0, 0.42) !default;
+$input-disabled-color: var(--color-input-text-disabled) !default;
 $input-disabled-solid-color: #949494 !default;
 $input-disabled-border: 1px dotted $input-disabled-color !default;
 $input-invalid-border: 1px solid $input-error-color !default;

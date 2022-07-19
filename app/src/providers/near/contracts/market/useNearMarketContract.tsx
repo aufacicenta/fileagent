@@ -12,6 +12,7 @@ import {
   GetAmountPayableArgs,
   MarketContractValues,
   OutcomeToken,
+  SellArgs,
 } from "./market.types";
 
 export default ({ marketId, preventLoad = false }: { marketId: AccountId; preventLoad?: boolean }) => {
@@ -72,7 +73,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
 
   const assertWalletConnection = () => {
     if (!wallet.isConnected.get()) {
-      throw new Error("ERR_GET_BALANCE_OF_INVALID_WALLET_CONNECTION");
+      throw new Error("ERR_USE_NEAR_MARKET_CONTRACT_INVALID_WALLET_CONNECTION");
     }
   };
 
@@ -168,6 +169,25 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     return [0, 0];
   };
 
+  const sell = async (args: SellArgs) => {
+    try {
+      assertWalletConnection();
+
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
+      await contract.sell(args);
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to call sell method",
+        children: (
+          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
+        ),
+      });
+    }
+  };
+
   return {
     contract: MarketContract,
     marketContractValues,
@@ -176,5 +196,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     getBalanceOf,
     getAmountMintable,
     getAmountPayable,
+    sell,
   };
 };

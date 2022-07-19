@@ -20,18 +20,6 @@ import styles from "./SwapCard.module.scss";
 
 const DEFAULT_DEBOUNCE_TIME = 500;
 
-const onSubmit = (values: SwapCardForm) => {
-  console.log(values);
-
-  // if (isCollateralTokenSource()) {
-  // } else {
-  // }
-};
-
-const onToTokenChange = (value: string, previous: string) => {
-  console.log(value, previous);
-};
-
 // @TODO let's try https://www.npmjs.com/package/@lemoncode/fonk: required, valid number, enough balance
 const validate = () => ({
   fromTokenAmount: undefined,
@@ -97,10 +85,11 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    // @TODO get balance of outcome token
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    setBalance(outcomeTokenBalance.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    setBalance(currency.convert.fromUIntAmount(outcomeTokenBalance, decimals).toString());
   }, [
+    FungibleTokenContract.fungibleTokenMetadata?.decimals,
     MarketContract,
     collateralToken.price,
     collateralToken.symbol,
@@ -122,34 +111,63 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
   };
 
-  // @TODO fetch rate from MarketContract.getAmountMintable
-  const getBuyRate = async (amount: number) => {
+  const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
-      amount,
+      amount: currency.convert.toUIntAmount(amount, decimals),
       outcome_id: selectedOutcomeToken.outcome_id,
     });
 
-    setFee(exchangeFee.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
-    setRate(amountMintable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const feeString = currency.convert.fromUIntAmount(exchangeFee, decimals).toString();
+    const rateString = currency.convert.fromUIntAmount(amountMintable, decimals).toString();
+
+    setFee(feeString);
+    setRate(rateString);
+
+    setToTokenInputValue(rateString);
   };
 
-  // @TODO fetch rate from MarketContract.getAmountPayable
-  const getSellRate = async (amount: number) => {
+  const getSellRate = async (sellAmount: number, setToTokenInputValue: (value: string) => void) => {
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const amount = currency.convert.toUIntAmount(sellAmount, decimals);
+
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
-      balance: amount,
+      balance: collateralTokenMetadata.balance,
     });
 
-    setRate(amountPayable.toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString());
+    const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
+
+    setRate(rateString);
+
+    setToTokenInputValue(rateString);
   };
 
-  const onFromTokenChange = (value: string) => {
+  const onFromTokenChange = (value: string, mutator: (value: string) => void) => {
     if (isCollateralSourceToken()) {
-      getBuyRate(Number(value));
+      getBuyRate(Number(value), mutator);
     } else {
-      getSellRate(Number(value));
+      getSellRate(Number(value), mutator);
     }
+  };
+
+  const onSubmit = async ({ fromTokenAmount }: SwapCardForm) => {
+    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
+
+    await (isCollateralSourceToken()
+      ? FungibleTokenContract.ftTransferCall(
+          collateralToken.accountId,
+          marketId,
+          amount,
+          selectedOutcomeToken.outcome_id,
+        )
+      : MarketContract.sell({
+          outcome_id: selectedOutcomeToken.outcome_id,
+          amount,
+        }));
   };
 
   // @TODO i18n
@@ -157,7 +175,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     <RFForm
       onSubmit={onSubmit}
       validate={validate}
-      render={({ handleSubmit }) => (
+      mutators={{
+        setToTokenInputValue: (_args, state, utils) => (value: string) => {
+          utils.changeValue(state, "toTokenAmount", () => value);
+        },
+      }}
+      render={({ handleSubmit, form }) => (
         <form onSubmit={handleSubmit}>
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
@@ -183,10 +206,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   <Form.TextInput
                     id="fromTokenAmount"
                     type="text"
-                    placeholder="0.00"
+                    defaultValue="0.00"
                     className={styles["swap-card__from--amount-input"]}
                   />
-                  <OnChange name="fromTokenAmount">{_.debounce(onFromTokenChange, DEFAULT_DEBOUNCE_TIME)}</OnChange>
+                  <OnChange name="fromTokenAmount">
+                    {_.debounce(
+                      (value) => onFromTokenChange(value, form.mutators.setToTokenInputValue()),
+                      DEFAULT_DEBOUNCE_TIME,
+                    )}
+                  </OnChange>
                 </div>
                 <div className={styles["swap-card__from--switch"]}>
                   <Button onClick={onClickFlip}>
@@ -210,10 +238,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   <Form.TextInput
                     id="toTokenAmount"
                     type="text"
-                    placeholder="0.00"
+                    defaultValue="0.00"
                     className={styles["swap-card__to--amount-input"]}
+                    disabled
                   />
-                  <OnChange name="toTokenAmount">{_.debounce(onToTokenChange, DEFAULT_DEBOUNCE_TIME)}</OnChange>
                 </div>
               </div>
               <Typography.Description className={styles["swap-card__overview"]}>

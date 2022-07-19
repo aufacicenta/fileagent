@@ -3,7 +3,7 @@ import { Form as RFForm } from "react-final-form";
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { Button } from "ui/button/Button";
 import { Card } from "ui/card/Card";
@@ -36,6 +36,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   // @TODO we need to read the query on router.ready and display a success toast with the tx hash and a link to the tx
 
   const routes = useRoutes();
+  const router = useRouter();
   const toast = useToastContext();
 
   const { t } = useTranslation(["latest-trends", "common"]);
@@ -71,6 +72,10 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
   const onClickCreateMarketButton = () => {
     // @TODO check if there's a connected wallet, otherwise display the "connect wallet modal"
     setIsCreateMarketModalVisible(true);
+  };
+
+  const onClickOutcomeToken = (marketId: string) => {
+    router.push(routes.dashboard.market({ marketId }));
   };
 
   return (
@@ -131,11 +136,11 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                       <Grid.Row>
                         {markets.map((marketId) => (
                           <Grid.Col lg={4} key={marketId} className={styles["latest-trends__market-cards-grid--col"]}>
-                            <Link href={routes.dashboard.market({ marketId })}>
-                              <a className={styles["latest-trends__market-cards-grid--item"]}>
-                                <MarketCardContainer marketId={marketId} />
-                              </a>
-                            </Link>
+                            <MarketCardContainer
+                              marketId={marketId}
+                              onClickOutcomeToken={() => onClickOutcomeToken(marketId)}
+                              onClickMarketTitle={() => onClickOutcomeToken(marketId)}
+                            />
                           </Grid.Col>
                         ))}
                       </Grid.Row>

@@ -1,4 +1,4 @@
-export const DEFAULT_DECIMALS_PRECISION = 2;
+export const DEFAULT_DECIMALS_PRECISION = 6;
 
 export default {
   DEFAULT_DECIMALS_PRECISION,

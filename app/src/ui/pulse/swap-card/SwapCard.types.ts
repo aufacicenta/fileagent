@@ -12,6 +12,6 @@ export type SwapCardProps = {
 };
 
 export type SwapCardForm = {
-  fromTokenAmount: number;
-  toTokenAmount: number;
+  fromTokenAmount: string;
+  toTokenAmount: string;
 };
