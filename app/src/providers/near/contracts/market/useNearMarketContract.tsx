@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
@@ -21,12 +21,15 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   const toast = useToastContext();
   const wallet = useWalletStateContext();
 
-  const fetchMarketContractValues = useCallback(async () => {
+  const fetchMarketContractValues = async () => {
     try {
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
       const resolutionWindow = await contract.getResolutionWindow();
       const isPublished = await contract.isPublished();
+      const isOver = await contract.isOver();
+      const isResolutionWindowExpired = await contract.isResolutionWindowExpired();
+      const isResolved = await contract.isResolved();
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
 
@@ -50,6 +53,9 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         market,
         resolutionWindow,
         isPublished,
+        isOver,
+        isResolved,
+        isResolutionWindowExpired,
         collateralTokenMetadata,
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,
@@ -63,13 +69,14 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
       });
     }
-  }, [marketId, toast]);
+  };
 
   useEffect(() => {
     if (!preventLoad) {
       fetchMarketContractValues();
     }
-  }, [fetchMarketContractValues, preventLoad]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketId, preventLoad]);
 
   const assertWalletConnection = () => {
     if (!wallet.isConnected.get()) {
@@ -109,18 +116,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
 
       return balance;
     } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        // @TODO i18n
-        title: "Failed to fetch outcome token balance",
-        children: (
-          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-        ),
-      });
+      return 0;
     }
-
-    return 0;
   };
 
   const getAmountMintable = async (args: GetAmountMintableArgs) => {

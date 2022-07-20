@@ -6,6 +6,7 @@ import { Typography } from "ui/typography/Typography";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
 import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
+import { Icon } from "ui/icon/Icon";
 
 import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
@@ -26,9 +27,16 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
 
   return (
     <div className={clsx(styles["wallet-selector"], className)}>
-      <Button color="primary" onClick={() => setIsWidgetVisible(!isWidgetVisible)}>
+      <Button
+        color="primary"
+        variant="outlined"
+        onClick={() => setIsWidgetVisible(!isWidgetVisible)}
+        rightIcon={<Icon name={wallet.address.get() ? "icon-power" : "icon-power-crossed"} />}
+        className={styles["wallet-selector__button"]}
+        size="xs"
+      >
         {wallet.isConnected.get() ? (
-          <Typography.Text inline truncate>
+          <Typography.Text inline truncate flat>
             {wallet.address.get()}
           </Typography.Text>
         ) : (
@@ -53,7 +61,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
               </Typography.MiniDescription>
             </div>
             <div className={styles["wallet-selector__connect"]}>
-              <Button size="xs" variant="gradient" color="secondary" onClick={handleOnConnectWalletClick}>
+              <Button size="xs" color="primary" onClick={handleOnConnectWalletClick}>
                 {wallet.isConnected.get() ? "Disconnect" : "Connect"}
               </Button>
             </div>

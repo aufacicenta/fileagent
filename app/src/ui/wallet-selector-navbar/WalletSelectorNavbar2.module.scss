@@ -189,7 +189,7 @@
     }
 
     &--cta {
-      @extend .button_primary;
+      @extend .button-primary;
 
       @include atLargeTablet {
         display: block;

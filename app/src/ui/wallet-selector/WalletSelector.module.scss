@@ -9,6 +9,10 @@
   align-items: center;
   height: $navbar-height;
 
+  &__button {
+    text-transform: lowercase;
+  }
+
   &__icon {
     &--connected {
       color: var(--color-typography-text);
@@ -128,6 +132,14 @@
   &__button--disable-hover {
     &:hover {
       cursor: default;
+    }
+  }
+
+  &--mobile {
+    &__button {
+      width: 100%;
+      margin: $space-m 0;
+      text-transform: lowercase;
     }
   }
 }

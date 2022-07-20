@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
@@ -9,11 +9,13 @@ import currency from "providers/currency";
 import { FungibleTokenContract } from ".";
 import { FungibleTokenMetadata } from "./fungible-token.types";
 
-export default () => {
-  const [fungibleTokenMetadata, setFungibleTokenMetadata] = useState<FungibleTokenMetadata | undefined>();
+export default ({ contractAddress }: { contractAddress?: string }) => {
+  const [metadata, setMetadata] = useState<FungibleTokenMetadata>();
+  const [contract, setContract] = useState<FungibleTokenContract>();
 
   const toast = useToastContext();
   const wallet = useWalletStateContext();
+  const { connection } = wallet.context.get();
 
   const assertWalletConnection = () => {
     if (!wallet.isConnected.get()) {
@@ -21,94 +23,105 @@ export default () => {
     }
   };
 
-  const getWalletBalance = async (contractAddress: AccountId) => {
-    try {
-      assertWalletConnection();
-
-      const contract = await FungibleTokenContract.loadFromWalletConnection(
-        wallet.context.get().connection!,
-        contractAddress,
-      );
-
-      const balance = await contract.ftBalanceOf({ account_id: wallet.address.get()! });
-      const metadata = await contract.ftMetadata();
-
-      if (!metadata) {
-        return balance;
-      }
-
-      setFungibleTokenMetadata(metadata);
-
-      return currency.convert.toDecimalsPrecisionString(balance, metadata.decimals);
-    } catch {
-      toast.trigger({
-        variant: "error",
-        // @TODO i18n
-        title: "Failed to fetch collateral token balance",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
-      });
+  const assertContractConnection = () => {
+    if (!contract) {
+      throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_CONNECTION");
     }
-
-    return "0.00";
   };
 
-  const getBalanceOf = async (contractAddress: AccountId, accountId: AccountId) => {
-    try {
-      assertWalletConnection();
-
-      const contract = await FungibleTokenContract.loadFromGuestConnection(contractAddress);
-
-      const balance = await contract.ftBalanceOf({ account_id: accountId });
-      const metadata = await contract.ftMetadata();
-
-      if (!metadata) {
-        return balance;
-      }
-
-      return currency.convert.toDecimalsPrecisionString(balance, metadata.decimals);
-    } catch {
-      toast.trigger({
-        variant: "error",
-        // @TODO i18n
-        title: "Failed to fetch collateral token balance",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
-      });
+  const assertContractMetadata = () => {
+    if (!metadata) {
+      throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_METADATA");
     }
-
-    return "0.00";
   };
 
-  const ftTransferCall = async (
-    contractAddress: AccountId,
-    receiverId: AccountId,
-    amount: number,
-    outcomeId: OutcomeId,
-  ) => {
+  const loadContract = async () => {
+    try {
+      if (!contractAddress) {
+        throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_ADDRESS");
+      }
+
+      if (wallet.isConnected.get()) {
+        setContract(
+          await FungibleTokenContract.loadFromWalletConnection(wallet.context.get().connection!, contractAddress),
+        );
+      } else {
+        setContract(await FungibleTokenContract.loadFromGuestConnection(contractAddress));
+      }
+    } catch {
+      // void
+    }
+  };
+
+  const getFtMetadata = async () => {
+    try {
+      if (!contract) {
+        return;
+      }
+
+      const ftMetadata = await contract.ftMetadata();
+
+      setMetadata(ftMetadata);
+    } catch {
+      // void
+    }
+  };
+
+  useEffect(() => {
+    loadContract();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connection, contractAddress]);
+
+  useEffect(() => {
+    getFtMetadata();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contract]);
+
+  const getWalletBalance = async () => {
     try {
       assertWalletConnection();
+      assertContractConnection();
+      assertContractMetadata();
 
-      const contract = await FungibleTokenContract.loadFromWalletConnection(
-        wallet.context.get().connection!,
-        contractAddress,
-      );
+      const balance = await contract!.ftBalanceOf({ account_id: wallet.address.get()! });
 
-      const metadata = await contract.ftMetadata();
+      return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
+    } catch {
+      return "0.00";
+    }
+  };
+
+  const getBalanceOf = async (accountId: AccountId) => {
+    try {
+      assertContractConnection();
+      assertContractMetadata();
+
+      const balance = await contract!.ftBalanceOf({ account_id: accountId });
+
+      return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
+    } catch {
+      return "0.00";
+    }
+  };
+
+  const ftTransferCall = async (receiverId: AccountId, amount: string, outcomeId: OutcomeId) => {
+    try {
+      assertWalletConnection();
+      assertContractConnection();
 
       if (!metadata) {
         throw new Error("ERR_FT_TRANSFER_CALL_FT_METADATA");
       }
 
-      const uintAmount = currency.convert.toUIntAmount(amount, metadata.decimals);
-
       const msg = JSON.stringify({ BuyArgs: { outcome_id: outcomeId } });
 
-      await contract.ftTransferCall({ receiver_id: receiverId, amount: uintAmount.toString(), msg });
+      await contract!.ftTransferCall({ receiver_id: receiverId, amount, msg });
     } catch {
       toast.trigger({
         variant: "error",
         // @TODO i18n
         title: "Failed to make transfer call",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
+        children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
       });
     }
   };
@@ -118,6 +131,6 @@ export default () => {
     getWalletBalance,
     getBalanceOf,
     ftTransferCall,
-    fungibleTokenMetadata,
+    metadata,
   };
 };

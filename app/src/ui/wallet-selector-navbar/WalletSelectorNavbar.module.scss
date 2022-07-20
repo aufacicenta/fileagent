@@ -207,7 +207,7 @@
     }
 
     &--cta {
-      @extend .button_primary;
+      @extend .button-primary;
 
       @include atLargeTablet {
         display: block;
@@ -258,5 +258,12 @@
     &:hover {
       background-color: var(--color-background-contrast);
     }
+  }
+
+  &__pill {
+    @include atLargeTablet {
+      display: block;
+    }
+    display: none;
   }
 }

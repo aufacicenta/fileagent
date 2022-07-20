@@ -23,6 +23,8 @@
     }
 
     &--amount {
+      display: flex;
+
       p {
         padding-left: $space-xs;
         font-weight: bold;

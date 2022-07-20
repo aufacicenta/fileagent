@@ -24,7 +24,7 @@ export const useNearWallet = () => {
         walletState.address.set(accountId);
 
         const accountBalance = await near.getAccountBalance(provider, accountId);
-        walletState.balance.set(near.formatAccountBalance(accountBalance.available, 8));
+        walletState.balance.set(near.formatAccountBalance(accountBalance.available, 5));
       }
     })();
   }, [
