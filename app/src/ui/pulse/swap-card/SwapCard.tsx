@@ -40,10 +40,11 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const { t } = useTranslation(["swap-card"]);
 
-  const FungibleTokenContract = useNearFungibleTokenContract();
+  const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
   const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
 
   const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
+  const ftMetadata = FungibleTokenContract.metadata;
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
 
@@ -60,7 +61,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    const collateralTokenBalance = await FungibleTokenContract.getWalletBalance(collateralTokenMetadata.id);
+    const collateralTokenBalance = await FungibleTokenContract.getWalletBalance();
     setBalance(collateralTokenBalance);
   };
 
@@ -79,14 +80,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const decimals = ftMetadata?.decimals!;
     setBalance(currency.convert.fromUIntAmount(outcomeTokenBalance, decimals).toString());
   };
 
   useEffect(() => {
     setCollateralAsSource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOutcomeToken.outcome_id]);
+  }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
   const onClickFlip = () => {
     if (isCollateralSourceToken()) {
@@ -97,7 +98,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
-    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const decimals = ftMetadata?.decimals!;
 
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
       amount: currency.convert.toUIntAmount(amount, decimals),
@@ -114,7 +115,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const getSellRate = async (sellAmount: number, setToTokenInputValue: (value: string) => void) => {
-    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(sellAmount, decimals);
 
     const [, amountPayable] = await MarketContract.getAmountPayable({
@@ -138,21 +139,22 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
   };
 
+  const buy = async (amount: number) => {
+    await FungibleTokenContract.ftTransferCall(marketId, amount.toString(), selectedOutcomeToken.outcome_id);
+  };
+
+  const sell = async (amount: number) => {
+    await MarketContract.sell({
+      outcome_id: selectedOutcomeToken.outcome_id,
+      amount,
+    });
+  };
+
   const onSubmit = async ({ fromTokenAmount }: SwapCardForm) => {
-    const decimals = FungibleTokenContract.fungibleTokenMetadata?.decimals!;
+    const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
 
-    await (isCollateralSourceToken()
-      ? FungibleTokenContract.ftTransferCall(
-          collateralToken.accountId,
-          marketId,
-          amount,
-          selectedOutcomeToken.outcome_id,
-        )
-      : MarketContract.sell({
-          outcome_id: selectedOutcomeToken.outcome_id,
-          amount,
-        }));
+    await (isCollateralSourceToken() ? buy(amount) : sell(amount));
   };
 
   // @TODO i18n
