@@ -27,6 +27,9 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const market = await contract.getMarketData();
       const resolutionWindow = await contract.getResolutionWindow();
       const isPublished = await contract.isPublished();
+      const isOver = await contract.isOver();
+      const isResolutionWindowExpired = await contract.isResolutionWindowExpired();
+      const isResolved = await contract.isResolved();
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
 
@@ -50,6 +53,9 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         market,
         resolutionWindow,
         isPublished,
+        isOver,
+        isResolved,
+        isResolutionWindowExpired,
         collateralTokenMetadata,
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,

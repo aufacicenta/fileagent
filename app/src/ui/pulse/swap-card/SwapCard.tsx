@@ -14,6 +14,7 @@ import pulse from "providers/pulse";
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import currency from "providers/currency";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
 
 import { SwapCardForm, SwapCardProps } from "./SwapCard.types";
 import styles from "./SwapCard.module.scss";
@@ -28,7 +29,7 @@ const validate = () => ({
 
 export const SwapCard: React.FC<SwapCardProps> = ({
   className,
-  marketContractValues: { market, collateralTokenMetadata, feeRatio },
+  marketContractValues: { market, collateralTokenMetadata, feeRatio, isOver, isResolutionWindowExpired, isResolved },
   selectedOutcomeToken,
   marketId,
 }) => {
@@ -39,6 +40,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const [fee, setFee] = useState("0.00");
 
   const { t } = useTranslation(["swap-card"]);
+  const toast = useToastContext();
 
   const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
   const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
@@ -140,6 +142,17 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const buy = async (amount: number) => {
+    if (isOver) {
+      toast.trigger({
+        variant: "error",
+        // @TODO i18n
+        title: "Market is over",
+        children: <Typography.Text>Cannot purchase market options on this event.</Typography.Text>,
+      });
+
+      return;
+    }
+
     await FungibleTokenContract.ftTransferCall(marketId, amount.toString(), selectedOutcomeToken.outcome_id);
   };
 
@@ -154,7 +167,37 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
 
-    await (isCollateralSourceToken() ? buy(amount) : sell(amount));
+    if (isOver && isResolved) {
+      await sell(amount);
+    } else if (isCollateralSourceToken()) {
+      await buy(amount);
+    } else {
+      await sell(amount);
+    }
+  };
+
+  const getSubmitButton = () => {
+    if (isOver && !isResolutionWindowExpired) {
+      return (
+        <Button fullWidth type="submit" disabled>
+          Market is under resolution
+        </Button>
+      );
+    }
+
+    if (isOver && isResolutionWindowExpired) {
+      return (
+        <Button fullWidth type="submit">
+          {t("swapCard.sell")}
+        </Button>
+      );
+    }
+
+    return (
+      <Button fullWidth type="submit">
+        {isCollateralSourceToken() ? t("swapCard.buy") : t("swapCard.sell")}
+      </Button>
+    );
   };
 
   // @TODO i18n
@@ -254,9 +297,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   </Typography.Text>
                 </div>
               </div>
-              <Button fullWidth type="submit">
-                {isCollateralSourceToken() ? t("swapCard.buy") : t("swapCard.sell")}
-              </Button>
+              {getSubmitButton()}
             </Card.Content>
           </Card>
         </form>
