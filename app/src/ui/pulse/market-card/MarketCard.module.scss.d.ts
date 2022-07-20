@@ -13,8 +13,10 @@ export type Styles = {
   "market-card__market-options--stats-stat": string;
   "market-card__market-options--title": string;
   "market-card__start-end-time": string;
+  "market-card__start-end-time--text": string;
   "market-card__title": string;
   "market-card__title--expanded": string;
+  "market-card__title--hover": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

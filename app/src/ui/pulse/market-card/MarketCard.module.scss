@@ -10,10 +10,22 @@
     &--expanded {
       @include font-properties($typography-headline-1);
     }
+
+    &--hover {
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
   }
 
   &__start-end-time {
     margin-bottom: $space-m;
+
+    &--text {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   &__image {
@@ -73,24 +85,13 @@
 
     &--actions {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-
-      > button {
-        padding: 12px 3px;
-
-        &:first-child {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-
-        &:last-child {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-      }
 
       &-button {
         border: 1px solid var(--color-background);
+        padding: 12px 3px;
+        text-transform: capitalize;
 
         &-dot {
           display: inline-block;

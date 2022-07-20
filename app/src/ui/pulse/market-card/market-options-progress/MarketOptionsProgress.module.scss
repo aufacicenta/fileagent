@@ -1,0 +1,25 @@
+@import "src/theme/base";
+
+.market-options-progress {
+  &__progres-bar {
+    display: flex;
+    margin: $space-default 0;
+
+    > div {
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &-width {
+      height: 6px;
+      border-radius: $border-radius-card;
+    }
+  }
+}
