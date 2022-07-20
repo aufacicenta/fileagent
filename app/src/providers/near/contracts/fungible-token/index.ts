@@ -83,6 +83,6 @@ export class FungibleTokenContract {
       console.log(error);
     }
 
-    return null;
+    return undefined;
   }
 }

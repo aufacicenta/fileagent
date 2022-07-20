@@ -122,6 +122,39 @@ export class MarketContract {
     }
   }
 
+  async isOver() {
+    try {
+      const result = await this.contract.is_over();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_IS_OVER");
+    }
+  }
+
+  async isResolutionWindowExpired() {
+    try {
+      const result = await this.contract.is_resolution_window_expired();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_IS_RESOLUTION_WINDOW_EXPIRED");
+    }
+  }
+
+  async isResolved() {
+    try {
+      const result = await this.contract.is_resolved();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_IS_RESOLVED");
+    }
+  }
+
   async getCollateralTokenMetadata() {
     try {
       const result = await this.contract.get_collateral_token_metadata();

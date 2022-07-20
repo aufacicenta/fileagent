@@ -61,6 +61,12 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <span>{date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                <span>Resolution mechanism</span>
+                <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
+                  {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
+                </Typography.Anchor>
+              </Typography.Description>
+              <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Contract</span>
                 <Typography.Anchor
                   href={`${near.getConfig(DEFAULT_NETWORK_ENV).explorerUrl}/accounts/${marketId}`}

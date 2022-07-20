@@ -1,6 +1,7 @@
 export type Styles = {
   "wallet-selector": string;
   "wallet-selector__balance": string;
+  "wallet-selector__button": string;
   "wallet-selector__button--disable-hover": string;
   "wallet-selector__chain-network-dropdowns": string;
   "wallet-selector__chain-network-dropdowns--chains-list": string;

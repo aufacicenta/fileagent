@@ -9,6 +9,10 @@
   align-items: center;
   height: $navbar-height;
 
+  &__button {
+    text-transform: lowercase;
+  }
+
   &__icon {
     &--connected {
       color: var(--color-typography-text);
