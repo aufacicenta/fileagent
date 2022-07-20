@@ -36,7 +36,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
         size="xs"
       >
         {wallet.isConnected.get() ? (
-          <Typography.Text inline truncate>
+          <Typography.Text inline truncate flat>
             {wallet.address.get()}
           </Typography.Text>
         ) : (

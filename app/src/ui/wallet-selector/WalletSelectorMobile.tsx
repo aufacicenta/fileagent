@@ -5,6 +5,7 @@ import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStat
 import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
 import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
+import { Typography } from "ui/typography/Typography";
 
 import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
@@ -23,8 +24,20 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
 
   return (
     <div className={clsx(styles["wallet-selector--mobile"], className)}>
-      <Button size="auto" color="primary" onClick={handleOnConnectWalletClick}>
-        {wallet.isConnected.get() ? "Disconnect Wallet" : "Connect Wallet"}
+      <Button
+        size="xs"
+        color="primary"
+        variant="outlined"
+        onClick={handleOnConnectWalletClick}
+        className={styles["wallet-selector--mobile__button"]}
+      >
+        {wallet.isConnected.get() ? (
+          <Typography.Text inline truncate flat>
+            {wallet.address.get()}
+          </Typography.Text>
+        ) : (
+          "Connect Wallet"
+        )}
       </Button>
       {wallet.isConnected.get() ? <BalancePill /> : null}
     </div>

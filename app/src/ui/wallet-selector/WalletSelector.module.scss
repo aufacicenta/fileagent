@@ -136,9 +136,10 @@
   }
 
   &--mobile {
-    button {
+    &__button {
       width: 100%;
       margin: $space-m 0;
+      text-transform: lowercase;
     }
   }
 }
