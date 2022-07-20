@@ -23,7 +23,7 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
   };
 
   return (
-    <div className={clsx(styles["wallet-selector--mobile"], className)}>
+    <div className={clsx(className)}>
       <Button
         size="xs"
         color="primary"
