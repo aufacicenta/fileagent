@@ -14,7 +14,7 @@ $LOADER_SIZE: 30px;
 $HALF_LOADER_SIZE: 15px;
 
 .button {
-  @extend .button_primary;
+  @extend .button-primary;
   display: inline-block;
   min-width: auto;
   white-space: nowrap;
@@ -72,7 +72,7 @@ $HALF_LOADER_SIZE: 15px;
   }
 
   &--large {
-    @extend .button_primary_large;
+    @extend .button-primary_large;
   }
 
   &--medium {
@@ -321,7 +321,7 @@ $HALF_LOADER_SIZE: 15px;
 
   &--outlined {
     @extend .button-outline;
-    background-color: transparent;
+    background: transparent;
 
     &.button--extra-small {
       padding: 6px 18px;
@@ -425,6 +425,8 @@ $HALF_LOADER_SIZE: 15px;
     }
 
     &.button--primary {
+      background-color: transparent;
+
       .button__icon--right {
         svg {
           fill: var(--color-button-primary);
@@ -434,6 +436,8 @@ $HALF_LOADER_SIZE: 15px;
       &:active,
       &:hover,
       &:focus {
+        border-color: var(--color-button-primary-hover-text);
+
         .button__icon--right {
           svg {
             fill: var(--color-button-primary-text);
