@@ -110,18 +110,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
 
       return balance;
     } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        // @TODO i18n
-        title: "Failed to fetch outcome token balance",
-        children: (
-          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-        ),
-      });
+      return 0;
     }
-
-    return 0;
   };
 
   const getAmountMintable = async (args: GetAmountMintableArgs) => {
