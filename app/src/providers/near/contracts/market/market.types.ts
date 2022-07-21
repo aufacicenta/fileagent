@@ -1,3 +1,5 @@
+import { Gas } from "providers/near/types";
+
 export type OutcomeId = number;
 export type WrappedBalance = number;
 export type AccountId = string;
@@ -60,8 +62,8 @@ export type MarketContractMethods = {
   get_fee_ratio: () => Promise<WrappedBalance>;
   get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<WrappedBalance>;
   get_balance_boost_ratio: () => Promise<WrappedBalance>;
-  publish: (args: Record<string, unknown>, gas?: number) => Promise<void>;
-  sell: (args: SellArgs, gas?: number) => Promise<void>;
+  publish: (args: Record<string, unknown>, gas?: Gas) => Promise<void>;
+  sell: (args: SellArgs, gas?: Gas) => Promise<void>;
   get_cumulative_weight: () => Promise<WrappedBalance>;
   get_amount_mintable: (args: GetAmountMintableArgs) => Promise<Array<number>>;
   get_amount_payable: (args: GetAmountPayableArgs) => Promise<Array<number>>;

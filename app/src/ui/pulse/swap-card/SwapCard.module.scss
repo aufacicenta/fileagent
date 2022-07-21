@@ -122,6 +122,10 @@
     &--row {
       display: flex;
       justify-content: space-between;
+
+      &-description {
+        text-align: right;
+      }
     }
   }
 }

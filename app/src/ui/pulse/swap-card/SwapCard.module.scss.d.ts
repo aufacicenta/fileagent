@@ -56,6 +56,7 @@ export type Styles = {
   "swap-card__overview": string;
   "swap-card__overview-card": string;
   "swap-card__overview-card--row": string;
+  "swap-card__overview-card--row-description": string;
   "swap-card__to": string;
   "swap-card__to--amount-input": string;
   "swap-card__to--label": string;

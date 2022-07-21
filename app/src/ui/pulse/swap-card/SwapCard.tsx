@@ -223,10 +223,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
               <div className={styles["swap-card__from"]}>
                 <div className={styles["swap-card__from--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
-                  <Typography.Text>
+                  <Typography.Description>
                     {fromToken.symbol}:{" "}
                     {Number(fromToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Text>
+                  </Typography.Description>
                 </div>
                 <div className={styles["swap-card__from--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__from--label"]}>
@@ -255,10 +255,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
               <div className={styles["swap-card__to"]}>
                 <div className={styles["swap-card__to--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
-                  <Typography.Text>
+                  <Typography.Description>
                     {toToken.symbol}:{" "}
                     {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Text>
+                  </Typography.Description>
                 </div>
                 <div className={styles["swap-card__to--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__to--label"]}>
@@ -292,9 +292,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 </div>
                 <div className={styles["swap-card__overview-card--row"]}>
                   <Typography.Text flat>{t("swapCard.rate")}</Typography.Text>
-                  <Typography.Text flat>
-                    {rate} {toToken.symbol} / {fromToken.symbol}
-                  </Typography.Text>
+                  <div className={styles["swap-card__overview-card--row-description"]}>
+                    <Typography.Text flat>{rate}</Typography.Text>
+                    <Typography.Description flat>
+                      {toToken.symbol} / {fromToken.symbol}
+                    </Typography.Description>
+                  </div>
                 </div>
               </div>
               {getSubmitButton()}

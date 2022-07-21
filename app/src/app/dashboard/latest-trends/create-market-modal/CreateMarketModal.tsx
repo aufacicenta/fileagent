@@ -60,6 +60,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
           info: "market info",
           category: values.marketCategory,
           options: [values.defaultMarketOption, ...values.marketOptions],
+          // @TODO validate that date is in the future, otherwise "publish" throws error
           starts_at: date.toNanoseconds(startsAt.valueOf()),
           ends_at: date.toNanoseconds(endsAt.valueOf()),
           utc_offset: timezoneOffset,

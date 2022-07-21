@@ -56,9 +56,14 @@ export class MarketContract {
     return [new MarketContract(contract), contract];
   }
 
-  async publish() {
+  async publish({ marketOptionsLength }: { marketOptionsLength: number }) {
     try {
-      const result = await this.contract.publish({}, new BN("100000000000000").toNumber());
+      const createProposalsGas = new BN("3000000000000").mul(new BN(marketOptionsLength));
+      const storageDepositGas = new BN("3000000000000");
+      const storageDepositCallbackGas = new BN("3000000000000");
+      const gas = createProposalsGas.add(storageDepositGas).add(storageDepositCallbackGas);
+
+      const result = await this.contract.publish({}, gas.toString());
 
       return result;
     } catch (error) {
