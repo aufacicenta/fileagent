@@ -12,14 +12,14 @@ const Market: NextPage<MarketContainerProps> = ({ marketId }) => (
   </DashboardLayout>
 );
 
-export async function getServerSideProps({ locale, params }: GetServerSidePropsContext) {
+export async function getServerSideProps({ locale, defaultLocale, params }: GetServerSidePropsContext) {
   const marketId = params?.marketId;
   await i18n?.reloadResources();
 
   return {
     props: {
       marketId,
-      ...(await serverSideTranslations(locale!, ["swap-card", "common", "head"])),
+      ...(await serverSideTranslations(locale || defaultLocale!, ["swap-card", "common", "head"])),
     },
   };
 }
