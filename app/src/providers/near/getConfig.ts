@@ -2,8 +2,6 @@ export const DEFAULT_NETWORK_ENV = "testnet";
 export const DEFAULT_FEE_RATIO = 0.02;
 export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "testnet";
-
 const TESTNET_GUEST_WALLET_ID = "nearholdings.testnet";
 const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
 
@@ -35,7 +33,6 @@ export default (network: string | undefined) => {
         marketDaoAccountId: MAINNET_DAO_ACCOUNT_ID,
         marketDaoUrl: MAINNET_DAO_URL,
         guestWalletId: MAINNET_GUEST_WALLET_ID,
-        contractName: CONTRACT_NAME,
       };
     case "test":
     case "testnet":
