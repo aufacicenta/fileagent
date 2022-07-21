@@ -32,6 +32,7 @@
     &-button {
       border: 1px solid var(--color-background);
       padding: 12px 3px;
+      white-space: break-spaces;
       text-transform: capitalize;
 
       &-dot {
