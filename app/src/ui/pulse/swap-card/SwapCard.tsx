@@ -224,14 +224,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__from--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
                   <Typography.Description>
-                    {fromToken.symbol}:{" "}
                     {Number(fromToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
                   </Typography.Description>
                 </div>
                 <div className={styles["swap-card__from--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__from--label"]}>
-                    <Icon name="icon-near" />
-                    <Typography.Text flat>{fromToken.symbol}</Typography.Text>
+                    <Typography.Description flat truncate>
+                      {fromToken.symbol}
+                    </Typography.Description>
                   </Form.Label>
                   <Form.TextInput
                     id="fromTokenAmount"
@@ -256,14 +256,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__to--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
                   <Typography.Description>
-                    {toToken.symbol}:{" "}
                     {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
                   </Typography.Description>
                 </div>
                 <div className={styles["swap-card__to--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__to--label"]}>
-                    <Icon name="icon-near" />
-                    <Typography.Text flat>{toToken.symbol}</Typography.Text>
+                    <Typography.Description flat truncate>
+                      {toToken.symbol}
+                    </Typography.Description>
                   </Form.Label>
                   <Form.TextInput
                     id="toTokenAmount"

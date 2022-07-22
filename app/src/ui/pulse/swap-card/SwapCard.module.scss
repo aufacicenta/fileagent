@@ -48,11 +48,15 @@
 
     &--label {
       position: absolute;
-      top: 6px;
+      top: 9px;
       left: $space-default;
       display: flex;
       align-items: center;
       margin-bottom: 0;
+
+      p {
+        color: var(--color-typography-text);
+      }
 
       span {
         margin-right: $space-s;
