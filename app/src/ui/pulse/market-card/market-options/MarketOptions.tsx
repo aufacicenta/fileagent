@@ -1,6 +1,6 @@
 import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
-import currency from "providers/currency";
+import { Typography } from "ui/typography/Typography";
 
 import styles from "./MarketOptions.module.scss";
 import { MarketOptionsProps } from "./MarketOptions.types";
@@ -24,12 +24,13 @@ export const MarketOptions = ({
               className={styles["market-options__actions-button-dot"]}
               style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
             />{" "}
-            {option}{" "}
+            <Typography.Text flat truncate inline>
+              {option}
+            </Typography.Text>{" "}
             <span className={styles["market-options__actions-button-percentage"]}>
               {Number(100 / market.options.length)
-                .toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION)
+                .toFixed(2)
                 .toString()}
-              %
             </span>
           </Button>
         );
@@ -49,8 +50,12 @@ export const MarketOptions = ({
             className={styles["market-options__actions-button-dot"]}
             style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
           />{" "}
-          {option}{" "}
-          <span className={styles["market-options__actions-button-percentage"]}>{outcomeToken.price * 100}%</span>
+          <Typography.Text flat truncate inline>
+            {option}
+          </Typography.Text>{" "}
+          <span className={styles["market-options__actions-button-percentage"]}>
+            {(outcomeToken.price * 100).toFixed(2)}
+          </span>
         </Button>
       );
     })}

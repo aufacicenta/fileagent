@@ -1,3 +1,4 @@
+import { Gas } from "providers/near/types";
 import { AccountId } from "../market/market.types";
 
 export type FungibleTokenContractValues = {
@@ -20,5 +21,5 @@ export type FtTransferCallArgs = { receiver_id: AccountId; amount: string; msg: 
 export type FungibleTokenContractMethods = {
   ft_balance_of: (args: FtBalanceOfArgs) => Promise<string>;
   ft_metadata: () => Promise<FungibleTokenMetadata>;
-  ft_transfer_call: (args: FtTransferCallArgs, gas?: number, deposit?: number) => Promise<string>;
+  ft_transfer_call: (args: FtTransferCallArgs, gas?: Gas, deposit?: number) => Promise<string>;
 };

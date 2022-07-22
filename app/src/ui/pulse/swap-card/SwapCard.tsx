@@ -223,15 +223,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
               <div className={styles["swap-card__from"]}>
                 <div className={styles["swap-card__from--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
-                  <Typography.Text>
-                    {fromToken.symbol}:{" "}
+                  <Typography.Description>
                     {Number(fromToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Text>
+                  </Typography.Description>
                 </div>
                 <div className={styles["swap-card__from--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__from--label"]}>
-                    <Icon name="icon-near" />
-                    <Typography.Text flat>{fromToken.symbol}</Typography.Text>
+                    <Typography.Description flat truncate>
+                      {fromToken.symbol}
+                    </Typography.Description>
                   </Form.Label>
                   <Form.TextInput
                     id="fromTokenAmount"
@@ -255,15 +255,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
               <div className={styles["swap-card__to"]}>
                 <div className={styles["swap-card__to--name-price"]}>
                   <Typography.Description>Price</Typography.Description>
-                  <Typography.Text>
-                    {toToken.symbol}:{" "}
+                  <Typography.Description>
                     {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Text>
+                  </Typography.Description>
                 </div>
                 <div className={styles["swap-card__to--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__to--label"]}>
-                    <Icon name="icon-near" />
-                    <Typography.Text flat>{toToken.symbol}</Typography.Text>
+                    <Typography.Description flat truncate>
+                      {toToken.symbol}
+                    </Typography.Description>
                   </Form.Label>
                   <Form.TextInput
                     id="toTokenAmount"
@@ -292,9 +292,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 </div>
                 <div className={styles["swap-card__overview-card--row"]}>
                   <Typography.Text flat>{t("swapCard.rate")}</Typography.Text>
-                  <Typography.Text flat>
-                    {rate} {toToken.symbol} / {fromToken.symbol}
-                  </Typography.Text>
+                  <div className={styles["swap-card__overview-card--row-description"]}>
+                    <Typography.Text flat>{rate}</Typography.Text>
+                    <Typography.Description flat>
+                      {toToken.symbol} / {fromToken.symbol}
+                    </Typography.Description>
+                  </div>
                 </div>
               </div>
               {getSubmitButton()}

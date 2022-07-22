@@ -90,7 +90,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       assertWalletConnection();
 
       const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
-      const result = await contract.publish();
+      const result = await contract.publish({ marketOptionsLength: marketContractValues!.market.options.length });
 
       return result;
     } catch {

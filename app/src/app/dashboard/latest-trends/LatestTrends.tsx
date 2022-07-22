@@ -10,8 +10,6 @@ import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
-import { CategoryPills } from "ui/category-pills/CategoryPills";
-import pulse from "providers/pulse";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 import { MarketCardContainer } from "ui/pulse/market-card/MarketCardContainer";
@@ -116,22 +114,6 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                         </div>
                       </Grid.Col>
                     </Grid.Row>
-                    <CategoryPills>
-                      {pulse.getConfig().MARKET_CATEGORIES.map((category) => (
-                        <CategoryPills.Pill
-                          name="marketCategory"
-                          type="radio"
-                          id={category.value}
-                          label={category.label}
-                          key={category.value}
-                          icon={
-                            <Typography.Text inline flat>
-                              {category.icon}
-                            </Typography.Text>
-                          }
-                        />
-                      ))}
-                    </CategoryPills>
                     <div className={styles["latest-trends__market-cards-grid"]}>
                       <Grid.Row>
                         {markets.map((marketId) => (

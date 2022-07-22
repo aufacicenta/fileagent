@@ -52,7 +52,9 @@ export class FungibleTokenContract {
 
   async ftTransferCall(args: FtTransferCallArgs) {
     try {
-      const result = await this.contract.ft_transfer_call(args, new BN("33000000000000").toNumber(), 1);
+      const gas = new BN("60000000000000");
+
+      const result = await this.contract.ft_transfer_call(args, gas.toString(), 1);
 
       return result;
     } catch (error) {

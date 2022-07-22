@@ -31,10 +31,12 @@ export class MarketFactoryContract {
 
       const base64args = Buffer.from(JSON.stringify(args)).toString("base64");
 
+      const attachedDeposit = new BN(near.parseNearAmount(Number(args.market.options.length + 1).toString())!);
+
       await contract.create_market(
         { args: base64args },
         new BN("60000000000000").toNumber(),
-        new BN(near.parseNearAmount("3.5")!).toString(),
+        attachedDeposit.toString(),
       );
 
       return contract;

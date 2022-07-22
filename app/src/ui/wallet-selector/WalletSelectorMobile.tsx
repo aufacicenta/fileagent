@@ -6,6 +6,7 @@ import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWall
 import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
 import { Typography } from "ui/typography/Typography";
+import { Icon } from "ui/icon/Icon";
 
 import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
@@ -30,6 +31,7 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
         variant="outlined"
         onClick={handleOnConnectWalletClick}
         className={styles["wallet-selector--mobile__button"]}
+        rightIcon={<Icon name={wallet.address.get() ? "icon-power" : "icon-power-crossed"} />}
       >
         {wallet.isConnected.get() ? (
           <Typography.Text inline truncate flat>
