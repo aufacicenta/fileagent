@@ -8,6 +8,7 @@ import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
+import { Icon } from "ui/icon/Icon";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -65,6 +66,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <span>Resolution mechanism</span>
                 <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
                   {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
+                  <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
@@ -74,6 +76,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   target="_blank"
                 >
                   {marketId}
+                  <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>
             </div>
@@ -109,7 +112,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 </div>
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
-                    <span>Liquidity:</span>
+                    <span>Collateral Balance:</span>
                     <span>
                       <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} marketId={marketId} />
                     </span>
