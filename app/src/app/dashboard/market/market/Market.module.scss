@@ -2,4 +2,8 @@
 
 .market {
   display: block;
+
+  &__info-card {
+    margin-bottom: $space-ml;
+  }
 }

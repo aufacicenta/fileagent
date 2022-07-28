@@ -1,6 +1,5 @@
 export type Styles = {
-  market: string;
-  "market__info-card": string;
+  "market-prices-chart": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
