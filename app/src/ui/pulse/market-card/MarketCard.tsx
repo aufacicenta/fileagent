@@ -15,6 +15,12 @@ import { MarketOptions } from "./market-options/MarketOptions";
 import { MarketOptionsProgress } from "./market-options-progress/MarketOptionsProgress";
 import { CollateralTokenBalance } from "./collateral-token-balance/CollateralTokenBalance";
 
+const getRandomImage = () => {
+  const num = Math.floor(Math.random() * (23 - 1) + 1);
+
+  return `url(/market/abstract/abstract${num}.png)`;
+};
+
 // @TODO i18n
 export const MarketCard: React.FC<MarketCardProps> = ({
   className,
@@ -30,12 +36,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   return (
     <Card className={clsx(styles["market-card"], className)}>
       <Card.Content>
-        {!expanded && (
-          <div
-            className={styles["market-card__image"]}
-            style={{ backgroundImage: `url(/shared/market-card-img.jpg)` }}
-          />
-        )}
+        {!expanded && <div className={styles["market-card__image"]} style={{ backgroundImage: getRandomImage() }} />}
         <Grid.Row>
           <Grid.Col lg={expanded ? 7 : 12}>
             <Typography.Text
