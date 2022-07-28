@@ -31,6 +31,7 @@ export const MarketOptions = ({
               {Number(100 / market.options.length)
                 .toFixed(2)
                 .toString()}
+              %
             </span>
           </Button>
         );
@@ -54,7 +55,7 @@ export const MarketOptions = ({
             {option}
           </Typography.Text>{" "}
           <span className={styles["market-options__actions-button-percentage"]}>
-            {(outcomeToken.price * 100).toFixed(2)}
+            {(outcomeToken.price * 100).toFixed(2)}%
           </span>
         </Button>
       );
