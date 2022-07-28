@@ -13,7 +13,6 @@ import { Grid } from "ui/grid/Grid";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import pulse from "providers/pulse";
-import { Styles } from "ui/icon/Icon.module.scss";
 import timezones from "providers/date/timezones.json";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import date from "providers/date";
@@ -155,9 +154,10 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
                           <Form.Select.Item value={token.symbol} key={token.symbol}>
                             <Typography.Text flat className={styles["create-market-modal__token"]}>
                               <span className={styles["create-market-modal__token--icon-box"]}>
-                                <Icon
-                                  name={token.icon as keyof Styles}
+                                <img
+                                  src={token.icon}
                                   className={styles["create-market-modal__token--icon"]}
+                                  alt="token-icon"
                                 />
                               </span>{" "}
                               {token.symbol}

@@ -53,6 +53,7 @@ export type Styles = {
   "swap-card__from--name-price": string;
   "swap-card__from--switch": string;
   "swap-card__from--token-amount": string;
+  "swap-card__from--token-icon": string;
   "swap-card__overview": string;
   "swap-card__overview-card": string;
   "swap-card__overview-card--row": string;
@@ -63,6 +64,7 @@ export type Styles = {
   "swap-card__to--name-price": string;
   "swap-card__to--switch": string;
   "swap-card__to--token-amount": string;
+  "swap-card__to--token-icon": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
