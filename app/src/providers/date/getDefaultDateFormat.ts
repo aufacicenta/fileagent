@@ -13,4 +13,6 @@ export const fromTimestampWithOffset = (timestamp: number, utcOffset: number) =>
     utcOffset < 0 ? "" : "+"
   }${utcOffset}:00`;
 
+export const fromTimestamp = (timestamp: number) => `${moment(fromNanoseconds(timestamp)).format("MM/DD/YYYY HH:mm")}`;
+
 export default (date?: Date | string | number) => moment(date || undefined).format("MMM DD, YYYY");

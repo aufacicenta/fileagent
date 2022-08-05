@@ -26,6 +26,11 @@
       display: flex;
       justify-content: space-between;
     }
+
+    span {
+      margin-left: 3px;
+      text-decoration: none;
+    }
   }
 
   &__image {

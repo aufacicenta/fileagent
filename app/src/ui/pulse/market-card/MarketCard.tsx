@@ -8,12 +8,19 @@ import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import near from "providers/near";
 import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
+import { Icon } from "ui/icon/Icon";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 import { MarketOptions } from "./market-options/MarketOptions";
 import { MarketOptionsProgress } from "./market-options-progress/MarketOptionsProgress";
 import { CollateralTokenBalance } from "./collateral-token-balance/CollateralTokenBalance";
+
+const getRandomImage = () => {
+  const num = Math.floor(Math.random() * (23 - 1) + 1);
+
+  return `url(/market/abstract/abstract${num}.png)`;
+};
 
 // @TODO i18n
 export const MarketCard: React.FC<MarketCardProps> = ({
@@ -30,12 +37,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   return (
     <Card className={clsx(styles["market-card"], className)}>
       <Card.Content>
-        {!expanded && (
-          <div
-            className={styles["market-card__image"]}
-            style={{ backgroundImage: `url(/shared/market-card-img.jpg)` }}
-          />
-        )}
+        {!expanded && <div className={styles["market-card__image"]} style={{ backgroundImage: getRandomImage() }} />}
         <Grid.Row>
           <Grid.Col lg={expanded ? 7 : 12}>
             <Typography.Text
@@ -64,6 +66,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <span>Resolution mechanism</span>
                 <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
                   {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
+                  <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
@@ -73,6 +76,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   target="_blank"
                 >
                   {marketId}
+                  <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>
             </div>
@@ -108,7 +112,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 </div>
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
-                    <span>Liquidity:</span>
+                    <span>Collateral at stake:</span>
                     <span>
                       <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} marketId={marketId} />
                     </span>

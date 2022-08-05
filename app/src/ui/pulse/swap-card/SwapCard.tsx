@@ -230,6 +230,13 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__from--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__from--label"]}>
                     <Typography.Description flat truncate>
+                      {isCollateralSourceToken() && (
+                        <img
+                          src={pulse.getCollateralTokenIconByAccountId(collateralToken.accountId)}
+                          alt="token-icon"
+                          className={styles["swap-card__from--token-icon"]}
+                        />
+                      )}{" "}
                       {fromToken.symbol}
                     </Typography.Description>
                   </Form.Label>
@@ -262,6 +269,13 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 <div className={styles["swap-card__to--token-amount"]}>
                   <Form.Label id="marketOptions" className={styles["swap-card__to--label"]}>
                     <Typography.Description flat truncate>
+                      {!isCollateralSourceToken() && (
+                        <img
+                          src={pulse.getCollateralTokenIconByAccountId(collateralToken.accountId)}
+                          alt="token-icon"
+                          className={styles["swap-card__from--token-icon"]}
+                        />
+                      )}{" "}
                       {toToken.symbol}
                     </Typography.Description>
                   </Form.Label>

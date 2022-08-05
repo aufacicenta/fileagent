@@ -8,6 +8,7 @@ import getDefaultDateFormat, {
   fromNanoseconds,
   toUtcOffsetNanoseconds,
   fromTimestampWithOffset,
+  fromTimestamp,
 } from "./getDefaultDateFormat";
 
 const parseFromFormat = (inp?: MomentInput, format?: MomentFormatSpecification, strict: boolean = false) =>
@@ -17,6 +18,7 @@ export default {
   parseFromFormat,
   timeFromNow,
   getDefaultDateFormat,
+  fromTimestamp,
   fromTimestampWithOffset,
   toNanoseconds,
   fromNanoseconds,

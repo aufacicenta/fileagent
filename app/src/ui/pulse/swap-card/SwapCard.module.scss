@@ -46,6 +46,12 @@
       margin-bottom: $space-ml;
     }
 
+    &--token-icon {
+      width: 18px;
+      height: auto;
+      margin-right: $space-s;
+    }
+
     &--label {
       position: absolute;
       top: 9px;
@@ -55,6 +61,8 @@
       margin-bottom: 0;
 
       p {
+        display: flex;
+        align-items: center;
         color: var(--color-typography-text);
       }
 
