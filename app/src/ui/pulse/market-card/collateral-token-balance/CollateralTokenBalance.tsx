@@ -22,9 +22,15 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collateralTokenMetadata.id, marketId, ftMetadata?.decimals]);
 
+  const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
+
+  if (!collateralToken) {
+    return <>0.00</>;
+  }
+
   return (
     <>
-      {balance} {pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id).symbol}
+      {balance} {collateralToken.symbol}
     </>
   );
 };
