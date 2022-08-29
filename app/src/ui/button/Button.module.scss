@@ -88,12 +88,12 @@ $HALF_LOADER_SIZE: 15px;
 
   &--extra-small {
     @include font-properties($typography-mini-button-label);
-    padding: $space-s 20px;
+    padding: 3px 14px;
   }
 
   &--small {
     @include font-properties($typography-button-label);
-    padding: 9px 24px;
+    padding: 4px 20px;
   }
 
   // "m" on desktop and "xs" on mobile
@@ -323,27 +323,15 @@ $HALF_LOADER_SIZE: 15px;
     @extend .button-outline;
     background: transparent;
 
-    &.button--extra-small {
-      padding: 6px 18px;
-    }
-
-    &.button--medium {
-      padding: 14px 30px;
-    }
-
-    &.button--large {
-      @extend .button-outline_large;
-    }
-
     &.button--primary,
     &.button--secondary,
     &.button--success,
     &.button--danger,
+    &.button--info,
     &.button--dark {
       &[disabled] {
-        border-color: var(--color-dark-1);
-        color: var(--color-dark-1);
-        background-color: var(--color-white);
+        border-color: var(--color-button-outlined-disabled);
+        color: var(--color-button-outlined-disabled-text);
       }
     }
 
@@ -421,6 +409,17 @@ $HALF_LOADER_SIZE: 15px;
         border-color: var(--color-dark-3);
         color: var(--color-dark-1);
         background-color: var(--color-white);
+      }
+    }
+
+    &.button--info {
+      border-color: var(--color-button-outlined-info);
+      color: var(--color-button-outlined-info-text);
+
+      &:active,
+      &:hover,
+      &:focus {
+        color: var(--color-white);
       }
     }
 

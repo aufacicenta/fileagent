@@ -1,11 +1,11 @@
 {
-  "swapCard.title": "Buy & Sell Outcomes",
+  "swapCard.title": "Place Your Bet",
   "swapCard.balance": "Balance",
   "swapCard.overview": "Overview",
   "swapCard.rate": "Rate",
   "swapCard.inverseRate": "Inverse Rate",
   "swapCard.estimatedFee": "Estimated Fee",
   "swapCard.swap": "Swap",
-  "swapCard.buy": "Buy",
-  "swapCard.sell": "Sell"
+  "swapCard.buy": "Place Bet",
+  "swapCard.sell": "Claim Earnings"
 }

@@ -1,6 +1,7 @@
 export const DEFAULT_NETWORK_ENV = "testnet";
 export const DEFAULT_FEE_RATIO = 0.02;
 export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
+export const DEFAULT_CLAIMING_WINDOW_DAY_SPAN = 30; // days
 
 const TESTNET_GUEST_WALLET_ID = "nearholdings.testnet";
 const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
@@ -10,8 +11,8 @@ const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.near";
 const TESTNET_DAO_URL = `https://testnet.app.astrodao.com/dao/${TESTNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 const MAINNET_DAO_URL = `https://app.astrodao.com/dao/${MAINNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 
-const TESTNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-8.aufacicenta.testnet";
-const MAINNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-8.aufacicenta.near";
+const TESTNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-9.aufacicenta.testnet";
+const MAINNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-9.aufacicenta.near";
 
 const TESTNET_CONFIG = {
   marketFactoryAccountId: TESTNET_AMM_FACTORY_ACCOUNT_ID,

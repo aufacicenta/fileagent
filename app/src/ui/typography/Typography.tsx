@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import NextLink, { LinkProps } from "next/link";
 
+import buttonStyles from "../button/Button.module.scss";
+
 import styles from "./Typography.module.scss";
 import { AnchorProps, TypographyProps } from "./Typography.types";
 
@@ -131,11 +133,17 @@ const Link: React.FC<AnchorProps & LinkProps> = ({ children, className, href, ..
   </NextLink>
 );
 
-const Anchor: React.FC<AnchorProps> = ({ children, className, truncate, flat, ...props }) => (
+const Anchor: React.FC<AnchorProps> = ({ children, className, truncate, flat, as, size, variant, ...props }) => (
   <a
-    className={clsx(styles.typography__link, className, {
+    className={clsx(className, {
+      [styles.typography__link]: as === undefined,
       [styles.typography__truncate]: truncate,
       [styles.typography__flat]: flat,
+      [styles["typography__link--button"]]: as === "button",
+      [buttonStyles.button]: as === "button",
+      [buttonStyles["button--primary"]]: as === "button",
+      [buttonStyles["button--auto-size"]]: as === "button",
+      [buttonStyles["button-outline"]]: as === "button" && variant === "outlined",
     })}
     {...props}
   >
