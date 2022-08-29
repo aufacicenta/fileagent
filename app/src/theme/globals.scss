@@ -47,7 +47,7 @@ body[data-theme="dark"] {
   --color-status-success: #3dd598;
   --color-status-success-light: #d6fff5;
   --color-status-success-lighter: #e6fff9;
-  --color-status-warning: #fad105;
+  --color-status-warning: #ffd74b;
   --color-status-warning-light: #fffdb8;
   --color-status-warning-lighter: #fffeeb;
   --color-status-critical: #bd2d00;
@@ -95,6 +95,12 @@ body[data-theme="dark"] {
   --color-button-secondary-hover: var(--color-dark-10);
   --color-button-secondary-hover-text: var(--color-white);
 
+  // Button outlined
+  --color-button-outlined-info: #ffd74b;
+  --color-button-outlined-info-text: #ffd74b;
+  --color-button-outlined-disabled: #5b5b65;
+  --color-button-outlined-disabled-text: #8a8a98;
+
   //Theme Selector
   --color-theme-button-light: #ffffff00;
   --color-theme-button-dark: #ffffff40;
@@ -112,7 +118,7 @@ body[data-theme="dark"] {
   --color-typography-subtitle: var(--color-dark-5);
   --color-typography-button-label: var(--color-white);
   --color-typography-mini-button-label: var(--color-white);
-  --color-typography-description: #585858;
+  --color-typography-description: #8a8a98;
   --color-typography-mini-description: var(--color-dark-4);
   --color-typography-link: var(--color-primary);
 
@@ -126,6 +132,10 @@ body[data-theme="dark"] {
   --color-market-card-background-contrast: var(--color-background);
   --color-market-card-title: #fff;
   --color-market-card-stat: #b1b1b1;
+
+  // Market Fees Card
+  --color-market-fees-card-background: #ffd74b;
+  --color-market-fees-card-text: #fff;
 
   // Horizontal Line
   --color-horizontal-line-background: #3c3c3c;
@@ -201,6 +211,12 @@ body[data-theme="light"] {
   --color-button-secondary-hover: var(--color-white);
   --color-button-secondary-hover-text: var(--color-text);
 
+  // Button outlined
+  --color-button-outlined-info: #ffd74b;
+  --color-button-outlined-info-text: #ffd74b;
+  --color-button-outlined-disabled: #5b5b65;
+  --color-button-outlined-disabled-text: #8a8a98;
+
   // Theme Selector
   --color-theme-button-light: #d0ddff;
   --color-theme-button-dark: var(--color-dark-1);
@@ -232,6 +248,10 @@ body[data-theme="light"] {
   --color-market-card-background-contrast: #f5f6fd;
   --color-market-card-title: #161515;
   --color-market-card-stat: #626161;
+
+  // Market Fees Card
+  --color-market-fees-card-background: #ffd74b;
+  --color-market-fees-card-text: #fff;
 
   // Horizontal Line
   --color-horizontal-line-background: #e7e7e7;

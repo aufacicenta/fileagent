@@ -1,5 +1,7 @@
 import { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 
+import { ButtonCommonProps } from "ui/button/Button.types";
+
 type GeneralProps = {
   inline?: boolean;
   flat?: boolean;
@@ -11,4 +13,9 @@ export type TypographyProps = HTMLAttributes<HTMLParagraphElement> & {
   className?: string;
 } & GeneralProps;
 
-export type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & GeneralProps;
+export type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> &
+  GeneralProps & {
+    as?: "button";
+    size?: ButtonCommonProps["size"];
+    variant?: ButtonCommonProps["variant"];
+  };
