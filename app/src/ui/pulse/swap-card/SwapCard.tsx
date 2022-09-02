@@ -80,7 +80,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
-  const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
+  const getBuyRate = async (amount: number) => {
     const decimals = ftMetadata?.decimals!;
 
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
@@ -93,11 +93,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
     setFee(feeString);
     setRate(rateString);
-
-    setToTokenInputValue(rateString);
   };
 
-  const getSellRate = async (sellAmount: number, setToTokenInputValue: (value: string) => void) => {
+  const getSellRate = async (sellAmount: number) => {
     const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(sellAmount, decimals);
 
@@ -110,15 +108,13 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
 
     setRate(rateString);
-
-    setToTokenInputValue(rateString);
   };
 
-  const onFromTokenChange = (value: string, mutator: (value: string) => void) => {
+  const onFromTokenChange = (value: StringConstructor) => {
     if (isCollateralSourceToken()) {
-      getBuyRate(Number(value), mutator);
+      getBuyRate(Number(value));
     } else {
-      getSellRate(Number(value), mutator);
+      getSellRate(Number(value));
     }
   };
 
@@ -148,13 +144,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
 
-    if (isOver && isResolved) {
-      await sell(amount);
-    } else if (isCollateralSourceToken()) {
-      await buy(amount);
-    } else {
-      await sell(amount);
-    }
+    await (isOver && isResolved ? sell(amount) : buy(amount));
   };
 
   const getSubmitButton = () => {
@@ -185,14 +175,26 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setSelectedOutcomeToken(outcomeTokens![id as number]);
   };
 
+  const onClickHalfBalance = (setFromTokenInputValue: (value: string) => void) => {
+    const amount = Number(balance) / 2;
+    setFromTokenInputValue(amount.toString());
+    getBuyRate(amount);
+  };
+
+  const onClickMaxBalance = (setFromTokenInputValue: (value: string) => void) => {
+    const amount = Number(balance);
+    setFromTokenInputValue(amount.toString());
+    getBuyRate(amount);
+  };
+
   // @TODO i18n
   return (
     <RFForm
       onSubmit={onSubmit}
       validate={validate}
       mutators={{
-        setToTokenInputValue: (_args, state, utils) => (value: string) => {
-          utils.changeValue(state, "toTokenAmount", () => value);
+        setFromTokenInputValue: (_args, state, utils) => (value: string) => {
+          utils.changeValue(state, "fromTokenAmount", () => value);
         },
       }}
       render={({ handleSubmit, form }) => (
@@ -214,17 +216,24 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   )}
                 </Typography.Description>
                 <div className={styles["swap-card__balance--half-max"]}>
-                  <Typography.Description className={styles["swap-card__balance--half"]}>Half</Typography.Description>
-                  <Typography.Description className={styles["swap-card__balance--max"]}>Max</Typography.Description>
+                  <Typography.Description
+                    className={styles["swap-card__balance--half"]}
+                    onClick={() => onClickHalfBalance(form.mutators.setFromTokenInputValue())}
+                  >
+                    Half
+                  </Typography.Description>
+                  <Typography.Description
+                    className={styles["swap-card__balance--max"]}
+                    onClick={() => onClickMaxBalance(form.mutators.setFromTokenInputValue())}
+                  >
+                    Max
+                  </Typography.Description>
                 </div>
               </div>
               <div className={styles["swap-card__from"]}>
                 <div className={styles["swap-card__from--token-amount"]}>
                   <OnChange name="fromTokenAmount">
-                    {_.debounce(
-                      (value) => onFromTokenChange(value, form.mutators.setToTokenInputValue()),
-                      DEFAULT_DEBOUNCE_TIME,
-                    )}
+                    {_.debounce((value) => onFromTokenChange(value), DEFAULT_DEBOUNCE_TIME)}
                   </OnChange>
                   <Form.TextInput
                     id="fromTokenAmount"
