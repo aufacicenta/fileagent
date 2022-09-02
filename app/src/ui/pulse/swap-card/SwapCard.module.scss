@@ -8,28 +8,53 @@
   display: block;
   margin-top: $space-ml;
 
-  &__balance,
-  &__overview {
-    padding: 0 $space-default;
-    text-align: right;
-    color: var(--color-typography-text);
+  &__balance {
+    display: block;
+
+    &--container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: $space-xs;
+    }
+
+    &--amount {
+      display: flex;
+      align-items: center;
+    }
+
+    &--half-max {
+      display: flex;
+    }
+
+    &--half {
+      margin-right: $space-s;
+    }
+
+    &--half,
+    &--max {
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 
   &__overview {
-    text-align: left;
+    margin-bottom: $space-xs;
   }
 
   &__buy-sell {
     text-align: left;
   }
 
+  &__select {
+    width: 50%;
+    margin-left: $space-s;
+  }
+
   &__from,
   &__to {
     position: relative;
-    margin-bottom: $space-ml;
-    border-radius: $border-radius-card;
-    padding: $space-default;
-    background-color: var(--color-market-card-background);
+    margin-bottom: $space-default;
 
     &--name-price {
       display: flex;
@@ -43,21 +68,20 @@
 
     &--token-amount {
       position: relative;
-      margin-bottom: $space-ml;
+      display: flex;
     }
 
     &--token-icon {
       width: 18px;
       height: auto;
-      margin-right: $space-s;
+      margin-left: $space-xs;
     }
 
     &--label {
-      position: absolute;
-      top: 9px;
-      left: $space-default;
       display: flex;
+      justify-content: center;
       align-items: center;
+      width: 30%;
       margin-bottom: 0;
 
       p {
@@ -77,43 +101,15 @@
     }
 
     &--amount-input {
+      width: 70%;
+
       input {
         margin-bottom: 0;
         font-size: 18px;
-        text-align: right;
         background-color: var(--color-market-card-background);
 
         &::placeholder {
           font-size: 18px;
-        }
-      }
-    }
-
-    &--switch {
-      position: absolute;
-      bottom: -$space-default;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      width: 100%;
-
-      > button {
-        @include buttonGradientPrimary;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 43px;
-        height: 43px;
-        border-radius: $border-radius-button;
-
-        &:hover {
-          cursor: pointer;
-        }
-
-        span {
-          color: white;
-          transform: rotate(90deg);
         }
       }
     }
@@ -127,9 +123,6 @@
 
   &__overview-card {
     margin-bottom: $space-default;
-    border-radius: $border-radius-card;
-    padding: $space-default;
-    background-color: var(--color-market-card-background);
 
     &--row {
       display: flex;

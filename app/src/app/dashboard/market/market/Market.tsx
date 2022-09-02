@@ -19,9 +19,6 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
   ssr: false,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const onSubmitSwapForm = (_values: Record<string, unknown>) => undefined;
-
 export const Market: React.FC<MarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
 
@@ -63,9 +60,9 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues,
             <MarketFeesCard />
             {selectedOutcomeToken && (
               <SwapCard
-                onSubmit={onSubmitSwapForm}
                 marketContractValues={marketContractValues}
                 selectedOutcomeToken={selectedOutcomeToken}
+                setSelectedOutcomeToken={setSelectedOutcomeToken}
                 marketId={marketId}
               />
             )}

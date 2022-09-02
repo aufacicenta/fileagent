@@ -2,12 +2,11 @@ import clsx from "clsx";
 import { Form as RFForm } from "react-final-form";
 import { OnChange } from "react-final-form-listeners";
 import { useTranslation } from "next-i18next";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import _ from "lodash";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
-import { Icon } from "ui/icon/Icon";
 import { Form } from "ui/form/Form";
 import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
@@ -29,8 +28,17 @@ const validate = () => ({
 
 export const SwapCard: React.FC<SwapCardProps> = ({
   className,
-  marketContractValues: { market, collateralTokenMetadata, feeRatio, isOver, isResolutionWindowExpired, isResolved },
+  marketContractValues: {
+    market,
+    collateralTokenMetadata,
+    feeRatio,
+    isOver,
+    isResolutionWindowExpired,
+    isResolved,
+    outcomeTokens,
+  },
   selectedOutcomeToken,
+  setSelectedOutcomeToken,
   marketId,
 }) => {
   const [fromToken, setFromToken] = useState({ price: 0, symbol: "", amount: 0 });
@@ -67,37 +75,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setBalance(collateralTokenBalance);
   };
 
-  const setOutcomeAsSource = async () => {
-    setFromToken({
-      price: selectedOutcomeToken.price,
-      symbol: market.options[selectedOutcomeToken.outcome_id],
-      amount: 0,
-    });
-
-    setToToken({
-      // @TODO get price from source like coingecko
-      price: collateralToken.price,
-      symbol: collateralToken.symbol,
-      amount: 0,
-    });
-
-    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    const decimals = ftMetadata?.decimals!;
-    setBalance(currency.convert.fromUIntAmount(outcomeTokenBalance, decimals).toString());
-  };
-
   useEffect(() => {
     setCollateralAsSource();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
-
-  const onClickFlip = () => {
-    if (isCollateralSourceToken()) {
-      setOutcomeAsSource();
-    } else {
-      setCollateralAsSource();
-    }
-  };
 
   const getBuyRate = async (amount: number, setToTokenInputValue: (value: string) => void) => {
     const decimals = ftMetadata?.decimals!;
@@ -200,6 +181,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     );
   };
 
+  const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOutcomeToken(outcomeTokens![id as number]);
+  };
+
   // @TODO i18n
   return (
     <RFForm
@@ -217,75 +202,52 @@ export const SwapCard: React.FC<SwapCardProps> = ({
               <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
                 {t("swapCard.title")}
               </Typography.Headline2>
-              <Typography.Description className={styles["swap-card__balance"]}>
-                {t("swapCard.balance")}: {balance}
-              </Typography.Description>
-              <div className={styles["swap-card__from"]}>
-                <div className={styles["swap-card__from--name-price"]}>
-                  <Typography.Description>Price</Typography.Description>
-                  <Typography.Description>
-                    {Number(fromToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Description>
+              <div className={styles["swap-card__balance--container"]}>
+                <Typography.Description className={styles["swap-card__balance--amount"]}>
+                  {t("swapCard.balance")}: {balance} {fromToken.symbol}
+                  {isCollateralSourceToken() && (
+                    <img
+                      src={pulse.getCollateralTokenIconByAccountId(collateralToken.accountId)}
+                      alt="token-icon"
+                      className={styles["swap-card__from--token-icon"]}
+                    />
+                  )}
+                </Typography.Description>
+                <div className={styles["swap-card__balance--half-max"]}>
+                  <Typography.Description className={styles["swap-card__balance--half"]}>Half</Typography.Description>
+                  <Typography.Description className={styles["swap-card__balance--max"]}>Max</Typography.Description>
                 </div>
+              </div>
+              <div className={styles["swap-card__from"]}>
                 <div className={styles["swap-card__from--token-amount"]}>
-                  <Form.Label id="marketOptions" className={styles["swap-card__from--label"]}>
-                    <Typography.Description flat truncate>
-                      {isCollateralSourceToken() && (
-                        <img
-                          src={pulse.getCollateralTokenIconByAccountId(collateralToken.accountId)}
-                          alt="token-icon"
-                          className={styles["swap-card__from--token-icon"]}
-                        />
-                      )}{" "}
-                      {fromToken.symbol}
-                    </Typography.Description>
-                  </Form.Label>
-                  <Form.TextInput
-                    id="fromTokenAmount"
-                    type="text"
-                    defaultValue="0.00"
-                    className={styles["swap-card__from--amount-input"]}
-                  />
                   <OnChange name="fromTokenAmount">
                     {_.debounce(
                       (value) => onFromTokenChange(value, form.mutators.setToTokenInputValue()),
                       DEFAULT_DEBOUNCE_TIME,
                     )}
                   </OnChange>
-                </div>
-                <div className={styles["swap-card__from--switch"]}>
-                  <Button onClick={onClickFlip}>
-                    <Icon name="icon-tab" />
-                  </Button>
-                </div>
-              </div>
-              <div className={styles["swap-card__to"]}>
-                <div className={styles["swap-card__to--name-price"]}>
-                  <Typography.Description>Price</Typography.Description>
-                  <Typography.Description>
-                    {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Description>
-                </div>
-                <div className={styles["swap-card__to--token-amount"]}>
-                  <Form.Label id="marketOptions" className={styles["swap-card__to--label"]}>
-                    <Typography.Description flat truncate>
-                      {!isCollateralSourceToken() && (
-                        <img
-                          src={pulse.getCollateralTokenIconByAccountId(collateralToken.accountId)}
-                          alt="token-icon"
-                          className={styles["swap-card__from--token-icon"]}
-                        />
-                      )}{" "}
-                      {toToken.symbol}
-                    </Typography.Description>
-                  </Form.Label>
                   <Form.TextInput
-                    id="toTokenAmount"
+                    id="fromTokenAmount"
                     type="text"
                     defaultValue="0.00"
-                    className={styles["swap-card__to--amount-input"]}
-                    disabled
+                    className={styles["swap-card__from--amount-input"]}
                   />
+                  <Form.Select
+                    id="outcomeTokenId"
+                    className={styles["swap-card__select"]}
+                    inputProps={{
+                      onChange: onSelectOutcomeToken,
+                      value: selectedOutcomeToken.outcome_id,
+                    }}
+                  >
+                    {market.options.map((option, id) => (
+                      <Form.Select.Item value={id} key={option}>
+                        <Typography.Text flat truncate>
+                          {option}
+                        </Typography.Text>
+                      </Form.Select.Item>
+                    ))}
+                  </Form.Select>
                 </div>
               </div>
               <Typography.Description className={styles["swap-card__overview"]}>
@@ -303,6 +265,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                   ) : (
                     <Typography.Text flat>none for sells</Typography.Text>
                   )}
+                </div>
+                <div className={styles["swap-card__overview-card--row"]}>
+                  <Typography.Text flat>Price</Typography.Text>
+                  <Typography.Text flat>
+                    {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
+                  </Typography.Text>
                 </div>
                 <div className={styles["swap-card__overview-card--row"]}>
                   <Typography.Text flat>{t("swapCard.rate")}</Typography.Text>
