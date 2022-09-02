@@ -1,6 +1,10 @@
 @import "src/theme/base";
 
 .market-fees-card {
+  @include atLargeTablet {
+    margin-top: 0;
+  }
+  margin-top: $space-ml;
   margin-bottom: $space-ml;
   border: 1px solid var(--color-market-fees-card-background);
 
