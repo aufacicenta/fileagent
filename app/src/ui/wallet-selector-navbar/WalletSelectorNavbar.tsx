@@ -33,7 +33,7 @@ export const WalletSelectorNavbar: React.FC<WalletSelectorNavbarProps> = ({ onCl
             <div className={styles["wallet-selector-navbar__right"]}>
               <div className={styles["wallet-selector-navbar__right--item"]}>
                 <Icon
-                  name="icon-pulse-menu-2"
+                  name="icon-menu"
                   onClick={() => onClickSidebarVisibility(true)}
                   className={styles["wallet-selector-navbar__right--trigger"]}
                 />
