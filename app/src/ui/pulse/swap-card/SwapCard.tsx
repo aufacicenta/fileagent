@@ -135,7 +135,11 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return;
     }
 
-    await FungibleTokenContract.ftTransferCall(marketId, amount.toString(), selectedOutcomeToken.outcome_id);
+    await FungibleTokenContract.ftTransferCall(
+      marketId,
+      amount.toLocaleString("fullwide", { useGrouping: false }),
+      selectedOutcomeToken.outcome_id,
+    );
   };
 
   const sell = async (amount: number) => {
