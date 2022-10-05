@@ -14,9 +14,12 @@ import useNearFungibleTokenContract from "providers/near/contracts/fungible-toke
 import currency from "providers/currency";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
+import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 
-import { SwapCardForm, SwapCardProps } from "./SwapCard.types";
 import styles from "./SwapCard.module.scss";
+import { SwapCardForm, SwapCardProps } from "./SwapCard.types";
 
 const DEFAULT_DEBOUNCE_TIME = 500;
 
@@ -47,6 +50,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const [rate, setRate] = useState("0.00");
   const [fee, setFee] = useState("0.00");
 
+  const wallet = useWalletStateContext();
+  const walletSelector = useWalletSelectorContext();
   const { t } = useTranslation(["swap-card"]);
   const toast = useToastContext();
 
@@ -148,6 +153,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const getSubmitButton = () => {
+    if (!wallet.isConnected.get()) {
+      return (
+        <Button fullWidth onClick={() => walletSelector.onConnect(WalletSelectorChain.near)}>
+          Connect to Bet
+        </Button>
+      );
+    }
+
     if (isOver && !isResolutionWindowExpired) {
       return (
         <Button fullWidth type="submit" disabled>
