@@ -43,40 +43,21 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <Typography.Description flat>{t("pulseSidebar.item.dashboard")}</Typography.Description>
               </Typography.Link>
             </div>
-            <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
-                <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-sports" />
-                </div>
-                <Typography.Description flat>{t("pulseSidebar.item.sportAndBetting")}</Typography.Description>
-              </Typography.Link>
-            </div>
-            <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
-                <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-bets" />
-                </div>
-                <Typography.Description flat>{t("pulseSidebar.item.bets")}</Typography.Description>
-              </Typography.Link>
-            </div>
-            <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
-                <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-profile-2" />
-                </div>
-                <Typography.Description flat>{t("pulseSidebar.item.profile")}</Typography.Description>
-              </Typography.Link>
-            </div>
             <div className={styles["pulse-sidebar__divider"]}>
               <div className={styles["pulse-sidebar__divider--bar"]} />
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
+              <Typography.Anchor
+                className={styles["pulse-sidebar__item--link"]}
+                href="https://rainbowbridge.app/transfer"
+                target="_blank"
+                rel="nofollow"
+              >
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-logout" />
+                  <Icon name="icon-flip-horizontal2" />
                 </div>
-                <Typography.Description flat>{t("pulseSidebar.item.close")}</Typography.Description>
-              </Typography.Link>
+                <Typography.Description flat>{t("pulseSidebar.item.bridge")}</Typography.Description>
+              </Typography.Anchor>
             </div>
           </div>
           <div className={styles["pulse-sidebar__footer"]}>
