@@ -11,8 +11,8 @@ const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.near";
 const TESTNET_DAO_URL = `https://testnet.app.astrodao.com/dao/${TESTNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 const MAINNET_DAO_URL = `https://app.astrodao.com/dao/${MAINNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 
-const TESTNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-9.aufacicenta.testnet";
-const MAINNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-9.aufacicenta.near";
+const TESTNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-22.aufacicenta.testnet";
+const MAINNET_AMM_FACTORY_ACCOUNT_ID = "amm-factory-22.aufacicenta.near";
 
 const TESTNET_CONFIG = {
   marketFactoryAccountId: TESTNET_AMM_FACTORY_ACCOUNT_ID,

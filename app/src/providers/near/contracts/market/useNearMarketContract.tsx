@@ -33,19 +33,17 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
 
-      if (!market || !resolutionWindow || !collateralTokenMetadata || !feeRatio) {
+      if (!market || !collateralTokenMetadata || !feeRatio) {
         throw new Error("Failed to fetch market data");
       }
 
-      const outcomeTokens = !isPublished
-        ? []
-        : (
-            await Promise.all(
-              market.options.map((_option, outcomeId) => contract.getOutcomeToken({ outcome_id: outcomeId })),
-            )
-          ).filter(Boolean);
+      const outcomeTokens = (
+        await Promise.all(
+          market.options.map((_option, outcomeId) => contract.getOutcomeToken({ outcome_id: outcomeId })),
+        )
+      ).filter(Boolean);
 
-      if (isPublished && !outcomeTokens) {
+      if (!outcomeTokens) {
         throw new Error("Failed to fetch outcome tokens data");
       }
 

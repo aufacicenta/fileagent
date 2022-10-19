@@ -17,12 +17,7 @@ import timezones from "providers/date/timezones.json";
 import { CategoryPills } from "ui/category-pills/CategoryPills";
 import date from "providers/date";
 import near from "providers/near";
-import {
-  DEFAULT_CLAIMING_WINDOW_DAY_SPAN,
-  DEFAULT_FEE_RATIO,
-  DEFAULT_NETWORK_ENV,
-  DEFAULT_RESOLUTION_WINDOW_DAY_SPAN,
-} from "providers/near/getConfig";
+import { DEFAULT_FEE_RATIO, DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
 import { DeployMarketContractArgs } from "providers/near/contracts/market-factory/market-factory.types";
@@ -52,9 +47,6 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
 
       const endsAt = date.parseFromFormat(`${values.marketEndDate} ${values.marketEndTime}`, "YYYY-MM-DD HH:mm");
 
-      const resolutionWindow = endsAt.clone().add(DEFAULT_RESOLUTION_WINDOW_DAY_SPAN, "days");
-      const claimingWindow = resolutionWindow.clone().add(DEFAULT_CLAIMING_WINDOW_DAY_SPAN, "days");
-
       const daoAccountId = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
       const collateralTokenAccountId = pulse.getCollateralTokenBySymbol(collateralTokenSymbol).accountId;
 
@@ -73,8 +65,6 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
         collateral_token_account_id: collateralTokenAccountId,
         staking_token_account_id: pulse.getConfig().STAKING_TOKEN_ACCOUNT_ID,
         fee_ratio: DEFAULT_FEE_RATIO,
-        resolution_window: date.toNanoseconds(resolutionWindow.valueOf()),
-        claiming_window: date.toNanoseconds(claimingWindow.valueOf()),
         collateral_token_decimals: pulse.getCollateralTokenByAccountId(collateralTokenAccountId).decimals,
       };
 

@@ -35,7 +35,7 @@ export class MarketFactoryContract {
 
       await contract.create_market(
         { args: base64args },
-        new BN("60000000000000").toNumber(),
+        new BN("300000000000000").toNumber(),
         attachedDeposit.toString(),
       );
 

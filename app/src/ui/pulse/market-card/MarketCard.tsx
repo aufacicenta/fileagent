@@ -32,7 +32,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const { market, resolutionWindow, isPublished, collateralTokenMetadata } = marketContractValues;
+  const { market, resolutionWindow, isPublished, isOver, collateralTokenMetadata } = marketContractValues;
 
   return (
     <Card className={clsx(styles["market-card"], className)}>
@@ -60,7 +60,11 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution date</span>
-                <span>{date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)}</span>
+                <span>
+                  {resolutionWindow
+                    ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)
+                    : "TBD when event ends and DAO proposals are published."}
+                </span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution mechanism</span>
@@ -84,25 +88,23 @@ export const MarketCard: React.FC<MarketCardProps> = ({
           <Grid.Col lg={expanded ? 5 : 12}>
             <Card className={styles["market-card__market-options"]}>
               <Card.Content className={styles["market-card__market-options--card-content"]}>
-                {isPublished && (
-                  <>
-                    <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
-                      What does the market think?
-                    </Typography.Headline5>
-                    <div className={styles["market-card__market-options--progres-bar"]}>
-                      <MarketOptionsProgress marketContractValues={marketContractValues} />
-                    </div>
-                  </>
-                )}
+                <>
+                  <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
+                    What does the market think?
+                  </Typography.Headline5>
+                  <div className={styles["market-card__market-options--progres-bar"]}>
+                    <MarketOptionsProgress marketContractValues={marketContractValues} />
+                  </div>
+                </>
                 <div className={styles["market-card__market-options--actions"]}>
-                  {!isPublished && (
+                  {isOver && !isPublished && (
                     <Button
                       color="primary"
                       fullWidth
                       className={styles["market-card__market-options--actions-button"]}
                       onClick={onClickPublishMarket}
                     >
-                      Publish Market
+                      Submit to Resolution
                     </Button>
                   )}
                   <MarketOptions

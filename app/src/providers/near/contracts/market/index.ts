@@ -99,9 +99,8 @@ export class MarketContract {
       const result = await this.contract.resolution_window();
 
       return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_GET_RESOLUTION_WINDOW");
+    } catch {
+      return undefined;
     }
   }
 
