@@ -35,7 +35,7 @@ export type OutcomeToken = {
 
 export type MarketContractValues = {
   market: MarketData;
-  resolutionWindow: Timestamp;
+  resolutionWindow?: Timestamp;
   isPublished: boolean;
   isOver: boolean;
   isResolutionWindowExpired: boolean;
