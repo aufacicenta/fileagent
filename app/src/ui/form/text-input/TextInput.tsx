@@ -31,7 +31,7 @@ export const TextInput: React.FC<TextInputProps> = ({
     >
       {({ input, meta }) => (
         <>
-          <input className={clsx(styles["text-input__field"], "validate")} disabled={disabled} {...input} />
+          <input className={clsx(styles["text-input__field"], "validate")} disabled={disabled} id={id} {...input} />
           {meta.error && meta.touched && <Typography.Description flat>{meta.error}</Typography.Description>}
         </>
       )}
