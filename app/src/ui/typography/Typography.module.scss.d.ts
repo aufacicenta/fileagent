@@ -1,5 +1,7 @@
 export type Styles = {
   typography: string;
+  "typography__align--center": string;
+  "typography__align--right": string;
   "typography__button-label": string;
   typography__description: string;
   typography__flat: string;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import clsx from "clsx";
 import { Form as RFForm } from "react-final-form";
 import { useTranslation } from "next-i18next";
@@ -43,12 +44,13 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
     try {
       const timezoneOffset = Number(getTimezoneOffsetString(marketEndTimezoneOffset));
 
-      const startsAt = date.parseFromFormat(`${values.marketStartDate} ${values.marketStartTime}`, "YYYY-MM-DD HH:mm");
+      const startsAt = date
+        .parseFromFormat(`${values.marketStartDate} ${values.marketStartTime}`, "YYYY-MM-DD HH:mm")
+        .utc();
+      const endsAt = date.parseFromFormat(`${values.marketEndDate} ${values.marketEndTime}`, "YYYY-MM-DD HH:mm").utc();
 
-      const endsAt = date.parseFromFormat(`${values.marketEndDate} ${values.marketEndTime}`, "YYYY-MM-DD HH:mm");
-
-      const daoAccountId = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
-      const collateralTokenAccountId = pulse.getCollateralTokenBySymbol(collateralTokenSymbol).accountId;
+      const dao_account_id = near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId;
+      const collateral_token_account_id = pulse.getCollateralTokenBySymbol(collateralTokenSymbol).accountId;
 
       const args: DeployMarketContractArgs = {
         market: {
@@ -61,11 +63,11 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
           ends_at: date.toNanoseconds(endsAt.valueOf()),
           utc_offset: timezoneOffset,
         },
-        dao_account_id: daoAccountId,
-        collateral_token_account_id: collateralTokenAccountId,
+        dao_account_id,
+        collateral_token_account_id,
         staking_token_account_id: pulse.getConfig().STAKING_TOKEN_ACCOUNT_ID,
         fee_ratio: DEFAULT_FEE_RATIO,
-        collateral_token_decimals: pulse.getCollateralTokenByAccountId(collateralTokenAccountId).decimals,
+        collateral_token_decimals: pulse.getCollateralTokenByAccountId(collateral_token_account_id).decimals,
       };
 
       // @TODO validate args, highlight fields if something's missing

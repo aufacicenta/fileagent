@@ -38,6 +38,7 @@ export type MarketContractValues = {
   resolutionWindow?: Timestamp;
   isPublished: boolean;
   isOver: boolean;
+  isOpen: boolean;
   isResolutionWindowExpired: boolean;
   isResolved: boolean;
   collateralTokenMetadata: CollateralTokenMetadata;

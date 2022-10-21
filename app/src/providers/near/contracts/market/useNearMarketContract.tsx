@@ -28,6 +28,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const resolutionWindow = await contract.getResolutionWindow();
       const isPublished = await contract.isPublished();
       const isOver = await contract.isOver();
+      const isOpen = await contract.isOpen();
       const isResolutionWindowExpired = await contract.isResolutionWindowExpired();
       const isResolved = await contract.isResolved();
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
@@ -53,6 +54,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         isPublished,
         isOver,
         isResolved,
+        isOpen,
         isResolutionWindowExpired,
         collateralTokenMetadata,
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
@@ -96,7 +98,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       assertWalletConnection();
 
       const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
-      const result = await contract.publish({ marketOptionsLength: marketContractValues!.market.options.length });
+      const result = await contract.publish();
 
       return result;
     } catch {

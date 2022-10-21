@@ -6,6 +6,7 @@ type GeneralProps = {
   inline?: boolean;
   flat?: boolean;
   truncate?: boolean;
+  align?: "center" | "right";
 };
 
 export type TypographyProps = HTMLAttributes<HTMLParagraphElement> & {

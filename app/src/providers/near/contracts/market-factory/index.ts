@@ -1,6 +1,7 @@
 import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
+import { v4 as uuidv4 } from "uuid";
 
 import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 import near from "providers/near";
@@ -32,10 +33,12 @@ export class MarketFactoryContract {
       const base64args = Buffer.from(JSON.stringify(args)).toString("base64");
 
       const storageDeposit = new BN(near.parseNearAmount("0.00235")!);
-      const attachedDeposit = new BN(near.parseNearAmount(Number(args.market.options.length + 1.5).toString())!);
+      const attachedDeposit = new BN(near.parseNearAmount(Number(args.market.options.length + 1.9).toString())!);
+
+      const name = uuidv4().slice(0, 13);
 
       await contract.create_market(
-        { args: base64args },
+        { name, args: base64args },
         new BN("300000000000000").toNumber(),
         attachedDeposit.add(storageDeposit).toString(),
       );

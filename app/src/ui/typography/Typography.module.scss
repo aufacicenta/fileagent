@@ -7,6 +7,16 @@
     display: inline-block;
   }
 
+  &__align {
+    &--center {
+      text-align: center;
+    }
+
+    &--right {
+      text-align: right;
+    }
+  }
+
   &__flat {
     margin-bottom: 0 !important;
   }

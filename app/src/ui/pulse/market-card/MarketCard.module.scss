@@ -94,6 +94,7 @@
       justify-content: space-between;
 
       &-button {
+        margin-bottom: $space-default;
         border: 1px solid var(--color-background);
         padding: 12px 3px;
         text-transform: capitalize;

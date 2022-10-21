@@ -56,13 +56,9 @@ export class MarketContract {
     return [new MarketContract(contract), contract];
   }
 
-  async publish({ marketOptionsLength }: { marketOptionsLength: number }) {
+  async publish() {
     try {
-      const createProposalsGas = new BN("3000000000000").mul(new BN(marketOptionsLength));
-      const storageDepositGas = new BN("3000000000000");
-      const storageDepositCallbackGas = new BN("3000000000000");
-      const gas = createProposalsGas.add(storageDepositGas).add(storageDepositCallbackGas);
-
+      const gas = new BN("300000000000000");
       const result = await this.contract.publish({}, gas.toString());
 
       return result;
@@ -134,6 +130,17 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_IS_OVER");
+    }
+  }
+
+  async isOpen() {
+    try {
+      const result = await this.contract.is_open();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_IS_OPEN");
     }
   }
 
