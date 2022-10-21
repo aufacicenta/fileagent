@@ -36,6 +36,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     collateralTokenMetadata,
     feeRatio,
     isOver,
+    isOpen,
+    isPublished,
     isResolutionWindowExpired,
     isResolved,
     outcomeTokens,
@@ -161,6 +163,22 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return (
         <Button fullWidth onClick={() => walletSelector.onConnect(WalletSelectorChain.near)}>
           Connect to Bet
+        </Button>
+      );
+    }
+
+    if (!isOver && !isOpen) {
+      return (
+        <Button fullWidth disabled>
+          Betting is Closed
+        </Button>
+      );
+    }
+
+    if (isOver && !isPublished) {
+      return (
+        <Button fullWidth onClick={MarketContract.onClickPublishMarket}>
+          Submit to Resolution
         </Button>
       );
     }

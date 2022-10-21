@@ -58,14 +58,17 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
               </Typography.Description>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
+              <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution date</span>
                 <span>
-                  {resolutionWindow
-                    ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset)
-                    : "TBD when event ends and DAO proposals are published."}
+                  {resolutionWindow ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset) : "TBD*"}
                 </span>
               </Typography.Description>
+              {!resolutionWindow && (
+                <Typography.MiniDescription align="right">
+                  *when event ends and DAO proposals are published.
+                </Typography.MiniDescription>
+              )}
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution mechanism</span>
                 <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
@@ -78,6 +81,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <Typography.Anchor
                   href={`${near.getConfig(DEFAULT_NETWORK_ENV).explorerUrl}/accounts/${marketId}`}
                   target="_blank"
+                  truncate
                 >
                   {marketId}
                   <Icon name="icon-launch" />
@@ -97,7 +101,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   </div>
                 </>
                 <div className={styles["market-card__market-options--actions"]}>
-                  {isOver && !isPublished && (
+                  {isOver && !isPublished && !expanded && (
                     <Button
                       color="primary"
                       fullWidth

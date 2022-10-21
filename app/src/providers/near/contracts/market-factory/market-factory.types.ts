@@ -17,5 +17,5 @@ export type MarketContractMethods = {
   get_markets_list: () => Promise<Array<string>>;
   get_markets_count: () => Promise<number>;
   get_markets: () => Promise<Array<string>>;
-  create_market: (args: { args: string }, gas?: number, amount?: string | null) => Promise<boolean>;
+  create_market: (args: { name: string; args: string }, gas?: number, amount?: string | null) => Promise<boolean>;
 };
