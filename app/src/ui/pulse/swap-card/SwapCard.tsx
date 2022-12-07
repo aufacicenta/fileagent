@@ -82,8 +82,29 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setBalance(collateralTokenBalance);
   };
 
+  const setOutcomeAsSource = async () => {
+    setToToken({
+      price: collateralToken.price,
+      symbol: collateralToken.symbol,
+      amount: 0,
+    });
+
+    setFromToken({
+      price: selectedOutcomeToken.price,
+      symbol: market.options[selectedOutcomeToken.outcome_id],
+      amount: 0,
+    });
+
+    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
+    setBalance(outcomeTokenBalance.toString());
+  };
+
   useEffect(() => {
-    setCollateralAsSource();
+    if (isOver && isResolutionWindowExpired) {
+      setOutcomeAsSource();
+    } else {
+      setCollateralAsSource();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
@@ -237,7 +258,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
               <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {t("swapCard.title")}
+                {isOver && isResolutionWindowExpired ? t("swapCard.title.claim") : t("swapCard.title")}
               </Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>
