@@ -64,6 +64,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const ftMetadata = FungibleTokenContract.metadata;
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
+  const canClaim = isOver && isResolutionWindowExpired;
 
   const setCollateralAsSource = async () => {
     setFromToken({
@@ -100,7 +101,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   useEffect(() => {
-    if (isOver && isResolutionWindowExpired) {
+    if (canClaim) {
       setOutcomeAsSource();
     } else {
       setCollateralAsSource();
@@ -183,7 +184,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     if (!wallet.isConnected.get()) {
       return (
         <Button fullWidth onClick={() => walletSelector.onConnect(WalletSelectorChain.near)}>
-          Connect to Bet
+          {canClaim ? "Connect to Claim" : "Connect to Bet"}
         </Button>
       );
     }
@@ -212,7 +213,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (isOver && isResolutionWindowExpired) {
+    if (canClaim) {
       return (
         <Button fullWidth type="submit">
           {t("swapCard.sell")}
@@ -258,7 +259,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
               <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {isOver && isResolutionWindowExpired ? t("swapCard.title.claim") : t("swapCard.title")}
+                {canClaim ? t("swapCard.title.claim") : t("swapCard.title")}
               </Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>
