@@ -1,4 +1,4 @@
-export const DEFAULT_NETWORK_ENV = "testnet";
+export const DEFAULT_NETWORK_ENV = process.env.NEXT_PUBLIC_DEFAULT_NETWORK_ENV;
 export const DEFAULT_FEE_RATIO = 0.02;
 export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 export const DEFAULT_CLAIMING_WINDOW_DAY_SPAN = 30; // days
@@ -21,8 +21,8 @@ const TESTNET_CONFIG = {
   guestWalletId: TESTNET_GUEST_WALLET_ID,
 };
 
-export default (network: string | undefined) => {
-  switch (network) {
+export default (network: string | undefined = "testnet") => {
+  switch (network || DEFAULT_NETWORK_ENV) {
     case "mainnet":
       return {
         networkId: "mainnet",

@@ -42,7 +42,7 @@ export type MarketContractValues = {
   isResolutionWindowExpired: boolean;
   isResolved: boolean;
   collateralTokenMetadata: CollateralTokenMetadata;
-  feeRatio: number;
+  feeRatio: WrappedBalance;
   outcomeTokens?: Array<OutcomeToken>;
 };
 
