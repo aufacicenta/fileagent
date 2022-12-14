@@ -17,9 +17,10 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
 import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
+import { WrappedBalance } from "providers/near/contracts/market/market.types";
 
 import styles from "./SwapCard.module.scss";
-import { SwapCardForm, SwapCardProps } from "./SwapCard.types";
+import { SwapCardForm, SwapCardProps, Token } from "./SwapCard.types";
 
 const DEFAULT_DEBOUNCE_TIME = 500;
 
@@ -46,8 +47,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   setSelectedOutcomeToken,
   marketId,
 }) => {
-  const [fromToken, setFromToken] = useState({ price: 0, symbol: "", amount: 0 });
-  const [toToken, setToToken] = useState({ price: 0, symbol: "", amount: 0 });
+  const [fromToken, setFromToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
+  const [toToken, setToToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
   const [balance, setBalance] = useState("0.00");
   const [rate, setRate] = useState("0.00");
   const [fee, setFee] = useState("0.00");
@@ -64,7 +65,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const ftMetadata = FungibleTokenContract.metadata;
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
-  const canClaim = isOver && isResolutionWindowExpired;
+  const canClaim = isResolved || (isOver && isResolutionWindowExpired);
 
   const setCollateralAsSource = async () => {
     setFromToken({
@@ -97,7 +98,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    setBalance(outcomeTokenBalance.toString());
+    setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
   };
 
   useEffect(() => {
@@ -109,11 +110,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
-  const getBuyRate = async (amount: number) => {
+  const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
+    const amount = Number(currency.convert.toUIntAmount(buyAmount, decimals));
 
     const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
-      amount: currency.convert.toUIntAmount(amount, decimals),
+      amount,
       outcome_id: selectedOutcomeToken.outcome_id,
     });
 
@@ -124,9 +126,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setRate(rateString);
   };
 
-  const getSellRate = async (sellAmount: number) => {
+  const getSellRate = async (sellAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
-    const amount = currency.convert.toUIntAmount(sellAmount, decimals);
+    const amount = Number(currency.convert.toUIntAmount(sellAmount, decimals));
 
     const [, amountPayable] = await MarketContract.getAmountPayable({
       amount,
@@ -139,7 +141,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     setRate(rateString);
   };
 
-  const onFromTokenChange = (value: StringConstructor) => {
+  const onFromTokenChange = (value: string) => {
     if (isCollateralSourceToken()) {
       getBuyRate(Number(value));
     } else {
@@ -147,7 +149,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
   };
 
-  const buy = async (amount: number) => {
+  const buy = async (amount: string) => {
     if (isOver) {
       toast.trigger({
         variant: "error",
@@ -159,14 +161,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return;
     }
 
-    await FungibleTokenContract.ftTransferCall(
-      marketId,
-      amount.toLocaleString("fullwide", { useGrouping: false }),
-      selectedOutcomeToken.outcome_id,
-    );
+    await FungibleTokenContract.ftTransferCall(marketId, amount, selectedOutcomeToken.outcome_id);
   };
 
-  const sell = async (amount: number) => {
+  const sell = async (sellAmount: string) => {
+    const amount = Number(sellAmount);
+
     await MarketContract.sell({
       outcome_id: selectedOutcomeToken.outcome_id,
       amount,
@@ -205,7 +205,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (isOver && !isResolutionWindowExpired) {
+    if (!isResolved && isOver && !isResolutionWindowExpired) {
       return (
         <Button fullWidth type="submit" disabled>
           Market is under resolution
@@ -320,24 +320,28 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 {t("swapCard.overview")}
               </Typography.Description>
               <div className={styles["swap-card__overview-card"]}>
-                <div className={styles["swap-card__overview-card--row"]}>
-                  <Typography.Text flat>
-                    {t("swapCard.estimatedFee")} ({feeRatio * 100}%)
-                  </Typography.Text>
-                  {fromToken.symbol === collateralToken.symbol ? (
+                {!canClaim && (
+                  <div className={styles["swap-card__overview-card--row"]}>
                     <Typography.Text flat>
-                      {fee} {fromToken.symbol}
+                      {t("swapCard.estimatedFee")} ({Number(feeRatio) * 100}%)
                     </Typography.Text>
-                  ) : (
-                    <Typography.Text flat>none for sells</Typography.Text>
-                  )}
-                </div>
-                <div className={styles["swap-card__overview-card--row"]}>
-                  <Typography.Text flat>Price</Typography.Text>
-                  <Typography.Text flat>
-                    {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                  </Typography.Text>
-                </div>
+                    {fromToken.symbol === collateralToken.symbol ? (
+                      <Typography.Text flat>
+                        {fee} {fromToken.symbol}
+                      </Typography.Text>
+                    ) : (
+                      <Typography.Text flat>none for sells</Typography.Text>
+                    )}
+                  </div>
+                )}
+                {!canClaim && (
+                  <div className={styles["swap-card__overview-card--row"]}>
+                    <Typography.Text flat>Price</Typography.Text>
+                    <Typography.Text flat>
+                      {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
+                    </Typography.Text>
+                  </div>
+                )}
                 <div className={styles["swap-card__overview-card--row"]}>
                   <Typography.Text flat>{t("swapCard.rate")}</Typography.Text>
                   <div className={styles["swap-card__overview-card--row-description"]}>

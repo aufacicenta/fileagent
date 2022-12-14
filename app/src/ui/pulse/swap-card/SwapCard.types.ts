@@ -1,6 +1,11 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
-import { AccountId, MarketContractValues, OutcomeToken } from "providers/near/contracts/market/market.types";
+import {
+  AccountId,
+  MarketContractValues,
+  OutcomeToken,
+  WrappedBalance,
+} from "providers/near/contracts/market/market.types";
 
 export type SwapCardProps = {
   marketContractValues: MarketContractValues;
@@ -15,3 +20,5 @@ export type SwapCardForm = {
   fromTokenAmount: string;
   toTokenAmount: string;
 };
+
+export type Token = { price: WrappedBalance; symbol: string; amount: WrappedBalance };
