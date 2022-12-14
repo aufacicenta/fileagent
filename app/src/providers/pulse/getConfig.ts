@@ -1,7 +1,7 @@
 import near from "providers/near";
 
 export default () => ({
-  STAKING_TOKEN_ACCOUNT_ID: process.env.NEXT_PUBLIC_STAKING_TOKEN_ACCOUNT_ID,
+  STAKING_TOKEN_ACCOUNT_ID: process.env.NEXT_PUBLIC_STAKING_TOKEN_ACCOUNT_ID as string,
   // @TODO get real decimals
   COLLATERAL_TOKENS: [
     {
