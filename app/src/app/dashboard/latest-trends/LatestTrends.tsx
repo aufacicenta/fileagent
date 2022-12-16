@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
-import { Button } from "ui/button/Button";
 import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
 import { MainPanel } from "ui/mainpanel/MainPanel";
@@ -67,11 +66,6 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
     setIsCreateMarketModalVisible(false);
   };
 
-  const onClickCreateMarketButton = () => {
-    // @TODO check if there's a connected wallet, otherwise display the "connect wallet modal"
-    setIsCreateMarketModalVisible(true);
-  };
-
   const onClickOutcomeToken = (marketId: string) => {
     router.push(routes.dashboard.market({ marketId }));
   };
@@ -93,11 +87,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                   <div className={styles["latest-trends__filters--desktop"]}>
                     <Grid.Row align="center">
                       <Grid.Col xs={6} offset={{ xs: 6 }}>
-                        <div className={styles["latest-trends__filters--actions"]}>
-                          <Button color="primary" onClick={onClickCreateMarketButton}>
-                            {t("button.createMarket", { ns: "common" })}
-                          </Button>
-                        </div>
+                        <div className={styles["latest-trends__filters--actions"]} />
                       </Grid.Col>
                     </Grid.Row>
                   </div>
@@ -107,11 +97,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                     <Grid.Row className={styles["latest-trends__card--actions-row"]}>
                       <Grid.Col lg={6}>.</Grid.Col>
                       <Grid.Col lg={6}>
-                        <div className={styles["latest-trends__card--actions"]}>
-                          <Button color="primary" onClick={onClickCreateMarketButton}>
-                            {t("button.createMarket", { ns: "common" })}
-                          </Button>
-                        </div>
+                        <div className={styles["latest-trends__card--actions"]} />
                       </Grid.Col>
                     </Grid.Row>
                     <div className={styles["latest-trends__market-cards-grid"]}>
