@@ -4,6 +4,15 @@ import near from "providers/near";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { WalletSelectorChain } from "../selector/WalletSelectorContext.types";
 
+const onConnect = async () => {
+  try {
+    const { wallet: connection } = await near.initWalletConnection();
+    await connection.requestSignIn();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const useNearWallet = () => {
   const walletState = useWalletStateContext();
 
@@ -13,7 +22,7 @@ export const useNearWallet = () => {
     }
 
     (async () => {
-      const { near: provider, wallet: connection } = await near.initWalletConnection(walletState.network.get());
+      const { near: provider, wallet: connection } = await near.initWalletConnection();
 
       if (connection.isSignedIn()) {
         walletState.isConnected.set(true);
@@ -35,15 +44,6 @@ export const useNearWallet = () => {
     walletState.chain,
     walletState.context,
   ]);
-
-  const onConnect = async () => {
-    try {
-      const { wallet: connection } = await near.initWalletConnection(walletState.network.get());
-      await connection.requestSignIn();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const onDisconnect = () => {
     const { connection } = walletState.context.get();

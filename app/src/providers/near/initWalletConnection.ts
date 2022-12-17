@@ -2,8 +2,8 @@ import * as nearAPI from "near-api-js";
 
 import getConfig from "./getConfig";
 
-export default async (network: string | undefined) => {
-  const nearConfig = getConfig(network);
+export default async () => {
+  const nearConfig = getConfig();
   const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore();
 
   const near = await nearAPI.connect({

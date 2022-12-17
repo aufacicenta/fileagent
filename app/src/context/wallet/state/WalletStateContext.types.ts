@@ -1,10 +1,10 @@
+import { NetworkId } from "@near-wallet-selector/core";
 import { Near, WalletConnection as NEARWalletConnection } from "near-api-js";
 import { Dispatch, SetStateAction } from "react";
 
 import { WalletSelectorChain } from "../selector/WalletSelectorContext.types";
 
 export type Address = string | undefined;
-export type Network = string | undefined;
 export type Explorer = string | undefined;
 export type Balance = string | undefined;
 export type Chain = WalletSelectorChain | undefined;
@@ -23,8 +23,8 @@ export type WalletStateContextType = {
     set: Dispatch<SetStateAction<Address>>;
   };
   network: {
-    get: () => Network;
-    set: Dispatch<SetStateAction<Network>>;
+    get: () => NetworkId | undefined;
+    set: Dispatch<SetStateAction<NetworkId | undefined>>;
   };
   explorer: {
     get: () => Explorer;
