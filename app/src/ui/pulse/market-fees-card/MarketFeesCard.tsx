@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
-import { Button } from "ui/button/Button";
 import { Modal } from "ui/modal/Modal";
 
 import { MarketFeesCardProps } from "./MarketFeesCard.types";
@@ -45,16 +44,10 @@ export const MarketFeesCard: React.FC<MarketFeesCardProps> = ({ className }) => 
 
       <Card className={clsx(styles["market-fees-card"], className)}>
         <Card.Content>
-          <Typography.Headline2>Stake $PULSE to earn market fees</Typography.Headline2>
-          <div className={styles["market-fees-card__buttons"]}>
-            <Button size="xs" variant="outlined" color="info" onClick={() => displayLearnModal(true)}>
-              Learn More
-            </Button>
-            <Button size="xs" variant="outlined" color="primary" disabled>
-              Claim Fees
-            </Button>
-          </div>
-          <div />
+          <Typography.Headline2>Disclaimer</Typography.Headline2>
+          <Typography.Text>
+            This is a beta dApp. Pulse contracts have not been audited. Use at your own risk.
+          </Typography.Text>
         </Card.Content>
       </Card>
     </>

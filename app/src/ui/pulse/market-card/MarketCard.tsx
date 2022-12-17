@@ -32,7 +32,10 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const { market, resolutionWindow, isPublished, isOver, collateralTokenMetadata } = marketContractValues;
+  const { market, resolutionWindow, isPublished, isOver, collateralTokenMetadata, buySellTimestamp } =
+    marketContractValues;
+
+  const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
 
   return (
     <Card className={clsx(styles["market-card"], className)}>
@@ -52,12 +55,15 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             <HorizontalLine />
             <div className={styles["market-card__start-end-time"]}>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Market starts</span>
+                <span>Event starts</span>
                 <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Market ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
+                <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
               </Typography.Description>
+              <Typography.MiniDescription align="right">
+                *market closes {marketClosesIn} minutes after event starts.
+              </Typography.MiniDescription>
               <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution date</span>
                 <span>

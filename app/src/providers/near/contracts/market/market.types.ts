@@ -36,6 +36,7 @@ export type OutcomeToken = {
 export type MarketContractValues = {
   market: MarketData;
   resolutionWindow?: Timestamp;
+  buySellTimestamp?: Timestamp;
   isPublished: boolean;
   isOver: boolean;
   isOpen: boolean;
@@ -69,6 +70,7 @@ export type MarketContractMethods = {
   get_fee_ratio: () => Promise<WrappedBalance>;
   get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<WrappedBalance>;
   get_balance_boost_ratio: () => Promise<WrappedBalance>;
+  get_buy_sell_timestamp: () => Promise<Timestamp>;
   publish: (args: Record<string, unknown>, gas?: Gas) => Promise<void>;
   sell: (args: SellArgs, gas?: Gas) => Promise<void>;
   get_cumulative_weight: () => Promise<WrappedBalance>;

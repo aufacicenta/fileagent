@@ -99,6 +99,16 @@ export class MarketContract {
     }
   }
 
+  async getBuySellTimestamp() {
+    try {
+      const result = await this.contract.get_buy_sell_timestamp();
+
+      return result;
+    } catch {
+      return undefined;
+    }
+  }
+
   async getOutcomeToken(args: GetOutcomeTokenArgs) {
     try {
       const result = await this.contract.get_outcome_token(args);

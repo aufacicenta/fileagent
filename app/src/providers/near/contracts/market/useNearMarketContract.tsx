@@ -26,6 +26,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
       const resolutionWindow = await contract.getResolutionWindow();
+      const buySellTimestamp = await contract.getBuySellTimestamp();
       const isPublished = await contract.isPublished();
       const isOver = await contract.isOver();
       const isOpen = await contract.isOpen();
@@ -59,6 +60,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         collateralTokenMetadata,
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,
+        buySellTimestamp,
       });
     } catch {
       toast.trigger({
