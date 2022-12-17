@@ -14,6 +14,7 @@ import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 import { MarketCardContainer } from "ui/pulse/market-card/MarketCardContainer";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
+import near from "providers/near";
 
 import styles from "./LatestTrends.module.scss";
 import { LatestTrendsProps } from "./LatestTrends.types";
@@ -94,9 +95,11 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                     <Grid.Row align="center">
                       <Grid.Col xs={6} offset={{ xs: 6 }}>
                         <div className={styles["latest-trends__filters--actions"]}>
-                          <Button color="primary" onClick={onClickCreateMarketButton}>
-                            {t("button.createMarket", { ns: "common" })}
-                          </Button>
+                          {near.getConfig().networkId === "testnet" && (
+                            <Button color="primary" onClick={onClickCreateMarketButton}>
+                              {t("button.createMarket", { ns: "common" })}
+                            </Button>
+                          )}
                         </div>
                       </Grid.Col>
                     </Grid.Row>
@@ -108,9 +111,11 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
                       <Grid.Col lg={6}>.</Grid.Col>
                       <Grid.Col lg={6}>
                         <div className={styles["latest-trends__card--actions"]}>
-                          <Button color="primary" onClick={onClickCreateMarketButton}>
-                            {t("button.createMarket", { ns: "common" })}
-                          </Button>
+                          {near.getConfig().networkId === "testnet" && (
+                            <Button color="primary" onClick={onClickCreateMarketButton}>
+                              {t("button.createMarket", { ns: "common" })}
+                            </Button>
+                          )}
                         </div>
                       </Grid.Col>
                     </Grid.Row>

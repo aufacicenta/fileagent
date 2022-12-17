@@ -11,7 +11,6 @@ import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
 import { OutcomeToken } from "providers/near/contracts/market/market.types";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { MarketPricesChart } from "ui/pulse/market-prices-chart/MarketPricesChart";
-import { MarketFeesCard } from "ui/pulse/market-fees-card/MarketFeesCard";
 
 import styles from "./Market.module.scss";
 import { MarketProps } from "./Market.types";
@@ -60,7 +59,6 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues,
             </Hidden>
           </Grid.Col>
           <Grid.Col lg={4} xs={12}>
-            <MarketFeesCard />
             {selectedOutcomeToken && (
               <SwapCard
                 marketContractValues={marketContractValues}

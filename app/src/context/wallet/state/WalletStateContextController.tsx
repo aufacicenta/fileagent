@@ -1,10 +1,11 @@
 import { ReactNode, useState } from "react";
+import { NetworkId } from "@near-wallet-selector/core";
 
-import { Address, Balance, Chain, Context, Explorer, IsConnected, Network } from "./WalletStateContext.types";
+import { Address, Balance, Chain, Context, Explorer, IsConnected } from "./WalletStateContext.types";
 import { WalletStateContext } from "./WalletStateContext";
 
 export const WalletStateContextController = ({ children }: { children: ReactNode }) => {
-  const [network, setNetwork] = useState<Network>("testnet");
+  const [network, setNetwork] = useState<NetworkId | undefined>("testnet");
   const [explorer, setExplorer] = useState<Explorer>(undefined);
   const [chain, setChain] = useState<Chain>(undefined);
   const [address, setAddress] = useState<Address>(undefined);
