@@ -55,7 +55,7 @@ export const CreateMarketModal: React.FC<CreateMarketModalProps> = ({ className,
       const args: DeployMarketContractArgs = {
         market: {
           description: values.marketDescription,
-          info: "market info",
+          info: "",
           category: values.marketCategory,
           options: [values.defaultMarketOption, ...values.marketOptions],
           // @TODO validate that date is in the future, otherwise "publish" throws error

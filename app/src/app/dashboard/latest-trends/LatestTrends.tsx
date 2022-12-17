@@ -62,7 +62,7 @@ export const LatestTrends: React.FC<LatestTrendsProps> = ({ className }) => {
         });
       }
     })();
-  }, [toast]);
+  }, []);
 
   const onClickCloseCreateMarketModal = () => {
     setIsCreateMarketModalVisible(false);

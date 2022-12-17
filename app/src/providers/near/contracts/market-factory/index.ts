@@ -3,7 +3,6 @@ import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
 import { v4 as uuidv4 } from "uuid";
 
-import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 import near from "providers/near";
 
 import { DeployMarketContractArgs, MarketContractMethods, MarketFactoryContractValues } from "./market-factory.types";
@@ -27,7 +26,7 @@ export class MarketFactoryContract {
 
   static async createMarket(connection: WalletConnection, args: DeployMarketContractArgs) {
     try {
-      const contractAddress = near.getConfig(DEFAULT_NETWORK_ENV).marketFactoryAccountId;
+      const contractAddress = near.getConfig().marketFactoryAccountId;
       const contract = await MarketFactoryContract.loadFromWalletConnection(connection, contractAddress);
 
       const base64args = Buffer.from(JSON.stringify(args)).toString("base64");
@@ -55,12 +54,12 @@ export class MarketFactoryContract {
     const connection = await nearAPI.connect({
       keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
       headers: {},
-      ...near.getConfig(DEFAULT_NETWORK_ENV),
+      ...near.getConfig(),
     });
 
-    const account = await connection.account(near.getConfig(DEFAULT_NETWORK_ENV).guestWalletId);
+    const account = await connection.account(near.getConfig().guestWalletId);
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
-    const contractAddress = near.getConfig(DEFAULT_NETWORK_ENV).marketFactoryAccountId;
+    const contractAddress = near.getConfig().marketFactoryAccountId;
 
     const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
 

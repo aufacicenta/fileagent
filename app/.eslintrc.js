@@ -107,7 +107,7 @@ module.exports = {
     "react/prop-types": 0,
     "react/display-name": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "react/require-default-props": "off",
     "react/no-unused-prop-types": "off",
     "react/react-in-jsx-scope": "off",

@@ -9,7 +9,7 @@ const TESTNET_GUEST_WALLET_ID = "nearholdings.testnet";
 const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
 
 const TESTNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.testnet";
-const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.near";
+const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnik-dao.near";
 const TESTNET_DAO_URL = `https://testnet.app.astrodao.com/dao/${TESTNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 const MAINNET_DAO_URL = `https://app.astrodao.com/dao/${MAINNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 
@@ -23,8 +23,8 @@ const TESTNET_CONFIG = {
   guestWalletId: TESTNET_GUEST_WALLET_ID,
 };
 
-export default (network: NetworkId | undefined = "testnet") => {
-  switch (network || DEFAULT_NETWORK_ENV) {
+export default (network: NetworkId | undefined = DEFAULT_NETWORK_ENV) => {
+  switch (network) {
     case "mainnet":
       return {
         networkId: "mainnet" as NetworkId,
