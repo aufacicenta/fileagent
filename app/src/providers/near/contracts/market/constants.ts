@@ -6,6 +6,7 @@ export const VIEW_METHODS = [
   "get_outcome_token",
   "get_block_timestamp",
   "get_collateral_token_metadata",
+  "get_buy_sell_timestamp",
   "dao_account_id",
   "published_at",
   "resolution_window",
