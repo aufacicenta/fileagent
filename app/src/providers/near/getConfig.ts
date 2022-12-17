@@ -23,8 +23,8 @@ const TESTNET_CONFIG = {
   guestWalletId: TESTNET_GUEST_WALLET_ID,
 };
 
-export default (network: NetworkId | undefined = "testnet") => {
-  switch (network || DEFAULT_NETWORK_ENV) {
+export default (network: NetworkId | undefined = DEFAULT_NETWORK_ENV) => {
+  switch (network) {
     case "mainnet":
       return {
         networkId: "mainnet" as NetworkId,

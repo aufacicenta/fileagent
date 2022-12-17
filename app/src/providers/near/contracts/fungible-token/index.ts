@@ -3,7 +3,6 @@ import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
 
 import near from "providers/near";
-import { DEFAULT_NETWORK_ENV } from "../../getConfig";
 import { AccountId } from "../market/market.types";
 
 import {
@@ -30,10 +29,10 @@ export class FungibleTokenContract {
     const connection = await nearAPI.connect({
       keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
       headers: {},
-      ...near.getConfig(DEFAULT_NETWORK_ENV),
+      ...near.getConfig(),
     });
 
-    const account = await connection.account(near.getConfig(DEFAULT_NETWORK_ENV).guestWalletId);
+    const account = await connection.account(near.getConfig().guestWalletId);
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
     const contract = near.initContract<FungibleTokenContractMethods>(account, contractAddress, contractMethods);
