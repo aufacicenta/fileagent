@@ -66,6 +66,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
   const canClaim = isResolved || (isOver && isResolutionWindowExpired);
+  const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isPublished;
+  const isBettingWindowClosed = !isOpen || isResolutionWindowOpen || canClaim;
+  const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
   const setCollateralAsSource = async () => {
     setFromToken({
@@ -189,15 +192,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (!isOver && !isOpen) {
-      return (
-        <Button fullWidth disabled>
-          Betting is Closed
-        </Button>
-      );
-    }
-
-    if (isOver && !isPublished) {
+    if (isResolutionWindowOpen) {
       return (
         <Button fullWidth onClick={MarketContract.onClickPublishMarket}>
           Submit to Resolution
@@ -205,10 +200,18 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (!isResolved && isOver && !isResolutionWindowExpired) {
+    if (isUnderResolution) {
       return (
-        <Button fullWidth type="submit" disabled>
+        <Button fullWidth disabled>
           Market is under resolution
+        </Button>
+      );
+    }
+
+    if (isBettingWindowClosed) {
+      return (
+        <Button fullWidth disabled>
+          Betting is Closed
         </Button>
       );
     }
@@ -259,7 +262,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
               <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {canClaim ? t("swapCard.title.claim") : t("swapCard.title")}
+                {isBettingWindowClosed ? t("swapCard.title.claim") : t("swapCard.title")}
               </Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>
