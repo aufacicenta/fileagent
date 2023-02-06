@@ -170,6 +170,28 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     }
   };
 
+  const onClickResolveMarket = async () => {
+    // @TODO check if wallet is connected or display wallet connect modal
+    try {
+      assertWalletConnection();
+
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
+      const result = await contract.aggregator_read();
+
+      return result;
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to publish market",
+        children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
+      });
+
+      return false;
+    }
+  };
+
   return {
     contract: MarketContract,
     marketContractValues,
@@ -178,5 +200,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     getAmountMintable,
     getAmountPayable,
     sell,
+    onClickResolveMarket,
   };
 };

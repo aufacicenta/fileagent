@@ -15,8 +15,6 @@ import currency from "providers/currency";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
-import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
 
 import styles from "./SwapCard.module.scss";
@@ -38,23 +36,21 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     feeRatio,
     isOver,
     isOpen,
-    isPublished,
-    isResolutionWindowExpired,
     isResolved,
+    isResolutionWindowExpired,
     outcomeTokens,
   },
   selectedOutcomeToken,
   setSelectedOutcomeToken,
   marketId,
 }) => {
-  const [fromToken, setFromToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
-  const [toToken, setToToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
+  const [fromToken, setFromToken] = useState<Token>({ symbol: "", amount: 0 });
+  const [toToken, setToToken] = useState<Token>({ symbol: "", amount: 0 });
   const [balance, setBalance] = useState("0.00");
   const [rate, setRate] = useState("0.00");
   const [fee, setFee] = useState("0.00");
 
   const wallet = useWalletStateContext();
-  const walletSelector = useWalletSelectorContext();
   const { t } = useTranslation(["swap-card"]);
   const toast = useToastContext();
 
@@ -66,19 +62,17 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
   const canClaim = isResolved || (isOver && isResolutionWindowExpired);
-  const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isPublished;
+  const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isResolved;
   const isBettingWindowClosed = !isOpen || isResolutionWindowOpen || canClaim;
   const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
   const setCollateralAsSource = async () => {
     setFromToken({
-      price: collateralToken.price,
       symbol: collateralToken.symbol,
       amount: 0,
     });
 
     setToToken({
-      price: selectedOutcomeToken.price,
       symbol: market.options[selectedOutcomeToken.outcome_id],
       amount: 0,
     });
@@ -89,13 +83,11 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const setOutcomeAsSource = async () => {
     setToToken({
-      price: collateralToken.price,
       symbol: collateralToken.symbol,
       amount: 0,
     });
 
     setFromToken({
-      price: selectedOutcomeToken.price,
       symbol: market.options[selectedOutcomeToken.outcome_id],
       amount: 0,
     });
@@ -110,16 +102,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     } else {
       setCollateralAsSource();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
   const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
     const amount = Number(currency.convert.toUIntAmount(buyAmount, decimals));
 
-    const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
+    const [amountMintable, exchangeFee] = await MarketContract.getAmountMintable({
       amount,
-      outcome_id: selectedOutcomeToken.outcome_id,
     });
 
     const feeString = currency.convert.fromUIntAmount(exchangeFee, decimals).toString();
@@ -133,10 +123,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = Number(currency.convert.toUIntAmount(sellAmount, decimals));
 
-    const [, amountPayable] = await MarketContract.getAmountPayable({
+    const [amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
-      balance: collateralTokenMetadata.balance,
     });
 
     const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
@@ -184,9 +173,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const getSubmitButton = () => {
-    if (!wallet.isConnected.get()) {
+    if (!wallet.isConnected) {
       return (
-        <Button fullWidth onClick={() => walletSelector.onConnect(WalletSelectorChain.near)}>
+        <Button disabled fullWidth>
           {canClaim ? "Connect to Claim" : "Connect to Bet"}
         </Button>
       );
@@ -194,7 +183,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
     if (isResolutionWindowOpen) {
       return (
-        <Button fullWidth onClick={MarketContract.onClickPublishMarket}>
+        <Button fullWidth onClick={MarketContract.onClickResolveMarket}>
           Submit to Resolution
         </Button>
       );
@@ -326,7 +315,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 {!canClaim && (
                   <div className={styles["swap-card__overview-card--row"]}>
                     <Typography.Text flat>
-                      {t("swapCard.estimatedFee")} ({Number(feeRatio) * 100}%)
+                      {t("swapCard.estimatedFee")} (
+                      {Number(currency.convert.fromUIntAmount(feeRatio, ftMetadata?.decimals!)) * 100}%)
                     </Typography.Text>
                     {fromToken.symbol === collateralToken.symbol ? (
                       <Typography.Text flat>
@@ -335,14 +325,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                     ) : (
                       <Typography.Text flat>none for sells</Typography.Text>
                     )}
-                  </div>
-                )}
-                {!canClaim && (
-                  <div className={styles["swap-card__overview-card--row"]}>
-                    <Typography.Text flat>Price</Typography.Text>
-                    <Typography.Text flat>
-                      {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                    </Typography.Text>
                   </div>
                 )}
                 <div className={styles["swap-card__overview-card--row"]}>

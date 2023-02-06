@@ -23,7 +23,7 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 export const Market: React.FC<MarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
 
-  const { onClickPublishMarket } = useNearMarketContract({ marketId });
+  const { onClickResolveMarket } = useNearMarketContract({ marketId });
 
   useEffect(() => {
     if (marketContractValues.outcomeTokens) {
@@ -46,7 +46,7 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues,
                   expanded
                   onClickOutcomeToken={onClickOutcomeToken}
                   marketContractValues={marketContractValues}
-                  onClickPublishMarket={onClickPublishMarket}
+                  onClickResolveMarket={onClickResolveMarket}
                   marketId={marketId}
                 />
               </Card.Content>

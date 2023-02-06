@@ -6,12 +6,12 @@ import styles from "./MarketOptions.module.scss";
 import { MarketOptionsProps } from "./MarketOptions.types";
 
 export const MarketOptions = ({
-  marketContractValues: { market, isPublished, outcomeTokens },
+  marketContractValues: { market, isResolved, outcomeTokens },
   onClickOutcomeToken,
 }: MarketOptionsProps) => (
   <>
     {market.options.map((option, id) => {
-      if (!isPublished && outcomeTokens?.length === 0) {
+      if (!isResolved && outcomeTokens?.length === 0) {
         return (
           <Button
             color="secondary"
@@ -38,6 +38,13 @@ export const MarketOptions = ({
       }
 
       const outcomeToken = outcomeTokens![id];
+      const totalSupply = outcomeTokens?.reduce<number>((prev, current) => prev + current.total_supply, 0);
+      const weight =
+        totalSupply === 0
+          ? Number(100 / market.options.length)
+              .toFixed(2)
+              .toString()
+          : ((outcomeToken.total_supply / totalSupply!) * 100).toFixed(2).toString();
 
       return (
         <Button
@@ -54,9 +61,7 @@ export const MarketOptions = ({
           <Typography.Text flat truncate inline>
             {option}
           </Typography.Text>{" "}
-          <span className={styles["market-options__actions-button-percentage"]}>
-            {(outcomeToken.price * 100).toFixed(2)}%
-          </span>
+          <span className={styles["market-options__actions-button-percentage"]}>{weight}%</span>
         </Button>
       );
     })}

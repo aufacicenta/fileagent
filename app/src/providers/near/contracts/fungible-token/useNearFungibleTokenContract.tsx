@@ -15,10 +15,10 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
 
   const toast = useToastContext();
   const wallet = useWalletStateContext();
-  const { connection } = wallet.context.get();
+  const { connection } = wallet.context;
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected.get()) {
+    if (!wallet.isConnected) {
       throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_WALLET_CONNECTION");
     }
   };
@@ -41,10 +41,8 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
         throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_ADDRESS");
       }
 
-      if (wallet.isConnected.get()) {
-        setContract(
-          await FungibleTokenContract.loadFromWalletConnection(wallet.context.get().connection!, contractAddress),
-        );
+      if (wallet.isConnected) {
+        setContract(await FungibleTokenContract.loadFromWalletConnection(wallet.context.connection!, contractAddress));
       } else {
         setContract(await FungibleTokenContract.loadFromGuestConnection(contractAddress));
       }
@@ -69,12 +67,10 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
 
   useEffect(() => {
     loadContract();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection, contractAddress]);
 
   useEffect(() => {
     getFtMetadata();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract]);
 
   const getWalletBalance = async () => {
@@ -83,7 +79,7 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
       assertContractConnection();
       assertContractMetadata();
 
-      const balance = await contract!.ftBalanceOf({ account_id: wallet.address.get()! });
+      const balance = await contract!.ftBalanceOf({ account_id: wallet.address! });
 
       return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
     } catch {

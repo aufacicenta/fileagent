@@ -70,6 +70,17 @@ export class MarketContract {
     }
   }
 
+  async aggregator_read() {
+    try {
+      const result = await this.contract.aggregator_read();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_AGGREGATOR_READ");
+    }
+  }
+
   async getMarketData() {
     try {
       const result = await this.contract.get_market_data();

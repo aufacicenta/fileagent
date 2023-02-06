@@ -21,4 +21,4 @@ export type SwapCardForm = {
   toTokenAmount: string;
 };
 
-export type Token = { price: WrappedBalance; symbol: string; amount: WrappedBalance };
+export type Token = { symbol: string; amount: WrappedBalance };

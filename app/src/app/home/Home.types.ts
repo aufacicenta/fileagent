@@ -4,6 +4,7 @@ import { MarketContractValues } from "providers/near/contracts/market/market.typ
 
 export type HomeProps = {
   marketContractValues: MarketContractValues;
+  marketId: string;
   children?: ReactNode;
   className?: string;
 };

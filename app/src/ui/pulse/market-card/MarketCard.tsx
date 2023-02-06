@@ -28,11 +28,11 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   expanded,
   marketContractValues,
   marketId,
-  onClickPublishMarket,
+  onClickResolveMarket,
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const { market, resolutionWindow, isPublished, isOver, collateralTokenMetadata, buySellTimestamp } =
+  const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved } =
     marketContractValues;
 
   const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
@@ -62,7 +62,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
               </Typography.Description>
               <Typography.MiniDescription align="right">
-                *market closes {marketClosesIn} minutes after event starts.
+                *market closes {marketClosesIn} minutes <strong>after event starts</strong>.
               </Typography.MiniDescription>
               <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution date</span>
@@ -77,6 +77,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               )}
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution mechanism</span>
+                {/* @TODO update to Switchboard feed URL */}
                 <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
                   {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
                   <Icon name="icon-launch" />
@@ -107,12 +108,12 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   </div>
                 </>
                 <div className={styles["market-card__market-options--actions"]}>
-                  {isOver && !isPublished && !expanded && (
+                  {isOver && !isResolved && !expanded && (
                     <Button
                       color="primary"
                       fullWidth
                       className={styles["market-card__market-options--actions-button"]}
-                      onClick={onClickPublishMarket}
+                      onClick={onClickResolveMarket}
                     >
                       Submit to Resolution
                     </Button>

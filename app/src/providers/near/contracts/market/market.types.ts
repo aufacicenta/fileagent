@@ -73,4 +73,5 @@ export type MarketContractMethods = {
   get_amount_mintable: (args: GetAmountMintableArgs) => Promise<Array<number>>;
   get_amount_payable: (args: GetAmountPayableArgs) => Promise<Array<number>>;
   sell: (args: SellArgs, gas?: Gas) => Promise<void>;
+  aggregator_read: () => Promise<void>;
 };
