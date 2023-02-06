@@ -48,7 +48,16 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       const [account] = await wallet.getAccounts();
 
-      walletStateContext.setIsConnected(true);
+      walletStateContext.setContext({
+        wallet,
+        connection: nearWalletConnection,
+        provider: nearAPI,
+        guest: {
+          address: account.accountId,
+        },
+      });
+
+      walletStateContext.setIsConnected(s.isSignedIn());
       walletStateContext.setAddress(account.accountId);
       walletStateContext.setNetwork(DEFAULT_NETWORK_ENV);
       walletStateContext.setChain(WalletSelectorChain.near);

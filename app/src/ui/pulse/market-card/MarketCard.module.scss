@@ -8,7 +8,7 @@
     color: var(--color-market-card-title);
 
     &--expanded {
-      @include font-properties($typography-headline-1);
+      @include font-properties($typography-headline-2);
     }
 
     &--hover {

@@ -19,8 +19,13 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
       const collateralTokenBalance = await FungibleTokenContract.getBalanceOf(marketId);
       setBalance(collateralTokenBalance);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collateralTokenMetadata.id, marketId, ftMetadata?.decimals]);
+  }, [
+    collateralTokenMetadata.id,
+    marketId,
+    ftMetadata?.decimals,
+    // @TODO make useNearFungibleTokenContract to be a React Context so that changes in this prop trigger the effect again
+    FungibleTokenContract.actions.ftTransferCall.isLoading,
+  ]);
 
   const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
 

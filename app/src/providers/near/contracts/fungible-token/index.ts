@@ -1,6 +1,8 @@
 import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
+import { Wallet } from "@near-wallet-selector/core";
+import { FinalExecutionOutcome, FinalExecutionStatus } from "near-api-js/lib/providers";
 
 import near from "providers/near";
 import { AccountId } from "../market/market.types";
@@ -16,13 +18,16 @@ import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 export class FungibleTokenContract {
   values: FungibleTokenContractValues | undefined;
 
-  contract: Contract & FungibleTokenContractMethods;
-
   contractAddress: AccountId;
 
-  constructor(contract: Contract & FungibleTokenContractMethods) {
+  contract?: Contract & FungibleTokenContractMethods;
+
+  wallet?: Wallet;
+
+  constructor(contractAddress: AccountId, contract?: Contract & FungibleTokenContractMethods, wallet?: Wallet) {
     this.contract = contract;
-    this.contractAddress = contract.contractId;
+    this.contractAddress = contractAddress;
+    this.wallet = wallet;
   }
 
   static async loadFromGuestConnection(contractAddress: string) {
@@ -37,7 +42,7 @@ export class FungibleTokenContract {
 
     const contract = near.initContract<FungibleTokenContractMethods>(account, contractAddress, contractMethods);
 
-    return new FungibleTokenContract(contract);
+    return new FungibleTokenContract(contractAddress, contract);
   }
 
   static async loadFromWalletConnection(connection: WalletConnection, contractAddress: string) {
@@ -46,18 +51,53 @@ export class FungibleTokenContract {
 
     const contract = near.initContract<FungibleTokenContractMethods>(account, contractAddress, contractMethods);
 
-    return new FungibleTokenContract(contract);
+    return new FungibleTokenContract(contractAddress, contract);
   }
 
   async ftTransferCall(args: FtTransferCallArgs) {
     try {
       const gas = new BN("60000000000000");
 
-      const result = await this.contract.ft_transfer_call(args, gas.toString(), 1);
+      if (this.contract && !this.wallet) {
+        const result = await this.contract.ft_transfer_call(args, gas.toString(), 1);
 
-      return result;
+        return result;
+      }
+
+      const response = await this.wallet!.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: this.contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "ft_transfer_call",
+                  args,
+                  gas: gas.toString(),
+                  deposit: "1",
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const [result] = response as Array<FinalExecutionOutcome>;
+
+      console.log(result);
+
+      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
+        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
+
+        console.log({ value });
+
+        return value;
+      }
     } catch (error) {
       console.log(error);
+
+      throw new Error("ERR_FungibleTokenContract_ftTransferCall");
     }
 
     return "0.00";
@@ -65,9 +105,11 @@ export class FungibleTokenContract {
 
   async ftBalanceOf(args: FtBalanceOfArgs) {
     try {
-      const result = await this.contract.ft_balance_of(args);
+      if (this.contract) {
+        const result = await this.contract.ft_balance_of(args);
 
-      return result;
+        return result;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -77,9 +119,11 @@ export class FungibleTokenContract {
 
   async ftMetadata() {
     try {
-      const result = await this.contract.ft_metadata();
+      if (this.contract) {
+        const result = await this.contract.ft_metadata();
 
-      return result;
+        return result;
+      }
     } catch (error) {
       console.log(error);
     }

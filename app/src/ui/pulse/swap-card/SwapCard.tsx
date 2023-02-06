@@ -66,6 +66,16 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const isBettingWindowClosed = !isOpen || isResolutionWindowOpen || canClaim;
   const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
+  const updateCollateralTokenBalance = async () => {
+    const collateralTokenBalance = await FungibleTokenContract.getWalletBalance();
+    setBalance(collateralTokenBalance);
+  };
+
+  const updateOutcomeTokenBalance = async () => {
+    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
+    setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
+  };
+
   const setCollateralAsSource = async () => {
     setFromToken({
       symbol: collateralToken.symbol,
@@ -77,8 +87,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    const collateralTokenBalance = await FungibleTokenContract.getWalletBalance();
-    setBalance(collateralTokenBalance);
+    updateCollateralTokenBalance();
   };
 
   const setOutcomeAsSource = async () => {
@@ -92,8 +101,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       amount: 0,
     });
 
-    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
+    updateOutcomeTokenBalance();
   };
 
   useEffect(() => {
@@ -154,6 +162,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     await FungibleTokenContract.ftTransferCall(marketId, amount, selectedOutcomeToken.outcome_id);
+
+    updateCollateralTokenBalance();
   };
 
   const sell = async (sellAmount: string) => {
@@ -213,9 +223,17 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
+    if (isCollateralSourceToken()) {
+      return (
+        <Button fullWidth type="submit">
+          {FungibleTokenContract.actions.ftTransferCall.isLoading ? t("swapCard.buying") : t("swapCard.buy")}
+        </Button>
+      );
+    }
+
     return (
       <Button fullWidth type="submit">
-        {isCollateralSourceToken() ? t("swapCard.buy") : t("swapCard.sell")}
+        {t("swapCard.sell")}
       </Button>
     );
   };

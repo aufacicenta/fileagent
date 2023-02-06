@@ -21,9 +21,8 @@ export type CollateralTokenMetadata = {
   balance: number;
 };
 
-export type PriceHistory = {
-  timestamp: Timestamp;
-  price: WrappedBalance;
+export type Resolution = {
+  feedId: string;
 };
 
 export type OutcomeToken = {
@@ -43,6 +42,7 @@ export type MarketContractValues = {
   isResolved: boolean;
   collateralTokenMetadata: CollateralTokenMetadata;
   feeRatio: WrappedBalance;
+  resolution: Resolution;
   outcomeTokens?: Array<OutcomeToken>;
 };
 

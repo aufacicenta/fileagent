@@ -10,21 +10,26 @@ import { FungibleTokenContract } from ".";
 import { FungibleTokenMetadata } from "./fungible-token.types";
 
 export default ({ contractAddress }: { contractAddress?: string }) => {
+  const [actions, setActions] = useState<{ ftTransferCall: { isLoading: boolean } }>({
+    ftTransferCall: {
+      isLoading: false,
+    },
+  });
   const [metadata, setMetadata] = useState<FungibleTokenMetadata>();
-  const [contract, setContract] = useState<FungibleTokenContract>();
+  const [guestContract, setGuestContract] = useState<FungibleTokenContract>();
 
   const toast = useToastContext();
-  const wallet = useWalletStateContext();
-  const { connection } = wallet.context;
+  const walletState = useWalletStateContext();
+  const { connection } = walletState.context;
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected) {
+    if (!walletState.isConnected || !walletState.context.wallet?.id) {
       throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_WALLET_CONNECTION");
     }
   };
 
-  const assertContractConnection = () => {
-    if (!contract) {
+  const assertGuestContractConnection = () => {
+    if (!guestContract) {
       throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_CONNECTION");
     }
   };
@@ -35,17 +40,17 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
     }
   };
 
-  const loadContract = async () => {
-    try {
-      if (!contractAddress) {
-        throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_ADDRESS");
-      }
+  const assertContractAddress = () => {
+    if (!contractAddress) {
+      throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_ADDRESS");
+    }
+  };
 
-      if (wallet.isConnected) {
-        setContract(await FungibleTokenContract.loadFromWalletConnection(wallet.context.connection!, contractAddress));
-      } else {
-        setContract(await FungibleTokenContract.loadFromGuestConnection(contractAddress));
-      }
+  const loadGuestContract = async () => {
+    try {
+      assertContractAddress();
+
+      setGuestContract(await FungibleTokenContract.loadFromGuestConnection(contractAddress!));
     } catch {
       // void
     }
@@ -53,33 +58,31 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
 
   const getFtMetadata = async () => {
     try {
-      if (!contract) {
-        return;
-      }
+      assertGuestContractConnection();
 
-      const ftMetadata = await contract.ftMetadata();
+      const ftMetadata = await guestContract!.ftMetadata();
 
       setMetadata(ftMetadata);
-    } catch {
-      // void
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    loadContract();
+    loadGuestContract();
   }, [connection, contractAddress]);
 
   useEffect(() => {
     getFtMetadata();
-  }, [contract]);
+  }, [guestContract]);
 
   const getWalletBalance = async () => {
     try {
       assertWalletConnection();
-      assertContractConnection();
+      assertGuestContractConnection();
       assertContractMetadata();
 
-      const balance = await contract!.ftBalanceOf({ account_id: wallet.address! });
+      const balance = await guestContract!.ftBalanceOf({ account_id: walletState.address! });
 
       return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
     } catch {
@@ -89,10 +92,10 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
 
   const getBalanceOf = async (accountId: AccountId) => {
     try {
-      assertContractConnection();
+      assertGuestContractConnection();
       assertContractMetadata();
 
-      const balance = await contract!.ftBalanceOf({ account_id: accountId });
+      const balance = await guestContract!.ftBalanceOf({ account_id: accountId });
 
       return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
     } catch {
@@ -103,11 +106,17 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
   const ftTransferCall = async (receiverId: AccountId, amount: string, outcomeId: OutcomeId) => {
     try {
       assertWalletConnection();
-      assertContractConnection();
+      assertContractAddress();
 
-      if (!metadata) {
-        throw new Error("ERR_FT_TRANSFER_CALL_FT_METADATA");
-      }
+      setActions((prev) => ({
+        ...prev,
+        ftTransferCall: {
+          ...prev.ftTransferCall,
+          isLoading: true,
+        },
+      }));
+
+      const contract = new FungibleTokenContract(contractAddress!, undefined, walletState.context.wallet!);
 
       const msg = JSON.stringify({ BuyArgs: { outcome_id: outcomeId } });
 
@@ -120,6 +129,14 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
         children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
       });
     }
+
+    setActions((prev) => ({
+      ...prev,
+      ftTransferCall: {
+        ...prev.ftTransferCall,
+        isLoading: false,
+      },
+    }));
   };
 
   return {
@@ -128,5 +145,6 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
     getBalanceOf,
     ftTransferCall,
     metadata,
+    actions,
   };
 };

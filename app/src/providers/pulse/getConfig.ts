@@ -1,6 +1,9 @@
 import near from "providers/near";
 
 export default () => ({
+  resolutionMechanism: {
+    baseUrl: "https://switchboard.xyz/explorer/4",
+  },
   STAKING_TOKEN_ACCOUNT_ID: process.env.NEXT_PUBLIC_STAKING_TOKEN_ACCOUNT_ID as string,
   // @TODO get real decimals
   COLLATERAL_TOKENS: [

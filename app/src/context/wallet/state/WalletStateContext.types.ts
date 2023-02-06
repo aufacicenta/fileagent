@@ -1,4 +1,4 @@
-import { NetworkId } from "@near-wallet-selector/core";
+import { NetworkId, Wallet } from "@near-wallet-selector/core";
 import { Near, WalletConnection as NEARWalletConnection } from "near-api-js";
 import { Dispatch, SetStateAction } from "react";
 
@@ -12,6 +12,7 @@ export type IsConnected = boolean;
 export type Network = NetworkId | undefined;
 
 export type Context = {
+  wallet?: Wallet;
   connection?: NEARWalletConnection;
   provider?: Near;
   guest: { address: Address };

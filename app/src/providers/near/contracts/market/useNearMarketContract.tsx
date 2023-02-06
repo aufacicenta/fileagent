@@ -33,6 +33,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const isResolved = await contract.isResolved();
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
+      // @TODO set to actual feed_id from current contract
+      const resolution = { feedId: "CfHFMUiP8BbTGkt9AvTFYzVPgoNxCz16zPD6huoRUwUB" };
 
       if (!market || !collateralTokenMetadata || !feeRatio) {
         throw new Error("Failed to fetch market data");
@@ -59,6 +61,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,
         buySellTimestamp,
+        resolution,
       });
     } catch {
       toast.trigger({

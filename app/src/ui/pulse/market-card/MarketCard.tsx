@@ -7,8 +7,8 @@ import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import near from "providers/near";
-import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 import { Icon } from "ui/icon/Icon";
+import pulse from "providers/pulse";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -32,7 +32,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved } =
+  const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
     marketContractValues;
 
   const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
@@ -78,15 +78,19 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution mechanism</span>
                 {/* @TODO update to Switchboard feed URL */}
-                <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
-                  {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
+                <Typography.Anchor
+                  href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feedId}`}
+                  target="_blank"
+                  truncate
+                >
+                  {resolution.feedId}
                   <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Contract</span>
                 <Typography.Anchor
-                  href={`${near.getConfig(DEFAULT_NETWORK_ENV).explorerUrl}/accounts/${marketId}`}
+                  href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
                   target="_blank"
                   truncate
                 >
