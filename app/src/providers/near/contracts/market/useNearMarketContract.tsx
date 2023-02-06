@@ -27,7 +27,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const market = await contract.getMarketData();
       const resolutionWindow = await contract.getResolutionWindow();
       const buySellTimestamp = await contract.getBuySellTimestamp();
-      const isPublished = await contract.isPublished();
       const isOver = await contract.isOver();
       const isOpen = await contract.isOpen();
       const isResolutionWindowExpired = await contract.isResolutionWindowExpired();
@@ -52,7 +51,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       setMarketContractValues({
         market,
         resolutionWindow,
-        isPublished,
         isOver,
         isResolved,
         isOpen,
@@ -77,7 +75,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     if (!preventLoad) {
       fetchMarketContractValues();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketId, preventLoad]);
 
   const assertWalletConnection = () => {
@@ -91,28 +88,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       });
 
       throw new Error("ERR_USE_NEAR_MARKET_CONTRACT_INVALID_WALLET_CONNECTION");
-    }
-  };
-
-  const onClickPublishMarket = async () => {
-    // @TODO check if wallet is connected or display wallet connect modal
-    try {
-      assertWalletConnection();
-
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
-      const result = await contract.publish();
-
-      return result;
-    } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        // @TODO i18n
-        title: "Failed to publish market",
-        children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
-      });
-
-      return false;
     }
   };
 
@@ -198,7 +173,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   return {
     contract: MarketContract,
     marketContractValues,
-    onClickPublishMarket,
     fetchMarketContractValues,
     getBalanceOf,
     getAmountMintable,

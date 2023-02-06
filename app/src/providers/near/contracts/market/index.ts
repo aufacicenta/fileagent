@@ -1,6 +1,5 @@
 import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
-import { BN } from "bn.js";
 
 import near from "providers/near";
 
@@ -29,18 +28,23 @@ export class MarketContract {
   }
 
   static async loadFromGuestConnection(contractAddress: string) {
-    const connection = await nearAPI.connect({
-      keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
-      headers: {},
-      ...near.getConfig(),
-    });
+    try {
+      const connection = await nearAPI.connect({
+        keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
+        headers: {},
+        ...near.getConfig(),
+      });
 
-    const account = await connection.account(near.getConfig().guestWalletId);
-    const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
+      const account = await connection.account(near.getConfig().guestWalletId);
+      const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
-    const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+      const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
 
-    return new MarketContract(contract);
+      return new MarketContract(contract);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   static async loadFromWalletConnection(
@@ -53,18 +57,6 @@ export class MarketContract {
     const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
 
     return [new MarketContract(contract), contract];
-  }
-
-  async publish() {
-    try {
-      const gas = new BN("300000000000000");
-      const result = await this.contract.publish({}, gas.toString());
-
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_PUBLISH");
-    }
   }
 
   async sell(args: SellArgs) {
@@ -117,17 +109,6 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_GET_OUTCOME_TOKEN");
-    }
-  }
-
-  async isPublished() {
-    try {
-      const result = await this.contract.is_published();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_IS_PUBLISHED");
     }
   }
 

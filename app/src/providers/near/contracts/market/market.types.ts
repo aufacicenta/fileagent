@@ -13,6 +13,7 @@ export type MarketData = {
   starts_at: Timestamp;
   ends_at: Timestamp;
   utc_offset: number;
+  price?: number;
 };
 
 export type CollateralTokenMetadata = {
@@ -29,15 +30,13 @@ export type OutcomeToken = {
   accounts_length: number;
   total_supply: WrappedBalance;
   outcome_id: OutcomeId;
-  price: WrappedBalance;
-  price_history: Array<PriceHistory>;
+  is_active: boolean;
 };
 
 export type MarketContractValues = {
   market: MarketData;
   resolutionWindow?: Timestamp;
   buySellTimestamp?: Timestamp;
-  isPublished: boolean;
   isOver: boolean;
   isOpen: boolean;
   isResolutionWindowExpired: boolean;
@@ -49,31 +48,29 @@ export type MarketContractValues = {
 
 export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
 export type BalanceOfArgs = { outcome_id: OutcomeId; account_id: AccountId };
-export type GetAmountMintableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
+export type GetAmountMintableArgs = { amount: WrappedBalance };
+export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
 export type SellArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
-export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance; balance: WrappedBalance };
 
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
+  get_fee_ratio: () => Promise<number>;
+  get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
+  get_outcome_ids: () => Promise<Array<number>>;
+  get_block_timestamp: () => Promise<Timestamp>;
   get_collateral_token_metadata: () => Promise<CollateralTokenMetadata>;
+  get_market_creator_account_id: () => Promise<AccountId>;
   dao_account_id: () => Promise<AccountId>;
-  published_at: () => Promise<Timestamp>;
   resolution_window: () => Promise<Timestamp>;
   resolved_at: () => Promise<Timestamp>;
-  is_published: () => Promise<boolean>;
   is_resolved: () => Promise<boolean>;
+  get_buy_sell_timestamp: () => Promise<Timestamp>;
   is_open: () => Promise<boolean>;
+  is_closed: () => Promise<boolean>;
   is_over: () => Promise<boolean>;
   is_resolution_window_expired: () => Promise<boolean>;
   balance_of: (args: BalanceOfArgs) => Promise<WrappedBalance>;
-  get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
-  get_fee_ratio: () => Promise<WrappedBalance>;
-  get_price_ratio: (args: { outcome_id: OutcomeId }) => Promise<WrappedBalance>;
-  get_balance_boost_ratio: () => Promise<WrappedBalance>;
-  get_buy_sell_timestamp: () => Promise<Timestamp>;
-  publish: (args: Record<string, unknown>, gas?: Gas) => Promise<void>;
-  sell: (args: SellArgs, gas?: Gas) => Promise<void>;
-  get_cumulative_weight: () => Promise<WrappedBalance>;
   get_amount_mintable: (args: GetAmountMintableArgs) => Promise<Array<number>>;
   get_amount_payable: (args: GetAmountPayableArgs) => Promise<Array<number>>;
+  sell: (args: SellArgs, gas?: Gas) => Promise<void>;
 };

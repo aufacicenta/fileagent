@@ -44,7 +44,7 @@ module.exports = {
   reportUnusedDisableDirectives: true,
   rules: {
     // Eslint
-    "no-console": "warn",
+    "no-console": "off",
     "brace-style": ["error", "1tbs", { allowSingleLine: false }],
     "padding-line-between-statements": ["error", { blankLine: "always", prev: "*", next: ["return", "if", "switch"] }],
     "no-use-before-define": 0,
