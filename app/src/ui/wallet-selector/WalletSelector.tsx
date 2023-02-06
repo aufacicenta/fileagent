@@ -1,35 +1,42 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "../button/Button";
 import { Typography } from "ui/typography/Typography";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
-import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { Icon } from "ui/icon/Icon";
+import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import near from "providers/near";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 
-import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
+import styles from "./WalletSelector.module.scss";
+
+import "@near-wallet-selector/modal-ui/styles.css";
 
 export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => {
   const [isWidgetVisible, setIsWidgetVisible] = useState(false);
 
+  const nearWalletSelectorContext = useNearWalletSelectorContext();
   const wallet = useWalletStateContext();
-  const selector = useWalletSelectorContext();
+
+  useEffect(() => {
+    if (!nearWalletSelectorContext.selector) {
+      return;
+    }
+
+    nearWalletSelectorContext.initModal(near.getConfig().marketFactoryAccountId);
+  }, [nearWalletSelectorContext.selector]);
 
   const handleOnConnectWalletClick = () => {
-    if (wallet.isConnected.get()) {
-      selector.onDisconnect();
-    } else {
-      selector.onConnect(WalletSelectorChain.near);
-    }
+    nearWalletSelectorContext.signOut();
+    setIsWidgetVisible(false);
   };
 
   const handleOnDisplayWidgetClick = () => {
-    if (wallet.isConnected.get()) {
+    if (wallet.isConnected) {
       setIsWidgetVisible(!isWidgetVisible);
     } else {
-      selector.onConnect(WalletSelectorChain.near);
+      nearWalletSelectorContext.modal?.show();
     }
   };
 
@@ -39,13 +46,13 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
         color="primary"
         variant="outlined"
         onClick={handleOnDisplayWidgetClick}
-        rightIcon={<Icon name={wallet.address.get() ? "icon-power" : "icon-power-crossed"} />}
+        rightIcon={<Icon name={wallet.address ? "icon-power" : "icon-power-crossed"} />}
         className={styles["wallet-selector__button"]}
         size="xs"
       >
-        {wallet.isConnected.get() ? (
+        {wallet.isConnected ? (
           <Typography.Text inline truncate flat>
-            {wallet.address.get()}
+            {wallet.address}
           </Typography.Text>
         ) : (
           "Connect Wallet"
@@ -61,16 +68,16 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
           <div className={styles["wallet-selector__widget"]}>
             <div className={styles["wallet-selector__balance"]}>
               <Typography.Description>Balance</Typography.Description>
-              <Typography.Text>{wallet.balance.get()}</Typography.Text>
+              <Typography.Text>{wallet.balance}</Typography.Text>
               <Typography.MiniDescription>
-                <Typography.Anchor href={`${wallet.explorer}/accounts/${wallet.address.get()}`} target="_blank">
-                  {wallet.isConnected.get() && wallet.address.get()}
+                <Typography.Anchor href={`${wallet.explorer}/accounts/${wallet.address}`} target="_blank">
+                  {wallet.isConnected && wallet.address}
                 </Typography.Anchor>
               </Typography.MiniDescription>
             </div>
             <div className={styles["wallet-selector__connect"]}>
               <Button size="xs" color="primary" onClick={handleOnConnectWalletClick}>
-                {wallet.isConnected.get() ? "Disconnect" : "Connect"}
+                {wallet.isConnected ? "Disconnect" : "Connect"}
               </Button>
             </div>
           </div>

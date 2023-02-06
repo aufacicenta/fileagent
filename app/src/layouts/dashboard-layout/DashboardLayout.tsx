@@ -8,8 +8,8 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { WalletSelectorNavbar } from "ui/wallet-selector-navbar/WalletSelectorNavbar";
 import { ToastContextController } from "context/toast/ToastContextController";
 import { PulseSidebar } from "ui/pulse/sidebar/PulseSidebar";
+import { NearWalletSelectorContextController } from "context/near/wallet-selector/NearWalletSelectorContextController";
 import { WalletStateContextController } from "context/wallet/state/WalletStateContextController";
-import { WalletSelectorContextController } from "context/wallet/selector/WalletSelectorContextController";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
@@ -44,7 +44,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <link rel="preload" href="/icons/icomoon.svg" as="font" crossOrigin="" />
       </Head>
       <WalletStateContextController>
-        <WalletSelectorContextController>
+        <NearWalletSelectorContextController>
           <ToastContextController>
             <div id="modal-root" />
             <div id="dropdown-portal" />
@@ -58,7 +58,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <MainPanel>{children}</MainPanel>
             </div>
           </ToastContextController>
-        </WalletSelectorContextController>
+        </NearWalletSelectorContextController>
       </WalletStateContextController>
     </>
   );

@@ -78,7 +78,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   }, [marketId, preventLoad]);
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected.get()) {
+    if (!wallet.isConnected) {
       toast.trigger({
         variant: "info",
         withTimeout: true,
@@ -96,8 +96,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
-      const balance = await contract.balanceOf({ outcome_id, account_id: wallet.address.get()! });
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
+      const balance = await contract.balanceOf({ outcome_id, account_id: wallet.address! });
 
       return balance;
     } catch {
@@ -109,7 +109,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
       const balance = await contract.getAmountMintable(args);
 
       return balance;
@@ -132,7 +132,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
       const balance = await contract.getAmountPayable(args);
 
       return balance;
@@ -155,7 +155,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.get().connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
       await contract.sell(args);
     } catch {
       toast.trigger({
