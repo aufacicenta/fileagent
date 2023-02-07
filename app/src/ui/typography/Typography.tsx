@@ -37,31 +37,40 @@ const Headline1: React.FC<TypographyProps> = ({ children, className, inline, fla
   </h1>
 );
 
-const Headline2: React.FC<TypographyProps> = ({ children, className, flat, inline }) => (
+const Headline2: React.FC<TypographyProps> = ({ children, className, flat, inline, ...props }) => (
   <h2
     className={clsx(styles.typography__headline2, className, {
       [styles.typography__inline]: inline,
       [styles.typography__flat]: flat,
     })}
+    {...props}
   >
     {children}
   </h2>
 );
 
-const Headline3: React.FC<TypographyProps> = ({ children, className, flat }) => (
-  <h3 className={clsx(styles.typography__headline3, className, { [styles.typography__flat]: flat })}>{children}</h3>
+const Headline3: React.FC<TypographyProps> = ({ children, className, flat, ...props }) => (
+  <h3 className={clsx(styles.typography__headline3, className, { [styles.typography__flat]: flat })} {...props}>
+    {children}
+  </h3>
 );
 
-const Headline4: React.FC<TypographyProps> = ({ children, className, inline }) => (
-  <h4 className={clsx(styles.typography__headline4, className, { [styles.typography__inline]: inline })}>{children}</h4>
+const Headline4: React.FC<TypographyProps> = ({ children, className, inline, ...props }) => (
+  <h4 className={clsx(styles.typography__headline4, className, { [styles.typography__inline]: inline })} {...props}>
+    {children}
+  </h4>
 );
 
-const Headline5: React.FC<TypographyProps> = ({ children, className }) => (
-  <h5 className={clsx(styles.typography__headline5, className)}>{children}</h5>
+const Headline5: React.FC<TypographyProps> = ({ children, className, ...props }) => (
+  <h5 className={clsx(styles.typography__headline5, className)} {...props}>
+    {children}
+  </h5>
 );
 
-const Headline6: React.FC<TypographyProps> = ({ children, className }) => (
-  <h6 className={clsx(styles.typography__headline6, className)}>{children}</h6>
+const Headline6: React.FC<TypographyProps> = ({ children, className, ...props }) => (
+  <h6 className={clsx(styles.typography__headline6, className)} {...props}>
+    {children}
+  </h6>
 );
 
 const Text: React.FC<TypographyProps> = ({ children, className, inline, flat, truncate, ...props }) => (

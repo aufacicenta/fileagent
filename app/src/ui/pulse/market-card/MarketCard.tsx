@@ -31,6 +31,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   onClickResolveMarket,
   onClickOutcomeToken,
   onClickMarketTitle,
+  currentResultElement,
 }) => {
   const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
     marketContractValues;
@@ -101,6 +102,13 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             </div>
           </Grid.Col>
           <Grid.Col lg={expanded ? 5 : 12}>
+            {currentResultElement && (
+              <Card className={styles["market-card__current-result-element"]}>
+                <Card.Content className={styles["market-card__current-result-element--card-content"]}>
+                  {currentResultElement}
+                </Card.Content>
+              </Card>
+            )}
             <Card className={styles["market-card__market-options"]}>
               <Card.Content className={styles["market-card__market-options--card-content"]}>
                 <>

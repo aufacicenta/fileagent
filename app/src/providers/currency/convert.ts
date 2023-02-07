@@ -19,8 +19,20 @@ const fromUIntAmount = (amount: string | number, decimals: number) =>
 const toDecimalsPrecisionString = (amount: string | number, decimals: number) =>
   (Number(amount) / padDecimals(decimals)).toFixed(DEFAULT_DECIMALS_PRECISION);
 
+const toFormattedString = (amount: string | number, decimals: number = 2, currency: string = "USD") => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+
+  return formatter.format(Number(amount));
+};
+
 export default {
   toUIntAmount,
   fromUIntAmount,
   toDecimalsPrecisionString,
+  toFormattedString,
 };

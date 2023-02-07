@@ -9,7 +9,7 @@ export type MarketCardProps = {
   onClickMarketTitle?: () => void;
   marketId: string;
   expanded?: boolean;
-  children?: ReactNode;
+  currentResultElement?: ReactNode;
   className?: string;
 };
 

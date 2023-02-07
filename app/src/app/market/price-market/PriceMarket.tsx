@@ -8,6 +8,9 @@ import { Card } from "ui/card/Card";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { OutcomeToken } from "providers/near/contracts/market/market.types";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
+import switchboard from "providers/switchboard";
+import currency from "providers/currency";
+import { Typography } from "ui/typography/Typography";
 
 import styles from "./PriceMarket.module.scss";
 import { PriceMarketProps } from "./PriceMarket.types";
@@ -18,6 +21,8 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
+  const [currentPrice, setCurrentPrice] = useState<string | undefined>(undefined);
+
   const { onClickResolveMarket } = useNearMarketContract({ marketId });
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
@@ -30,6 +35,19 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
     }
   }, [marketContractValues.outcomeTokens]);
 
+  useEffect(() => {
+    (async () => {
+      const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
+      setCurrentPrice(currency.convert.toFormattedString(price));
+    })();
+    // const interval = setInterval(async () => {
+    // }, 5000);
+
+    // return () => {
+    //   clearInterval(interval);
+    // };
+  }, [marketContractValues.outcomeTokens]);
+
   return (
     <div className={clsx(styles["price-market"], className)}>
       <Grid.Row>
@@ -38,6 +56,14 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
             <Card.Content>
               <MarketCard
                 expanded
+                currentResultElement={
+                  <>
+                    <Typography.Description align="right">Current Price</Typography.Description>
+                    <Typography.Headline3 align="right" flat>
+                      {currentPrice}
+                    </Typography.Headline3>
+                  </>
+                }
                 onClickOutcomeToken={onClickOutcomeToken}
                 marketContractValues={marketContractValues}
                 onClickResolveMarket={onClickResolveMarket}

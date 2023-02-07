@@ -1,5 +1,7 @@
 export type Styles = {
   "market-card": string;
+  "market-card__current-result-element": string;
+  "market-card__current-result-element--card-content": string;
   "market-card__image": string;
   "market-card__market-options": string;
   "market-card__market-options--actions": string;
