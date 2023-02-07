@@ -92,11 +92,11 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <span>Resolution mechanism</span>
                 {/* @TODO update to Switchboard feed URL */}
                 <Typography.Anchor
-                  href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feedId}`}
+                  href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
                   target="_blank"
                   truncate
                 >
-                  {resolution.feedId}
+                  {resolution.feed_id}
                   <Icon name="icon-launch" />
                 </Typography.Anchor>
               </Typography.Description>

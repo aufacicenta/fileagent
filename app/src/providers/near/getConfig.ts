@@ -1,7 +1,8 @@
 import { NetworkId } from "@near-wallet-selector/core";
 
 export const DEFAULT_NETWORK_ENV = process.env.NEXT_PUBLIC_DEFAULT_NETWORK_ENV as NetworkId;
-export const DEFAULT_FEE_RATIO = 0.02;
+// 2% of 6 precision decimals
+export const DEFAULT_FEE_RATIO = 20000;
 export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 export const DEFAULT_CLAIMING_WINDOW_DAY_SPAN = 30; // days
 

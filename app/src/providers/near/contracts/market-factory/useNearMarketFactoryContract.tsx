@@ -1,5 +1,6 @@
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import near from "providers/near";
 import { Typography } from "ui/typography/Typography";
 
 import { MarketFactoryContract } from ".";
@@ -7,10 +8,10 @@ import { DeployMarketContractArgs } from "./market-factory.types";
 
 export default () => {
   const toast = useToastContext();
-  const wallet = useWalletStateContext();
+  const walletState = useWalletStateContext();
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected) {
+    if (!walletState.isConnected) {
       toast.trigger({
         variant: "error",
         withTimeout: true,
@@ -27,7 +28,10 @@ export default () => {
     try {
       assertWalletConnection();
 
-      await MarketFactoryContract.createMarket(wallet.context.connection!, args);
+      const contractAddress = near.getConfig().marketFactoryAccountId;
+      const contract = new MarketFactoryContract(contractAddress, undefined, walletState.context.wallet);
+
+      await contract.createMarket(args);
     } catch (error) {
       console.log(error);
     }

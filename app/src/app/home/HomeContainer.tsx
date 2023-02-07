@@ -5,7 +5,7 @@ import { Home } from "./Home";
 
 export const HomeContainer = () => {
   // @TODO fetch latest price market from market-factory contract
-  const marketId = "price-5.market-factory-2.pulsemarkets.testnet";
+  const marketId = "a1d5e2.market-factory-2.pulsemarkets.testnet";
 
   const { marketContractValues } = useNearMarketContract({ marketId });
 

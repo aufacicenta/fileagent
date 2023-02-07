@@ -1,5 +1,6 @@
 export type Styles = {
   "price-market": string;
+  "price-market__current-result-element--create-market": string;
   "price-market__dates-element": string;
   "price-market__info-card": string;
   "price-market__start-end-time": string;

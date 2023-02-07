@@ -21,13 +21,33 @@ export type Pricing = {
   target_currency_symbol: string;
 };
 
+export type Fees = {
+  fee_ratio: number;
+  claiming_window?: Timestamp;
+};
+
+export type Management = {
+  dao_account_id: AccountId;
+  staking_token_account_id?: AccountId;
+  market_creator_account_id?: AccountId;
+};
+
 export type CollateralTokenMetadata = {
   id: string;
   balance: number;
+  decimals: number;
+  fee_balance: WrappedBalance;
 };
 
 export type Resolution = {
-  feedId: string;
+  window: Timestamp;
+  ix: Ix;
+  resolved_at?: Timestamp;
+  feed_id?: string;
+};
+
+export type Ix = {
+  address: Array<number>;
 };
 
 export type OutcomeToken = {
@@ -61,6 +81,7 @@ export type SellArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
   get_pricing_data: () => Promise<Pricing | null>;
+  get_resolution_data: () => Promise<Resolution>;
   get_fee_ratio: () => Promise<number>;
   get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
   get_outcome_ids: () => Promise<Array<number>>;

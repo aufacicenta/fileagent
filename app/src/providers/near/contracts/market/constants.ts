@@ -1,6 +1,7 @@
 export const VIEW_METHODS = [
   "get_market_data",
   "get_pricing_data",
+  "get_resolution_data",
   "get_fee_ratio",
   "get_outcome_token",
   "get_outcome_ids",

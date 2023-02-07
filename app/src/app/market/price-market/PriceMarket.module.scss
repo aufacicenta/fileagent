@@ -3,6 +3,18 @@
 .price-market {
   display: block;
 
+  &__current-result-element {
+    &--create-market {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      p {
+        margin-bottom: $space-default;
+      }
+    }
+  }
+
   &__info-card {
     margin-bottom: $space-s;
   }

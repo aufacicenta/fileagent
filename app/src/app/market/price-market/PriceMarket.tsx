@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
@@ -12,9 +13,16 @@ import switchboard from "providers/switchboard";
 import currency from "providers/currency";
 import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
+import { Button } from "ui/button/Button";
+import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
+import { DeployMarketContractArgs } from "providers/near/contracts/market-factory/market-factory.types";
+import pulse from "providers/pulse";
+import near from "providers/near";
+import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
 
-import styles from "./PriceMarket.module.scss";
 import { PriceMarketProps } from "./PriceMarket.types";
+import styles from "./PriceMarket.module.scss";
 
 const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCard").then((mod) => mod.SwapCard), {
   ssr: false,
@@ -24,12 +32,93 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
 
-  const { onClickResolveMarket } = useNearMarketContract({ marketId });
+  const toast = useToastContext();
 
-  const { market, buySellTimestamp, outcomeTokens } = marketContractValues;
+  const { onClickResolveMarket } = useNearMarketContract({ marketId });
+  const MarketFactoryContract = useNearMarketFactoryContract();
+
+  const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired } = marketContractValues;
+
+  const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
+  const startsAt = date.client(date.fromNanoseconds(market.starts_at));
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);
+  };
+
+  const updateCurrentPrice = async () => {
+    const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
+    setCurrentPrice(currency.convert.toFormattedString(price));
+  };
+
+  const onClickCreatePriceMarket = async () => {
+    try {
+      const timezoneOffset = 0;
+
+      const starts_at = date.now().utcOffset(timezoneOffset);
+      const ends_at = startsAt.clone().add(30, "minutes");
+
+      const dao_account_id = near.getConfig().marketDaoAccountId;
+
+      const collateralToken = pulse.getConfig().COLLATERAL_TOKENS[0];
+
+      const resolutionWindow = ends_at.clone().add(5, "minutes");
+
+      // @TODO set to the corresponding Switchboard aggregator feed address
+      const ix = {
+        address: [
+          173, 62, 255, 125, 45, 251, 162, 167, 128, 129, 25, 33, 146, 248, 118, 134, 118, 192, 215, 84, 225, 222, 198,
+          48, 70, 49, 212, 195, 84, 136, 96, 56,
+        ],
+      };
+
+      const current_price = (await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd)).toFixed(2);
+
+      const args: DeployMarketContractArgs = {
+        market: {
+          description: "",
+          info: "",
+          category: "crypto",
+          options: ["yes", "no"],
+          starts_at: date.toNanoseconds(starts_at.valueOf()),
+          ends_at: date.toNanoseconds(ends_at.valueOf()),
+          utc_offset: timezoneOffset,
+        },
+        collateral_token: {
+          id: collateralToken.accountId,
+          decimals: collateralToken.decimals,
+          balance: 0,
+          fee_balance: 0,
+        },
+        fees: {
+          // 2% of 6 precision decimals
+          fee_ratio: DEFAULT_FEE_RATIO,
+        },
+        resolution: {
+          window: date.toNanoseconds(resolutionWindow.valueOf()),
+          ix,
+        },
+        management: {
+          dao_account_id,
+        },
+        price: {
+          value: Number(current_price),
+          base_currency_symbol: "BTC",
+          target_currency_symbol: "USD",
+        },
+      };
+
+      // @TODO validate args, highlight fields if something's missing
+
+      await MarketFactoryContract.createMarket(args);
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        title: "Oops, our bad.",
+        children: <Typography.Text>While creating the market. Try again?</Typography.Text>,
+      });
+    }
   };
 
   useEffect(() => {
@@ -39,22 +128,43 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
   }, [outcomeTokens]);
 
   useEffect(() => {
-    // (async () => {
-    // })();
     const interval = setInterval(async () => {
-      const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
-      setCurrentPrice(currency.convert.toFormattedString(price));
+      updateCurrentPrice();
     }, 5000);
+
+    if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
+      updateCurrentPrice();
+      clearInterval(interval);
+    }
 
     return () => {
       clearInterval(interval);
     };
-  }, [outcomeTokens]);
+  }, []);
+
+  const getCurrentResultElement = () => {
+    if (isOver && isResolutionWindowExpired) {
+      return (
+        <div className={styles["price-market__current-result-element--create-market"]}>
+          <Typography.Description align="right">Create the next price market and earn fees</Typography.Description>
+          <Button size="xs" variant="outlined" color="success" onClick={onClickCreatePriceMarket}>
+            Create Next Market
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <Typography.Description align="right">Current Price</Typography.Description>
+        <Typography.Headline3 align="right" flat>
+          {currentPrice}
+        </Typography.Headline3>
+      </>
+    );
+  };
 
   const getDatesElement = () => {
-    const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
-    const startsAt = date.client(date.fromNanoseconds(market.starts_at));
-
     if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
       return (
         <>
@@ -87,14 +197,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
             <Card.Content>
               <MarketCard
                 expanded
-                currentResultElement={
-                  <>
-                    <Typography.Description align="right">Current Price</Typography.Description>
-                    <Typography.Headline3 align="right" flat>
-                      {currentPrice}
-                    </Typography.Headline3>
-                  </>
-                }
+                currentResultElement={getCurrentResultElement()}
                 datesElement={<div className={styles["price-market__dates-element"]}>{getDatesElement()}</div>}
                 onClickOutcomeToken={onClickOutcomeToken}
                 marketContractValues={marketContractValues}

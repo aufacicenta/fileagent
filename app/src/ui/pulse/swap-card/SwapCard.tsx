@@ -35,7 +35,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     collateralTokenMetadata,
     feeRatio,
     isOver,
-    isOpen,
     isResolved,
     isResolutionWindowExpired,
     outcomeTokens,
@@ -63,7 +62,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
   const canClaim = isResolved || (isOver && isResolutionWindowExpired);
   const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isResolved;
-  const isBettingWindowClosed = !isOpen || isResolutionWindowOpen || canClaim;
+  const endedUnresolved = isOver && isResolutionWindowExpired && !isResolved;
   const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
   const updateCollateralTokenBalance = async () => {
@@ -207,11 +206,13 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (isBettingWindowClosed) {
+    if (endedUnresolved) {
       return (
-        <Button fullWidth disabled>
-          Betting is Closed
-        </Button>
+        <>
+          <Typography.MiniDescription>Market was not resolved</Typography.MiniDescription>
+          {/* @TODO add action to wihdraw unresolved bets */}
+          <Button fullWidth>Withdraw your bet</Button>
+        </>
       );
     }
 
@@ -269,7 +270,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
               <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {isBettingWindowClosed ? t("swapCard.title.claim") : t("swapCard.title")}
+                {canClaim ? t("swapCard.title.claim") : t("swapCard.title")}
               </Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>

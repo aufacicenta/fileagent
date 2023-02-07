@@ -37,7 +37,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
       // @TODO set to actual feed_id from current contract
-      const resolution = { feedId: "CfHFMUiP8BbTGkt9AvTFYzVPgoNxCz16zPD6huoRUwUB" };
+      const resolution = await contract.getResolutionData();
 
       if (!market || !collateralTokenMetadata || !feeRatio) {
         throw new Error("Failed to fetch market data");
@@ -70,7 +70,10 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,
         buySellTimestamp,
-        resolution,
+        resolution: {
+          ...resolution,
+          feed_id: "CfHFMUiP8BbTGkt9AvTFYzVPgoNxCz16zPD6huoRUwUB",
+        },
         price,
       });
     } catch {
