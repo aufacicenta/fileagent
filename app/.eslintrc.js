@@ -9,7 +9,17 @@ module.exports = {
     },
     project: ["./tsconfig.eslint.json", "./cypress/tsconfig.eslint.json"],
   },
-  plugins: ["react", "react-hooks", "import", "@typescript-eslint", "testing-library", "jest", "jest-dom", "prettier"],
+  plugins: [
+    "react",
+    "react-hooks",
+    "import",
+    "@typescript-eslint",
+    "testing-library",
+    "jest",
+    "jest-dom",
+    "prettier",
+    "unused-imports",
+  ],
   extends: [
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -136,6 +146,12 @@ module.exports = {
       },
     ],
     "@typescript-eslint/indent": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
+    ],
 
     // Unicorn
     "unicorn/filename-case": "off",

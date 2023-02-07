@@ -65,6 +65,7 @@
     "@types/react-final-form-listeners": "^1.0.0",
     "@types/react-transition-group": "^4.4.3",
     "@types/uuid": "^8.3.4",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "inquirer-directory": "^2.2.0",
     "node-sass": "^6.0.0",
     "plop": "^2.7.4",

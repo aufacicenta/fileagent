@@ -1,6 +1,7 @@
 export type Styles = {
   home: string;
   "home__info-card": string;
+  home__title: string;
   "home__title-row": string;
   "z-depth-0": string;
   "z-depth-1": string;

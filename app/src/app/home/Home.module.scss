@@ -3,11 +3,15 @@
 .home {
   display: block;
 
+  &__title {
+    color: var(--color-button-secondary-text);
+  }
+
   &__title-row {
     margin-bottom: $space-ml;
   }
 
   &__info-card {
-    margin-bottom: $space-ml;
+    margin-bottom: $space-s;
   }
 }

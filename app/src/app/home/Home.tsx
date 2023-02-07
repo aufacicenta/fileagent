@@ -13,7 +13,6 @@ import { MarketCard } from "ui/pulse/market-card/MarketCard";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { OutcomeToken } from "providers/near/contracts/market/market.types";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
-import { MarketFeesCard } from "ui/pulse/market-fees-card/MarketFeesCard";
 
 import { HomeProps } from "./Home.types";
 import styles from "./Home.module.scss";
@@ -70,7 +69,7 @@ export const Home: React.FC<HomeProps> = ({ className, marketId, marketContractV
     <div className={clsx(styles.home, className)}>
       <MainPanel.Container>
         <div className={styles["home__title-row"]}>
-          <Typography.Headline1>{t("home.title")}</Typography.Headline1>
+          <Typography.Headline1 className={styles.home__title}>{t("home.title")}</Typography.Headline1>
         </div>
         <Grid.Row>
           <Grid.Col lg={8} xs={12}>
@@ -87,7 +86,6 @@ export const Home: React.FC<HomeProps> = ({ className, marketId, marketContractV
             </Card>
           </Grid.Col>
           <Grid.Col lg={4} xs={12}>
-            <MarketFeesCard />
             {selectedOutcomeToken && (
               <SwapCard
                 marketContractValues={marketContractValues}
