@@ -92,6 +92,17 @@ export class MarketContract {
     }
   }
 
+  async getPricingData() {
+    try {
+      const result = await this.contract.get_pricing_data();
+
+      return result || undefined;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_PRICING_DATA");
+    }
+  }
+
   async getResolutionWindow() {
     try {
       const result = await this.contract.resolution_window();

@@ -13,7 +13,12 @@ export type MarketData = {
   starts_at: Timestamp;
   ends_at: Timestamp;
   utc_offset: number;
-  price?: number;
+};
+
+export type Pricing = {
+  value: number;
+  base_currency_symbol: string;
+  target_currency_symbol: string;
 };
 
 export type CollateralTokenMetadata = {
@@ -44,6 +49,7 @@ export type MarketContractValues = {
   feeRatio: WrappedBalance;
   resolution: Resolution;
   outcomeTokens?: Array<OutcomeToken>;
+  price?: Pricing;
 };
 
 export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
@@ -54,6 +60,7 @@ export type SellArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
 
 export type MarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
+  get_pricing_data: () => Promise<Pricing | null>;
   get_fee_ratio: () => Promise<number>;
   get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
   get_outcome_ids: () => Promise<Array<number>>;

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import currency from "providers/currency";
+import date from "providers/date";
 
 import { MarketContract } from ".";
 import {
@@ -25,6 +27,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
+      const price = await contract.getPricingData();
       const resolutionWindow = await contract.getResolutionWindow();
       const buySellTimestamp = await contract.getBuySellTimestamp();
       const isOver = await contract.isOver();
@@ -38,6 +41,12 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
 
       if (!market || !collateralTokenMetadata || !feeRatio) {
         throw new Error("Failed to fetch market data");
+      }
+
+      if (price) {
+        market.description = `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(
+          price.value,
+        )} ${date.timeFromNow.asDefault(date.fromNanoseconds(market.ends_at))}?`;
       }
 
       const outcomeTokens = (
@@ -62,6 +71,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         feeRatio,
         buySellTimestamp,
         resolution,
+        price,
       });
     } catch {
       toast.trigger({
