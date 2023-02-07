@@ -10,7 +10,7 @@ export default () => {
   const wallet = useWalletStateContext();
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected.get()) {
+    if (!wallet.isConnected) {
       toast.trigger({
         variant: "error",
         withTimeout: true,
@@ -27,7 +27,7 @@ export default () => {
     try {
       assertWalletConnection();
 
-      await MarketFactoryContract.createMarket(wallet.context.get().connection!, args);
+      await MarketFactoryContract.createMarket(wallet.context.connection!, args);
     } catch (error) {
       console.log(error);
     }

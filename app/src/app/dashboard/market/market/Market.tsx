@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { Hidden } from "react-grid-system";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Grid } from "ui/grid/Grid";
@@ -10,7 +9,6 @@ import { Card } from "ui/card/Card";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
 import { OutcomeToken } from "providers/near/contracts/market/market.types";
 import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
-import { MarketPricesChart } from "ui/pulse/market-prices-chart/MarketPricesChart";
 import { MarketFeesCard } from "ui/pulse/market-fees-card/MarketFeesCard";
 
 import styles from "./Market.module.scss";
@@ -51,13 +49,6 @@ export const Market: React.FC<MarketProps> = ({ className, marketContractValues,
                 />
               </Card.Content>
             </Card>
-            <Hidden xs sm>
-              <Card>
-                <Card.Content>
-                  <MarketPricesChart marketContractValues={marketContractValues} />
-                </Card.Content>
-              </Card>
-            </Hidden>
           </Grid.Col>
           <Grid.Col lg={4} xs={12}>
             <MarketFeesCard />

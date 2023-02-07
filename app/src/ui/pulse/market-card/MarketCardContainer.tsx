@@ -11,7 +11,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({
   onClickOutcomeToken,
   onClickMarketTitle,
 }) => {
-  const { marketContractValues, onClickPublishMarket } = useNearMarketContract({ marketId });
+  const { marketContractValues, onClickResolveMarket } = useNearMarketContract({ marketId });
 
   if (!marketContractValues) {
     return <MarketCardTemplate expanded={expanded} />;
@@ -22,7 +22,7 @@ export const MarketCardContainer: React.FC<MarketCardContainerProps> = ({
       expanded={expanded}
       marketContractValues={marketContractValues}
       className={className}
-      onClickResolveMarket={onClickPublishMarket}
+      onClickResolveMarket={onClickResolveMarket}
       onClickOutcomeToken={onClickOutcomeToken}
       onClickMarketTitle={onClickMarketTitle}
       marketId={marketId}
