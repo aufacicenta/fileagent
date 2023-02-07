@@ -11,6 +11,7 @@ import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
 import switchboard from "providers/switchboard";
 import currency from "providers/currency";
 import { Typography } from "ui/typography/Typography";
+import date from "providers/date";
 
 import styles from "./PriceMarket.module.scss";
 import { PriceMarketProps } from "./PriceMarket.types";
@@ -21,32 +22,62 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
-  const [currentPrice, setCurrentPrice] = useState<string | undefined>(undefined);
+  const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
 
   const { onClickResolveMarket } = useNearMarketContract({ marketId });
+
+  const { market, buySellTimestamp, outcomeTokens } = marketContractValues;
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);
   };
 
   useEffect(() => {
-    if (marketContractValues.outcomeTokens) {
-      setSelectedOutcomeToken(marketContractValues.outcomeTokens[0]);
+    if (outcomeTokens) {
+      setSelectedOutcomeToken(outcomeTokens[0]);
     }
-  }, [marketContractValues.outcomeTokens]);
+  }, [outcomeTokens]);
 
   useEffect(() => {
-    (async () => {
+    // (async () => {
+    // })();
+    const interval = setInterval(async () => {
       const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
       setCurrentPrice(currency.convert.toFormattedString(price));
-    })();
-    // const interval = setInterval(async () => {
-    // }, 5000);
+    }, 5000);
 
-    // return () => {
-    //   clearInterval(interval);
-    // };
-  }, [marketContractValues.outcomeTokens]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [outcomeTokens]);
+
+  const getDatesElement = () => {
+    const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
+    const startsAt = date.client(date.fromNanoseconds(market.starts_at));
+
+    if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
+      return (
+        <>
+          <Typography.Description className={styles["price-market__start-end-time--text"]}>
+            <span>Betting ended</span> <span>be ready for the next round!</span>
+          </Typography.Description>
+          <Typography.MiniDescription align="right">
+            * Bets end {diff} minutes after market opens.
+          </Typography.MiniDescription>
+        </>
+      );
+    }
+
+    const minutes = startsAt.clone().add(diff, "minutes").diff(date.now(), "minutes");
+    const seconds = startsAt.clone().add(diff, "minutes").diff(date.now(), "seconds");
+    const marketClosesIn = `in ${minutes} minutes, ${seconds} seconds`;
+
+    return (
+      <Typography.Description className={styles["price-market__start-end-time--text"]}>
+        <span>Betting ends</span> <span>{marketClosesIn}</span>
+      </Typography.Description>
+    );
+  };
 
   return (
     <div className={clsx(styles["price-market"], className)}>
@@ -64,6 +95,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
                     </Typography.Headline3>
                   </>
                 }
+                datesElement={<div className={styles["price-market__dates-element"]}>{getDatesElement()}</div>}
                 onClickOutcomeToken={onClickOutcomeToken}
                 marketContractValues={marketContractValues}
                 onClickResolveMarket={onClickResolveMarket}

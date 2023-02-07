@@ -46,7 +46,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       if (price) {
         market.description = `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(
           price.value,
-        )} ${date.timeFromNow.asDefault(date.fromNanoseconds(market.ends_at))}?`;
+        )}?`;
       }
 
       const outcomeTokens = (
@@ -84,11 +84,46 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     }
   };
 
+  const updatePriceMarketDescription = async () => {
+    const market = marketContractValues?.market;
+    const price = marketContractValues?.price;
+
+    if (!market || !price) {
+      return;
+    }
+
+    market.description =
+      date.now().valueOf() > date.client(date.fromNanoseconds(market.ends_at)).valueOf()
+        ? `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(price.value)}?`
+        : `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(
+            price.value,
+          )} ${date.timeFromNow.asDefault(date.fromNanoseconds(market.ends_at))}?`;
+
+    setMarketContractValues((prev) => ({
+      ...prev!,
+      price,
+    }));
+  };
+
   useEffect(() => {
     if (!preventLoad) {
       fetchMarketContractValues();
     }
   }, [marketId, preventLoad]);
+
+  useEffect(() => {
+    if (!marketContractValues?.price) {
+      return undefined;
+    }
+
+    const interval = setInterval(async () => {
+      updatePriceMarketDescription();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [marketContractValues?.price]);
 
   const assertWalletConnection = () => {
     if (!wallet.isConnected) {

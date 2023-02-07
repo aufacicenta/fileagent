@@ -6,4 +6,25 @@
   &__info-card {
     margin-bottom: $space-s;
   }
+
+  &__start-end-time {
+    margin-bottom: $space-m;
+
+    &--text {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        text-decoration: none;
+
+        &:last-child {
+          margin-left: 3px;
+        }
+      }
+    }
+  }
+
+  &__dates-element {
+    margin-bottom: $space-default;
+  }
 }

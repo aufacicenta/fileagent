@@ -23,14 +23,16 @@ const fetchFeedResult = async (jobs: Array<Job>) => {
 
     const data: SwitchboardFeedResponse = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     return data;
   } catch (error) {
     console.log(error);
   }
 
-  return null;
+  return {
+    result: 0,
+  };
 };
 
 export default fetchFeedResult;

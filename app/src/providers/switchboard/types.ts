@@ -58,7 +58,7 @@ export type Receipt = {
 
 export type SwitchboardFeedResponse = {
   result: string;
-  results: string[];
-  receipts: Receipt[];
-  task_runner_version: string;
+  results?: string[];
+  receipts?: Receipt[];
+  task_runner_version?: string;
 };

@@ -32,11 +32,42 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   onClickOutcomeToken,
   onClickMarketTitle,
   currentResultElement,
+  datesElement,
 }) => {
   const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
     marketContractValues;
 
   const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
+
+  const getDatesElement = () => {
+    if (!datesElement) {
+      return (
+        <>
+          <Typography.Description className={styles["market-card__start-end-time--text"]}>
+            <span>Event starts</span>
+            <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
+          </Typography.Description>
+          <Typography.Description className={styles["market-card__start-end-time--text"]}>
+            <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
+          </Typography.Description>
+          <Typography.MiniDescription align="right">
+            *market closes {marketClosesIn} minutes <strong>after event starts</strong>.
+          </Typography.MiniDescription>
+          <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
+            <span>Resolution date</span>
+            <span>{resolutionWindow ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset) : "TBD*"}</span>
+          </Typography.Description>
+          {!resolutionWindow && (
+            <Typography.MiniDescription align="right">
+              *when event ends and DAO proposals are published.
+            </Typography.MiniDescription>
+          )}
+        </>
+      );
+    }
+
+    return datesElement;
+  };
 
   return (
     <Card className={clsx(styles["market-card"], className)}>
@@ -55,27 +86,8 @@ export const MarketCard: React.FC<MarketCardProps> = ({
             </Typography.Text>
             <HorizontalLine />
             <div className={styles["market-card__start-end-time"]}>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Event starts</span>
-                <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
-              </Typography.Description>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
-              </Typography.Description>
-              <Typography.MiniDescription align="right">
-                *market closes {marketClosesIn} minutes <strong>after event starts</strong>.
-              </Typography.MiniDescription>
-              <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution date</span>
-                <span>
-                  {resolutionWindow ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset) : "TBD*"}
-                </span>
-              </Typography.Description>
-              {!resolutionWindow && (
-                <Typography.MiniDescription align="right">
-                  *when event ends and DAO proposals are published.
-                </Typography.MiniDescription>
-              )}
+              {getDatesElement()}
+
               <Typography.Description className={styles["market-card__start-end-time--text"]}>
                 <span>Resolution mechanism</span>
                 {/* @TODO update to Switchboard feed URL */}

@@ -10,6 +10,7 @@ export type MarketCardProps = {
   marketId: string;
   expanded?: boolean;
   currentResultElement?: ReactNode;
+  datesElement?: ReactNode;
   className?: string;
 };
 
