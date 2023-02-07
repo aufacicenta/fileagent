@@ -16,6 +16,7 @@ import useNearMarketContract from "providers/near/contracts/market/useNearMarket
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
+import date from "providers/date";
 
 import styles from "./SwapCard.module.scss";
 import { SwapCardForm, SwapCardProps, Token } from "./SwapCard.types";
@@ -38,6 +39,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     isResolved,
     isResolutionWindowExpired,
     outcomeTokens,
+    resolution,
   },
   selectedOutcomeToken,
   setSelectedOutcomeToken,
@@ -61,7 +63,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
   const canClaim = isResolved || (isOver && isResolutionWindowExpired);
-  const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isResolved;
   const endedUnresolved = isOver && isResolutionWindowExpired && !isResolved;
   const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
@@ -190,19 +191,20 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       );
     }
 
-    if (isResolutionWindowOpen) {
-      return (
-        <Button fullWidth onClick={MarketContract.onClickResolveMarket}>
-          Submit to Resolution
-        </Button>
-      );
-    }
-
     if (isUnderResolution) {
+      const resolutionMinutes = date
+        .client(date.fromNanoseconds(resolution.window) - date.fromNanoseconds(market.ends_at))
+        .minutes();
+
       return (
-        <Button fullWidth disabled>
-          Market is under resolution
-        </Button>
+        <>
+          <Button fullWidth disabled>
+            Market is under resolution
+          </Button>
+          <Typography.MiniDescription align="center">
+            Resolution window: {resolutionMinutes} minutes
+          </Typography.MiniDescription>
+        </>
       );
     }
 

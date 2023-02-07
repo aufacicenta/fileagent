@@ -28,6 +28,7 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
   ssr: false,
 });
 
+// @TODO markets will be resolved automatically after event ends (server side)
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
@@ -56,7 +57,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
       const timezoneOffset = 0;
 
       const starts_at = date.now().utcOffset(timezoneOffset);
-      const ends_at = startsAt.clone().add(30, "minutes");
+      const ends_at = starts_at.clone().add(30, "minutes");
 
       const dao_account_id = near.getConfig().marketDaoAccountId;
 
@@ -107,8 +108,6 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
           target_currency_symbol: "USD",
         },
       };
-
-      // @TODO validate args, highlight fields if something's missing
 
       await MarketFactoryContract.createMarket(args);
     } catch {

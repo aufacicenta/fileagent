@@ -36,7 +36,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       const isResolved = await contract.isResolved();
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
-      // @TODO set to actual feed_id from current contract
       const resolution = await contract.getResolutionData();
 
       if (!market || !collateralTokenMetadata || !feeRatio) {
@@ -72,6 +71,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
         buySellTimestamp,
         resolution: {
           ...resolution,
+          // @TODO set to actual feed_id from current contract
           feed_id: "CfHFMUiP8BbTGkt9AvTFYzVPgoNxCz16zPD6huoRUwUB",
         },
         price,
