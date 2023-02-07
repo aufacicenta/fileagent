@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
 import { Typography } from "ui/typography/Typography";
@@ -11,32 +13,6 @@ export const MarketOptions = ({
 }: MarketOptionsProps) => (
   <>
     {market.options.map((option, id) => {
-      if (!isResolved && outcomeTokens?.length === 0) {
-        return (
-          <Button
-            color="secondary"
-            fullWidth
-            className={styles["market-options__actions-button"]}
-            key={option}
-            disabled
-          >
-            <span
-              className={styles["market-options__actions-button-dot"]}
-              style={{ backgroundColor: pulse.constants.COMPLEMENTARY_COLORS[id] }}
-            />{" "}
-            <Typography.Text flat truncate inline>
-              {option}
-            </Typography.Text>{" "}
-            <span className={styles["market-options__actions-button-percentage"]}>
-              {Number(100 / market.options.length)
-                .toFixed(2)
-                .toString()}
-              %
-            </span>
-          </Button>
-        );
-      }
-
       const outcomeToken = outcomeTokens![id];
       const totalSupply = outcomeTokens?.reduce<number>((prev, current) => prev + current.total_supply, 0);
       const weight =
@@ -50,7 +26,9 @@ export const MarketOptions = ({
         <Button
           color="secondary"
           fullWidth
-          className={styles["market-options__actions-button"]}
+          className={clsx(styles["market-options__actions-button"], {
+            [styles["market-options__actions-button--winner"]]: isResolved && outcomeToken.is_active,
+          })}
           key={option}
           onClick={() => onClickOutcomeToken(outcomeToken)}
         >
