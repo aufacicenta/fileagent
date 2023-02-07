@@ -1,0 +1,9 @@
+@import "src/theme/base";
+
+.price-market {
+  display: block;
+
+  &__info-card {
+    margin-bottom: $space-s;
+  }
+}
