@@ -44,6 +44,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   selectedOutcomeToken,
   setSelectedOutcomeToken,
   marketId,
+  isBettingEnabled,
 }) => {
   const [fromToken, setFromToken] = useState<Token>({ symbol: "", amount: 0 });
   const [toToken, setToToken] = useState<Token>({ symbol: "", amount: 0 });
@@ -182,6 +183,42 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     await (isOver && isResolved ? sell(amount) : buy(amount));
   };
 
+  const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOutcomeToken(outcomeTokens![id as number]);
+  };
+
+  const onClickHalfBalance = (setFromTokenInputValue: (value: string) => void) => {
+    const amount = Number(balance) / 2;
+    setFromTokenInputValue(amount.toString());
+    getBuyRate(amount);
+  };
+
+  const onClickMaxBalance = (setFromTokenInputValue: (value: string) => void) => {
+    const amount = Number(balance);
+    setFromTokenInputValue(amount.toString());
+    getBuyRate(amount);
+  };
+
+  const onClickResolveMarket = async () => {
+    await MarketContract.onClickResolveMarket();
+  };
+
+  const getMarketTitle = () => {
+    if (canClaim) {
+      return t("swapCard.title.claim");
+    }
+
+    if (isUnderResolution) {
+      return t("swapCard.title.underResolution");
+    }
+
+    if (!isBettingEnabled) {
+      return t("swapCard.title.bettingExpired");
+    }
+
+    return t("swapCard.title");
+  };
+
   const getSubmitButton = () => {
     if (!wallet.isConnected) {
       return (
@@ -198,10 +235,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
       return (
         <>
-          <Button fullWidth disabled>
-            Market is under resolution
+          <Button fullWidth onClick={onClickResolveMarket} className={styles["swap-card__button--resolve-market"]}>
+            Resolve Market
           </Button>
-          <Typography.MiniDescription align="center">
+          <Typography.MiniDescription align="center" flat>
             Resolution window: {resolutionMinutes} minutes
           </Typography.MiniDescription>
         </>
@@ -220,8 +257,23 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
     if (canClaim) {
       return (
-        <Button fullWidth type="submit">
-          {t("swapCard.sell")}
+        <>
+          <Button fullWidth type="submit" className={styles["swap-card__button--resolve-market"]}>
+            {t("swapCard.sell")}
+          </Button>
+          {resolution.resolved_at && (
+            <Typography.MiniDescription align="center" flat>
+              Resolved at: {date.fromTimestampWithOffset(resolution.resolved_at, market.utc_offset)}
+            </Typography.MiniDescription>
+          )}
+        </>
+      );
+    }
+
+    if (!isBettingEnabled) {
+      return (
+        <Button fullWidth disabled>
+          Betting is over
         </Button>
       );
     }
@@ -241,22 +293,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     );
   };
 
-  const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOutcomeToken(outcomeTokens![id as number]);
-  };
-
-  const onClickHalfBalance = (setFromTokenInputValue: (value: string) => void) => {
-    const amount = Number(balance) / 2;
-    setFromTokenInputValue(amount.toString());
-    getBuyRate(amount);
-  };
-
-  const onClickMaxBalance = (setFromTokenInputValue: (value: string) => void) => {
-    const amount = Number(balance);
-    setFromTokenInputValue(amount.toString());
-    getBuyRate(amount);
-  };
-
   // @TODO i18n
   return (
     <RFForm
@@ -271,9 +307,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
         <form onSubmit={handleSubmit}>
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
-              <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {canClaim ? t("swapCard.title.claim") : t("swapCard.title")}
-              </Typography.Headline2>
+              <Typography.Headline2 className={styles["swap-card__buy-sell"]}>{getMarketTitle()}</Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>
                   {t("swapCard.balance")}: {balance} {fromToken.symbol}

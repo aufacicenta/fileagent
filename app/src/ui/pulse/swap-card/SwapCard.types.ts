@@ -12,6 +12,7 @@ export type SwapCardProps = {
   selectedOutcomeToken: OutcomeToken;
   setSelectedOutcomeToken: Dispatch<SetStateAction<OutcomeToken | undefined>>;
   marketId: AccountId;
+  isBettingEnabled: boolean;
   children?: ReactNode;
   className?: string;
 };

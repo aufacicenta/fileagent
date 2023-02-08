@@ -1,6 +1,8 @@
 {
   "swapCard.title": "Market Is Open",
   "swapCard.title.claim": "Market Ended",
+  "swapCard.title.bettingExpired": "Betting Is Over",
+  "swapCard.title.underResolution": "Market Is Under Resolution",
   "swapCard.balance": "Balance",
   "swapCard.overview": "Overview",
   "swapCard.rate": "Rate",

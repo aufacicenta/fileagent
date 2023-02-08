@@ -9,7 +9,7 @@ export const toNanoseconds = (date: number) => date * 1000000;
 export const fromNanoseconds = (date: number) => date / 1000000;
 
 export const fromTimestampWithOffset = (timestamp: number, utcOffset: number) =>
-  `${moment(fromNanoseconds(timestamp)).format("ddd, MMM DD YYYY hh:mm A")} GMT${
+  `${moment(fromNanoseconds(timestamp)).utcOffset(utcOffset).format("ddd, MMM DD YYYY hh:mm A")} GMT${
     utcOffset < 0 ? "" : "+"
   }${utcOffset}:00`;
 

@@ -1,5 +1,8 @@
 import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
+import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
+import { BN } from "bn.js";
+import { FinalExecutionStatus } from "near-api-js/lib/providers";
 
 import near from "providers/near";
 
@@ -59,6 +62,45 @@ export class MarketContract {
     return [new MarketContract(contract), contract];
   }
 
+  static async aggregatorRead(wallet: Wallet, contractAddress: AccountId) {
+    try {
+      const gas = new BN("300000000000000");
+      const deposit = "0";
+
+      const response = await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "aggregator_read",
+                  args: {},
+                  gas: gas.toString(),
+                  deposit,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const [result] = response as Array<FinalExecutionOutcome>;
+
+      console.log(result);
+
+      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
+        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
+
+        console.log({ value });
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_AGGREGATOR_READ");
+    }
+  }
+
   async sell(args: SellArgs) {
     try {
       const result = await this.contract.sell(args);
@@ -67,17 +109,6 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_SELL");
-    }
-  }
-
-  async aggregator_read() {
-    try {
-      const result = await this.contract.aggregator_read();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_AGGREGATOR_READ");
     }
   }
 

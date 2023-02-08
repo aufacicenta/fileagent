@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import Countdown from "react-countdown";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -16,10 +15,6 @@ import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
 import { Button } from "ui/button/Button";
 import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
-import { DeployMarketContractArgs } from "providers/near/contracts/market-factory/market-factory.types";
-import pulse from "providers/pulse";
-import near from "providers/near";
-import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 
 import { PriceMarketProps } from "./PriceMarket.types";
@@ -33,6 +28,7 @@ const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCar
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContractValues, marketId }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
+  const [isBettingEnabled, setIsBettingEnabled] = useState(true);
 
   const toast = useToastContext();
 
@@ -43,6 +39,9 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
 
   const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
   const startsAt = date.client(date.fromNanoseconds(market.starts_at));
+  const bettingTimestamp = startsAt.clone().add(diff, "minutes").valueOf();
+
+  const bettingPeriodExpired = () => date.now().valueOf() > bettingTimestamp;
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);
@@ -55,62 +54,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
 
   const onClickCreatePriceMarket = async () => {
     try {
-      const timezoneOffset = 0;
-
-      const starts_at = date.now().utcOffset(timezoneOffset);
-      const ends_at = starts_at.clone().add(30, "minutes");
-
-      const dao_account_id = near.getConfig().marketDaoAccountId;
-
-      const collateralToken = pulse.getConfig().COLLATERAL_TOKENS[0];
-
-      const resolutionWindow = ends_at.clone().add(5, "minutes");
-
-      // @TODO set to the corresponding Switchboard aggregator feed address
-      const ix = {
-        address: [
-          173, 62, 255, 125, 45, 251, 162, 167, 128, 129, 25, 33, 146, 248, 118, 134, 118, 192, 215, 84, 225, 222, 198,
-          48, 70, 49, 212, 195, 84, 136, 96, 56,
-        ],
-      };
-
-      const current_price = (await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd)).toFixed(2);
-
-      const args: DeployMarketContractArgs = {
-        market: {
-          description: "",
-          info: "",
-          category: "crypto",
-          options: ["yes", "no"],
-          starts_at: date.toNanoseconds(starts_at.valueOf()),
-          ends_at: date.toNanoseconds(ends_at.valueOf()),
-          utc_offset: timezoneOffset,
-        },
-        collateral_token: {
-          id: collateralToken.accountId,
-          decimals: collateralToken.decimals,
-          balance: 0,
-          fee_balance: 0,
-        },
-        fees: {
-          // 2% of 6 precision decimals
-          fee_ratio: DEFAULT_FEE_RATIO,
-        },
-        resolution: {
-          window: date.toNanoseconds(resolutionWindow.valueOf()),
-          ix,
-        },
-        management: {
-          dao_account_id,
-        },
-        price: {
-          value: Number(current_price),
-          base_currency_symbol: "BTC",
-          target_currency_symbol: "USD",
-        },
-      };
-
-      await MarketFactoryContract.createMarket(args);
+      await MarketFactoryContract.createPriceMarket();
     } catch {
       toast.trigger({
         variant: "error",
@@ -128,14 +72,18 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
   }, [outcomeTokens]);
 
   useEffect(() => {
+    updateCurrentPrice();
+    setIsBettingEnabled(!bettingPeriodExpired());
+
     const interval = setInterval(async () => {
       updateCurrentPrice();
-    }, 5000);
 
-    if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
-      updateCurrentPrice();
-      clearInterval(interval);
-    }
+      if (bettingPeriodExpired()) {
+        updateCurrentPrice();
+        setIsBettingEnabled(false);
+        clearInterval(interval);
+      }
+    }, 5000);
 
     return () => {
       clearInterval(interval);
@@ -164,7 +112,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
           <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
             <Typography.Description>Time left to bet</Typography.Description>
             <Typography.Headline3>
-              <Countdown date={startsAt.clone().add(diff, "minutes").valueOf()} />
+              <Countdown date={bettingTimestamp} />
             </Typography.Headline3>
           </Grid.Col>
         </Grid.Row>
@@ -176,7 +124,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
   };
 
   const getDatesElement = () => {
-    if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
+    if (bettingPeriodExpired()) {
       return (
         <Typography.Description className={styles["price-market__start-end-time--text"]}>
           <span>Betting ended</span> <span>be ready for the next round!</span>
@@ -212,6 +160,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
               selectedOutcomeToken={selectedOutcomeToken}
               setSelectedOutcomeToken={setSelectedOutcomeToken}
               marketId={marketId}
+              isBettingEnabled={isBettingEnabled}
             />
           )}
         </Grid.Col>

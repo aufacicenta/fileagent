@@ -8,6 +8,12 @@
   display: block;
   margin-top: $space-ml;
 
+  &__button {
+    &--resolve-market {
+      margin-bottom: $space-default;
+    }
+  }
+
   &__balance {
     display: block;
 

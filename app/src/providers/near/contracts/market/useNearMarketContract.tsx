@@ -21,7 +21,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
 
   const toast = useToastContext();
-  const wallet = useWalletStateContext();
+  const walletState = useWalletStateContext();
 
   const fetchMarketContractValues = async () => {
     try {
@@ -119,6 +119,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
       return undefined;
     }
 
+    updatePriceMarketDescription();
+
     const interval = setInterval(async () => {
       updatePriceMarketDescription();
     }, 5000);
@@ -129,7 +131,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   }, [marketContractValues?.price]);
 
   const assertWalletConnection = () => {
-    if (!wallet.isConnected) {
+    if (!walletState.isConnected) {
       toast.trigger({
         variant: "info",
         withTimeout: true,
@@ -147,8 +149,8 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
-      const balance = await contract.balanceOf({ outcome_id, account_id: wallet.address! });
+      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
+      const balance = await contract.balanceOf({ outcome_id, account_id: walletState.address! });
 
       return balance;
     } catch {
@@ -160,7 +162,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
       const balance = await contract.getAmountMintable(args);
 
       return balance;
@@ -183,7 +185,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
       const balance = await contract.getAmountPayable(args);
 
       return balance;
@@ -206,7 +208,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
+      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
       await contract.sell(args);
     } catch {
       toast.trigger({
@@ -226,8 +228,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(wallet.context.connection!, marketId);
-      const result = await contract.aggregator_read();
+      const result = await MarketContract.aggregatorRead(walletState.context.wallet!, marketId);
 
       return result;
     } catch {

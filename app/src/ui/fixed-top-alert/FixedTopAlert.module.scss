@@ -21,6 +21,7 @@
   p {
     @include atLargeTablet {
       @include text();
+      color: var(--color-background);
     }
     @include miniDescription();
     line-height: $font-size-mini-description;

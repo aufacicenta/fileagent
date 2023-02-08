@@ -51,6 +51,7 @@ export type Styles = {
   "swap-card__balance--half": string;
   "swap-card__balance--half-max": string;
   "swap-card__balance--max": string;
+  "swap-card__button--resolve-market": string;
   "swap-card__buy-sell": string;
   "swap-card__from": string;
   "swap-card__from--amount-input": string;
