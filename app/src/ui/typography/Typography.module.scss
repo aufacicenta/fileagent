@@ -91,9 +91,7 @@
   }
 
   &__mini-description {
-    @include font-properties($typography-mini-description);
-    @include normalizeTypography;
-    color: var(--color-typography-mini-description);
+    @include miniDescription();
   }
 
   &__link {

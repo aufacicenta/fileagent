@@ -4,6 +4,20 @@
 .market-card {
   background-color: var(--color-market-card-background);
 
+  &__row {
+    @include atLargeTablet {
+      flex-direction: row;
+    }
+    flex-direction: row-reverse;
+  }
+
+  &__right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
   &__title {
     font-weight: $font-weight-medium;
     color: var(--color-market-card-title);
@@ -21,7 +35,7 @@
   }
 
   &__start-end-time {
-    margin-bottom: $space-m;
+    display: block;
 
     &--text {
       display: flex;
@@ -55,6 +69,10 @@
   }
 
   &__market-options {
+    @include atLargeTablet {
+      margin-bottom: 0;
+    }
+    margin-bottom: $space-default;
     background-color: var(--color-market-card-background-contrast);
 
     &--card-content {

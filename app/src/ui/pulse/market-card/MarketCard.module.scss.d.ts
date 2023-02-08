@@ -14,6 +14,8 @@ export type Styles = {
   "market-card__market-options--stats": string;
   "market-card__market-options--stats-stat": string;
   "market-card__market-options--title": string;
+  "market-card__right-column": string;
+  "market-card__row": string;
   "market-card__start-end-time": string;
   "market-card__start-end-time--text": string;
   "market-card__title": string;

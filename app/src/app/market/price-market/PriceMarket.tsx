@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import Countdown from "react-countdown";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
@@ -155,10 +156,21 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
 
     return (
       <>
-        <Typography.Description align="right">Current Price</Typography.Description>
-        <Typography.Headline3 align="right" flat>
-          {currentPrice}
-        </Typography.Headline3>
+        <Grid.Row>
+          <Grid.Col className={styles["price-market__current-result-element--current-price"]}>
+            <Typography.Description>Current price</Typography.Description>
+            <Typography.Headline3>{currentPrice}</Typography.Headline3>
+          </Grid.Col>
+          <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
+            <Typography.Description>Time left to bet</Typography.Description>
+            <Typography.Headline3>
+              <Countdown date={startsAt.clone().add(diff, "minutes").valueOf()} />
+            </Typography.Headline3>
+          </Grid.Col>
+        </Grid.Row>
+        <Typography.MiniDescription align="center" flat>
+          * Bets end {diff} minutes after event starts.
+        </Typography.MiniDescription>
       </>
     );
   };
@@ -166,26 +178,13 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketContr
   const getDatesElement = () => {
     if (date.now().valueOf() > startsAt.clone().add(diff, "minutes").valueOf()) {
       return (
-        <>
-          <Typography.Description className={styles["price-market__start-end-time--text"]}>
-            <span>Betting ended</span> <span>be ready for the next round!</span>
-          </Typography.Description>
-          <Typography.MiniDescription align="right">
-            * Bets end {diff} minutes after market opens.
-          </Typography.MiniDescription>
-        </>
+        <Typography.Description className={styles["price-market__start-end-time--text"]}>
+          <span>Betting ended</span> <span>be ready for the next round!</span>
+        </Typography.Description>
       );
     }
 
-    const minutes = startsAt.clone().add(diff, "minutes").diff(date.now(), "minutes");
-    const seconds = startsAt.clone().add(diff, "minutes").diff(date.now(), "seconds");
-    const marketClosesIn = `in ${minutes} minutes, ${seconds} seconds`;
-
-    return (
-      <Typography.Description className={styles["price-market__start-end-time--text"]}>
-        <span>Betting ends</span> <span>{marketClosesIn}</span>
-      </Typography.Description>
-    );
+    return null;
   };
 
   return (

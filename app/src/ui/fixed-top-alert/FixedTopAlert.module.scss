@@ -1,5 +1,6 @@
 @import "src/theme/base";
 @import "src/ui/fixed-top-alert/variables";
+@import "src/ui/typography/mixins";
 
 .fixed-top-alert {
   position: fixed;
@@ -19,10 +20,9 @@
 
   p {
     @include atLargeTablet {
-      font-size: $font-size-text;
-      line-height: $font-size-text;
+      @include text();
     }
-    font-size: $font-size-mini-description;
+    @include miniDescription();
     line-height: $font-size-mini-description;
     color: var(--color-background);
   }

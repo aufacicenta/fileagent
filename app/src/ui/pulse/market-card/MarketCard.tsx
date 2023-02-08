@@ -73,7 +73,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
     <Card className={clsx(styles["market-card"], className)}>
       <Card.Content>
         {!expanded && <div className={styles["market-card__image"]} style={{ backgroundImage: getRandomImage() }} />}
-        <Grid.Row>
+        <Grid.Row className={styles["market-card__row"]}>
           <Grid.Col lg={expanded ? 7 : 12}>
             <Typography.Text
               className={clsx(styles["market-card__title"], className, {
@@ -85,52 +85,17 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               {market.description}
             </Typography.Text>
             <HorizontalLine />
-            <div className={styles["market-card__start-end-time"]}>
-              {getDatesElement()}
 
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution mechanism</span>
-                {/* @TODO update to Switchboard feed URL */}
-                <Typography.Anchor
-                  href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
-                  target="_blank"
-                  truncate
-                >
-                  {resolution.feed_id}
-                  <Icon name="icon-launch" />
-                </Typography.Anchor>
-              </Typography.Description>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Contract</span>
-                <Typography.Anchor
-                  href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
-                  target="_blank"
-                  truncate
-                >
-                  {marketId}
-                  <Icon name="icon-launch" />
-                </Typography.Anchor>
-              </Typography.Description>
-            </div>
-          </Grid.Col>
-          <Grid.Col lg={expanded ? 5 : 12}>
-            {currentResultElement && (
-              <Card className={styles["market-card__current-result-element"]}>
-                <Card.Content className={styles["market-card__current-result-element--card-content"]}>
-                  {currentResultElement}
-                </Card.Content>
-              </Card>
-            )}
             <Card className={styles["market-card__market-options"]}>
               <Card.Content className={styles["market-card__market-options--card-content"]}>
-                <>
+                <div>
                   <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
                     What does the market think?
                   </Typography.Headline5>
                   <div className={styles["market-card__market-options--progres-bar"]}>
                     <MarketOptionsProgress marketContractValues={marketContractValues} />
                   </div>
-                </>
+                </div>
                 <div className={styles["market-card__market-options--actions"]}>
                   {isOver && !isResolved && !expanded && (
                     <Button
@@ -157,6 +122,44 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 </div>
               </Card.Content>
             </Card>
+          </Grid.Col>
+          <Grid.Col lg={expanded ? 5 : 12}>
+            <div className={styles["market-card__right-column"]}>
+              {currentResultElement && (
+                <Card className={styles["market-card__current-result-element"]}>
+                  <Card.Content className={styles["market-card__current-result-element--card-content"]}>
+                    {currentResultElement}
+                  </Card.Content>
+                </Card>
+              )}
+              <div className={styles["market-card__start-end-time"]}>
+                {getDatesElement()}
+
+                <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                  <span>Resolution mechanism</span>
+                  {/* @TODO update to Switchboard feed URL */}
+                  <Typography.Anchor
+                    href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
+                    target="_blank"
+                    truncate
+                  >
+                    {resolution.feed_id}
+                    <Icon name="icon-launch" />
+                  </Typography.Anchor>
+                </Typography.Description>
+                <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                  <span>Contract</span>
+                  <Typography.Anchor
+                    href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
+                    target="_blank"
+                    truncate
+                  >
+                    {marketId}
+                    <Icon name="icon-launch" />
+                  </Typography.Anchor>
+                </Typography.Description>
+              </div>
+            </div>
           </Grid.Col>
         </Grid.Row>
       </Card.Content>

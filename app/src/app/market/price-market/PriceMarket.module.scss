@@ -13,6 +13,17 @@
         margin-bottom: $space-default;
       }
     }
+
+    &--time-left {
+      text-align: right;
+    }
+
+    &--current-price {
+      @include atLargeTablet {
+        text-align: right;
+      }
+      text-align: left;
+    }
   }
 
   &__info-card {
@@ -25,6 +36,7 @@
     &--text {
       display: flex;
       justify-content: space-between;
+      color: var(--color-status-warning);
 
       span {
         text-decoration: none;
