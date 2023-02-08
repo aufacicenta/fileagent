@@ -1,11 +1,9 @@
 @import "src/theme/base";
+@import "./variables";
+@import "./mixins";
 
 .typography {
   position: relative;
-
-  &__inline {
-    display: inline-block;
-  }
 
   &__align {
     &--center {
@@ -17,103 +15,60 @@
     }
   }
 
+  &__inline {
+    display: inline-block;
+  }
+
   &__flat {
     margin-bottom: 0 !important;
   }
 
   &__truncate {
     @extend .typography__inline;
-    width: 120px;
+    width: 140px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
   &__headline1 {
-    @include font-properties($typography-headline-1);
-    @include normalizeTypography;
-    @include atLargeTablet {
-      font-size: $font-size-headline-1;
-    }
-    margin-bottom: $space-s;
-    font-size: rem(18);
-    color: var(--color-typography-headline-1);
+    @include headline1();
   }
 
   &__headline2 {
-    @include font-properties($typography-headline-2);
-    @include normalizeTypography;
-    @include atLargeTablet {
-      font-size: $font-size-headline-2;
-    }
-    font-size: rem(20);
-    color: var(--color-typography-headline-2);
+    @include headline2();
   }
 
   &__headline3 {
-    @include font-properties($typography-headline-3);
-    @include normalizeTypography;
-    @include atLargeTablet {
-      font-size: $font-size-headline-3;
-    }
-    margin-bottom: $space-default;
-    font-size: rem(16);
-    color: var(--color-typography-headline-3);
+    @include headline3();
   }
 
   &__headline4 {
-    @include font-properties($typography-headline-4);
-    @include normalizeTypography;
-    margin-bottom: $space-xs;
-    color: var(--color-typography-headline-4);
-
-    [class^="icon-"],
-    [class*=" icon-"] {
-      font-size: $font-size-headline-4 * 0.75;
-    }
+    @include headline4();
   }
 
   &__headline5 {
-    @include font-properties($typography-headline-5);
-    @include normalizeTypography;
-    margin-top: $space-default;
-    margin-bottom: $space-xs;
-    color: var(--color-typography-headline-5);
+    @include headline5();
   }
 
   &__headline6 {
-    @include font-properties($typography-headline-6);
-    @include normalizeTypography;
-    margin-top: $space-default;
-    margin-bottom: $space-xs;
-    color: var(--color-typography-headline-6);
+    @include headline6();
   }
 
   &__text {
-    @include font-properties($typography-text);
-    @include normalizeTypography;
-    margin-bottom: $space-m;
-    color: var(--color-typography-text);
+    @include text();
   }
 
   &__text-lead {
-    @include font-properties($typography-text-lead);
-    @include normalizeTypography;
-    margin-bottom: $space-m;
-    color: var(--color-typography-text);
+    @include textLead();
   }
 
   &__text-bold {
-    @include font-properties($typography-text-bold);
-    @include normalizeTypography;
-    color: var(--color-typography-text-bold);
+    @include textBold();
   }
 
   &__subtitle {
-    @include font-properties($typography-subtitle);
-    @include normalizeTypography;
-    margin-bottom: $space-xs;
-    color: var(--color-typography-subtitle);
+    @include subtitle();
   }
 
   &__button-label {

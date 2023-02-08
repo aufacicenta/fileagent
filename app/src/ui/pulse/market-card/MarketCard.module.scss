@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/ui/typography/mixins";
 
 .market-card {
   background-color: var(--color-market-card-background);
@@ -8,7 +9,7 @@
     color: var(--color-market-card-title);
 
     &--expanded {
-      @include font-properties($typography-headline-2);
+      @include headline2();
     }
 
     &--hover {

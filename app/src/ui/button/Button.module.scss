@@ -1,6 +1,7 @@
 @import "src/theme/base";
 @import "src/theme/button/primary";
 @import "src/theme/button/button-outline";
+@import "src/ui/typography/variables";
 
 @mixin buttonGradientPrimary {
   background-image: linear-gradient(90deg, #6f86ff, #b372ce 49%, #ff7586);
@@ -96,11 +97,8 @@ $HALF_LOADER_SIZE: 15px;
     padding: 4px 20px;
   }
 
-  // "m" on desktop and "xs" on mobile
-
   &--auto-size {
     padding: 12px 27px;
-    font-size: $font-size-4;
     font-weight: $font-weight-bold;
     line-height: 1.47;
 
@@ -191,8 +189,6 @@ $HALF_LOADER_SIZE: 15px;
       background: rgba(var(--color-dark-5), 0.9);
     }
   }
-
-  // Inverted and text variant
 
   &.button--inverted,
   &.button--text {
@@ -316,8 +312,6 @@ $HALF_LOADER_SIZE: 15px;
       }
     }
   }
-
-  // Outlined variant
 
   &--outlined {
     @extend .button-outline;
@@ -458,8 +452,6 @@ $HALF_LOADER_SIZE: 15px;
       background-color: var(--color-background);
     }
   }
-
-  // Loader classes
 
   &__loading-floating-border {
     @keyframes spin {
