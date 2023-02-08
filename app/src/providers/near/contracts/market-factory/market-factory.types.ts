@@ -13,7 +13,7 @@ export type MarketFactoryContractValues = {
   marketsCount: number;
 };
 
-export type MarketContractMethods = {
+export type MarketFactoryContractMethods = {
   get_markets_list: () => Promise<Array<string>>;
   get_markets_count: () => Promise<number>;
   get_markets: () => Promise<Array<string>>;

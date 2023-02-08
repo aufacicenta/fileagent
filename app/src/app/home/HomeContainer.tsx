@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
-import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { GenericLoader } from "ui/generic-loader/GenericLoader";
 import { Typography } from "ui/typography/Typography";
+import { NearMarketContractContextController } from "context/near/market-contract/NearMarketContractContextController";
 
 import { Home } from "./Home";
 
 export const HomeContainer = () => {
   const [marketId, setMarketId] = useState("");
-  const [preventLoad, setPreventLoad] = useState(true);
-
-  const { marketContractValues } = useNearMarketContract({ marketId, preventLoad });
 
   const toast = useToastContext();
 
@@ -33,7 +30,6 @@ export const HomeContainer = () => {
         }
 
         setMarketId(latestMarketId);
-        setPreventLoad(false);
       } catch {
         toast.trigger({
           variant: "error",
@@ -46,9 +42,13 @@ export const HomeContainer = () => {
     })();
   }, []);
 
-  if (!marketContractValues) {
+  if (!marketId) {
     return <GenericLoader />;
   }
 
-  return <Home marketContractValues={marketContractValues} marketId={marketId} />;
+  return (
+    <NearMarketContractContextController marketId={marketId}>
+      <Home marketId={marketId} />
+    </NearMarketContractContextController>
+  );
 };

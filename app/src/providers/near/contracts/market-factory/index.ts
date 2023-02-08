@@ -8,7 +8,11 @@ import { FinalExecutionStatus } from "near-api-js/lib/providers";
 import near from "providers/near";
 import { AccountId } from "../market/market.types";
 
-import { DeployMarketContractArgs, MarketContractMethods, MarketFactoryContractValues } from "./market-factory.types";
+import {
+  DeployMarketContractArgs,
+  MarketFactoryContractMethods,
+  MarketFactoryContractValues,
+} from "./market-factory.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class MarketFactoryContract {
@@ -16,11 +20,11 @@ export class MarketFactoryContract {
 
   contractAddress: string;
 
-  contract?: Contract & MarketContractMethods;
+  contract?: Contract & MarketFactoryContractMethods;
 
   wallet?: Wallet;
 
-  constructor(contractAddress: AccountId, contract?: Contract & MarketContractMethods, wallet?: Wallet) {
+  constructor(contractAddress: AccountId, contract?: Contract & MarketFactoryContractMethods, wallet?: Wallet) {
     this.contract = contract;
     this.contractAddress = contractAddress;
     this.wallet = wallet;
@@ -41,7 +45,7 @@ export class MarketFactoryContract {
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
     const contractAddress = near.getConfig().marketFactoryAccountId;
 
-    const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+    const contract = near.initContract<MarketFactoryContractMethods>(account, contractAddress, contractMethods);
 
     return new MarketFactoryContract(near.getConfig().marketFactoryAccountId, contract);
   }
@@ -50,7 +54,7 @@ export class MarketFactoryContract {
     const account = await connection.account();
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
-    return near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+    return near.initContract<MarketFactoryContractMethods>(account, contractAddress, contractMethods);
   }
 
   async getMarketsList() {

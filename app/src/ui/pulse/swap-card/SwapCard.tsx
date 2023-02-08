@@ -4,6 +4,7 @@ import { OnChange } from "react-final-form-listeners";
 import { useTranslation } from "next-i18next";
 import { ChangeEvent, useEffect, useState } from "react";
 import _ from "lodash";
+import Countdown from "react-countdown";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
@@ -12,11 +13,11 @@ import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import currency from "providers/currency";
-import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
 import date from "providers/date";
+import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 
 import styles from "./SwapCard.module.scss";
 import { SwapCardForm, SwapCardProps, Token } from "./SwapCard.types";
@@ -57,7 +58,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   const toast = useToastContext();
 
   const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
-  const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
+  const MarketContract = useNearMarketContractContext();
 
   const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
   const ftMetadata = FungibleTokenContract.metadata;
@@ -73,7 +74,11 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const updateOutcomeTokenBalance = async () => {
-    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
+    const outcomeTokenBalance = await MarketContract.getBalanceOf({
+      outcome_id: selectedOutcomeToken.outcome_id,
+      account_id: wallet.address!,
+    });
+
     setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
   };
 
@@ -112,6 +117,12 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       setCollateralAsSource();
     }
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
+
+  // useEffect(() => {
+  //   if (!isBettingEnabled && isOver) {
+
+  //   }
+  // }, []);
 
   const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
@@ -203,6 +214,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     await MarketContract.onClickResolveMarket();
   };
 
+  const onResolutionWindowCountdownComplete = async () => {
+    await MarketContract.fetchMarketContractValues();
+  };
+
+  const onTimeLeftBeforeResolutionCountdownComplete = async () => {
+    await MarketContract.fetchMarketContractValues();
+  };
+
   const getMarketTitle = () => {
     if (canClaim) {
       return t("swapCard.title.claim");
@@ -229,9 +248,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     if (isUnderResolution) {
-      const resolutionMinutes = date
-        .client(date.fromNanoseconds(resolution.window) - date.fromNanoseconds(market.ends_at))
-        .minutes();
+      const timeLeft = date.fromNanoseconds(resolution.window);
 
       return (
         <>
@@ -239,7 +256,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
             Resolve Market
           </Button>
           <Typography.MiniDescription align="center" flat>
-            Resolution window: {resolutionMinutes} minutes
+            Time left to resolve: <Countdown date={timeLeft} onComplete={onResolutionWindowCountdownComplete} />
           </Typography.MiniDescription>
         </>
       );
@@ -271,10 +288,18 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     if (!isBettingEnabled) {
+      const timeLeft = date.fromNanoseconds(market.ends_at);
+
       return (
-        <Button fullWidth disabled>
-          Betting is over
-        </Button>
+        <>
+          <Button fullWidth disabled>
+            Betting is over
+          </Button>
+          <Typography.MiniDescription align="center" flat>
+            Time left before resolution:{" "}
+            <Countdown date={timeLeft} onComplete={onTimeLeftBeforeResolutionCountdownComplete} />
+          </Typography.MiniDescription>
+        </>
       );
     }
 

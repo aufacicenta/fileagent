@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { useToastContext } from "hooks/useToastContext/useToastContext";
-import { Typography } from "ui/typography/Typography";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import currency from "providers/currency";
-import date from "providers/date";
-
-import { MarketContract } from ".";
 import {
-  AccountId,
   BalanceOfArgs,
   GetAmountMintableArgs,
   GetAmountPayableArgs,
   MarketContractValues,
   OutcomeToken,
   SellArgs,
-} from "./market.types";
+} from "providers/near/contracts/market/market.types";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
+import { MarketContract } from "providers/near/contracts/market";
+import { Typography } from "ui/typography/Typography";
+import date from "providers/date";
+import currency from "providers/currency";
 
-export default ({ marketId, preventLoad = false }: { marketId: AccountId; preventLoad?: boolean }) => {
+import { NearMarketContractContext } from "./NearMarketContractContext";
+import { NearMarketContractContextControllerProps } from "./NearMarketContractContext.types";
+
+export const NearMarketContractContextController = ({
+  children,
+  marketId,
+}: NearMarketContractContextControllerProps) => {
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
 
   const toast = useToastContext();
@@ -109,12 +113,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
   };
 
   useEffect(() => {
-    if (!preventLoad) {
-      fetchMarketContractValues();
-    }
-  }, [marketId, preventLoad]);
-
-  useEffect(() => {
     if (!marketContractValues?.price) {
       return undefined;
     }
@@ -144,13 +142,13 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     }
   };
 
-  const getBalanceOf = async ({ outcome_id }: Omit<BalanceOfArgs, "account_id">) => {
+  const getBalanceOf = async (args: BalanceOfArgs) => {
     // @TODO check if wallet is connected or display wallet connect modal
     try {
       assertWalletConnection();
 
       const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
-      const balance = await contract.balanceOf({ outcome_id, account_id: walletState.address! });
+      const balance = await contract.balanceOf(args);
 
       return balance;
     } catch {
@@ -244,7 +242,7 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     }
   };
 
-  return {
+  const props = {
     marketContractValues,
     fetchMarketContractValues,
     getBalanceOf,
@@ -253,4 +251,6 @@ export default ({ marketId, preventLoad = false }: { marketId: AccountId; preven
     sell,
     onClickResolveMarket,
   };
+
+  return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;
 };
