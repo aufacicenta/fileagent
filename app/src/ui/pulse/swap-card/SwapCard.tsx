@@ -118,12 +118,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
-  // useEffect(() => {
-  //   if (!isBettingEnabled && isOver) {
-
-  //   }
-  // }, []);
-
   const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
     const amount = Number(currency.convert.toUIntAmount(buyAmount, decimals));

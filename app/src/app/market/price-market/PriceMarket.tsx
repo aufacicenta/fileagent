@@ -34,7 +34,8 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   const { onClickResolveMarket } = useNearMarketContractContext();
   const MarketFactoryContract = useNearMarketFactoryContract();
 
-  const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired } = marketContractValues;
+  const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
+    marketContractValues;
 
   const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
   const startsAt = date.client(date.fromNanoseconds(market.starts_at));
@@ -90,12 +91,12 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   };
 
   const getCurrentResultElement = () => {
-    if (isOver && isResolutionWindowExpired) {
+    if (isResolved || (isOver && isResolutionWindowExpired)) {
       return (
         <div className={styles["price-market__current-result-element--create-market"]}>
           <Typography.Description align="right">Create the next price market and earn fees</Typography.Description>
           <Button size="xs" variant="outlined" color="success" onClick={onClickCreatePriceMarket}>
-            Create Next Market
+            Create Next Price Market
           </Button>
         </div>
       );

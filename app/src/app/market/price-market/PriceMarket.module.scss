@@ -19,9 +19,6 @@
     }
 
     &--current-price {
-      @include atLargeTablet {
-        text-align: right;
-      }
       text-align: left;
     }
   }
