@@ -203,8 +203,7 @@ export const NearMarketContractContextController = ({
     try {
       assertWalletConnection();
 
-      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
-      await contract.sell(args);
+      await MarketContract.sell(walletState.context.wallet!, marketId, args);
     } catch {
       toast.trigger({
         variant: "error",

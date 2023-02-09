@@ -101,11 +101,39 @@ export class MarketContract {
     }
   }
 
-  async sell(args: SellArgs) {
+  static async sell(wallet: Wallet, contractAddress: AccountId, args: SellArgs) {
     try {
-      const result = await this.contract.sell(args);
+      const gas = new BN("300000000000000");
+      const deposit = "0";
 
-      return result;
+      const response = await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "sell",
+                  args,
+                  gas: gas.toString(),
+                  deposit,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const [result] = response as Array<FinalExecutionOutcome>;
+
+      console.log(result);
+
+      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
+        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
+
+        console.log({ value });
+      }
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_SELL");

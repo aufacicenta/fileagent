@@ -208,12 +208,16 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     await MarketContract.onClickResolveMarket();
   };
 
-  const onResolutionWindowCountdownComplete = async () => {
-    await MarketContract.fetchMarketContractValues();
+  const onResolutionWindowCountdownComplete = () => {
+    setTimeout(() => {
+      MarketContract.fetchMarketContractValues();
+    }, 3000);
   };
 
-  const onTimeLeftBeforeResolutionCountdownComplete = async () => {
-    await MarketContract.fetchMarketContractValues();
+  const onTimeLeftBeforeResolutionCountdownComplete = () => {
+    setTimeout(() => {
+      MarketContract.fetchMarketContractValues();
+    }, 3000);
   };
 
   const getMarketTitle = () => {
