@@ -1,19 +1,20 @@
 import { NetworkId } from "@near-wallet-selector/core";
 
 export const DEFAULT_NETWORK_ENV = process.env.NEXT_PUBLIC_DEFAULT_NETWORK_ENV as NetworkId;
-export const DEFAULT_FEE_RATIO = 0.02;
+// 2% of 6 precision decimals
+export const DEFAULT_FEE_RATIO = 20000;
 export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 export const DEFAULT_CLAIMING_WINDOW_DAY_SPAN = 30; // days
 
-const TESTNET_GUEST_WALLET_ID = "nearholdings.testnet";
-const MAINNET_GUEST_WALLET_ID = "communitycapital.near";
+const TESTNET_GUEST_WALLET_ID = "pulsemarkets.testnet";
+const MAINNET_GUEST_WALLET_ID = "pulsemarkets.near";
 
 const TESTNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.testnet";
 const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnik-dao.near";
 const TESTNET_DAO_URL = `https://testnet.app.astrodao.com/dao/${TESTNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 const MAINNET_DAO_URL = `https://app.astrodao.com/dao/${MAINNET_DAO_ACCOUNT_ID}/proposals?status=&category=FunctionCalls`;
 
-const TESTNET_AMM_FACTORY_ACCOUNT_ID = "market-factory-1.pulsemarkets.testnet";
+const TESTNET_AMM_FACTORY_ACCOUNT_ID = "market-factory-2.pulsemarkets.testnet";
 const MAINNET_AMM_FACTORY_ACCOUNT_ID = "factory.pulsemarkets.near";
 
 const TESTNET_CONFIG = {

@@ -1,25 +1,32 @@
 import clsx from "clsx";
+import { useEffect } from "react";
 
 import { Button } from "../button/Button";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
-import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
+import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import near from "providers/near";
 
 import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
 
 export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className }) => {
   const wallet = useWalletStateContext();
-  const selector = useWalletSelectorContext();
+  const nearWalletSelectorContext = useNearWalletSelectorContext();
+
+  useEffect(() => {
+    if (!nearWalletSelectorContext.selector) {
+      return;
+    }
+
+    nearWalletSelectorContext.initModal(near.getConfig().marketFactoryAccountId);
+  }, [nearWalletSelectorContext.selector]);
 
   const handleOnConnectWalletClick = () => {
-    if (wallet.isConnected.get()) {
-      selector.onDisconnect();
-    } else {
-      selector.onConnect(WalletSelectorChain.near);
+    if (!wallet.isConnected) {
+      nearWalletSelectorContext.modal?.show();
     }
   };
 
@@ -31,17 +38,17 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
         variant="outlined"
         onClick={handleOnConnectWalletClick}
         className={styles["wallet-selector--mobile__button"]}
-        rightIcon={<Icon name={wallet.address.get() ? "icon-power" : "icon-power-crossed"} />}
+        rightIcon={<Icon name={wallet.address ? "icon-power" : "icon-power-crossed"} />}
       >
-        {wallet.isConnected.get() ? (
+        {wallet.isConnected ? (
           <Typography.Text inline truncate flat>
-            {wallet.address.get()}
+            {wallet.address}
           </Typography.Text>
         ) : (
           "Connect Wallet"
         )}
       </Button>
-      {wallet.isConnected.get() ? <BalancePill /> : null}
+      {wallet.isConnected ? <BalancePill /> : null}
     </div>
   );
 };

@@ -1,5 +1,9 @@
+import near from "providers/near";
+
 import getConfig from "./getConfig";
 import * as constants from "./constants";
+
+const isMainnet = () => near.getConfig().networkId !== "testnet";
 
 const getCollateralTokenBySymbol = (symbol: string) =>
   getConfig().COLLATERAL_TOKENS.filter((token) => token.symbol === symbol)[0];
@@ -15,4 +19,5 @@ export default {
   getCollateralTokenByAccountId,
   getCollateralTokenIconByAccountId,
   constants,
+  isMainnet,
 };

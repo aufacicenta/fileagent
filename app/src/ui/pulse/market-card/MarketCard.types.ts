@@ -4,12 +4,13 @@ import { MarketContractValues, OutcomeToken } from "providers/near/contracts/mar
 
 export type MarketCardProps = {
   marketContractValues: MarketContractValues;
-  onClickPublishMarket: () => void;
+  onClickResolveMarket: () => void;
   onClickOutcomeToken: (outcomeToken: OutcomeToken) => void;
   onClickMarketTitle?: () => void;
   marketId: string;
   expanded?: boolean;
-  children?: ReactNode;
+  currentResultElement?: ReactNode;
+  datesElement?: ReactNode;
   className?: string;
 };
 

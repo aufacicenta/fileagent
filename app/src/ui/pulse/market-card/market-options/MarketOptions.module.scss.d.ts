@@ -2,6 +2,7 @@ export type Styles = {
   "market-options": string;
   "market-options__actions": string;
   "market-options__actions-button": string;
+  "market-options__actions-button--winner": string;
   "market-options__actions-button-dot": string;
   "market-options__actions-button-percentage": string;
   "market-options__card-content": string;

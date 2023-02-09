@@ -1,0 +1,32 @@
+@import "src/theme/base";
+
+.outcome-tokens-position {
+  display: block;
+
+  &__card {
+    margin-bottom: $space-default;
+    background-color: var(--color-market-card-background-contrast);
+
+    &--content {
+      padding-top: $space-default;
+      padding-bottom: $space-default;
+    }
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    margin-right: -$space-default;
+    margin-left: -$space-default;
+
+    &:nth-child(odd) {
+      background-color: var(--color-background-contrast);
+    }
+  }
+
+  &__col {
+    padding: $space-xs $space-default;
+    text-transform: capitalize;
+    color: var(--color-typography-text);
+  }
+}

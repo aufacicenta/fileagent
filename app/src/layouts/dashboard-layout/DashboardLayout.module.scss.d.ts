@@ -1,6 +1,7 @@
 export type Styles = {
   "dashboard-layout": string;
   "dashboard-layout__sidebar--trigger": string;
+  "dashboard-layout__with-top-alert": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

@@ -17,7 +17,7 @@ export const BalancePill: React.FC<BalancePillProps> = ({ className }) => {
         </div>
         <div className={styles["balance-pill__wrapper--amount"]}>
           <Typography.Description inline truncate>
-            {wallet.balance.get()}
+            {wallet.balance}
           </Typography.Description>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { OnChange } from "react-final-form-listeners";
 import { useTranslation } from "next-i18next";
 import { ChangeEvent, useEffect, useState } from "react";
 import _ from "lodash";
+import Countdown from "react-countdown";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
@@ -12,12 +13,11 @@ import { Button } from "ui/button/Button";
 import pulse from "providers/pulse";
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import currency from "providers/currency";
-import useNearMarketContract from "providers/near/contracts/market/useNearMarketContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useWalletSelectorContext } from "hooks/useWalletSelectorContext/useWalletSelectorContext";
-import { WalletSelectorChain } from "context/wallet/selector/WalletSelectorContext.types";
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
+import date from "providers/date";
+import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 
 import styles from "./SwapCard.module.scss";
 import { SwapCardForm, SwapCardProps, Token } from "./SwapCard.types";
@@ -37,71 +37,77 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     collateralTokenMetadata,
     feeRatio,
     isOver,
-    isOpen,
-    isPublished,
-    isResolutionWindowExpired,
     isResolved,
+    isResolutionWindowExpired,
     outcomeTokens,
+    resolution,
   },
   selectedOutcomeToken,
   setSelectedOutcomeToken,
   marketId,
+  isBettingEnabled,
 }) => {
-  const [fromToken, setFromToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
-  const [toToken, setToToken] = useState<Token>({ price: 0, symbol: "", amount: 0 });
+  const [fromToken, setFromToken] = useState<Token>({ symbol: "", amount: 0 });
+  const [toToken, setToToken] = useState<Token>({ symbol: "", amount: 0 });
   const [balance, setBalance] = useState("0.00");
   const [rate, setRate] = useState("0.00");
   const [fee, setFee] = useState("0.00");
 
   const wallet = useWalletStateContext();
-  const walletSelector = useWalletSelectorContext();
   const { t } = useTranslation(["swap-card"]);
   const toast = useToastContext();
 
   const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
-  const MarketContract = useNearMarketContract({ marketId, preventLoad: true });
+  const MarketContract = useNearMarketContractContext();
 
   const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
   const ftMetadata = FungibleTokenContract.metadata;
 
   const isCollateralSourceToken = () => fromToken.symbol === collateralToken.symbol;
   const canClaim = isResolved || (isOver && isResolutionWindowExpired);
-  const isResolutionWindowOpen = isOver && !isResolutionWindowExpired && !isPublished;
-  const isBettingWindowClosed = !isOpen || isResolutionWindowOpen || canClaim;
+  const endedUnresolved = isOver && isResolutionWindowExpired && !isResolved;
   const isUnderResolution = !isResolved && isOver && !isResolutionWindowExpired;
 
-  const setCollateralAsSource = async () => {
-    setFromToken({
-      price: collateralToken.price,
-      symbol: collateralToken.symbol,
-      amount: 0,
-    });
-
-    setToToken({
-      price: selectedOutcomeToken.price,
-      symbol: market.options[selectedOutcomeToken.outcome_id],
-      amount: 0,
-    });
-
+  const updateCollateralTokenBalance = async () => {
     const collateralTokenBalance = await FungibleTokenContract.getWalletBalance();
     setBalance(collateralTokenBalance);
   };
 
+  const updateOutcomeTokenBalance = async () => {
+    const outcomeTokenBalance = await MarketContract.getBalanceOf({
+      outcome_id: selectedOutcomeToken.outcome_id,
+      account_id: wallet.address!,
+    });
+
+    setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
+  };
+
+  const setCollateralAsSource = async () => {
+    setFromToken({
+      symbol: collateralToken.symbol,
+      amount: 0,
+    });
+
+    setToToken({
+      symbol: market.options[selectedOutcomeToken.outcome_id],
+      amount: 0,
+    });
+
+    updateCollateralTokenBalance();
+  };
+
   const setOutcomeAsSource = async () => {
     setToToken({
-      price: collateralToken.price,
       symbol: collateralToken.symbol,
       amount: 0,
     });
 
     setFromToken({
-      price: selectedOutcomeToken.price,
       symbol: market.options[selectedOutcomeToken.outcome_id],
       amount: 0,
     });
 
-    const outcomeTokenBalance = await MarketContract.getBalanceOf({ outcome_id: selectedOutcomeToken.outcome_id });
-    setBalance(currency.convert.toDecimalsPrecisionString(outcomeTokenBalance, ftMetadata?.decimals!));
+    updateOutcomeTokenBalance();
   };
 
   useEffect(() => {
@@ -110,16 +116,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     } else {
       setCollateralAsSource();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
 
   const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
     const amount = Number(currency.convert.toUIntAmount(buyAmount, decimals));
 
-    const [, exchangeFee, , , amountMintable] = await MarketContract.getAmountMintable({
+    const [amountMintable, exchangeFee] = await MarketContract.getAmountMintable({
       amount,
-      outcome_id: selectedOutcomeToken.outcome_id,
     });
 
     const feeString = currency.convert.fromUIntAmount(exchangeFee, decimals).toString();
@@ -133,10 +137,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = Number(currency.convert.toUIntAmount(sellAmount, decimals));
 
-    const [, amountPayable] = await MarketContract.getAmountPayable({
+    const [amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
-      balance: collateralTokenMetadata.balance,
     });
 
     const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
@@ -165,6 +168,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     await FungibleTokenContract.ftTransferCall(marketId, amount, selectedOutcomeToken.outcome_id);
+
+    updateCollateralTokenBalance();
   };
 
   const sell = async (sellAmount: string) => {
@@ -180,55 +185,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
 
-    await (isOver && isResolved ? sell(amount) : buy(amount));
-  };
-
-  const getSubmitButton = () => {
-    if (!wallet.isConnected.get()) {
-      return (
-        <Button fullWidth onClick={() => walletSelector.onConnect(WalletSelectorChain.near)}>
-          {canClaim ? "Connect to Claim" : "Connect to Bet"}
-        </Button>
-      );
-    }
-
-    if (isResolutionWindowOpen) {
-      return (
-        <Button fullWidth onClick={MarketContract.onClickPublishMarket}>
-          Submit to Resolution
-        </Button>
-      );
-    }
-
-    if (isUnderResolution) {
-      return (
-        <Button fullWidth disabled>
-          Market is under resolution
-        </Button>
-      );
-    }
-
-    if (isBettingWindowClosed) {
-      return (
-        <Button fullWidth disabled>
-          Betting is Closed
-        </Button>
-      );
-    }
-
-    if (canClaim) {
-      return (
-        <Button fullWidth type="submit">
-          {t("swapCard.sell")}
-        </Button>
-      );
-    }
-
-    return (
-      <Button fullWidth type="submit">
-        {isCollateralSourceToken() ? t("swapCard.buy") : t("swapCard.sell")}
-      </Button>
-    );
+    await (canClaim || endedUnresolved ? sell(amount) : buy(amount));
   };
 
   const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
@@ -247,6 +204,119 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     getBuyRate(amount);
   };
 
+  const onClickResolveMarket = async () => {
+    await MarketContract.onClickResolveMarket();
+  };
+
+  const onResolutionWindowCountdownComplete = () => {
+    setTimeout(() => {
+      MarketContract.fetchMarketContractValues();
+    }, 3000);
+  };
+
+  const onTimeLeftBeforeResolutionCountdownComplete = () => {
+    setTimeout(() => {
+      MarketContract.fetchMarketContractValues();
+    }, 3000);
+  };
+
+  const getMarketTitle = () => {
+    if (canClaim) {
+      return t("swapCard.title.claim");
+    }
+
+    if (isUnderResolution) {
+      return t("swapCard.title.underResolution");
+    }
+
+    if (!isBettingEnabled) {
+      return t("swapCard.title.bettingExpired");
+    }
+
+    return t("swapCard.title");
+  };
+
+  const getSubmitButton = () => {
+    if (!wallet.isConnected) {
+      return (
+        <Button disabled fullWidth>
+          {canClaim ? "Connect to Claim" : "Connect to Bet"}
+        </Button>
+      );
+    }
+
+    if (isUnderResolution) {
+      const timeLeft = date.fromNanoseconds(resolution.window);
+
+      return (
+        <>
+          <Button fullWidth onClick={onClickResolveMarket} className={styles["swap-card__button--resolve-market"]}>
+            Resolve Market
+          </Button>
+          <Typography.MiniDescription align="center" flat>
+            Time left to resolve: <Countdown date={timeLeft} onComplete={onResolutionWindowCountdownComplete} />
+          </Typography.MiniDescription>
+        </>
+      );
+    }
+
+    if (endedUnresolved) {
+      return (
+        <>
+          <Typography.MiniDescription>Market was not resolved</Typography.MiniDescription>
+          <Button fullWidth type="submit">
+            Withdraw your bet
+          </Button>
+        </>
+      );
+    }
+
+    if (canClaim) {
+      return (
+        <>
+          <Button fullWidth type="submit" className={styles["swap-card__button--resolve-market"]}>
+            {t("swapCard.sell")}
+          </Button>
+          {resolution.resolved_at && (
+            <Typography.MiniDescription align="center" flat>
+              Resolved at: {date.fromTimestampWithOffset(resolution.resolved_at, market.utc_offset)}
+            </Typography.MiniDescription>
+          )}
+        </>
+      );
+    }
+
+    if (!isBettingEnabled) {
+      const timeLeft = date.fromNanoseconds(market.ends_at);
+
+      return (
+        <>
+          <Button fullWidth disabled>
+            Betting is over
+          </Button>
+          <Typography.MiniDescription align="center" flat>
+            Time left before resolution:{" "}
+            <Countdown date={timeLeft} onComplete={onTimeLeftBeforeResolutionCountdownComplete} />
+          </Typography.MiniDescription>
+        </>
+      );
+    }
+
+    if (isCollateralSourceToken()) {
+      return (
+        <Button fullWidth type="submit">
+          {FungibleTokenContract.actions.ftTransferCall.isLoading ? t("swapCard.buying") : t("swapCard.buy")}
+        </Button>
+      );
+    }
+
+    return (
+      <Button fullWidth type="submit">
+        {t("swapCard.sell")}
+      </Button>
+    );
+  };
+
   // @TODO i18n
   return (
     <RFForm
@@ -261,9 +331,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
         <form onSubmit={handleSubmit}>
           <Card className={clsx(styles["swap-card"], className)}>
             <Card.Content>
-              <Typography.Headline2 className={styles["swap-card__buy-sell"]}>
-                {isBettingWindowClosed ? t("swapCard.title.claim") : t("swapCard.title")}
-              </Typography.Headline2>
+              <Typography.Headline2 className={styles["swap-card__buy-sell"]}>{getMarketTitle()}</Typography.Headline2>
               <div className={styles["swap-card__balance--container"]}>
                 <Typography.Description className={styles["swap-card__balance--amount"]}>
                   {t("swapCard.balance")}: {balance} {fromToken.symbol}
@@ -326,7 +394,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                 {!canClaim && (
                   <div className={styles["swap-card__overview-card--row"]}>
                     <Typography.Text flat>
-                      {t("swapCard.estimatedFee")} ({Number(feeRatio) * 100}%)
+                      {t("swapCard.estimatedFee")} (
+                      {Number(currency.convert.fromUIntAmount(feeRatio, ftMetadata?.decimals!)) * 100}%)
                     </Typography.Text>
                     {fromToken.symbol === collateralToken.symbol ? (
                       <Typography.Text flat>
@@ -335,14 +404,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                     ) : (
                       <Typography.Text flat>none for sells</Typography.Text>
                     )}
-                  </div>
-                )}
-                {!canClaim && (
-                  <div className={styles["swap-card__overview-card--row"]}>
-                    <Typography.Text flat>Price</Typography.Text>
-                    <Typography.Text flat>
-                      {Number(toToken.price).toFixed(currency.constants.DEFAULT_DECIMALS_PRECISION).toString()}
-                    </Typography.Text>
                   </div>
                 )}
                 <div className={styles["swap-card__overview-card--row"]}>

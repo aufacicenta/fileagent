@@ -29,17 +29,21 @@ export const WalletStateContextController = ({ children }: { children: ReactNode
   };
 
   const props = {
-    network: { get: () => network, set: setNetwork },
-    address: { get: () => address, set: setAddress },
-    explorer: { get: () => explorer, set: setExplorer },
-    chain: { get: () => chain, set: setChain },
-    balance: { get: () => balance, set: setBalance },
-    isConnected: { get: () => isConnected, set: setIsConnected },
+    setNetwork,
+    setAddress,
+    setExplorer,
+    setChain,
+    setBalance,
+    setIsConnected,
+    setContext,
+    network,
+    address,
+    explorer,
+    chain,
+    balance,
+    isConnected,
     reset,
-    context: {
-      get: () => context,
-      set: setContext,
-    },
+    context,
   };
 
   return <WalletStateContext.Provider value={props}>{children}</WalletStateContext.Provider>;

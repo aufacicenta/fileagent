@@ -8,8 +8,10 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { WalletSelectorNavbar } from "ui/wallet-selector-navbar/WalletSelectorNavbar";
 import { ToastContextController } from "context/toast/ToastContextController";
 import { PulseSidebar } from "ui/pulse/sidebar/PulseSidebar";
+import { NearWalletSelectorContextController } from "context/near/wallet-selector/NearWalletSelectorContextController";
 import { WalletStateContextController } from "context/wallet/state/WalletStateContextController";
-import { WalletSelectorContextController } from "context/wallet/selector/WalletSelectorContextController";
+import { FixedTopAlert } from "ui/fixed-top-alert/FixedTopAlert";
+import { Typography } from "ui/typography/Typography";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
@@ -44,11 +46,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <link rel="preload" href="/icons/icomoon.svg" as="font" crossOrigin="" />
       </Head>
       <WalletStateContextController>
-        <WalletSelectorContextController>
+        <NearWalletSelectorContextController>
           <ToastContextController>
+            <FixedTopAlert>
+              <Typography.Text flat>
+                <strong>Disclaimer</strong>: This is a beta dApp. Pulse contracts have not been audited. Use at your own
+                risk.
+              </Typography.Text>
+            </FixedTopAlert>
             <div id="modal-root" />
             <div id="dropdown-portal" />
-            <div className={clsx(styles["dashboard-layout"])}>
+            <div
+              className={clsx(styles["dashboard-layout"], {
+                [styles["dashboard-layout__with-top-alert"]]: true,
+              })}
+            >
               <PulseSidebar
                 isOpen={isSidebarOpen}
                 handleOpen={() => setSidebarVisibility(true)}
@@ -58,7 +70,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <MainPanel>{children}</MainPanel>
             </div>
           </ToastContextController>
-        </WalletSelectorContextController>
+        </NearWalletSelectorContextController>
       </WalletStateContextController>
     </>
   );

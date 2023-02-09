@@ -1,6 +1,8 @@
 {
   "swapCard.title": "Market Is Open",
-  "swapCard.title.claim": "Market Is Closed",
+  "swapCard.title.claim": "Market Ended",
+  "swapCard.title.bettingExpired": "Betting Is Over",
+  "swapCard.title.underResolution": "Market Is Under Resolution",
   "swapCard.balance": "Balance",
   "swapCard.overview": "Overview",
   "swapCard.rate": "Rate",
@@ -8,5 +10,6 @@
   "swapCard.estimatedFee": "Estimated Fee",
   "swapCard.swap": "Swap",
   "swapCard.buy": "Place Your Bet",
+  "swapCard.buying": "Placing your bet",
   "swapCard.sell": "Claim Your Earnings"
 }

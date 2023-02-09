@@ -7,8 +7,9 @@ import { Button } from "ui/button/Button";
 import { Grid } from "ui/grid/Grid";
 import date from "providers/date";
 import near from "providers/near";
-import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 import { Icon } from "ui/icon/Icon";
+import pulse from "providers/pulse";
+import { OutcomeTokensPosition } from "app/market/outcome-tokens-position/OutcomeTokensPosition";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -28,20 +29,52 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   expanded,
   marketContractValues,
   marketId,
-  onClickPublishMarket,
+  onClickResolveMarket,
   onClickOutcomeToken,
   onClickMarketTitle,
+  currentResultElement,
+  datesElement,
 }) => {
-  const { market, resolutionWindow, isPublished, isOver, collateralTokenMetadata, buySellTimestamp } =
+  const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
     marketContractValues;
 
   const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
+
+  const getDatesElement = () => {
+    if (!datesElement) {
+      return (
+        <>
+          <Typography.Description className={styles["market-card__start-end-time--text"]}>
+            <span>Event starts</span>
+            <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
+          </Typography.Description>
+          <Typography.Description className={styles["market-card__start-end-time--text"]}>
+            <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
+          </Typography.Description>
+          <Typography.MiniDescription align="right">
+            *market closes {marketClosesIn} minutes <strong>after event starts</strong>.
+          </Typography.MiniDescription>
+          <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
+            <span>Resolution date</span>
+            <span>{resolutionWindow ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset) : "TBD*"}</span>
+          </Typography.Description>
+          {!resolutionWindow && (
+            <Typography.MiniDescription align="right">
+              *when event ends and DAO proposals are published.
+            </Typography.MiniDescription>
+          )}
+        </>
+      );
+    }
+
+    return datesElement;
+  };
 
   return (
     <Card className={clsx(styles["market-card"], className)}>
       <Card.Content>
         {!expanded && <div className={styles["market-card__image"]} style={{ backgroundImage: getRandomImage() }} />}
-        <Grid.Row>
+        <Grid.Row className={styles["market-card__row"]}>
           <Grid.Col lg={expanded ? 7 : 12}>
             <Typography.Text
               className={clsx(styles["market-card__title"], className, {
@@ -53,66 +86,24 @@ export const MarketCard: React.FC<MarketCardProps> = ({
               {market.description}
             </Typography.Text>
             <HorizontalLine />
-            <div className={styles["market-card__start-end-time"]}>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Event starts</span>
-                <span>{date.fromTimestampWithOffset(market.starts_at, market.utc_offset)}</span>
-              </Typography.Description>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Event ends</span> <span>{date.fromTimestampWithOffset(market.ends_at, market.utc_offset)}</span>
-              </Typography.Description>
-              <Typography.MiniDescription align="right">
-                *market closes {marketClosesIn} minutes after event starts.
-              </Typography.MiniDescription>
-              <Typography.Description flat={!resolutionWindow} className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution date</span>
-                <span>
-                  {resolutionWindow ? date.fromTimestampWithOffset(resolutionWindow, market.utc_offset) : "TBD*"}
-                </span>
-              </Typography.Description>
-              {!resolutionWindow && (
-                <Typography.MiniDescription align="right">
-                  *when event ends and DAO proposals are published.
-                </Typography.MiniDescription>
-              )}
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Resolution mechanism</span>
-                <Typography.Anchor href={`${near.getConfig(DEFAULT_NETWORK_ENV).marketDaoUrl}`} target="_blank">
-                  {near.getConfig(DEFAULT_NETWORK_ENV).marketDaoAccountId}
-                  <Icon name="icon-launch" />
-                </Typography.Anchor>
-              </Typography.Description>
-              <Typography.Description className={styles["market-card__start-end-time--text"]}>
-                <span>Contract</span>
-                <Typography.Anchor
-                  href={`${near.getConfig(DEFAULT_NETWORK_ENV).explorerUrl}/accounts/${marketId}`}
-                  target="_blank"
-                  truncate
-                >
-                  {marketId}
-                  <Icon name="icon-launch" />
-                </Typography.Anchor>
-              </Typography.Description>
-            </div>
-          </Grid.Col>
-          <Grid.Col lg={expanded ? 5 : 12}>
+
             <Card className={styles["market-card__market-options"]}>
               <Card.Content className={styles["market-card__market-options--card-content"]}>
-                <>
+                <div>
                   <Typography.Headline5 className={clsx(styles["market-card__market-options--title"])}>
                     What does the market think?
                   </Typography.Headline5>
                   <div className={styles["market-card__market-options--progres-bar"]}>
                     <MarketOptionsProgress marketContractValues={marketContractValues} />
                   </div>
-                </>
+                </div>
                 <div className={styles["market-card__market-options--actions"]}>
-                  {isOver && !isPublished && !expanded && (
+                  {isOver && !isResolved && !expanded && (
                     <Button
                       color="primary"
                       fullWidth
                       className={styles["market-card__market-options--actions-button"]}
-                      onClick={onClickPublishMarket}
+                      onClick={onClickResolveMarket}
                     >
                       Submit to Resolution
                     </Button>
@@ -132,6 +123,47 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 </div>
               </Card.Content>
             </Card>
+          </Grid.Col>
+          <Grid.Col lg={expanded ? 5 : 12}>
+            <div className={styles["market-card__right-column"]}>
+              {currentResultElement && (
+                <Card className={styles["market-card__current-result-element"]}>
+                  <Card.Content className={styles["market-card__current-result-element--card-content"]}>
+                    {currentResultElement}
+                  </Card.Content>
+                </Card>
+              )}
+              <div>
+                <OutcomeTokensPosition />
+              </div>
+              <div className={styles["market-card__start-end-time"]}>
+                {getDatesElement()}
+
+                <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                  <span>Resolution mechanism</span>
+                  {/* @TODO update to Switchboard feed URL */}
+                  <Typography.Anchor
+                    href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
+                    target="_blank"
+                    truncate
+                  >
+                    {resolution.feed_id}
+                    <Icon name="icon-launch" />
+                  </Typography.Anchor>
+                </Typography.Description>
+                <Typography.Description className={styles["market-card__start-end-time--text"]}>
+                  <span>Contract</span>
+                  <Typography.Anchor
+                    href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
+                    target="_blank"
+                    truncate
+                  >
+                    {marketId}
+                    <Icon name="icon-launch" />
+                  </Typography.Anchor>
+                </Typography.Description>
+              </div>
+            </div>
           </Grid.Col>
         </Grid.Row>
       </Card.Content>

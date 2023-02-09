@@ -1,0 +1,51 @@
+@import "src/theme/base";
+
+.price-market {
+  display: block;
+
+  &__current-result-element {
+    &--create-market {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      p {
+        margin-bottom: $space-default;
+      }
+    }
+
+    &--time-left {
+      text-align: right;
+    }
+
+    &--current-price {
+      text-align: left;
+    }
+  }
+
+  &__info-card {
+    margin-bottom: $space-s;
+  }
+
+  &__start-end-time {
+    margin-bottom: $space-m;
+
+    &--text {
+      display: flex;
+      justify-content: space-between;
+      color: var(--color-status-warning);
+
+      span {
+        text-decoration: none;
+
+        &:last-child {
+          margin-left: 3px;
+        }
+      }
+    }
+  }
+
+  &__dates-element {
+    margin-bottom: $space-default;
+  }
+}

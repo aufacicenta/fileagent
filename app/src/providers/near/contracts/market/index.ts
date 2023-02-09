@@ -1,6 +1,8 @@
 import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
+import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
 import { BN } from "bn.js";
+import { FinalExecutionStatus } from "near-api-js/lib/providers";
 
 import near from "providers/near";
 
@@ -29,18 +31,23 @@ export class MarketContract {
   }
 
   static async loadFromGuestConnection(contractAddress: string) {
-    const connection = await nearAPI.connect({
-      keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
-      headers: {},
-      ...near.getConfig(),
-    });
+    try {
+      const connection = await nearAPI.connect({
+        keyStore: new nearAPI.keyStores.InMemoryKeyStore(),
+        headers: {},
+        ...near.getConfig(),
+      });
 
-    const account = await connection.account(near.getConfig().guestWalletId);
-    const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
+      const account = await connection.account(near.getConfig().guestWalletId);
+      const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
 
-    const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
+      const contract = near.initContract<MarketContractMethods>(account, contractAddress, contractMethods);
 
-    return new MarketContract(contract);
+      return new MarketContract(contract);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   static async loadFromWalletConnection(
@@ -55,23 +62,78 @@ export class MarketContract {
     return [new MarketContract(contract), contract];
   }
 
-  async publish() {
+  static async aggregatorRead(wallet: Wallet, contractAddress: AccountId) {
     try {
       const gas = new BN("300000000000000");
-      const result = await this.contract.publish({}, gas.toString());
+      const deposit = "0";
 
-      return result;
+      const response = await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "aggregator_read",
+                  args: {},
+                  gas: gas.toString(),
+                  deposit,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const [result] = response as Array<FinalExecutionOutcome>;
+
+      console.log(result);
+
+      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
+        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
+
+        console.log({ value });
+      }
     } catch (error) {
       console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_PUBLISH");
+      throw new Error("ERR_MARKET_CONTRACT_AGGREGATOR_READ");
     }
   }
 
-  async sell(args: SellArgs) {
+  static async sell(wallet: Wallet, contractAddress: AccountId, args: SellArgs) {
     try {
-      const result = await this.contract.sell(args);
+      const gas = new BN("300000000000000");
+      const deposit = "0";
 
-      return result;
+      const response = await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "sell",
+                  args,
+                  gas: gas.toString(),
+                  deposit,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const [result] = response as Array<FinalExecutionOutcome>;
+
+      console.log(result);
+
+      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
+        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
+
+        console.log({ value });
+      }
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_SELL");
@@ -86,6 +148,29 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_GET_MARKET_DATA");
+    }
+  }
+
+  async getPricingData() {
+    try {
+      const result = await this.contract.get_pricing_data();
+
+      return result || undefined;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_PRICING_DATA");
+    }
+  }
+
+  async getResolutionData() {
+    try {
+      const result = await this.contract.get_resolution_data();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("ERR_MARKET_CONTRACT_GET_PRICING_DATA");
     }
   }
 
@@ -117,17 +202,6 @@ export class MarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_GET_OUTCOME_TOKEN");
-    }
-  }
-
-  async isPublished() {
-    try {
-      const result = await this.contract.is_published();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_MARKET_CONTRACT_IS_PUBLISHED");
     }
   }
 
