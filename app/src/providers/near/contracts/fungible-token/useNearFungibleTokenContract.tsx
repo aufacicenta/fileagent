@@ -116,11 +116,13 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
         },
       }));
 
-      const contract = new FungibleTokenContract(contractAddress!, undefined, walletState.context.wallet!);
-
       const msg = JSON.stringify({ BuyArgs: { outcome_id: outcomeId } });
 
-      await contract!.ftTransferCall({ receiver_id: receiverId, amount, msg });
+      await FungibleTokenContract.ftTransferCall(walletState.context.wallet!, contractAddress!, {
+        receiver_id: receiverId,
+        amount,
+        msg,
+      });
     } catch {
       toast.trigger({
         variant: "error",

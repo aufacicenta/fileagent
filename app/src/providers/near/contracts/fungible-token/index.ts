@@ -20,14 +20,11 @@ export class FungibleTokenContract {
 
   contractAddress: AccountId;
 
-  contract?: Contract & FungibleTokenContractMethods;
+  contract: Contract & FungibleTokenContractMethods;
 
-  wallet?: Wallet;
-
-  constructor(contractAddress: AccountId, contract?: Contract & FungibleTokenContractMethods, wallet?: Wallet) {
+  constructor(contractAddress: AccountId, contract: Contract & FungibleTokenContractMethods) {
     this.contract = contract;
     this.contractAddress = contractAddress;
-    this.wallet = wallet;
   }
 
   static async loadFromGuestConnection(contractAddress: string) {
@@ -54,20 +51,14 @@ export class FungibleTokenContract {
     return new FungibleTokenContract(contractAddress, contract);
   }
 
-  async ftTransferCall(args: FtTransferCallArgs) {
+  static async ftTransferCall(wallet: Wallet, contractAddress: AccountId, args: FtTransferCallArgs) {
     try {
       const gas = new BN("60000000000000");
 
-      if (this.contract && !this.wallet) {
-        const result = await this.contract.ft_transfer_call(args, gas.toString(), 1);
-
-        return result;
-      }
-
-      const response = await this.wallet!.signAndSendTransactions({
+      const response = await wallet.signAndSendTransactions({
         transactions: [
           {
-            receiverId: this.contractAddress,
+            receiverId: contractAddress,
             actions: [
               {
                 type: "FunctionCall",
@@ -105,11 +96,9 @@ export class FungibleTokenContract {
 
   async ftBalanceOf(args: FtBalanceOfArgs) {
     try {
-      if (this.contract) {
-        const result = await this.contract.ft_balance_of(args);
+      const result = await this.contract.ft_balance_of(args);
 
-        return result;
-      }
+      return result;
     } catch (error) {
       console.log(error);
     }
@@ -119,11 +108,9 @@ export class FungibleTokenContract {
 
   async ftMetadata() {
     try {
-      if (this.contract) {
-        const result = await this.contract.ft_metadata();
+      const result = await this.contract.ft_metadata();
 
-        return result;
-      }
+      return result;
     } catch (error) {
       console.log(error);
     }
