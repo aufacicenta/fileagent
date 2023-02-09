@@ -143,11 +143,8 @@ export const NearMarketContractContextController = ({
   };
 
   const getBalanceOf = async (args: BalanceOfArgs) => {
-    // @TODO check if wallet is connected or display wallet connect modal
     try {
-      assertWalletConnection();
-
-      const [contract] = await MarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
+      const contract = await MarketContract.loadFromGuestConnection(marketId);
       const balance = await contract.balanceOf(args);
 
       return balance;

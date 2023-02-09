@@ -52,7 +52,7 @@ export default () => {
       const timezoneOffset = 0;
 
       const starts_at = date.now().utcOffset(timezoneOffset);
-      const ends_at = starts_at.clone().add(3, "minutes");
+      const ends_at = starts_at.clone().add(15, "minutes");
 
       const dao_account_id = near.getConfig().marketDaoAccountId;
 

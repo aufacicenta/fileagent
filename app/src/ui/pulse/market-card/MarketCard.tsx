@@ -9,6 +9,7 @@ import date from "providers/date";
 import near from "providers/near";
 import { Icon } from "ui/icon/Icon";
 import pulse from "providers/pulse";
+import { OutcomeTokensPosition } from "app/market/outcome-tokens-position/OutcomeTokensPosition";
 
 import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
@@ -132,6 +133,9 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   </Card.Content>
                 </Card>
               )}
+              <div>
+                <OutcomeTokensPosition />
+              </div>
               <div className={styles["market-card__start-end-time"]}>
                 {getDatesElement()}
 

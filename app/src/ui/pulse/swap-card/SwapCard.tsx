@@ -185,7 +185,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const decimals = ftMetadata?.decimals!;
     const amount = currency.convert.toUIntAmount(fromTokenAmount, decimals);
 
-    await (isOver && isResolved ? sell(amount) : buy(amount));
+    await (canClaim || endedUnresolved ? sell(amount) : buy(amount));
   };
 
   const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
@@ -260,8 +260,9 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return (
         <>
           <Typography.MiniDescription>Market was not resolved</Typography.MiniDescription>
-          {/* @TODO add action to wihdraw unresolved bets */}
-          <Button fullWidth>Withdraw your bet</Button>
+          <Button fullWidth type="submit">
+            Withdraw your bet
+          </Button>
         </>
       );
     }

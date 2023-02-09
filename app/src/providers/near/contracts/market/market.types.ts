@@ -55,6 +55,9 @@ export type OutcomeToken = {
   total_supply: WrappedBalance;
   outcome_id: OutcomeId;
   is_active: boolean;
+  balance_of?: WrappedBalance;
+  value?: string | number;
+  position?: number;
 };
 
 export type MarketContractValues = {
