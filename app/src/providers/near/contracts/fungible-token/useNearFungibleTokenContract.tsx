@@ -23,14 +23,14 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
   const { connection } = walletState.context;
 
   const assertWalletConnection = () => {
-    if (!walletState.isConnected || !walletState.context.wallet?.id) {
+    if (!walletState.isConnected) {
       throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_WALLET_CONNECTION");
     }
   };
 
   const assertGuestContractConnection = () => {
     if (!guestContract) {
-      throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_CONTRACT_CONNECTION");
+      throw new Error("ERR_USE_NEAR_FT_CONTRACT_INVALID_GUEST_CONTRACT_CONNECTION");
     }
   };
 
@@ -73,6 +73,10 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
   }, [connection, contractAddress]);
 
   useEffect(() => {
+    if (!guestContract) {
+      return;
+    }
+
     getFtMetadata();
   }, [guestContract]);
 

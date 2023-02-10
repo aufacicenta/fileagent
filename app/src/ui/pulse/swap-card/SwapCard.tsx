@@ -75,6 +75,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const updateOutcomeTokenBalance = async () => {
+    if (!wallet.isConnected) {
+      return;
+    }
+
     const outcomeTokenBalance = await MarketContract.getBalanceOf({
       outcome_id: selectedOutcomeToken.outcome_id,
       account_id: wallet.address!,

@@ -37,7 +37,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;
 
-  const diff = date.client(market.starts_at + (market.ends_at - buySellTimestamp!)).minutes();
+  const diff = date.client(buySellTimestamp - market.starts_at).minutes();
 
   const bettingPeriodExpired = () => date.now().valueOf() > buySellTimestamp;
 
