@@ -31,15 +31,14 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
 
   const toast = useToastContext();
 
-  const { onClickResolveMarket } = useNearMarketContractContext();
+  const { onClickResolveMarket, bettingPeriodExpired } = useNearMarketContractContext();
   const MarketFactoryContract = useNearMarketFactoryContract();
 
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;
 
   const diff = date.client(buySellTimestamp - market.starts_at).minutes();
-
-  const bettingPeriodExpired = () => date.now().valueOf() > buySellTimestamp;
+  const isBettingPeriodEnding = () => date.client(buySellTimestamp).diff(date.now()) < 1000 * 60;
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
@@ -69,7 +68,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [marketId]);
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);
@@ -109,7 +108,11 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
           </Grid.Col>
           <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
             <Typography.Description>Time left to bet</Typography.Description>
-            <Typography.Headline3>
+            <Typography.Headline3
+              className={clsx({
+                [styles["price-market__current-result-element--time-left-warn"]]: isBettingPeriodEnding(),
+              })}
+            >
               <Countdown date={buySellTimestamp} />
             </Typography.Headline3>
           </Grid.Col>

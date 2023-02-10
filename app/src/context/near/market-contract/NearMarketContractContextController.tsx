@@ -202,6 +202,19 @@ export const NearMarketContractContextController = ({
       assertWalletConnection();
 
       await MarketContract.sell(walletState.context.wallet!, marketId, args);
+
+      toast.trigger({
+        variant: "confirmation",
+        withTimeout: false,
+        // @TODO i18n
+        title: "Success",
+        children: (
+          <Typography.Text>{`Sold ${currency.convert.toDecimalsPrecisionString(
+            args.amount,
+            marketContractValues?.collateralTokenMetadata?.decimals!,
+          )} of "${marketContractValues?.market.options[args.outcome_id]}"`}</Typography.Text>
+        ),
+      });
     } catch {
       toast.trigger({
         variant: "error",
@@ -235,6 +248,9 @@ export const NearMarketContractContextController = ({
     }
   };
 
+  const bettingPeriodExpired = () =>
+    !!marketContractValues?.buySellTimestamp && date.now().valueOf() > marketContractValues.buySellTimestamp;
+
   const props = {
     marketContractValues,
     fetchMarketContractValues,
@@ -243,6 +259,7 @@ export const NearMarketContractContextController = ({
     getAmountPayable,
     sell,
     onClickResolveMarket,
+    bettingPeriodExpired,
   };
 
   return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;

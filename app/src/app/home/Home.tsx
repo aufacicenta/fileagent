@@ -18,7 +18,7 @@ export const Home: React.FC<HomeProps> = ({ className, marketId }) => {
 
   useEffect(() => {
     fetchMarketContractValues();
-  }, []);
+  }, [marketId]);
 
   return (
     <div className={clsx(styles.home, className)}>
