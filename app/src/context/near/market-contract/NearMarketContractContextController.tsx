@@ -34,6 +34,7 @@ export const NearMarketContractContextController = ({
       const price = await contract.getPricingData();
       const resolutionWindow = await contract.getResolutionWindow();
       const buySellTimestamp = await contract.getBuySellTimestamp();
+      const blockTimestamp = await contract.getBlockTimestamp();
       const isOver = await contract.isOver();
       const isOpen = await contract.isOpen();
       const isResolutionWindowExpired = await contract.isResolutionWindowExpired();
@@ -41,10 +42,6 @@ export const NearMarketContractContextController = ({
       const collateralTokenMetadata = await contract.getCollateralTokenMetadata();
       const feeRatio = await contract.getFeeRatio();
       const resolution = await contract.getResolutionData();
-
-      if (!market || !collateralTokenMetadata || !feeRatio) {
-        throw new Error("Failed to fetch market data");
-      }
 
       if (price) {
         market.description = `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(
@@ -59,7 +56,7 @@ export const NearMarketContractContextController = ({
       ).filter(Boolean);
 
       if (!outcomeTokens) {
-        throw new Error("Failed to fetch outcome tokens data");
+        throw new Error("ERR_FAILED_TO_FETCH_OUTCOME_TOKENS");
       }
 
       setMarketContractValues({
@@ -73,6 +70,7 @@ export const NearMarketContractContextController = ({
         outcomeTokens: outcomeTokens as Array<OutcomeToken>,
         feeRatio,
         buySellTimestamp,
+        blockTimestamp,
         resolution: {
           ...resolution,
           // @TODO set to actual feed_id from current contract
@@ -100,11 +98,11 @@ export const NearMarketContractContextController = ({
     }
 
     market.description =
-      date.now().valueOf() > date.client(date.fromNanoseconds(market.ends_at)).valueOf()
+      date.now().valueOf() > market.ends_at
         ? `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(price.value)}?`
         : `Will ${price.base_currency_symbol} be above ${currency.convert.toFormattedString(
             price.value,
-          )} ${date.timeFromNow.asDefault(date.fromNanoseconds(market.ends_at))}?`;
+          )} ${date.timeFromNow.asDefault(market.ends_at)}?`;
 
     setMarketContractValues((prev) => ({
       ...prev!,
@@ -218,7 +216,6 @@ export const NearMarketContractContextController = ({
   };
 
   const onClickResolveMarket = async () => {
-    // @TODO check if wallet is connected or display wallet connect modal
     try {
       assertWalletConnection();
 
@@ -230,7 +227,7 @@ export const NearMarketContractContextController = ({
         variant: "error",
         withTimeout: true,
         // @TODO i18n
-        title: "Failed to publish market",
+        title: "Failed to resolve market",
         children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
       });
 

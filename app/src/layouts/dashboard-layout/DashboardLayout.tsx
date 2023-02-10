@@ -30,7 +30,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     <>
       <Head>
         <title>{t("head.og.title")}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" as="image" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <meta name="description" content={t("head.og.description")} />
@@ -40,10 +40,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <meta property="og:url" content="https://airdrop.pulsemarkets.org/" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
-        <link rel="preload" href="/icons/icomoon.eot" as="font" crossOrigin="" />
-        <link rel="preload" href="/icons/icomoon.ttf" as="font" crossOrigin="" />
-        <link rel="preload" href="/icons/icomoon.woff" as="font" crossOrigin="" />
-        <link rel="preload" href="/icons/icomoon.svg" as="font" crossOrigin="" />
       </Head>
       <WalletStateContextController>
         <NearWalletSelectorContextController>

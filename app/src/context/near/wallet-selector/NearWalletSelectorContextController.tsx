@@ -111,14 +111,22 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   }, []);
 
   useEffect(() => {
+    if (!selector) {
+      return;
+    }
+
     (async () => {
-      const wallet = await selector?.wallet();
+      try {
+        const wallet = await selector?.wallet();
 
-      if (!selector || !wallet) {
-        return;
+        if (!wallet) {
+          return;
+        }
+
+        onSignedIn(selector!);
+      } catch (error) {
+        console.log(error);
       }
-
-      onSignedIn(selector!);
     })();
   }, [selector]);
 
