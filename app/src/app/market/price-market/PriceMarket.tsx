@@ -37,11 +37,9 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;
 
-  const diff = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
-  const startsAt = date.client(date.fromNanoseconds(market.starts_at));
-  const bettingTimestamp = startsAt.clone().add(diff, "minutes").valueOf();
+  const diff = date.client(market.starts_at + (market.ends_at - buySellTimestamp!)).minutes();
 
-  const bettingPeriodExpired = () => date.now().valueOf() > bettingTimestamp;
+  const bettingPeriodExpired = () => date.now().valueOf() > buySellTimestamp;
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
@@ -112,7 +110,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
           <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
             <Typography.Description>Time left to bet</Typography.Description>
             <Typography.Headline3>
-              <Countdown date={bettingTimestamp} />
+              <Countdown date={buySellTimestamp} />
             </Typography.Headline3>
           </Grid.Col>
         </Grid.Row>

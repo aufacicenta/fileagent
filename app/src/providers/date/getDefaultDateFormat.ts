@@ -8,11 +8,14 @@ export const toUtcOffsetNanoseconds = (date?: number | string) =>
 export const toNanoseconds = (date: number) => date * 1000000;
 export const fromNanoseconds = (date: number) => date / 1000000;
 
+export const extractNanoseconds = (date: number) => Number(date.toString().slice(0, 13));
+
 export const fromTimestampWithOffset = (timestamp: number, utcOffset: number) =>
-  `${moment(fromNanoseconds(timestamp)).utcOffset(utcOffset).format("ddd, MMM DD YYYY hh:mm A")} GMT${
+  `${moment(extractNanoseconds(timestamp)).utcOffset(utcOffset).format("ddd, MMM DD YYYY hh:mm A")} GMT${
     utcOffset < 0 ? "" : "+"
   }${utcOffset}:00`;
 
-export const fromTimestamp = (timestamp: number) => `${moment(fromNanoseconds(timestamp)).format("MM/DD/YYYY HH:mm")}`;
+export const fromTimestamp = (timestamp: number) =>
+  `${moment(extractNanoseconds(timestamp)).format("MM/DD/YYYY HH:mm")}`;
 
 export default (date?: Date | string | number) => moment(date || undefined).format("MMM DD, YYYY");

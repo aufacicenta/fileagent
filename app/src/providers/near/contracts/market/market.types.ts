@@ -62,8 +62,9 @@ export type OutcomeToken = {
 
 export type MarketContractValues = {
   market: MarketData;
-  resolutionWindow?: Timestamp;
-  buySellTimestamp?: Timestamp;
+  resolutionWindow: Timestamp;
+  buySellTimestamp: Timestamp;
+  blockTimestamp: Timestamp;
   isOver: boolean;
   isOpen: boolean;
   isResolutionWindowExpired: boolean;
@@ -78,7 +79,7 @@ export type MarketContractValues = {
 export type GetOutcomeTokenArgs = { outcome_id: OutcomeId };
 export type BalanceOfArgs = { outcome_id: OutcomeId; account_id: AccountId };
 export type GetAmountMintableArgs = { amount: WrappedBalance };
-export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
+export type GetAmountPayableArgs = { outcome_id: OutcomeId; amount: WrappedBalance; account_id: AccountId };
 export type SellArgs = { outcome_id: OutcomeId; amount: WrappedBalance };
 
 export type MarketContractMethods = {

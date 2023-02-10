@@ -18,6 +18,7 @@ import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStat
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
 import date from "providers/date";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
+import near from "providers/near";
 
 import styles from "./SwapCard.module.scss";
 import { SwapCardForm, SwapCardProps, Token } from "./SwapCard.types";
@@ -140,6 +141,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const [amountPayable] = await MarketContract.getAmountPayable({
       amount,
       outcome_id: selectedOutcomeToken.outcome_id,
+      account_id: wallet.address || near.getConfig().guestWalletId,
     });
 
     const rateString = currency.convert.fromUIntAmount(amountPayable, decimals);
@@ -246,7 +248,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     if (isUnderResolution) {
-      const timeLeft = date.fromNanoseconds(resolution.window);
+      const timeLeft = resolution.window;
 
       return (
         <>
@@ -287,7 +289,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     if (!isBettingEnabled) {
-      const timeLeft = date.fromNanoseconds(market.ends_at);
+      const timeLeft = market.ends_at;
 
       return (
         <>

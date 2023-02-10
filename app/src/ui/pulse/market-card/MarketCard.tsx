@@ -38,7 +38,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
     marketContractValues;
 
-  const marketClosesIn = date.client(date.fromNanoseconds(market.ends_at - buySellTimestamp!)).minutes();
+  const marketClosesIn = date.client(market.ends_at - buySellTimestamp!).minutes();
 
   const getDatesElement = () => {
     if (!datesElement) {

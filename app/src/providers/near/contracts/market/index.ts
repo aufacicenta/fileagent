@@ -5,6 +5,7 @@ import { BN } from "bn.js";
 import { FinalExecutionStatus } from "near-api-js/lib/providers";
 
 import near from "providers/near";
+import date from "providers/date";
 
 import {
   AccountId,
@@ -144,7 +145,11 @@ export class MarketContract {
     try {
       const result = await this.contract.get_market_data();
 
-      return result;
+      return {
+        ...result,
+        starts_at: date.extractNanoseconds(result.starts_at),
+        ends_at: date.extractNanoseconds(result.ends_at),
+      };
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_GET_MARKET_DATA");
@@ -166,7 +171,11 @@ export class MarketContract {
     try {
       const result = await this.contract.get_resolution_data();
 
-      return result;
+      return {
+        ...result,
+        window: date.extractNanoseconds(result.window),
+        resolved_at: result.resolved_at ? date.extractNanoseconds(result.resolved_at) : undefined,
+      };
     } catch (error) {
       console.log(error);
 
@@ -178,9 +187,10 @@ export class MarketContract {
     try {
       const result = await this.contract.resolution_window();
 
-      return result;
-    } catch {
-      return undefined;
+      return date.extractNanoseconds(result);
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_RESOLUTION_WINDOW");
     }
   }
 
@@ -188,9 +198,21 @@ export class MarketContract {
     try {
       const result = await this.contract.get_buy_sell_timestamp();
 
-      return result;
-    } catch {
-      return undefined;
+      return date.extractNanoseconds(result);
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_BUY_SELL_TIMESTAMP");
+    }
+  }
+
+  async getBlockTimestamp() {
+    try {
+      const result = await this.contract.get_block_timestamp();
+
+      return date.extractNanoseconds(result);
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_GET_BLOCK_TIMESTAMP");
     }
   }
 
