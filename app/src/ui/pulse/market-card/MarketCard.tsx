@@ -35,8 +35,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   currentResultElement,
   datesElement,
 }) => {
-  const { market, resolutionWindow, isOver, collateralTokenMetadata, buySellTimestamp, isResolved, resolution } =
-    marketContractValues;
+  const { market, resolutionWindow, isOver, buySellTimestamp, isResolved, resolution } = marketContractValues;
 
   const marketClosesIn = date.client(market.ends_at - buySellTimestamp!).minutes();
 
@@ -117,7 +116,7 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Total Value Locked:</span>
                     <span>
-                      <CollateralTokenBalance collateralTokenMetadata={collateralTokenMetadata} marketId={marketId} />
+                      <CollateralTokenBalance marketContractValues={marketContractValues} marketId={marketId} />
                     </span>
                   </Typography.Description>
                 </div>

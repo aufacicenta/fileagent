@@ -115,13 +115,21 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     updateOutcomeTokenBalance();
   };
 
-  useEffect(() => {
+  const updateSourceToken = () => {
     if (canClaim) {
       setOutcomeAsSource();
     } else {
       setCollateralAsSource();
     }
-  }, [selectedOutcomeToken.outcome_id, ftMetadata?.decimals]);
+  };
+
+  useEffect(() => {
+    updateSourceToken();
+  }, [
+    selectedOutcomeToken.outcome_id,
+    ftMetadata?.decimals,
+    MarketContract.actions.fetchMarketContractValues.isLoading,
+  ]);
 
   const getBuyRate = async (buyAmount: WrappedBalance) => {
     const decimals = ftMetadata?.decimals!;
@@ -214,16 +222,14 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     await MarketContract.onClickResolveMarket();
   };
 
-  const onResolutionWindowCountdownComplete = () => {
-    setTimeout(() => {
-      MarketContract.fetchMarketContractValues();
-    }, 3000);
+  const onResolutionWindowCountdownComplete = async () => {
+    await MarketContract.fetchMarketContractValues();
+    updateSourceToken();
   };
 
-  const onTimeLeftBeforeResolutionCountdownComplete = () => {
-    setTimeout(() => {
-      MarketContract.fetchMarketContractValues();
-    }, 3000);
+  const onTimeLeftBeforeResolutionCountdownComplete = async () => {
+    await MarketContract.fetchMarketContractValues();
+    updateSourceToken();
   };
 
   const getMarketTitle = () => {

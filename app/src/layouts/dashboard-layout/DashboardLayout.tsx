@@ -12,6 +12,7 @@ import { NearWalletSelectorContextController } from "context/near/wallet-selecto
 import { WalletStateContextController } from "context/wallet/state/WalletStateContextController";
 import { FixedTopAlert } from "ui/fixed-top-alert/FixedTopAlert";
 import { Typography } from "ui/typography/Typography";
+import { NearMarketFactoryContractContextController } from "context/near/market-factory-contract/NearMarketFactoryContractContextController";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
@@ -44,27 +45,29 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       <WalletStateContextController>
         <NearWalletSelectorContextController>
           <ToastContextController>
-            <FixedTopAlert>
-              <Typography.Text flat>
-                <strong>Disclaimer</strong>: This is a beta dApp. Pulse contracts have not been audited. Use at your own
-                risk.
-              </Typography.Text>
-            </FixedTopAlert>
-            <div id="modal-root" />
-            <div id="dropdown-portal" />
-            <div
-              className={clsx(styles["dashboard-layout"], {
-                [styles["dashboard-layout__with-top-alert"]]: true,
-              })}
-            >
-              <PulseSidebar
-                isOpen={isSidebarOpen}
-                handleOpen={() => setSidebarVisibility(true)}
-                handleClose={() => setSidebarVisibility(false)}
-              />
-              <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
-              <MainPanel>{children}</MainPanel>
-            </div>
+            <NearMarketFactoryContractContextController>
+              <FixedTopAlert>
+                <Typography.Text flat>
+                  <strong>Disclaimer</strong>: This is a beta dApp. Pulse contracts have not been audited. Use at your
+                  own risk.
+                </Typography.Text>
+              </FixedTopAlert>
+              <div id="modal-root" />
+              <div id="dropdown-portal" />
+              <div
+                className={clsx(styles["dashboard-layout"], {
+                  [styles["dashboard-layout__with-top-alert"]]: true,
+                })}
+              >
+                <PulseSidebar
+                  isOpen={isSidebarOpen}
+                  handleOpen={() => setSidebarVisibility(true)}
+                  handleClose={() => setSidebarVisibility(false)}
+                />
+                <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
+                <MainPanel>{children}</MainPanel>
+              </div>
+            </NearMarketFactoryContractContextController>
           </ToastContextController>
         </NearWalletSelectorContextController>
       </WalletStateContextController>

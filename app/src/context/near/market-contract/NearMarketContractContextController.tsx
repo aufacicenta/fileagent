@@ -16,18 +16,33 @@ import date from "providers/date";
 import currency from "providers/currency";
 
 import { NearMarketContractContext } from "./NearMarketContractContext";
-import { NearMarketContractContextControllerProps } from "./NearMarketContractContext.types";
+import {
+  NearMarketContractContextActions,
+  NearMarketContractContextControllerProps,
+} from "./NearMarketContractContext.types";
 
 export const NearMarketContractContextController = ({
   children,
   marketId,
 }: NearMarketContractContextControllerProps) => {
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
+  const [actions, setActions] = useState<NearMarketContractContextActions>({
+    fetchMarketContractValues: {
+      isLoading: false,
+    },
+  });
 
   const toast = useToastContext();
   const walletState = useWalletStateContext();
 
   const fetchMarketContractValues = async () => {
+    setActions((prev) => ({
+      ...prev,
+      fetchMarketContractValues: {
+        isLoading: true,
+      },
+    }));
+
     try {
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
@@ -87,6 +102,13 @@ export const NearMarketContractContextController = ({
         children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
       });
     }
+
+    setActions((prev) => ({
+      ...prev,
+      fetchMarketContractValues: {
+        isLoading: false,
+      },
+    }));
   };
 
   const updatePriceMarketDescription = async () => {
@@ -202,6 +224,19 @@ export const NearMarketContractContextController = ({
       assertWalletConnection();
 
       await MarketContract.sell(walletState.context.wallet!, marketId, args);
+
+      toast.trigger({
+        variant: "confirmation",
+        withTimeout: false,
+        // @TODO i18n
+        title: "Success",
+        children: (
+          <Typography.Text>{`Sold ${currency.convert.toDecimalsPrecisionString(
+            args.amount,
+            marketContractValues?.collateralTokenMetadata?.decimals!,
+          )} of "${marketContractValues?.market.options[args.outcome_id]}"`}</Typography.Text>
+        ),
+      });
     } catch {
       toast.trigger({
         variant: "error",
@@ -235,6 +270,9 @@ export const NearMarketContractContextController = ({
     }
   };
 
+  const bettingPeriodExpired = () =>
+    !!marketContractValues?.buySellTimestamp && date.now().valueOf() > marketContractValues.buySellTimestamp;
+
   const props = {
     marketContractValues,
     fetchMarketContractValues,
@@ -243,6 +281,8 @@ export const NearMarketContractContextController = ({
     getAmountPayable,
     sell,
     onClickResolveMarket,
+    bettingPeriodExpired,
+    actions,
   };
 
   return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;

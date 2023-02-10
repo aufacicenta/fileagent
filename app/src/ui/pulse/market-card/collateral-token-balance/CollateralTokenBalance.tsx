@@ -6,7 +6,7 @@ import pulse from "providers/pulse";
 import { CollateralTokenBalanceProps } from "./CollateralTokenBalance.types";
 
 export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
-  collateralTokenMetadata,
+  marketContractValues: { isOver, collateralTokenMetadata },
   marketId,
 }) => {
   const [balance, setBalance] = useState("0.00");
@@ -14,11 +14,29 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
   const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
   const ftMetadata = FungibleTokenContract.metadata;
 
+  const updateBalance = async () => {
+    const collateralTokenBalance = await FungibleTokenContract.getBalanceOf(marketId);
+    setBalance(collateralTokenBalance);
+  };
+
   useEffect(() => {
-    (async () => {
-      const collateralTokenBalance = await FungibleTokenContract.getBalanceOf(marketId);
-      setBalance(collateralTokenBalance);
-    })();
+    updateBalance();
+
+    if (isOver) {
+      return undefined;
+    }
+
+    const interval = setInterval(() => {
+      updateBalance();
+    }, 3000);
+
+    if (isOver) {
+      clearInterval(interval);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [
     collateralTokenMetadata.id,
     marketId,

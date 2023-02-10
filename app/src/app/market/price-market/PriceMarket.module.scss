@@ -16,6 +16,10 @@
 
     &--time-left {
       text-align: right;
+
+      &-warn {
+        color: var(--color-status-warning);
+      }
     }
 
     &--current-price {

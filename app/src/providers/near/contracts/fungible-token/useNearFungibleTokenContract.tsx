@@ -5,6 +5,7 @@ import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStat
 import { Typography } from "ui/typography/Typography";
 import { AccountId, OutcomeId } from "../market/market.types";
 import currency from "providers/currency";
+import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 
 import { FungibleTokenContract } from ".";
 import { FungibleTokenMetadata } from "./fungible-token.types";
@@ -21,6 +22,7 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
   const toast = useToastContext();
   const walletState = useWalletStateContext();
   const { connection } = walletState.context;
+  const { marketContractValues } = useNearMarketContractContext();
 
   const assertWalletConnection = () => {
     if (!walletState.isConnected) {
@@ -126,6 +128,18 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
         receiver_id: receiverId,
         amount,
         msg,
+      });
+
+      toast.trigger({
+        variant: "confirmation",
+        withTimeout: false,
+        // @TODO i18n
+        title: "Your bet was made successfully",
+        children: (
+          <Typography.Text>{`Bought ${currency.convert.toDecimalsPrecisionString(amount, metadata?.decimals!)} ${
+            metadata?.symbol
+          } of "${marketContractValues?.market.options[outcomeId]}"`}</Typography.Text>
+        ),
       });
     } catch {
       toast.trigger({

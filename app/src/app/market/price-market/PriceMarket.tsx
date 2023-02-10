@@ -13,9 +13,9 @@ import currency from "providers/currency";
 import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
 import { Button } from "ui/button/Button";
-import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
+import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
 
 import { PriceMarketProps } from "./PriceMarket.types";
 import styles from "./PriceMarket.module.scss";
@@ -31,15 +31,18 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
 
   const toast = useToastContext();
 
-  const { onClickResolveMarket } = useNearMarketContractContext();
-  const MarketFactoryContract = useNearMarketFactoryContract();
+  const {
+    onClickResolveMarket,
+    bettingPeriodExpired,
+    actions: nearMarketContractContextActions,
+  } = useNearMarketContractContext();
+  const MarketFactoryContract = useNearMarketFactoryContractContext();
 
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;
 
   const diff = date.client(buySellTimestamp - market.starts_at).minutes();
-
-  const bettingPeriodExpired = () => date.now().valueOf() > buySellTimestamp;
+  const isBettingPeriodEnding = () => date.client(buySellTimestamp).diff(date.now()) < 1000 * 60;
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
@@ -53,6 +56,10 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   }, [outcomeTokens]);
 
   useEffect(() => {
+    if (nearMarketContractContextActions.fetchMarketContractValues.isLoading) {
+      return undefined;
+    }
+
     updateCurrentPrice();
     setIsBettingEnabled(!bettingPeriodExpired());
 
@@ -69,7 +76,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [marketId, nearMarketContractContextActions.fetchMarketContractValues.isLoading]);
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);
@@ -109,7 +116,11 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
           </Grid.Col>
           <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
             <Typography.Description>Time left to bet</Typography.Description>
-            <Typography.Headline3>
+            <Typography.Headline3
+              className={clsx({
+                [styles["price-market__current-result-element--time-left-warn"]]: isBettingPeriodEnding(),
+              })}
+            >
               <Countdown date={buySellTimestamp} />
             </Typography.Headline3>
           </Grid.Col>
