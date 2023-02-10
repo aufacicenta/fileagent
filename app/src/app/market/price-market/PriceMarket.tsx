@@ -13,9 +13,9 @@ import currency from "providers/currency";
 import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
 import { Button } from "ui/button/Button";
-import useNearMarketFactoryContract from "providers/near/contracts/market-factory/useNearMarketFactoryContract";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
+import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
 
 import { PriceMarketProps } from "./PriceMarket.types";
 import styles from "./PriceMarket.module.scss";
@@ -32,7 +32,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   const toast = useToastContext();
 
   const { onClickResolveMarket, bettingPeriodExpired } = useNearMarketContractContext();
-  const MarketFactoryContract = useNearMarketFactoryContract();
+  const MarketFactoryContract = useNearMarketFactoryContractContext();
 
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;

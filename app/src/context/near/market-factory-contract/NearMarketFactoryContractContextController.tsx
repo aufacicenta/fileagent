@@ -1,17 +1,25 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useToastContext } from "hooks/useToastContext/useToastContext";
+import React, { useState } from "react";
+
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
+import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
+import { DeployMarketContractArgs } from "providers/near/contracts/market-factory/market-factory.types";
 import near from "providers/near";
-import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
+import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 import pulse from "providers/pulse";
 import switchboard from "providers/switchboard";
-import { Typography } from "ui/typography/Typography";
+import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
 
-import { MarketFactoryContract } from ".";
-import { DeployMarketContractArgs } from "./market-factory.types";
+import { NearMarketFactoryContractContextControllerProps } from "./NearMarketFactoryContractContext.types";
+import { NearMarketFactoryContractContext } from "./NearMarketFactoryContractContext";
 
-export default () => {
+export const NearMarketFactoryContractContextController = ({
+  children,
+}: NearMarketFactoryContractContextControllerProps) => {
+  const [marketId, setMarketId] = useState("");
+
   const toast = useToastContext();
   const walletState = useWalletStateContext();
 
@@ -26,6 +34,33 @@ export default () => {
       });
 
       throw new Error("ERR_MARKET_FACTORY_WALLET_IS_NOT_CONNECTED");
+    }
+  };
+
+  const fetchLatestPriceMarket = async () => {
+    try {
+      const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
+      const marketsList = await marketFactory.getMarketsList();
+
+      if (!marketsList) {
+        throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
+      }
+
+      const latestMarketId = marketsList.pop();
+
+      if (!latestMarketId) {
+        throw new Error("ERR_MARKET_FACTORY_HAS_NO_MARKETS");
+      }
+
+      setMarketId(latestMarketId);
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to fetch recent markets",
+        children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
+      });
     }
   };
 
@@ -105,14 +140,21 @@ export default () => {
       };
 
       await contract.createMarket(args);
+
+      await fetchLatestPriceMarket();
     } catch (error) {
       console.log(error);
     }
   };
 
-  return {
-    contract: MarketFactoryContract,
+  const props = {
+    fetchLatestPriceMarket,
     createMarket,
     createPriceMarket,
+    marketId,
   };
+
+  return (
+    <NearMarketFactoryContractContext.Provider value={props}>{children}</NearMarketFactoryContractContext.Provider>
+  );
 };
