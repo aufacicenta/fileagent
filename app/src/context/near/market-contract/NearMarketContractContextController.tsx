@@ -16,18 +16,33 @@ import date from "providers/date";
 import currency from "providers/currency";
 
 import { NearMarketContractContext } from "./NearMarketContractContext";
-import { NearMarketContractContextControllerProps } from "./NearMarketContractContext.types";
+import {
+  NearMarketContractContextActions,
+  NearMarketContractContextControllerProps,
+} from "./NearMarketContractContext.types";
 
 export const NearMarketContractContextController = ({
   children,
   marketId,
 }: NearMarketContractContextControllerProps) => {
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
+  const [actions, setActions] = useState<NearMarketContractContextActions>({
+    fetchMarketContractValues: {
+      isLoading: false,
+    },
+  });
 
   const toast = useToastContext();
   const walletState = useWalletStateContext();
 
   const fetchMarketContractValues = async () => {
+    setActions((prev) => ({
+      ...prev,
+      fetchMarketContractValues: {
+        isLoading: true,
+      },
+    }));
+
     try {
       const contract = await MarketContract.loadFromGuestConnection(marketId);
       const market = await contract.getMarketData();
@@ -87,6 +102,13 @@ export const NearMarketContractContextController = ({
         children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
       });
     }
+
+    setActions((prev) => ({
+      ...prev,
+      fetchMarketContractValues: {
+        isLoading: false,
+      },
+    }));
   };
 
   const updatePriceMarketDescription = async () => {
@@ -260,6 +282,7 @@ export const NearMarketContractContextController = ({
     sell,
     onClickResolveMarket,
     bettingPeriodExpired,
+    actions,
   };
 
   return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;

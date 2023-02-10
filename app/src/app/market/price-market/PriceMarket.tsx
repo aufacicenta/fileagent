@@ -31,7 +31,11 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
 
   const toast = useToastContext();
 
-  const { onClickResolveMarket, bettingPeriodExpired } = useNearMarketContractContext();
+  const {
+    onClickResolveMarket,
+    bettingPeriodExpired,
+    actions: nearMarketContractContextActions,
+  } = useNearMarketContractContext();
   const MarketFactoryContract = useNearMarketFactoryContractContext();
 
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
@@ -52,6 +56,10 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   }, [outcomeTokens]);
 
   useEffect(() => {
+    if (nearMarketContractContextActions.fetchMarketContractValues.isLoading) {
+      return undefined;
+    }
+
     updateCurrentPrice();
     setIsBettingEnabled(!bettingPeriodExpired());
 
@@ -68,7 +76,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     return () => {
       clearInterval(interval);
     };
-  }, [marketId]);
+  }, [marketId, nearMarketContractContextActions.fetchMarketContractValues.isLoading]);
 
   const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
     setSelectedOutcomeToken(outcomeToken);

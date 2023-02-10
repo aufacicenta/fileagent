@@ -17,11 +17,7 @@ export type NearMarketContractContextType = {
   getAmountPayable: MarketContractMethods["get_amount_payable"];
   sell: MarketContractMethods["sell"];
   marketContractValues?: MarketContractValues;
+  actions: NearMarketContractContextActions;
 };
 
-export type NEARSignInOptions = {
-  contractId?: string;
-  methodNames?: string[];
-  successUrl?: string;
-  failureUrl?: string;
-};
+export type NearMarketContractContextActions = { fetchMarketContractValues: { isLoading: boolean } };
