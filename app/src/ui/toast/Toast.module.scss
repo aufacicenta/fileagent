@@ -1,25 +1,32 @@
 @import "src/theme/base";
+@import "src/ui/typography/mixins";
 
 .toast {
+  @extend .z-depth-1;
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   max-width: 512px;
-  border-radius: $border-radius;
+  border: 1px solid var(--color-background-contrast);
+  border-radius: $border-radius-card;
   padding: $space-default;
   background-color: var(--color-background);
-  @extend .z-depth-1;
 
   &__icon {
     display: flex;
-    margin-right: $space-m;
-    color: var(--color-status-info);
+    padding: 0 $space-s;
     font-size: $font-size-headline-3;
+    color: var(--color-status-info);
   }
 
   &__content {
+    width: 100%;
     padding: 0 $space-default;
+
+    p {
+      margin-bottom: 0;
+    }
   }
 
   &--error {
@@ -41,9 +48,7 @@
   }
 
   &__title {
-    margin-right: $space-xl;
     word-break: break-word;
-    font-weight: $font-weight-bold;
   }
 
   &__close-button {

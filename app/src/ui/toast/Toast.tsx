@@ -31,7 +31,7 @@ export const Toast = ({ title, actionText, children, className, style, variant, 
         {variant === "error" && <Icon name="icon-warning" />}
       </div>
       <div className={styles.toast__content}>
-        <Typography.Text className={styles.toast__title}>{title}</Typography.Text>
+        <Typography.Headline4 className={styles.toast__title}>{title}</Typography.Headline4>
         {children}
       </div>
       <button type="button" className={styles["toast__close-button"]} aria-label="close" onClick={onClose}>
