@@ -1,6 +1,14 @@
 import near from "providers/near";
 
 export default () => ({
+  priceMarket: {
+    defaultBaseCurrency: {
+      symbol: "BTC",
+    },
+    defaultTargetCurrency: {
+      symbol: "USD",
+    },
+  },
   resolutionMechanism: {
     baseUrl: "https://switchboard.xyz/explorer/4",
   },

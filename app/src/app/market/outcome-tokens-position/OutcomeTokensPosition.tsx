@@ -63,7 +63,7 @@ export const OutcomeTokensPosition: React.FC<OutcomeTokensPositionProps> = ({ cl
             ))}
           </>
         ) : (
-          <Typography.MiniDescription>Connect wallet to load balances</Typography.MiniDescription>
+          <Typography.MiniDescription align="center">Connect wallet to load balances</Typography.MiniDescription>
         )}
       </Card.Content>
     </Card>

@@ -38,7 +38,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <meta property="og:title" content={t("head.og.title")} />
         <meta property="og:description" content={t("head.og.description")} />
         <meta property="og:image" content="/shared/pulse.png" />
-        <meta property="og:url" content="https://airdrop.pulsemarkets.org/" />
+        <meta property="og:url" content="https://app.pulsemarkets.org/" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
       </Head>

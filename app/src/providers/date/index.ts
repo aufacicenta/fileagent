@@ -1,5 +1,3 @@
-import { MomentFormatSpecification, MomentInput } from "moment";
-
 import timeFromNow from "./timeFromNow";
 import client from "./client";
 import getDefaultDateFormat, {
@@ -11,12 +9,10 @@ import getDefaultDateFormat, {
   fromTimestampWithOffset,
   fromTimestamp,
 } from "./getDefaultDateFormat";
-
-const parseFromFormat = (inp?: MomentInput, format?: MomentFormatSpecification, strict: boolean = false) =>
-  client(inp, format, strict);
+import { DEFAULT_TIMEZONE_OFFSET } from "./constants";
+import parse from "./parse";
 
 export default {
-  parseFromFormat,
   timeFromNow,
   getDefaultDateFormat,
   fromTimestamp,
@@ -27,4 +23,8 @@ export default {
   now,
   client,
   toUtcOffsetNanoseconds,
+  constants: {
+    DEFAULT_TIMEZONE_OFFSET,
+  },
+  parse,
 };

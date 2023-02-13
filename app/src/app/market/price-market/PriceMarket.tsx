@@ -13,30 +13,32 @@ import currency from "providers/currency";
 import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
 import { Button } from "ui/button/Button";
-import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
-import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
 
 import { PriceMarketProps } from "./PriceMarket.types";
 import styles from "./PriceMarket.module.scss";
+import { CreatePriceMarketModalProps } from "./create-price-market-modal/CreatePriceMarketModal.types";
 
 const SwapCard = dynamic<SwapCardProps>(() => import("ui/pulse/swap-card/SwapCard").then((mod) => mod.SwapCard), {
   ssr: false,
 });
 
+const CreatePriceMarketModal = dynamic<CreatePriceMarketModalProps>(
+  () => import("./create-price-market-modal/CreatePriceMarketModal").then((mod) => mod.CreatePriceMarketModal),
+  { ssr: false },
+);
+
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, marketContractValues }) => {
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
   const [isBettingEnabled, setIsBettingEnabled] = useState(true);
-
-  const toast = useToastContext();
+  const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
 
   const {
     onClickResolveMarket,
     bettingPeriodExpired,
     actions: nearMarketContractContextActions,
   } = useNearMarketContractContext();
-  const MarketFactoryContract = useNearMarketFactoryContractContext();
 
   const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
     marketContractValues;
@@ -82,17 +84,13 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     setSelectedOutcomeToken(outcomeToken);
   };
 
-  const onClickCreatePriceMarket = async () => {
-    try {
-      await MarketFactoryContract.createPriceMarket();
-    } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        title: "Oops, our bad.",
-        children: <Typography.Text>While creating the market. Try again?</Typography.Text>,
-      });
-    }
+  const onClickCloseCreateMarketModal = () => {
+    setIsCreatePriceMarketModalVisible(false);
+  };
+
+  const onClickCreateMarketButton = () => {
+    // @TODO check if there's a connected wallet, otherwise display the "connect wallet modal"
+    setIsCreatePriceMarketModalVisible(true);
   };
 
   const getCurrentResultElement = () => {
@@ -100,7 +98,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
       return (
         <div className={styles["price-market__current-result-element--create-market"]}>
           <Typography.Description align="right">Create the next price market and earn fees</Typography.Description>
-          <Button size="xs" variant="outlined" color="success" onClick={onClickCreatePriceMarket}>
+          <Button size="xs" variant="outlined" color="success" onClick={onClickCreateMarketButton}>
             Create Next Price Market
           </Button>
         </div>
@@ -145,35 +143,39 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   };
 
   return (
-    <div className={clsx(styles["price-market"], className)}>
-      <Grid.Row>
-        <Grid.Col lg={8} xs={12}>
-          <Card className={styles["price-market__info-card"]}>
-            <Card.Content>
-              <MarketCard
-                expanded
-                currentResultElement={getCurrentResultElement()}
-                datesElement={<div className={styles["price-market__dates-element"]}>{getDatesElement()}</div>}
-                onClickOutcomeToken={onClickOutcomeToken}
+    <>
+      <div className={clsx(styles["price-market"], className)}>
+        <Grid.Row>
+          <Grid.Col lg={8} xs={12}>
+            <Card className={styles["price-market__info-card"]}>
+              <Card.Content>
+                <MarketCard
+                  expanded
+                  currentResultElement={getCurrentResultElement()}
+                  datesElement={<div className={styles["price-market__dates-element"]}>{getDatesElement()}</div>}
+                  onClickOutcomeToken={onClickOutcomeToken}
+                  marketContractValues={marketContractValues}
+                  onClickResolveMarket={onClickResolveMarket}
+                  marketId={marketId}
+                />
+              </Card.Content>
+            </Card>
+          </Grid.Col>
+          <Grid.Col lg={4} xs={12}>
+            {selectedOutcomeToken && (
+              <SwapCard
                 marketContractValues={marketContractValues}
-                onClickResolveMarket={onClickResolveMarket}
+                selectedOutcomeToken={selectedOutcomeToken}
+                setSelectedOutcomeToken={setSelectedOutcomeToken}
                 marketId={marketId}
+                isBettingEnabled={isBettingEnabled}
               />
-            </Card.Content>
-          </Card>
-        </Grid.Col>
-        <Grid.Col lg={4} xs={12}>
-          {selectedOutcomeToken && (
-            <SwapCard
-              marketContractValues={marketContractValues}
-              selectedOutcomeToken={selectedOutcomeToken}
-              setSelectedOutcomeToken={setSelectedOutcomeToken}
-              marketId={marketId}
-              isBettingEnabled={isBettingEnabled}
-            />
-          )}
-        </Grid.Col>
-      </Grid.Row>
-    </div>
+            )}
+          </Grid.Col>
+        </Grid.Row>
+      </div>
+
+      {isCreatePriceMarketModalVisible && <CreatePriceMarketModal onClose={onClickCloseCreateMarketModal} />}
+    </>
   );
 };
