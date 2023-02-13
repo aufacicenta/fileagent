@@ -40,10 +40,9 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     actions: nearMarketContractContextActions,
   } = useNearMarketContractContext();
 
-  const { market, buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } =
-    marketContractValues;
+  const { buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } = marketContractValues;
 
-  const diff = date.client(buySellTimestamp - market.starts_at).minutes();
+  const diff = date.client(buySellTimestamp).fromNow();
   const isBettingPeriodEnding = () => date.client(buySellTimestamp).diff(date.now()) < 1000 * 60;
 
   const updateCurrentPrice = async () => {
@@ -124,7 +123,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
           </Grid.Col>
         </Grid.Row>
         <Typography.MiniDescription align="center" flat>
-          * Bets end {diff} minutes after event starts.
+          * Bets end {diff}.
         </Typography.MiniDescription>
       </>
     );
