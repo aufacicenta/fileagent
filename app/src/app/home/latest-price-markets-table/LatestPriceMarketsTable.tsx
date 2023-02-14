@@ -14,14 +14,22 @@ export const LatestPriceMarketsTable: React.FC<LatestPriceMarketsTableProps> = (
   return (
     <table className={clsx(styles["latest-price-markets-table"], className)}>
       <thead>
-        <th>
-          <Typography.Description>Description</Typography.Description>
-        </th>
+        <tr>
+          <th>
+            <Typography.Description>Description</Typography.Description>
+          </th>
+          <th>
+            <Typography.Description>Total Value Locked</Typography.Description>
+          </th>
+          <th>
+            <Typography.Description>Your Stake</Typography.Description>
+          </th>
+        </tr>
       </thead>
       <tbody>
         {latestPriceMarketsIds.map((marketId) => (
-          <NearMarketContractContextController marketId={marketId}>
-            <PriceMarketTableRow key={marketId} marketId={marketId} />
+          <NearMarketContractContextController marketId={marketId} key={marketId}>
+            <PriceMarketTableRow marketId={marketId} />
           </NearMarketContractContextController>
         ))}
       </tbody>

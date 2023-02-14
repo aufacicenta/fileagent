@@ -1,5 +1,9 @@
 @import "src/theme/base";
 
 .price-market-table-row {
-  display: block;
+  td {
+    p {
+      color: var(--color-typography-text);
+    }
+  }
 }

@@ -1,0 +1,27 @@
+@mixin table {
+  width: 100%;
+  vertical-align: top;
+
+  > tbody {
+    vertical-align: inherit;
+  }
+
+  > thead {
+    vertical-align: bottom;
+  }
+}
+@mixin tableStripped {
+  tbody {
+    tr {
+      &:nth-of-type(even) {
+        background-color: var(--color-background);
+      }
+    }
+  }
+}
+@mixin tableSm {
+  // stylelint-disable-next-line selector-max-universal
+  > :not(caption) > * > * {
+    padding: $table-cell-padding-y-sm $table-cell-padding-x-sm;
+  }
+}
