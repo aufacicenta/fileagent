@@ -193,6 +193,7 @@ $HALF_LOADER_SIZE: 15px;
   &.button--inverted,
   &.button--text {
     border: none;
+    background: transparent;
     background-color: transparent;
 
     &.button--primary {
