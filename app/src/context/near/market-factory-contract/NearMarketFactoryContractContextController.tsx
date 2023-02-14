@@ -63,9 +63,13 @@ export const NearMarketFactoryContractContextController = ({
         throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
       }
 
-      marketsList.reverse().pop();
+      marketsList.reverse();
 
-      setLatestPriceMarketsIds(marketsList.slice(0, 7));
+      const latest = marketsList.slice(0, 7);
+
+      const first = [...latest].shift();
+
+      setLatestPriceMarketsIds(latest.filter((name) => name !== first));
     } catch {
       toast.trigger({
         variant: "error",

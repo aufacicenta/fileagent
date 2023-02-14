@@ -12,30 +12,36 @@ export const LatestPriceMarketsTable: React.FC<LatestPriceMarketsTableProps> = (
   const { latestPriceMarketsIds } = useNearMarketFactoryContractContext();
 
   return (
-    <table className={clsx(styles["latest-price-markets-table"], className)}>
-      <thead>
-        <tr>
-          <th>
-            <Typography.Description>Description</Typography.Description>
-          </th>
-          <th>
-            <Typography.Description>Total Value Locked</Typography.Description>
-          </th>
-          <th>
-            <Typography.Description>Your Stake</Typography.Description>
-          </th>
-          <th>
-            <Typography.Description>Ends in</Typography.Description>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {latestPriceMarketsIds.map((marketId) => (
-          <NearMarketContractContextController marketId={marketId} key={marketId}>
-            <PriceMarketTableRow marketId={marketId} />
-          </NearMarketContractContextController>
-        ))}
-      </tbody>
-    </table>
+    <div className={clsx(styles["latest-price-markets-table__responsive"])}>
+      <table className={clsx(styles["latest-price-markets-table"], className)}>
+        <thead>
+          <tr>
+            <th>
+              <Typography.Description>Description</Typography.Description>
+            </th>
+            <th>
+              <Typography.Description>Total Value Locked</Typography.Description>
+            </th>
+            <th>
+              <Typography.Description>Your Stake</Typography.Description>
+            </th>
+            <th>
+              <Typography.Description>Ends in</Typography.Description>
+            </th>
+            <th>
+              <Typography.Description>Status</Typography.Description>
+            </th>
+            <th>{null}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {latestPriceMarketsIds.map((marketId) => (
+            <NearMarketContractContextController marketId={marketId} key={marketId}>
+              <PriceMarketTableRow marketId={marketId} />
+            </NearMarketContractContextController>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };

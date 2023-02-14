@@ -6,4 +6,8 @@
   @include table;
   @include tableStripped;
   @include tableSm;
+
+  &__responsive {
+    @include tableResponsive;
+  }
 }

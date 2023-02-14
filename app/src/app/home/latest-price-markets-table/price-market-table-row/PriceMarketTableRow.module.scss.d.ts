@@ -1,5 +1,6 @@
 export type Styles = {
   "price-market-table-row": string;
+  "price-market-table-row__link": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

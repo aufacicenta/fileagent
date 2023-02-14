@@ -1,9 +1,14 @@
 @import "src/theme/base";
+@import "src/ui/typography/mixins";
 
 .price-market-table-row {
   td {
     p {
       color: var(--color-typography-text);
     }
+  }
+
+  &__link {
+    @include miniDescription;
   }
 }

@@ -1,5 +1,6 @@
 export type Styles = {
   "latest-price-markets-table": string;
+  "latest-price-markets-table__responsive": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

@@ -1,5 +1,6 @@
 @mixin table {
   width: 100%;
+  white-space: nowrap;
   vertical-align: top;
 
   > tbody {
@@ -16,12 +17,19 @@
       &:nth-of-type(even) {
         background-color: var(--color-background);
       }
+
+      &:hover {
+        background-color: var(--color-market-card-background);
+      }
     }
   }
 }
 @mixin tableSm {
-  // stylelint-disable-next-line selector-max-universal
   > :not(caption) > * > * {
     padding: $table-cell-padding-y-sm $table-cell-padding-x-sm;
   }
+}
+@mixin tableResponsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
