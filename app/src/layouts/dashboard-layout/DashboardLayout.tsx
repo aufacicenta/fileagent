@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
@@ -19,7 +18,7 @@ import styles from "./DashboardLayout.module.scss";
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setSidebarVisibility] = useState(false);
-  const { t } = useTranslation("head");
+
   const { locale } = useRouter();
 
   useEffect(() => {
@@ -30,15 +29,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   return (
     <>
       <Head>
-        <title>{t("head.og.title")}</title>
         <link rel="icon" href="/favicon.ico" as="image" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <meta name="description" content={t("head.og.description")} />
-        <meta property="og:title" content={t("head.og.title")} />
-        <meta property="og:description" content={t("head.og.description")} />
         <meta property="og:image" content="/shared/pulse.png" />
-        <meta property="og:url" content="https://app.pulsemarkets.org/" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
       </Head>

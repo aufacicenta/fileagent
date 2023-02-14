@@ -10,4 +10,9 @@ export type PriceMarketProps = {
 
 export type PriceMarketContainerProps = {
   marketId: AccountId;
+  head: {
+    title: string;
+    description: string;
+    url: string;
+  };
 };
