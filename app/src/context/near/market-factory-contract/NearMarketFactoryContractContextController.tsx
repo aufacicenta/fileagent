@@ -13,6 +13,7 @@ import switchboard from "providers/switchboard";
 import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
 
 import {
+  NearMarketFactoryContractContextActions,
   NearMarketFactoryContractContextControllerProps,
   PartialCreatePriceMarketContractArgs,
 } from "./NearMarketFactoryContractContext.types";
@@ -22,6 +23,12 @@ export const NearMarketFactoryContractContextController = ({
   children,
 }: NearMarketFactoryContractContextControllerProps) => {
   const [marketId, setMarketId] = useState("");
+  const [latestPriceMarketsIds, setLatestPriceMarketsIds] = useState<string[]>([]);
+  const [actions, setActions] = useState<NearMarketFactoryContractContextActions>({
+    fetchLatestPriceMarkets: {
+      isLoading: false,
+    },
+  });
 
   const toast = useToastContext();
   const walletState = useWalletStateContext();
@@ -38,6 +45,41 @@ export const NearMarketFactoryContractContextController = ({
 
       throw new Error("ERR_MARKET_FACTORY_WALLET_IS_NOT_CONNECTED");
     }
+  };
+
+  const fetchLatestPriceMarkets = async () => {
+    setActions((prev) => ({
+      ...prev,
+      fetchLatestPriceMarkets: {
+        isLoading: true,
+      },
+    }));
+
+    try {
+      const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
+      const marketsList = await marketFactory.getMarketsList();
+
+      if (!marketsList) {
+        throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
+      }
+
+      setLatestPriceMarketsIds(marketsList.reverse());
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to fetch latest price markets",
+        children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
+      });
+    }
+
+    setActions((prev) => ({
+      ...prev,
+      fetchLatestPriceMarkets: {
+        isLoading: false,
+      },
+    }));
   };
 
   const fetchLatestPriceMarket = async () => {
@@ -149,9 +191,12 @@ export const NearMarketFactoryContractContextController = ({
 
   const props = {
     fetchLatestPriceMarket,
+    fetchLatestPriceMarkets,
     createMarket,
     createPriceMarket,
+    latestPriceMarketsIds,
     marketId,
+    actions,
   };
 
   return (

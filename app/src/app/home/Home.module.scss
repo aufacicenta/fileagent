@@ -3,6 +3,10 @@
 .home {
   display: block;
 
+  &__latest-price-markets-table {
+    margin-top: $space-ml;
+  }
+
   &__title {
     @include atLargeTablet {
       margin-bottom: 0;

@@ -43,8 +43,6 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     outcomeTokens,
     resolution,
   },
-  selectedOutcomeToken,
-  setSelectedOutcomeToken,
   marketId,
   isBettingEnabled,
 }) => {
@@ -80,7 +78,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     }
 
     const outcomeTokenBalance = await MarketContract.getBalanceOf({
-      outcome_id: selectedOutcomeToken.outcome_id,
+      outcome_id: MarketContract.selectedOutcomeToken!.outcome_id,
       account_id: wallet.address!,
     });
 
@@ -94,7 +92,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     setToToken({
-      symbol: market.options[selectedOutcomeToken.outcome_id],
+      symbol: market.options[MarketContract.selectedOutcomeToken!.outcome_id],
       amount: 0,
     });
 
@@ -108,7 +106,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     });
 
     setFromToken({
-      symbol: market.options[selectedOutcomeToken.outcome_id],
+      symbol: market.options[MarketContract.selectedOutcomeToken!.outcome_id],
       amount: 0,
     });
 
@@ -126,7 +124,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   useEffect(() => {
     updateSourceToken();
   }, [
-    selectedOutcomeToken.outcome_id,
+    MarketContract.selectedOutcomeToken!.outcome_id,
     ftMetadata?.decimals,
     MarketContract.actions.fetchMarketContractValues.isLoading,
   ]);
@@ -152,7 +150,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
 
     const [amountPayable] = await MarketContract.getAmountPayable({
       amount,
-      outcome_id: selectedOutcomeToken.outcome_id,
+      outcome_id: MarketContract.selectedOutcomeToken!.outcome_id,
       account_id: wallet.address || near.getConfig().guestWalletId,
     });
 
@@ -181,7 +179,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return;
     }
 
-    await FungibleTokenContract.ftTransferCall(marketId, amount, selectedOutcomeToken.outcome_id);
+    await FungibleTokenContract.ftTransferCall(marketId, amount, MarketContract.selectedOutcomeToken!.outcome_id);
 
     updateCollateralTokenBalance();
   };
@@ -190,7 +188,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     const amount = Number(sellAmount);
 
     await MarketContract.sell({
-      outcome_id: selectedOutcomeToken.outcome_id,
+      outcome_id: MarketContract.selectedOutcomeToken!.outcome_id,
       amount,
     });
   };
@@ -203,7 +201,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   };
 
   const onSelectOutcomeToken = (id: string | number | ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOutcomeToken(outcomeTokens![id as number]);
+    MarketContract.onClickOutcomeToken(outcomeTokens![id as number]);
   };
 
   const onClickHalfBalance = (setFromTokenInputValue: (value: string) => void) => {
@@ -386,7 +384,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                     className={styles["swap-card__select"]}
                     inputProps={{
                       onChange: onSelectOutcomeToken,
-                      value: selectedOutcomeToken.outcome_id,
+                      value: MarketContract.selectedOutcomeToken!.outcome_id,
                     }}
                   >
                     {market.options.map((option, id) => (

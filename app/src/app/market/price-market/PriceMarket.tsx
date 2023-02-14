@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { Grid } from "ui/grid/Grid";
 import { MarketCard } from "ui/pulse/market-card/MarketCard";
 import { Card } from "ui/card/Card";
-import { OutcomeToken } from "providers/near/contracts/market/market.types";
 import { SwapCardProps } from "ui/pulse/swap-card/SwapCard.types";
 import switchboard from "providers/switchboard";
 import currency from "providers/currency";
@@ -14,6 +13,7 @@ import { Typography } from "ui/typography/Typography";
 import date from "providers/date";
 import { Button } from "ui/button/Button";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
+import { GenericLoader } from "ui/generic-loader/GenericLoader";
 
 import { PriceMarketProps } from "./PriceMarket.types";
 import styles from "./PriceMarket.module.scss";
@@ -28,22 +28,19 @@ const CreatePriceMarketModal = dynamic<CreatePriceMarketModalProps>(
   { ssr: false },
 );
 
-export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, marketContractValues }) => {
-  const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
+export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId }) => {
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
   const [isBettingEnabled, setIsBettingEnabled] = useState(true);
   const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
 
   const {
+    marketContractValues,
     onClickResolveMarket,
     bettingPeriodExpired,
     actions: nearMarketContractContextActions,
+    fetchMarketContractValues,
+    selectedOutcomeToken,
   } = useNearMarketContractContext();
-
-  const { buySellTimestamp, outcomeTokens, isOver, isResolutionWindowExpired, isResolved } = marketContractValues;
-
-  const diff = date.client(buySellTimestamp).fromNow();
-  const isBettingPeriodEnding = () => date.client(buySellTimestamp).diff(date.now()) < 1000 * 60;
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
@@ -51,10 +48,8 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
   };
 
   useEffect(() => {
-    if (outcomeTokens) {
-      setSelectedOutcomeToken(outcomeTokens[0]);
-    }
-  }, [outcomeTokens]);
+    fetchMarketContractValues();
+  }, [marketId]);
 
   useEffect(() => {
     if (nearMarketContractContextActions.fetchMarketContractValues.isLoading) {
@@ -79,9 +74,15 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
     };
   }, [marketId, nearMarketContractContextActions.fetchMarketContractValues.isLoading]);
 
-  const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
-    setSelectedOutcomeToken(outcomeToken);
-  };
+  if (!marketContractValues) {
+    // @TODO render PriceMarket skeleton template
+    return <GenericLoader />;
+  }
+
+  const { buySellTimestamp, isOver, isResolutionWindowExpired, isResolved } = marketContractValues;
+
+  const diff = date.client(buySellTimestamp).fromNow();
+  const isBettingPeriodEnding = () => date.client(buySellTimestamp).diff(date.now()) < 1000 * 60;
 
   const onClickCloseCreateMarketModal = () => {
     setIsCreatePriceMarketModalVisible(false);
@@ -152,7 +153,6 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
                   expanded
                   currentResultElement={getCurrentResultElement()}
                   datesElement={<div className={styles["price-market__dates-element"]}>{getDatesElement()}</div>}
-                  onClickOutcomeToken={onClickOutcomeToken}
                   marketContractValues={marketContractValues}
                   onClickResolveMarket={onClickResolveMarket}
                   marketId={marketId}
@@ -164,8 +164,6 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId, m
             {selectedOutcomeToken && (
               <SwapCard
                 marketContractValues={marketContractValues}
-                selectedOutcomeToken={selectedOutcomeToken}
-                setSelectedOutcomeToken={setSelectedOutcomeToken}
                 marketId={marketId}
                 isBettingEnabled={isBettingEnabled}
               />

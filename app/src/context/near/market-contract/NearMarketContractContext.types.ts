@@ -1,6 +1,11 @@
 import { ReactNode } from "react";
 
-import { AccountId, MarketContractMethods, MarketContractValues } from "providers/near/contracts/market/market.types";
+import {
+  AccountId,
+  MarketContractMethods,
+  MarketContractValues,
+  OutcomeToken,
+} from "providers/near/contracts/market/market.types";
 
 export type NearMarketContractContextControllerProps = {
   marketId: AccountId;
@@ -11,6 +16,7 @@ export type NearMarketContractContextControllerProps = {
 export type NearMarketContractContextType = {
   fetchMarketContractValues: () => Promise<void>;
   onClickResolveMarket: () => Promise<false | void>;
+  onClickOutcomeToken: (outcomeToken: OutcomeToken) => void;
   bettingPeriodExpired: () => boolean;
   getBalanceOf: MarketContractMethods["balance_of"];
   getAmountMintable: MarketContractMethods["get_amount_mintable"];
@@ -18,6 +24,7 @@ export type NearMarketContractContextType = {
   sell: MarketContractMethods["sell"];
   marketContractValues?: MarketContractValues;
   actions: NearMarketContractContextActions;
+  selectedOutcomeToken?: OutcomeToken;
 };
 
 export type NearMarketContractContextActions = { fetchMarketContractValues: { isLoading: boolean } };

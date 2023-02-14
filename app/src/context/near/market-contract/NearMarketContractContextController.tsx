@@ -26,6 +26,7 @@ export const NearMarketContractContextController = ({
   marketId,
 }: NearMarketContractContextControllerProps) => {
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
+  const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [actions, setActions] = useState<NearMarketContractContextActions>({
     fetchMarketContractValues: {
       isLoading: false,
@@ -93,6 +94,8 @@ export const NearMarketContractContextController = ({
         },
         price,
       });
+
+      setSelectedOutcomeToken(outcomeTokens[0]);
     } catch {
       toast.trigger({
         variant: "error",
@@ -270,6 +273,10 @@ export const NearMarketContractContextController = ({
     }
   };
 
+  const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
+    setSelectedOutcomeToken(outcomeToken);
+  };
+
   const bettingPeriodExpired = () =>
     !!marketContractValues?.buySellTimestamp && date.now().valueOf() > marketContractValues.buySellTimestamp;
 
@@ -281,8 +288,10 @@ export const NearMarketContractContextController = ({
     getAmountPayable,
     sell,
     onClickResolveMarket,
+    onClickOutcomeToken,
     bettingPeriodExpired,
     actions,
+    selectedOutcomeToken,
   };
 
   return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;

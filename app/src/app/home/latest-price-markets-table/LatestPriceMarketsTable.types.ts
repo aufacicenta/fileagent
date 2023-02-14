@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 
-export type PriceMarketProps = {
-  marketId: string;
+export type LatestPriceMarketsTableProps = {
   children?: ReactNode;
   className?: string;
 };

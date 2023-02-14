@@ -1,18 +1,18 @@
 import clsx from "clsx";
 import { useTranslation } from "next-i18next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
 import { PriceMarket } from "app/market/price-market/PriceMarket";
-import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
-import { GenericLoader } from "ui/generic-loader/GenericLoader";
 import { Button } from "ui/button/Button";
 import { CreatePriceMarketModalProps } from "app/market/price-market/create-price-market-modal/CreatePriceMarketModal.types";
+import { NearMarketContractContextController } from "context/near/market-contract/NearMarketContractContextController";
 
 import { HomeProps } from "./Home.types";
 import styles from "./Home.module.scss";
+import { LatestPriceMarketsTableContainer } from "./latest-price-markets-table/LatestPriceMarketsTableContainer";
 
 const CreatePriceMarketModal = dynamic<CreatePriceMarketModalProps>(
   () =>
@@ -26,12 +26,6 @@ export const Home: React.FC<HomeProps> = ({ className, marketId }) => {
   const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
 
   const { t } = useTranslation(["home", "common"]);
-
-  const { marketContractValues, fetchMarketContractValues } = useNearMarketContractContext();
-
-  useEffect(() => {
-    fetchMarketContractValues();
-  }, [marketId]);
 
   const onClickCloseCreateMarketModal = () => {
     setIsCreatePriceMarketModalVisible(false);
@@ -62,12 +56,13 @@ export const Home: React.FC<HomeProps> = ({ className, marketId }) => {
             </div>
           </div>
 
-          {!marketContractValues ? (
-            // @TODO render PriceMarket skeleton template
-            <GenericLoader />
-          ) : (
-            <PriceMarket marketId={marketId} marketContractValues={marketContractValues} />
-          )}
+          <NearMarketContractContextController marketId={marketId}>
+            <PriceMarket marketId={marketId} />
+          </NearMarketContractContextController>
+
+          <div className={styles["home__latest-price-markets-table"]}>
+            <LatestPriceMarketsTableContainer />
+          </div>
         </MainPanel.Container>
       </div>
 
