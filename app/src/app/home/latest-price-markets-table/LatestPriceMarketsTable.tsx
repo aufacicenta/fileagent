@@ -24,6 +24,9 @@ export const LatestPriceMarketsTable: React.FC<LatestPriceMarketsTableProps> = (
           <th>
             <Typography.Description>Your Stake</Typography.Description>
           </th>
+          <th>
+            <Typography.Description>Ends in</Typography.Description>
+          </th>
         </tr>
       </thead>
       <tbody>

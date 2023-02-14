@@ -1,10 +1,12 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import Countdown from "react-countdown";
 
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { Typography } from "ui/typography/Typography";
 import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import currency from "providers/currency";
 
 import { PriceMarketTableRowProps } from "./PriceMarketTableRow.types";
 import styles from "./PriceMarketTableRow.module.scss";
@@ -17,6 +19,7 @@ export const PriceMarketTableRow: React.FC<PriceMarketTableRowProps> = ({ classN
     marketContractValues,
     calculateTotalOutcomeTokensPosition,
     outcomeTokensExtended,
+    bettingPeriodExpired,
   } = useNearMarketContractContext();
 
   useEffect(() => {
@@ -35,8 +38,14 @@ export const PriceMarketTableRow: React.FC<PriceMarketTableRowProps> = ({ classN
     if (outcomeTokensExtended?.length) {
       return outcomeTokensExtended.map((token, index) =>
         index === outcomeTokensExtended.length - 1
-          ? `${token.value}: ${token.balance_of} (${token.position}%)`
-          : `${token.value}: ${token.balance_of} (${token.position}%), `,
+          ? `${token.value}: ${currency.convert.fromUIntAmount(
+              token.balance_of!,
+              marketContractValues?.collateralTokenMetadata.decimals!,
+            )} (${token.position?.toFixed(2)}%)`
+          : `${token.value}: ${currency.convert.fromUIntAmount(
+              token.balance_of!,
+              marketContractValues?.collateralTokenMetadata.decimals!,
+            )} (${token.position?.toFixed(2)}%), `,
       );
     }
 
@@ -59,6 +68,11 @@ export const PriceMarketTableRow: React.FC<PriceMarketTableRowProps> = ({ classN
       </td>
       <td>
         <Typography.Description flat>{getOutcomeTokensPosition()}</Typography.Description>
+      </td>
+      <td>
+        <Typography.Description flat>
+          {!bettingPeriodExpired() ? <Countdown date={marketContractValues.buySellTimestamp} /> : "finalized"}
+        </Typography.Description>
       </td>
     </tr>
   );
