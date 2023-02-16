@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
 
-import { MarketContractValues, OutcomeToken } from "providers/near/contracts/market/market.types";
+import { MarketContractValues } from "providers/near/contracts/market/market.types";
 
 export type MarketCardProps = {
   marketContractValues: MarketContractValues;
   onClickResolveMarket: () => void;
-  onClickOutcomeToken: (outcomeToken: OutcomeToken) => void;
   onClickMarketTitle?: () => void;
   marketId: string;
   expanded?: boolean;

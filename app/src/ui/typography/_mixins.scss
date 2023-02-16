@@ -22,7 +22,7 @@
 @mixin headline4 {
   @include font-properties($typography-headline-4);
   @include normalizeTypography;
-  margin-bottom: $space-xs;
+  margin-bottom: $space-s;
   color: var(--color-typography-headline-4);
 
   [class^="icon-"],

@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import pulse from "providers/pulse";
+import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 
 import { CollateralTokenBalanceProps } from "./CollateralTokenBalance.types";
 
-export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
-  marketContractValues: { isOver, collateralTokenMetadata },
-  marketId,
-}) => {
+export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = () => {
   const [balance, setBalance] = useState("0.00");
 
-  const FungibleTokenContract = useNearFungibleTokenContract({ contractAddress: collateralTokenMetadata.id });
+  const { marketContractValues, marketId, actions } = useNearMarketContractContext();
+  const FungibleTokenContract = useNearFungibleTokenContract({
+    contractAddress: marketContractValues?.collateralTokenMetadata.id,
+  });
+
   const ftMetadata = FungibleTokenContract.metadata;
 
   const updateBalance = async () => {
@@ -20,9 +22,13 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
   };
 
   useEffect(() => {
+    if (actions.fetchMarketContractValues.isLoading) {
+      return undefined;
+    }
+
     updateBalance();
 
-    if (isOver) {
+    if (marketContractValues?.isOver) {
       return undefined;
     }
 
@@ -30,7 +36,7 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
       updateBalance();
     }, 3000);
 
-    if (isOver) {
+    if (marketContractValues?.isOver) {
       clearInterval(interval);
     }
 
@@ -38,17 +44,17 @@ export const CollateralTokenBalance: React.FC<CollateralTokenBalanceProps> = ({
       clearInterval(interval);
     };
   }, [
-    collateralTokenMetadata.id,
+    marketContractValues?.collateralTokenMetadata.id,
     marketId,
     ftMetadata?.decimals,
     FungibleTokenContract.actions.ftTransferCall.isLoading,
   ]);
 
-  const collateralToken = pulse.getCollateralTokenByAccountId(collateralTokenMetadata.id);
-
-  if (!collateralToken) {
+  if (!marketContractValues?.collateralTokenMetadata.id) {
     return <>0.00</>;
   }
+
+  const collateralToken = pulse.getCollateralTokenByAccountId(marketContractValues?.collateralTokenMetadata.id);
 
   return (
     <>

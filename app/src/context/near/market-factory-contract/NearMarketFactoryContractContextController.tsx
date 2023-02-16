@@ -12,13 +12,23 @@ import pulse from "providers/pulse";
 import switchboard from "providers/switchboard";
 import { DEFAULT_FEE_RATIO } from "providers/near/getConfig";
 
-import { NearMarketFactoryContractContextControllerProps } from "./NearMarketFactoryContractContext.types";
+import {
+  NearMarketFactoryContractContextActions,
+  NearMarketFactoryContractContextControllerProps,
+  PartialCreatePriceMarketContractArgs,
+} from "./NearMarketFactoryContractContext.types";
 import { NearMarketFactoryContractContext } from "./NearMarketFactoryContractContext";
 
 export const NearMarketFactoryContractContextController = ({
   children,
 }: NearMarketFactoryContractContextControllerProps) => {
   const [marketId, setMarketId] = useState("");
+  const [latestPriceMarketsIds, setLatestPriceMarketsIds] = useState<string[]>([]);
+  const [actions, setActions] = useState<NearMarketFactoryContractContextActions>({
+    fetchLatestPriceMarkets: {
+      isLoading: false,
+    },
+  });
 
   const toast = useToastContext();
   const walletState = useWalletStateContext();
@@ -35,6 +45,47 @@ export const NearMarketFactoryContractContextController = ({
 
       throw new Error("ERR_MARKET_FACTORY_WALLET_IS_NOT_CONNECTED");
     }
+  };
+
+  const fetchLatestPriceMarkets = async () => {
+    setActions((prev) => ({
+      ...prev,
+      fetchLatestPriceMarkets: {
+        isLoading: true,
+      },
+    }));
+
+    try {
+      const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
+      const marketsList = await marketFactory.getMarketsList();
+
+      if (!marketsList) {
+        throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
+      }
+
+      marketsList.reverse();
+
+      const latest = marketsList.slice(0, 7);
+
+      const first = [...latest].shift();
+
+      setLatestPriceMarketsIds(latest.filter((name) => name !== first));
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Failed to fetch latest price markets",
+        children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
+      });
+    }
+
+    setActions((prev) => ({
+      ...prev,
+      fetchLatestPriceMarkets: {
+        isLoading: false,
+      },
+    }));
   };
 
   const fetchLatestPriceMarket = async () => {
@@ -77,23 +128,20 @@ export const NearMarketFactoryContractContextController = ({
     }
   };
 
-  const createPriceMarket = async () => {
+  const createPriceMarket = async ({
+    startsAt: starts_at,
+    endsAt: ends_at,
+    resolutionWindow,
+  }: PartialCreatePriceMarketContractArgs) => {
     try {
       assertWalletConnection();
 
       const contractAddress = near.getConfig().marketFactoryAccountId;
       const contract = new MarketFactoryContract(contractAddress, undefined, walletState.context.wallet);
 
-      const timezoneOffset = 0;
-
-      const starts_at = date.now().utcOffset(timezoneOffset);
-      const ends_at = starts_at.clone().add(15, "minutes");
-
       const dao_account_id = near.getConfig().marketDaoAccountId;
 
       const collateralToken = pulse.getConfig().COLLATERAL_TOKENS[0];
-
-      const resolutionWindow = ends_at.clone().add(5, "minutes");
 
       // @TODO set to the corresponding Switchboard aggregator feed address
       const ix = {
@@ -105,15 +153,15 @@ export const NearMarketFactoryContractContextController = ({
 
       const current_price = (await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd)).toFixed(2);
 
-      const args: DeployMarketContractArgs = {
+      const createPriceMarketArgs: DeployMarketContractArgs = {
         market: {
           description: "",
           info: "",
           category: "crypto",
           options: ["yes", "no"],
-          starts_at: date.toNanoseconds(starts_at.valueOf()),
-          ends_at: date.toNanoseconds(ends_at.valueOf()),
-          utc_offset: timezoneOffset,
+          starts_at,
+          ends_at,
+          utc_offset: date.constants.DEFAULT_TIMEZONE_OFFSET,
         },
         collateral_token: {
           id: collateralToken.accountId,
@@ -126,7 +174,7 @@ export const NearMarketFactoryContractContextController = ({
           fee_ratio: DEFAULT_FEE_RATIO,
         },
         resolution: {
-          window: date.toNanoseconds(resolutionWindow.valueOf()),
+          window: resolutionWindow,
           ix,
         },
         management: {
@@ -134,12 +182,12 @@ export const NearMarketFactoryContractContextController = ({
         },
         price: {
           value: Number(current_price),
-          base_currency_symbol: "BTC",
-          target_currency_symbol: "USD",
+          base_currency_symbol: pulse.getConfig().priceMarket.defaultBaseCurrency.symbol,
+          target_currency_symbol: pulse.getConfig().priceMarket.defaultTargetCurrency.symbol,
         },
       };
 
-      await contract.createMarket(args);
+      await contract.createMarket(createPriceMarketArgs);
 
       await fetchLatestPriceMarket();
     } catch (error) {
@@ -149,9 +197,12 @@ export const NearMarketFactoryContractContextController = ({
 
   const props = {
     fetchLatestPriceMarket,
+    fetchLatestPriceMarkets,
     createMarket,
     createPriceMarket,
+    latestPriceMarketsIds,
     marketId,
+    actions,
   };
 
   return (

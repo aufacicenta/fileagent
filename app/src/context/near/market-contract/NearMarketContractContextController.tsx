@@ -25,7 +25,9 @@ export const NearMarketContractContextController = ({
   children,
   marketId,
 }: NearMarketContractContextControllerProps) => {
+  const [outcomeTokensExtended, setOutcomeTokensExtended] = useState<OutcomeToken[]>();
   const [marketContractValues, setMarketContractValues] = useState<MarketContractValues>();
+  const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<OutcomeToken | undefined>(undefined);
   const [actions, setActions] = useState<NearMarketContractContextActions>({
     fetchMarketContractValues: {
       isLoading: false,
@@ -93,6 +95,8 @@ export const NearMarketContractContextController = ({
         },
         price,
       });
+
+      setSelectedOutcomeToken(outcomeTokens[0]);
     } catch {
       toast.trigger({
         variant: "error",
@@ -250,6 +254,25 @@ export const NearMarketContractContextController = ({
     }
   };
 
+  const calculateTotalOutcomeTokensPosition = async () => {
+    if (!walletState.isConnected || !marketContractValues?.outcomeTokens) {
+      return;
+    }
+
+    const promises = marketContractValues.outcomeTokens.map((token) =>
+      getBalanceOf({ outcome_id: token.outcome_id, account_id: walletState.address! }).then((balance_of) => ({
+        ...token,
+        balance_of,
+        value: marketContractValues.market.options[token.outcome_id],
+        position: token.total_supply === 0 ? 0 : (balance_of / token.total_supply) * 100,
+      })),
+    );
+
+    const result = await Promise.all(promises);
+
+    setOutcomeTokensExtended(result);
+  };
+
   const onClickResolveMarket = async () => {
     try {
       assertWalletConnection();
@@ -270,6 +293,10 @@ export const NearMarketContractContextController = ({
     }
   };
 
+  const onClickOutcomeToken = (outcomeToken: OutcomeToken) => {
+    setSelectedOutcomeToken(outcomeToken);
+  };
+
   const bettingPeriodExpired = () =>
     !!marketContractValues?.buySellTimestamp && date.now().valueOf() > marketContractValues.buySellTimestamp;
 
@@ -281,8 +308,13 @@ export const NearMarketContractContextController = ({
     getAmountPayable,
     sell,
     onClickResolveMarket,
+    onClickOutcomeToken,
     bettingPeriodExpired,
     actions,
+    selectedOutcomeToken,
+    marketId,
+    calculateTotalOutcomeTokensPosition,
+    outcomeTokensExtended,
   };
 
   return <NearMarketContractContext.Provider value={props}>{children}</NearMarketContractContext.Provider>;

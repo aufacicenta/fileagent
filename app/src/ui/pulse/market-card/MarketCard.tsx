@@ -30,7 +30,6 @@ export const MarketCard: React.FC<MarketCardProps> = ({
   marketContractValues,
   marketId,
   onClickResolveMarket,
-  onClickOutcomeToken,
   onClickMarketTitle,
   currentResultElement,
   datesElement,
@@ -107,16 +106,13 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                       Submit to Resolution
                     </Button>
                   )}
-                  <MarketOptions
-                    onClickOutcomeToken={onClickOutcomeToken}
-                    marketContractValues={marketContractValues}
-                  />
+                  <MarketOptions marketContractValues={marketContractValues} />
                 </div>
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Total Value Locked:</span>
                     <span>
-                      <CollateralTokenBalance marketContractValues={marketContractValues} marketId={marketId} />
+                      <CollateralTokenBalance />
                     </span>
                   </Typography.Description>
                 </div>

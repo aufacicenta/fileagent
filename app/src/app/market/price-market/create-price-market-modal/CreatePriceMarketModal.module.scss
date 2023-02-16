@@ -1,0 +1,77 @@
+@import "src/theme/base";
+@import "src/theme/forms/variables";
+
+.create-price-market-modal {
+  display: block;
+
+  &__modal-content {
+    padding-top: 0;
+  }
+
+  &__categories {
+    margin-bottom: $space-ml;
+  }
+
+  &__market-details-card {
+    border-radius: 14px;
+    background-color: var(--color-dark-10);
+  }
+
+  &__spacer {
+    margin-top: $space-m;
+  }
+
+  &__token {
+    display: flex;
+    font-size: $input-font-size;
+
+    &--icon-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      width: 18px;
+      height: 18px;
+      margin-right: $space-s;
+      border-radius: 50%;
+      background-color: var(--color-status-critical);
+    }
+
+    &--icon {
+      width: 100%;
+      color: var(--color-background);
+    }
+  }
+
+  &__market-options {
+    display: block;
+
+    &--option {
+      display: flex;
+      justify-content: space-between;
+
+      &-input {
+        width: 100%;
+        padding-right: $space-default;
+      }
+
+      &-add-remove {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: $input-height;
+        border-radius: $border-radius-input;
+        padding: $input-padding;
+        color: var(--color-typography-text);
+        background: $input-background;
+
+        &:hover {
+          background: var(--color-background);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

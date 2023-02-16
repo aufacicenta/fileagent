@@ -1,0 +1,13 @@
+@import "src/theme/base";
+@import "src/ui/table/variables";
+@import "src/ui/table/mixins";
+
+.latest-price-markets-table {
+  @include table;
+  @include tableStripped;
+  @include tableSm;
+
+  &__responsive {
+    @include tableResponsive;
+  }
+}

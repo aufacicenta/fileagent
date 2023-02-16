@@ -1,10 +1,18 @@
 import { ReactNode } from "react";
 
-import { MarketContractValues } from "providers/near/contracts/market/market.types";
+import { AccountId } from "providers/near/contracts/market/market.types";
 
 export type PriceMarketProps = {
-  marketContractValues: MarketContractValues;
-  marketId: string;
+  marketId: AccountId;
   children?: ReactNode;
   className?: string;
+};
+
+export type PriceMarketContainerProps = {
+  marketId: AccountId;
+  head: {
+    title: string;
+    description: string;
+    url: string;
+  };
 };

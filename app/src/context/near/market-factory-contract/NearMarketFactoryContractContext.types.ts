@@ -9,7 +9,18 @@ export type NearMarketFactoryContractContextControllerProps = {
 
 export type NearMarketFactoryContractContextType = {
   fetchLatestPriceMarket: () => Promise<void>;
+  fetchLatestPriceMarkets: () => Promise<void>;
   createMarket: (args: DeployMarketContractArgs) => Promise<void>;
-  createPriceMarket: () => Promise<void>;
+  createPriceMarket: (args: PartialCreatePriceMarketContractArgs) => Promise<void>;
+  latestPriceMarketsIds: string[];
+  actions: NearMarketFactoryContractContextActions;
   marketId?: AccountId;
 };
+
+export type PartialCreatePriceMarketContractArgs = {
+  startsAt: DeployMarketContractArgs["market"]["starts_at"];
+  endsAt: DeployMarketContractArgs["market"]["ends_at"];
+  resolutionWindow: DeployMarketContractArgs["resolution"]["window"];
+};
+
+export type NearMarketFactoryContractContextActions = { fetchLatestPriceMarkets: { isLoading: boolean } };

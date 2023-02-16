@@ -3,6 +3,20 @@
 .price-market {
   display: block;
 
+  &__title-row {
+    @include atLargeTablet {
+      flex-direction: row;
+    }
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $space-ml;
+
+    a {
+      text-align: left;
+      text-transform: none;
+    }
+  }
+
   &__current-result-element {
     &--create-market {
       display: flex;

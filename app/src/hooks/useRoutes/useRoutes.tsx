@@ -1,4 +1,8 @@
 type RouteMap = {
+  home: () => string;
+  market: {
+    price: (args: { marketId: string }) => string;
+  };
   dashboard: {
     latestTrends: () => string;
     market: (args: { marketId: string }) => string;
@@ -9,6 +13,10 @@ type RouteMap = {
 };
 
 export const routes: RouteMap = {
+  home: () => `/`,
+  market: {
+    price: ({ marketId }) => `/market/price/${marketId}`,
+  },
   dashboard: {
     latestTrends: () => `/`,
     market: ({ marketId }) => `/market/${marketId}`,
