@@ -68,7 +68,7 @@
     "@types/uuid": "^8.3.4",
     "eslint-plugin-unused-imports": "^2.0.0",
     "inquirer-directory": "^2.2.0",
-    "node-sass": "^6.0.0",
+    "node-sass": "^8.0",
     "plop": "^2.7.4",
     "sass-loader": "^12.3.0",
     "typed-scss-modules": "^4.1.1",

@@ -1,9 +1,11 @@
 {
-  "pulseSidebar.item.dashboard": "Dashboard",
+  "pulseSidebar.item.dashboard": "Latest Markets",
   "pulseSidebar.item.sportAndBetting": "Sport & Betting",
   "pulseSidebar.item.bets": "Bets",
   "pulseSidebar.item.profile": "Profile",
   "pulseSidebar.item.close": "Close",
+  "pulseSidebar.item.code": "Github",
+  "pulseSidebar.item.docs": "Docs",
   "pulseSidebar.item.bridge": "Bridge",
   "button.createMarket": "Create Market",
   "toast.cta.dismiss": "Dismiss"

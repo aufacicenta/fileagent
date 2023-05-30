@@ -38,13 +38,39 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-dashboard" />
+                  <Icon name="icon-icons2" />
                 </div>
                 <Typography.Description flat>{t("pulseSidebar.item.dashboard")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__divider"]}>
               <div className={styles["pulse-sidebar__divider--bar"]} />
+            </div>
+            <div className={styles["pulse-sidebar__item"]}>
+              <Typography.Anchor
+                className={styles["pulse-sidebar__item--link"]}
+                href="https://github.com/aufacicenta/pulsemarkets-v2-web"
+                target="_blank"
+                rel="nofollow"
+              >
+                <div className={styles["pulse-sidebar__item--icon"]}>
+                  <Icon name="icon-file-code" />
+                </div>
+                <Typography.Description flat>{t("pulseSidebar.item.code")}</Typography.Description>
+              </Typography.Anchor>
+            </div>
+            <div className={styles["pulse-sidebar__item"]}>
+              <Typography.Anchor
+                className={styles["pulse-sidebar__item--link"]}
+                href="https://docs.pulsemarkets.org"
+                target="_blank"
+                rel="nofollow"
+              >
+                <div className={styles["pulse-sidebar__item--icon"]}>
+                  <Icon name="icon-reading" />
+                </div>
+                <Typography.Description flat>{t("pulseSidebar.item.docs")}</Typography.Description>
+              </Typography.Anchor>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Anchor
