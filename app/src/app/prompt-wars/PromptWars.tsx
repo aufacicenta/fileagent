@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { Field, Form as RFForm } from "react-final-form";
 import { useEffect } from "react";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
@@ -11,6 +10,7 @@ import { Button } from "ui/button/Button";
 import { ImgPromptCard } from "ui/pulse/img-prompt-card/ImgPromptCard";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { GenericLoader } from "ui/generic-loader/GenericLoader";
+import { PromptInputCard } from "ui/pulse/prompt-input-card/PromptInputCard";
 
 import { PromptWarsProps } from "./PromptWars.types";
 import styles from "./PromptWars.module.scss";
@@ -53,29 +53,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
             <Grid.Col lg={5} xs={12}>
               <Card>
                 <Card.Content>
-                  <Card>
-                    <Card.Content>
-                      <Typography.Headline3 className={styles["prompt-wars__prompt-card--title"]}>
-                        Write your prompt down 👇
-                      </Typography.Headline3>
-                      <RFForm
-                        onSubmit={onSubmit}
-                        render={({ handleSubmit }) => (
-                          <form onSubmit={handleSubmit}>
-                            <Field
-                              name="prompt"
-                              component="textarea"
-                              className={clsx(
-                                styles["prompt-wars__prompt-card--input"],
-                                "input-field",
-                                "materialize-textarea",
-                              )}
-                            />
-                          </form>
-                        )}
-                      />
-                    </Card.Content>
-                  </Card>
+                  <PromptInputCard onSubmit={onSubmit} />
                 </Card.Content>
               </Card>
             </Grid.Col>

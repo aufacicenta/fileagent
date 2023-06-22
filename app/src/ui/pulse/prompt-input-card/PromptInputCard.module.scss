@@ -1,0 +1,17 @@
+@import "src/theme/base";
+@import "src/theme/forms/variables";
+
+.prompt-input-card {
+  display: block;
+
+  &__title {
+    margin-bottom: $space-default;
+  }
+
+  &__input {
+    min-height: 180px;
+    padding: $space-default !important;
+    font-size: $input-font-size !important;
+    background-color: var(--color-market-card-background);
+  }
+}

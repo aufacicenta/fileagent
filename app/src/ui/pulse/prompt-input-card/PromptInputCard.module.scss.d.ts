@@ -1,8 +1,7 @@
 export type Styles = {
-  "prompt-wars": string;
-  "prompt-wars__game-row": string;
-  "prompt-wars__title-row": string;
-  "prompt-wars__title-row--description": string;
+  "prompt-input-card": string;
+  "prompt-input-card__input": string;
+  "prompt-input-card__title": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

@@ -1,5 +1,4 @@
 @import "src/theme/base";
-@import "src/theme/forms/variables";
 
 .prompt-wars {
   display: block;
@@ -24,24 +23,6 @@
   }
 
   &__game-row {
-    @include atLargeTablet {
-      flex-direction: row;
-    }
-    display: flex;
-    flex-direction: column;
     margin-bottom: $space-ml;
-  }
-
-  &__prompt-card {
-    &--title {
-      margin-bottom: $space-default;
-    }
-
-    &--input {
-      min-height: 180px;
-      padding: $space-default !important;
-      font-size: $input-font-size !important;
-      background-color: var(--color-market-card-background);
-    }
   }
 }
