@@ -5,6 +5,8 @@ export type Styles = {
   card__content: string;
   card__link: string;
   card__shadow: string;
+  card__spotlight: string;
+  "card__spotlight--child": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

@@ -6,6 +6,7 @@ export type CardProps = HTMLAttributes<HTMLDivElement> & {
   backgroundImageUrl?: string;
   url?: string;
   shadow?: boolean;
+  withSpotlightEffect?: boolean;
 };
 
 export type CardContentProps = {

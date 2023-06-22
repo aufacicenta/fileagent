@@ -13,7 +13,7 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
     onSubmit={onSubmit}
     render={({ handleSubmit }) => (
       <form onSubmit={handleSubmit}>
-        <Card className={clsx(styles["prompt-input-card"], className)}>
+        <Card className={clsx(styles["prompt-input-card"], className)} withSpotlightEffect>
           <Card.Content>
             <Typography.Headline3 className={styles["prompt-input-card__title"]}>
               Write your prompt down 👇

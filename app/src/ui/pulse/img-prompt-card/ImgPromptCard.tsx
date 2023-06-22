@@ -53,11 +53,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   };
 
   return (
-    <Card className={clsx(styles["img-prompt-card"], className)}>
+    <Card className={clsx(styles["img-prompt-card"], className)} withSpotlightEffect>
       <Card.Content>
         <Grid.Row>
           <Grid.Col lg={7}>
-            <Card>
+            <Card withSpotlightEffect>
               <Card.Content className={styles["img-prompt-card__current-img-card--box"]}>
                 <div className={styles["img-prompt-card__current-img-card--file"]}>
                   <img src="/prompt-wars/toast.jpg" alt="current" />
@@ -81,7 +81,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
               <div className={styles["img-prompt-card__start-end-time"]}>
                 {getDatesElement()}
 
-                <Card className={styles["img-prompt-card__stats"]}>
+                <Card className={styles["img-prompt-card__stats"]} withSpotlightEffect>
                   <Card.Content className={styles["img-prompt-card__stats--content"]}>
                     <Typography.Description>Participants</Typography.Description>
                     <Typography.Text>12,345</Typography.Text>

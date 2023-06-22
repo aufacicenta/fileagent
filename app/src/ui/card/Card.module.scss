@@ -8,6 +8,23 @@
     @extend .z-depth-1;
   }
 
+  &__spotlight {
+    position: relative;
+    border: 1px solid #374151;
+    border-radius: 0.875rem;
+    overflow: hidden;
+    background-image: linear-gradient(to right, var(--color-background-contrast), var(--color-background));
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    &--child {
+      pointer-events: none;
+      position: absolute;
+      inset: -1px;
+      opacity: 0;
+      transition: opacity 300ms;
+    }
+  }
+
   &__content {
     padding: 1.3rem $space-default;
   }

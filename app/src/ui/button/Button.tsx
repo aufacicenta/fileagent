@@ -41,6 +41,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         [styles["button--inverted"]]: variant === "inverted",
         [styles["button--text"]]: variant === "text",
         [styles["button--gradient"]]: variant === "gradient",
+        [styles["button--glass"]]: variant === "glass",
         // sizes
         [styles["button--extra-small"]]: size === "xs",
         [styles["button--small"]]: size === "s",

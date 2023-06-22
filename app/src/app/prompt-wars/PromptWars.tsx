@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { PromptWarsLogo } from "ui/icons/PromptWarsLogo";
 import { Grid } from "ui/grid/Grid";
-import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { ImgPromptCard } from "ui/pulse/img-prompt-card/ImgPromptCard";
@@ -51,11 +50,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
               <ImgPromptCard marketId={marketId} marketContractValues={marketContractValues} datesElement={<></>} />
             </Grid.Col>
             <Grid.Col lg={5} xs={12}>
-              <Card>
-                <Card.Content>
-                  <PromptInputCard onSubmit={onSubmit} />
-                </Card.Content>
-              </Card>
+              <PromptInputCard onSubmit={onSubmit} />
             </Grid.Col>
           </Grid.Row>
         </div>
