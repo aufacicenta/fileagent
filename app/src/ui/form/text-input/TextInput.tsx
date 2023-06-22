@@ -17,12 +17,13 @@ export const TextInput: React.FC<TextInputProps> = ({
   autoFocus,
   disabled,
   defaultValue,
+  component = "input",
 }) => (
   <div className={clsx(styles["text-input"], "input-field", className)}>
     <Field
       id={id}
       name={name || id}
-      component="input"
+      component={component}
       type={type}
       autoFocus={autoFocus}
       placeholder={placeholder}

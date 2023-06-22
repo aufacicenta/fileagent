@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/ui/typography/variables";
 
 @mixin visible($width) {
   width: $width;
@@ -119,6 +120,7 @@
       }
 
       p {
+        font-weight: $font-weight-bold;
         color: var(--color-typography-text);
         opacity: 0;
       }

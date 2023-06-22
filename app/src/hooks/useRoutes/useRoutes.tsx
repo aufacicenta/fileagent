@@ -5,6 +5,7 @@ type RouteMap = {
   };
   dashboard: {
     latestTrends: () => string;
+    promptWars: () => string;
     market: (args: { marketId: string }) => string;
     sports: (pageSlug: string) => string;
     bets: (pageSlug: string) => string;
@@ -19,6 +20,7 @@ export const routes: RouteMap = {
   },
   dashboard: {
     latestTrends: () => `/`,
+    promptWars: () => `/prompt-wars`,
     market: ({ marketId }) => `/market/${marketId}`,
     sports: () => `/sports`,
     bets: () => `/bets`,

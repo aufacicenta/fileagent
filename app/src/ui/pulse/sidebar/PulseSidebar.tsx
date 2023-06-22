@@ -43,6 +43,14 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                 <Typography.Description flat>{t("pulseSidebar.item.dashboard")}</Typography.Description>
               </Typography.Link>
             </div>
+            <div className={styles["pulse-sidebar__item"]}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.promptWars()}>
+                <div className={styles["pulse-sidebar__item--icon"]}>
+                  <Icon name="icon-portrait2" />
+                </div>
+                <Typography.Description flat>{t("pulseSidebar.item.promptWars")}</Typography.Description>
+              </Typography.Link>
+            </div>
             <div className={styles["pulse-sidebar__divider"]}>
               <div className={styles["pulse-sidebar__divider--bar"]} />
             </div>

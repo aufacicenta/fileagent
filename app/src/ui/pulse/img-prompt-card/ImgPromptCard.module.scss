@@ -1,0 +1,55 @@
+@import "src/theme/base";
+
+.img-prompt-card {
+  display: block;
+
+  &__current-img-card {
+    &--box {
+      background-color: var(--color-market-card-background-contrast);
+    }
+
+    &--file {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  &__current-result-element {
+    margin-bottom: $space-default;
+    border: 1px solid var(--color-market-fees-card-background);
+    background-color: var(--color-market-card-background-contrast);
+
+    &--time-left {
+      padding-top: $space-default;
+      padding-bottom: $space-default;
+      text-align: right;
+
+      &-warn {
+        color: var(--color-status-warning);
+      }
+    }
+  }
+
+  &__start-end-time {
+    display: block;
+
+    &--text {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        margin-left: 3px;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+}
