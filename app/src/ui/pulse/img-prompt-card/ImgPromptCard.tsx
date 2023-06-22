@@ -67,16 +67,28 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
           </Grid.Col>
           <Grid.Col lg={5}>
             <div className={styles["img-prompt-card__right-column"]}>
-              <Card className={styles["img-prompt-card__current-result-element"]}>
-                <Card.Content className={styles["img-prompt-card__current-result-element--time-left"]}>
+              <Card className={styles["img-prompt-card__countdown"]}>
+                <Card.Content className={styles["img-prompt-card__countdown--content"]}>
                   <Typography.Description>Time left</Typography.Description>
                   <Typography.Headline3 flat>
                     <Countdown date={Date.now() - 1000000} />
                   </Typography.Headline3>
+                  <Typography.MiniDescription flat>
+                    Next image will load in <Countdown date={Date.now() - 1000000} />
+                  </Typography.MiniDescription>
                 </Card.Content>
               </Card>
               <div className={styles["img-prompt-card__start-end-time"]}>
                 {getDatesElement()}
+
+                <Card className={styles["img-prompt-card__stats"]}>
+                  <Card.Content className={styles["img-prompt-card__stats--content"]}>
+                    <Typography.Description>Participants</Typography.Description>
+                    <Typography.Text>12,345</Typography.Text>
+                    <Typography.Description>Total Price Bag</Typography.Description>
+                    <Typography.Text flat>USDT 34,500.00</Typography.Text>
+                  </Card.Content>
+                </Card>
 
                 <Typography.Description className={styles["img-prompt-card__start-end-time--text"]}>
                   <span>Resolution mechanism</span>

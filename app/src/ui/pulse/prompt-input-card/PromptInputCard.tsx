@@ -26,6 +26,13 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
             />
           </Card.Content>
           <Card.Actions>
+            <Typography.Description flat>
+              Submitting your prompt will charge 10 USDT from your wallet. This will cover storage costs and the
+              submission fee.{" "}
+              <Button size="xs" variant="outlined" color="secondary">
+                FAQs
+              </Button>
+            </Typography.Description>
             <Button type="submit">Submit</Button>
           </Card.Actions>
         </Card>

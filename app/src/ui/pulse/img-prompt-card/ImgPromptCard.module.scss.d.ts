@@ -1,13 +1,16 @@
 export type Styles = {
   "img-prompt-card": string;
+  "img-prompt-card__countdown": string;
+  "img-prompt-card__countdown--content": string;
+  "img-prompt-card__countdown--content-warn": string;
   "img-prompt-card__current-img-card--box": string;
   "img-prompt-card__current-img-card--file": string;
-  "img-prompt-card__current-result-element": string;
-  "img-prompt-card__current-result-element--time-left": string;
-  "img-prompt-card__current-result-element--time-left-warn": string;
   "img-prompt-card__right-column": string;
   "img-prompt-card__start-end-time": string;
   "img-prompt-card__start-end-time--text": string;
+  "img-prompt-card__stats": string;
+  "img-prompt-card__stats--content": string;
+  "img-prompt-card__stats--content-warn": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

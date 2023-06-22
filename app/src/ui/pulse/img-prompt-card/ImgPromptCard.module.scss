@@ -16,12 +16,27 @@
     }
   }
 
-  &__current-result-element {
+  &__countdown {
     margin-bottom: $space-default;
     border: 1px solid var(--color-market-fees-card-background);
     background-color: var(--color-market-card-background-contrast);
 
-    &--time-left {
+    &--content {
+      padding-top: $space-default;
+      padding-bottom: $space-default;
+      text-align: right;
+
+      &-warn {
+        color: var(--color-status-warning);
+      }
+    }
+  }
+
+  &__stats {
+    margin-bottom: $space-default;
+    background-color: var(--color-market-card-background-contrast);
+
+    &--content {
       padding-top: $space-default;
       padding-bottom: $space-default;
       text-align: right;
