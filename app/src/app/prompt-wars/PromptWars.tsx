@@ -5,7 +5,6 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { PromptWarsLogo } from "ui/icons/PromptWarsLogo";
 import { Grid } from "ui/grid/Grid";
 import { Typography } from "ui/typography/Typography";
-import { Button } from "ui/button/Button";
 import { ImgPromptCard } from "ui/pulse/img-prompt-card/ImgPromptCard";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { GenericLoader } from "ui/generic-loader/GenericLoader";
@@ -37,9 +36,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
             <Typography.Description flat>
               Compete against the best prompt engineers
               <br /> writing the prompt that will render the image on display.{" "}
-              <Button size="xs" variant="outlined" color="secondary">
-                FAQs
-              </Button>
+              <Typography.Anchor>FAQs</Typography.Anchor>
             </Typography.Description>
           </div>
         </div>
