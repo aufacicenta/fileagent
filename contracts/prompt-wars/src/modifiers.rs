@@ -1,10 +1,16 @@
-use near_sdk::{env, near_bindgen};
+use near_sdk::{env, near_bindgen, AccountId};
 use shared::OutcomeId;
 
 use crate::storage::*;
 
 #[near_bindgen]
 impl Market {
+    pub fn assert_price(&self, amount: WrappedBalance) {
+        if amount < self.fees.price {
+            env::panic_str("ERR_ASSERT_PRICE_TOO_LOW");
+        }
+    }
+
     pub fn assert_is_not_resolved(&self) {
         if self.is_resolved() {
             env::panic_str("ERR_MARKET_RESOLVED");
@@ -29,6 +35,12 @@ impl Market {
         }
     }
 
+    pub fn assert_is_reveal_window_open(&self) {
+        if self.is_reveal_window_expired() {
+            env::panic_str("ERR_REVEAL_WINDOW_EXPIRED");
+        }
+    }
+
     pub fn assert_is_claiming_window_open(&self) {
         if self.is_claiming_window_expired() {
             env::panic_str("ERR_CLAIMING_WINDOW_EXPIRED");
@@ -41,8 +53,14 @@ impl Market {
         }
     }
 
-    pub fn assert_only_owner(&self, ix: Ix) {
-        if self.resolution.ix.address != ix.address {
+    pub fn assert_only_player(&self, outcome_id: OutcomeId, account_id: AccountId) {
+        if outcome_id != account_id {
+            env::panic_str("ERR_SIGNER_IS_NOT_PLAYER");
+        }
+    }
+
+    pub fn assert_only_owner(&self) {
+        if env::signer_account_id() != self.management.market_creator_account_id {
             env::panic_str("ERR_SIGNER_IS_NOT_OWNER");
         }
     }

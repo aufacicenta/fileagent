@@ -9,6 +9,7 @@ use shared::{OutcomeId, Price};
 
 pub type Timestamp = i64;
 pub type WrappedBalance = u128;
+pub type OutcomeTokenResult = f32;
 
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
 #[cfg_attr(not(target_arch = "wasm32"), derive(Debug, PartialEq))]
@@ -35,6 +36,8 @@ pub struct Market {
     pub management: Management,
     // Keeps track of Outcomes prices and balances
     pub outcome_tokens: LookupMap<AccountId, OutcomeToken>,
+    // Keeps track of the outcome_ids that have bet on the market
+    pub players: Vec<AccountId>,
     // Market fees metadata
     pub fees: Fees,
 }
@@ -48,9 +51,11 @@ pub enum SetPriceOptions {
 #[derive(BorshSerialize, BorshDeserialize, Serialize)]
 pub struct OutcomeToken {
     // the account id of the outcome_token
-    pub player_id: AccountId,
+    pub outcome_id: OutcomeId,
     // the outcome value, in this case, the prompt submitted to the competition
-    pub value: String,
+    pub prompt: String,
+    // store the result from the image comparison: percentage_diff or pixel_difference
+    pub result: Option<OutcomeTokenResult>,
     // map `AccountId` to corresponding `Balance` in the market
     #[serde(skip_serializing)]
     pub balances: UnorderedMap<AccountId, WrappedBalance>,
@@ -74,12 +79,10 @@ pub struct CollateralToken {
 pub struct Resolution {
     // Time to free up the market
     pub window: Timestamp,
+    // Time after the market ends and before the resolution window starts
+    pub reveal_window: Timestamp,
     // When the market is resolved, set only by fn resolve
     pub resolved_at: Option<Timestamp>,
-    // Unit8ByteArray with the immutable Aggregator address, this is the "is_owner" condition to resolve the market
-    pub ix: Ix,
-    // The value to compare the outcomes tokens value with
-    pub source: String,
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
@@ -90,6 +93,8 @@ pub struct Management {
     pub market_creator_account_id: AccountId,
     // Set at initialization, the market may be destroyed by the creator to claim the storage deposit
     pub self_destruct_window: Timestamp,
+    // Set at initialization, determines when to close bets
+    pub buy_sell_threshold: f32,
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Deserialize, Serialize)]
@@ -117,15 +122,13 @@ pub enum StorageKeys {
 #[derive(Serialize, Deserialize)]
 pub struct BuyArgs {
     // id of the outcome that shares are to be purchased from
-    pub player_id: AccountId,
+    pub outcome_id: OutcomeId,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct CreateOutcomeTokenArgs {
-    // the account id of the outcome_token
-    pub player_id: AccountId,
     // the outcome value, in this case, the prompt submitted to the competition
-    pub value: String,
+    pub prompt: String,
 }
 
 #[derive(Serialize, Deserialize)]

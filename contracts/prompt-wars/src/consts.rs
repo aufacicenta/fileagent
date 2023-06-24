@@ -15,8 +15,10 @@ pub const GAS_FT_METADATA: Gas = Gas(2_000_000_000_000);
 pub const GAS_FT_METADATA_CALLBACK: Gas = Gas(2_000_000_000_000);
 pub const GAS_AGGREGATOR_READ: Gas = Gas(8_000_000_000_000);
 
+pub const BUY_SELL_THRESHOLD: f32 = 0.75; // 25% before the event ends
+
 pub const CREATE_OUTCOME_TOKEN_PRICE: WrappedBalance = 10_000_000; // 10 USDT
-pub const FEE_RATIO: Balance = 2_000; // 2%
+pub const FEE_RATIO: Balance = 20_000; // 2%
 
 pub const BALANCE_PROPOSAL_BOND: Balance = 100_000_000_000_000_000_000_000; // 0.1 Near
 pub const FT_TRANSFER_BOND: Balance = ONE_YOCTO;

@@ -9,6 +9,7 @@ use std::default::Default;
 use near_contract_standards::fungible_token::core::ext_ft_core;
 
 use crate::consts::*;
+use crate::outcome_token;
 use crate::storage::*;
 
 #[ext_contract(ext_self)]
@@ -46,13 +47,23 @@ impl Market {
             env::panic_str("ERR_ALREADY_INITIALIZED");
         }
 
-        let resolution_window = resolution.window;
+        // Add 5 minutes
+        let reveal_window = market.ends_at + 300_000;
+        // Add 5 minutes
+        let resolution_window = reveal_window + 300_000;
+
+        // 30 days
         let self_destruct_window = resolution_window + 2_592_000 * 1_000_000_000;
 
         Self {
             market,
             outcome_tokens: LookupMap::new(StorageKeys::OutcomeTokens),
-            resolution,
+            players: Vec::new(),
+            resolution: Resolution {
+                window: resolution_window,
+                reveal_window,
+                resolved_at: None,
+            },
             fees: Fees {
                 price: CREATE_OUTCOME_TOKEN_PRICE,
                 fee_ratio: FEE_RATIO,
@@ -65,6 +76,7 @@ impl Market {
             },
             management: Management {
                 self_destruct_window,
+                buy_sell_threshold: BUY_SELL_THRESHOLD,
                 ..management
             },
         }
@@ -78,14 +90,15 @@ impl Market {
     ) -> WrappedBalance {
         self.assert_is_open();
         self.assert_is_not_resolved();
+        self.assert_price(amount);
 
-        let player_id = payload.player_id;
-        let value = payload.value;
+        let outcome_id = sender_id;
+        let prompt = payload.prompt;
 
-        match self.outcome_tokens.get(&player_id) {
-            Some(_token) => env::panic_str("ERR_CREATE_OUTCOME_TOKEN_PLAYER_ID_EXIST"),
+        match self.outcome_tokens.get(&outcome_id) {
+            Some(_token) => env::panic_str("ERR_CREATE_OUTCOME_TOKEN_outcome_id_EXIST"),
             None => {
-                self.internal_create_outcome_token(player_id, value, amount);
+                self.internal_create_outcome_token(outcome_id, prompt, amount);
             }
         }
 
@@ -103,80 +116,57 @@ impl Market {
         self.assert_is_open();
         self.assert_is_not_resolved();
 
-        let mut outcome_token = self.get_outcome_token(payload.player_id);
-
-        let (amount_mintable, fee) = self.get_amount_mintable(amount);
-
-        log!("BUY amount: {}, fee_ratio: {}, fee_result: {}, player_id: {}, sender_id: {}, supply: {}, amount_mintable: {}, fee_balance: {}",
-            amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
-            self.fees.fee_ratio.to_formatted_string(&FORMATTED_STRING_LOCALE),
-            fee.to_formatted_string(&FORMATTED_STRING_LOCALE),
-            outcome_token.player_id,
-            sender_id,
-            outcome_token.total_supply().to_formatted_string(&FORMATTED_STRING_LOCALE),
-            amount_mintable.to_formatted_string(&FORMATTED_STRING_LOCALE),
-            self.collateral_token.fee_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
-        );
-
-        outcome_token.mint(&sender_id, amount_mintable);
-        self.update_ct_balance(self.collateral_token.balance + amount);
-        self.update_ct_fee_balance(fee);
-
-        self.outcome_tokens
-            .insert(&payload.player_id, &outcome_token);
-
-        return amount_mintable;
+        self.internal_buy(payload.outcome_id, &sender_id, amount)
     }
 
     #[payable]
     pub fn sell(&mut self, outcome_id: OutcomeId, amount: WrappedBalance) -> WrappedBalance {
         // @TODO if there are participants only in 1 outcome, allow to claim funds after resolution, otherwise funds will be locked
         if self.is_expired_unresolved() {
-            return self.internal_sell(outcome_id, amount);
+            return self.internal_sell(&outcome_id, amount);
         }
 
         self.assert_is_not_under_resolution();
         self.assert_is_resolved();
 
-        return self.internal_sell(outcome_id, amount);
+        return self.internal_sell(&outcome_id, amount);
     }
 
     #[payable]
-    pub fn resolve(&mut self, outcome_id: OutcomeId, ix: Ix) {
-        self.assert_only_owner(ix);
+    pub fn reveal(&mut self, outcome_id: OutcomeId, result: OutcomeTokenResult) {
+        self.assert_only_owner();
+        self.assert_is_reveal_window_open();
         self.assert_is_not_resolved();
-        self.assert_is_valid_outcome(outcome_id);
-
+        self.assert_is_valid_outcome(outcome_id.clone());
         self.assert_is_resolution_window_open();
+
+        let mut outcome_token = self.outcome_tokens.get(&outcome_id).unwrap();
+        outcome_token.set_result(result);
+
+        self.outcome_tokens.insert(&outcome_id, &outcome_token);
+
+        self.resolution.resolved_at = Some(self.get_block_timestamp());
+    }
+
+    #[payable]
+    pub fn resolve(&mut self, outcome_id: OutcomeId) {
+        self.assert_only_owner();
+        self.assert_is_not_resolved();
+        self.assert_is_valid_outcome(outcome_id.clone());
+        self.assert_is_resolution_window_open();
+
+        // @TODO the server (owner) will call this method after the reveal period.
+        // @TODO the server should iterate over all participants with a valid outcome_token.result and determine which is closer to 0
 
         self.burn_the_losers(outcome_id);
 
         self.resolution.resolved_at = Some(self.get_block_timestamp());
     }
 
-    pub fn aggregator_read(&mut self) -> Promise {
-        let ix = self.resolution.ix.clone();
-
-        let msg = serde_json::json!({
-            "AggregatorReadArgs": {
-                "ix": ix,
-                "market_options": self.get_market_data().options,
-                "market_outcome_ids": self.get_outcome_ids(),
-                "price": self.get_pricing_data().value,
-            }
-        });
-
-        log!("{}", msg.to_string());
-
-        ext_feed_parser::ext(FEED_PARSER_ACCOUNT_ID.to_string().try_into().unwrap())
-            .with_static_gas(GAS_AGGREGATOR_READ)
-            .aggregator_read(msg.to_string())
-    }
-
     #[private]
-    pub fn update_ct_balance(&mut self, amount: WrappedBalance) -> WrappedBalance {
+    pub fn update_collateral_token_balance(&mut self, amount: WrappedBalance) -> WrappedBalance {
         log!(
-            "update_ct_balance: {}",
+            "update_collateral_token_balance: {}",
             amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
         );
 
@@ -185,51 +175,93 @@ impl Market {
     }
 
     #[private]
-    pub fn update_ct_fee_balance(&mut self, amount: WrappedBalance) -> WrappedBalance {
+    pub fn update_collateral_token_fee_balance(
+        &mut self,
+        amount: WrappedBalance,
+    ) -> WrappedBalance {
+        log!(
+            "update_collateral_token_fee_balance: {}",
+            amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
+        );
+
         self.collateral_token.fee_balance += amount;
         self.collateral_token.fee_balance
     }
 }
 
 impl Market {
+    // Mint a new token for the player
     fn internal_create_outcome_token(
         &mut self,
-        player_id: AccountId,
-        value: String,
+        outcome_id: OutcomeId,
+        prompt: String,
         amount: WrappedBalance,
     ) -> WrappedBalance {
+        let outcome_token = OutcomeToken::new(&outcome_id, prompt);
+
+        self.players.push(outcome_id.clone());
+
+        self.outcome_tokens.insert(&outcome_id, &outcome_token);
+
+        self.internal_buy(outcome_id.clone(), &outcome_id, amount)
+    }
+
+    fn internal_buy(
+        &mut self,
+        outcome_id: OutcomeId,
+        sender_id: &AccountId,
+        amount: WrappedBalance,
+    ) -> WrappedBalance {
+        let mut outcome_token = self.get_outcome_token(outcome_id.clone());
+
         let (amount_mintable, fee) = self.get_amount_mintable(amount);
 
-        let outcome_token = OutcomeToken::new(player_id, value, 0);
-        self.outcome_tokens.insert(&player_id, &outcome_token);
+        log!("BUY amount: {}, fee_ratio: {}, fee_result: {}, outcome_id: {}, sender_id: {}, supply: {}, amount_mintable: {}, fee_balance: {}",
+            amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            self.fees.fee_ratio.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            fee.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            outcome_token.outcome_id,
+            sender_id,
+            outcome_token.total_supply().to_formatted_string(&FORMATTED_STRING_LOCALE),
+            amount_mintable.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            self.collateral_token.fee_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
+        );
 
-        amount_mintable
+        outcome_token.mint(&sender_id, amount_mintable);
+
+        self.update_collateral_token_balance(self.collateral_token.balance + amount_mintable);
+        self.update_collateral_token_fee_balance(fee);
+
+        self.outcome_tokens.insert(&outcome_id, &outcome_token);
+
+        return amount_mintable;
     }
 
     fn burn_the_losers(&mut self, outcome_id: OutcomeId) {
-        for id in 0..self.market.options.len() {
-            let mut outcome_token = self.get_outcome_token(id as OutcomeId);
-            if outcome_token.outcome_id != outcome_id {
+        for p_id in self.players.iter() {
+            if p_id != &outcome_id {
+                let mut outcome_token = self.get_outcome_token(p_id.clone());
                 outcome_token.deactivate();
-                self.outcome_tokens
-                    .insert(&(id as OutcomeId), &outcome_token);
+                self.outcome_tokens.insert(&(p_id), &outcome_token);
             }
         }
     }
 
-    fn internal_sell(&mut self, outcome_id: OutcomeId, amount: WrappedBalance) -> WrappedBalance {
-        if amount > self.balance_of(outcome_id, env::signer_account_id()) {
+    fn internal_sell(&mut self, outcome_id: &OutcomeId, amount: WrappedBalance) -> WrappedBalance {
+        if amount > self.balance_of(outcome_id.clone(), env::signer_account_id()) {
             env::panic_str("ERR_SELL_AMOUNT_GREATER_THAN_BALANCE");
         }
 
+        // @TODO add logic to calculate amount_payable to the player (should earn 100% of the losing players bag, minus fees)
+
         let (amount_payable, weight) =
-            self.get_amount_payable(amount, outcome_id, env::signer_account_id());
+            self.get_amount_payable(amount, outcome_id.clone(), env::signer_account_id());
 
         if amount_payable <= 0 {
             env::panic_str("ERR_CANT_SELL_A_LOSING_OUTCOME");
         }
 
-        let outcome_token = self.get_outcome_token(outcome_id);
+        let outcome_token = self.get_outcome_token(outcome_id.clone());
 
         let payee = env::signer_account_id();
 
@@ -238,7 +270,7 @@ impl Market {
             amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
             outcome_id,
             payee,
-            outcome_token.get_balance(&payee).to_formatted_string(&FORMATTED_STRING_LOCALE),
+            outcome_token.get_balance_of(&payee).to_formatted_string(&FORMATTED_STRING_LOCALE),
             outcome_token.total_supply().to_formatted_string(&FORMATTED_STRING_LOCALE),
             self.is_resolved(),
             self.collateral_token.balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
@@ -254,7 +286,7 @@ impl Market {
         let ft_transfer_callback_promise = ext_self::ext(env::current_account_id())
             .with_attached_deposit(0)
             .with_static_gas(GAS_FT_TRANSFER_CALLBACK)
-            .on_ft_transfer_callback(amount, payee, outcome_id, amount_payable);
+            .on_ft_transfer_callback(amount, payee, outcome_id.clone(), amount_payable);
 
         ft_transfer_promise.then(ft_transfer_callback_promise);
 

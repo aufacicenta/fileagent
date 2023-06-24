@@ -1,10 +1,10 @@
-use near_sdk::{collections::UnorderedMap, log, AccountId};
+use near_sdk::{collections::UnorderedMap, env, log, AccountId};
 use num_format::ToFormattedString;
 use shared::OutcomeId;
 
 use crate::{
     storage::{OutcomeToken, WrappedBalance},
-    FORMATTED_STRING_LOCALE,
+    OutcomeTokenResult, FORMATTED_STRING_LOCALE,
 };
 
 impl Default for OutcomeToken {
@@ -14,12 +14,13 @@ impl Default for OutcomeToken {
 }
 
 impl OutcomeToken {
-    pub fn new(player_id: AccountId, value: String, initial_supply: WrappedBalance) -> Self {
+    pub fn new(outcome_id: &OutcomeId, prompt: String) -> Self {
         Self {
-            player_id,
-            value,
-            total_supply: initial_supply,
-            balances: UnorderedMap::new(format!("OT:{}", player_id).as_bytes().to_vec()),
+            outcome_id: outcome_id.clone(),
+            prompt,
+            result: None,
+            total_supply: 0,
+            balances: UnorderedMap::new(format!("OT:{}", outcome_id).as_bytes().to_vec()),
             accounts_length: 0,
             is_active: true,
         }
@@ -36,7 +37,7 @@ impl OutcomeToken {
         self.accounts_length += if balance == 0 { 1 } else { 0 };
 
         log!(
-            "Minted {} of outcome_token [{}] for {}. Supply: {}",
+            "Minted {} tokens of outcome_id [{}] for {}. Supply: {}",
             amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
             self.outcome_id,
             account_id,
@@ -62,7 +63,7 @@ impl OutcomeToken {
         };
 
         log!(
-            "Burned {} of outcome_token [{}] for {}. Supply: {}",
+            "Burned {} of outcome_id [{}] for {}. Supply: {}",
             amount,
             self.outcome_id,
             account_id,
@@ -75,7 +76,15 @@ impl OutcomeToken {
         self.total_supply = 0;
     }
 
-    pub fn get_balance(&self, account_id: &AccountId) -> WrappedBalance {
+    pub fn set_result(&mut self, result: OutcomeTokenResult) {
+        if let Some(r) = self.result {
+            env::panic_str("ERR_SET_RESULT_ALREADY_SET");
+        }
+
+        self.result = Some(result);
+    }
+
+    pub fn get_balance_of(&self, account_id: &AccountId) -> WrappedBalance {
         self.balances.get(account_id).unwrap_or(0)
     }
 
@@ -85,6 +94,14 @@ impl OutcomeToken {
 
     pub fn total_supply(&self) -> WrappedBalance {
         self.total_supply
+    }
+
+    pub fn outcome_id(&self) -> OutcomeId {
+        self.outcome_id.clone()
+    }
+
+    pub fn get_prompt(&self) -> String {
+        self.prompt.clone()
     }
 
     pub fn is_active(&self) -> bool {

@@ -21,10 +21,13 @@ impl Market {
                     amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
                 );
 
-                let mut outcome_token = self.get_outcome_token(outcome_id);
+                let mut outcome_token = self.get_outcome_token(outcome_id.clone());
                 outcome_token.burn(&payee, amount);
 
-                self.update_ct_balance(self.collateral_token.balance - amount_payable);
+                self.update_collateral_token_balance(
+                    self.collateral_token.balance - amount_payable,
+                );
+
                 self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
                 return amount_payable.to_string();
