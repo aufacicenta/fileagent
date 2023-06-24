@@ -1,6 +1,7 @@
+use near_sdk::collections::Vector;
 use near_sdk::{
-    collections::LookupMap, env, ext_contract, json_types::U128, log, near_bindgen, serde_json,
-    AccountId, Promise,
+    collections::LookupMap, env, ext_contract, json_types::U128, log, near_bindgen, AccountId,
+    Promise,
 };
 use num_format::ToFormattedString;
 use shared::OutcomeId;
@@ -9,7 +10,6 @@ use std::default::Default;
 use near_contract_standards::fungible_token::core::ext_ft_core;
 
 use crate::consts::*;
-use crate::outcome_token;
 use crate::storage::*;
 
 #[ext_contract(ext_self)]
@@ -46,10 +46,10 @@ impl Market {
             env::panic_str("ERR_ALREADY_INITIALIZED");
         }
 
-        // Add 5 minutes
-        let reveal_window = market.ends_at + 300_000;
-        // Add 5 minutes
-        let resolution_window = reveal_window + 300_000;
+        // Add 5 minutes in nanos
+        let reveal_window = market.ends_at + 300_000_000_000;
+        // Add 5 minutes in nanos
+        let resolution_window = reveal_window + 300_000_000_000;
 
         // 30 days
         let self_destruct_window = resolution_window + 2_592_000 * 1_000_000_000;
@@ -57,7 +57,7 @@ impl Market {
         Self {
             market,
             outcome_tokens: LookupMap::new(StorageKeys::OutcomeTokens),
-            players: Vec::new(),
+            players: Vector::new(b"m"),
             resolution: Resolution {
                 window: resolution_window,
                 reveal_window,
@@ -121,7 +121,7 @@ impl Market {
         return self.internal_sell_resolved();
     }
 
-    #[payable]
+    // During the resolution period, this method is called by the server (owner), setting the OutcomeTokenResult of each player
     pub fn reveal(&mut self, outcome_id: OutcomeId, result: OutcomeTokenResult) {
         self.assert_only_owner();
         self.assert_is_reveal_window_open();
@@ -134,23 +134,57 @@ impl Market {
 
         self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
-        self.resolution.resolved_at = Some(self.get_block_timestamp());
+        log!("reveal: outcome_id: {}, result: {}", outcome_id, result);
     }
 
     #[payable]
-    pub fn resolve(&mut self, outcome_id: OutcomeId) {
+    pub fn resolve(&mut self) {
         self.assert_only_owner();
         self.assert_is_not_resolved();
-        self.assert_is_valid_outcome(&outcome_id);
         self.assert_is_resolution_window_open();
 
         // @TODO the server (owner) will call this method after the reveal period.
         // @TODO the server should iterate over all participants with a valid outcome_token.result and determine which is closer to 0
         // Or should the contract iterate over all? What's the cost?
 
-        self.resolution.result = Some(outcome_id.clone());
+        let separator = "=".to_string();
 
-        self.burn_the_losers(outcome_id);
+        let mut outcome_id = self.management.market_creator_account_id.clone();
+        let mut results: Vector<String> = Vector::new(b"m");
+        for player in self.players.iter() {
+            let outcome_token = self.outcome_tokens.get(&player).unwrap();
+
+            if outcome_token.result.is_none() {
+                log!(
+                    "resolve — PLAYER_DID_NOT_REVEAL — outcome_id: {}, result: {}",
+                    outcome_token.outcome_id,
+                    outcome_token.result.unwrap_or(0.0)
+                );
+            } else {
+                let result_str = outcome_token.result.unwrap().to_string();
+
+                results.push(&(player.to_string() + &separator + &result_str));
+            }
+        }
+
+        log!("resolve, unsorted results: {:?}", results.to_vec());
+
+        let mut sort = results.to_vec();
+        sort.sort_by(|a, b| {
+            let result_a = a.split("=").last().unwrap();
+            let result_b = b.split("=").last().unwrap();
+
+            return result_a.partial_cmp(result_b).unwrap();
+        });
+
+        log!("resolve, sorted results: {:?}", sort);
+
+        let winner = &sort[0];
+        let result = winner.split("=").next().unwrap();
+
+        log!("resolve, result: {}", result);
+
+        self.internal_set_resolution_result(AccountId::new_unchecked(result.to_string()));
 
         self.resolution.resolved_at = Some(self.get_block_timestamp());
     }
@@ -198,7 +232,7 @@ impl Market {
 
         let outcome_token = OutcomeToken::new(&outcome_id, prompt, amount_mintable);
 
-        self.players.push(outcome_id.clone());
+        self.players.push(&outcome_id);
 
         self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
@@ -220,17 +254,6 @@ impl Market {
         );
 
         amount_mintable
-    }
-
-    // Sets the is_active flag to false on each losing outcome token
-    fn burn_the_losers(&mut self, outcome_id: OutcomeId) {
-        for p_id in self.players.iter() {
-            if p_id != &outcome_id {
-                let mut outcome_token = self.get_outcome_token(&p_id);
-                outcome_token.deactivate();
-                self.outcome_tokens.insert(&(p_id), &outcome_token);
-            }
-        }
     }
 
     fn internal_sell_unresolved(&mut self) -> WrappedBalance {
@@ -288,5 +311,14 @@ impl Market {
         ft_transfer_promise.then(ft_transfer_callback_promise);
 
         amount_payable
+    }
+
+    fn internal_set_resolution_result(&mut self, result: ResolutionResult) {
+        self.resolution.result = Some(result);
+
+        log!(
+            "internal_set_resolution_result, result: {:?}",
+            self.resolution.result.clone().unwrap()
+        );
     }
 }

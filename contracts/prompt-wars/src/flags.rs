@@ -5,10 +5,17 @@ use crate::storage::*;
 #[near_bindgen]
 impl Market {
     pub fn is_resolved(&self) -> bool {
-        match self.resolution.resolved_at {
+        let is_resolved_at_set = match self.resolution.resolved_at {
             Some(_) => true,
             None => false,
-        }
+        };
+
+        let is_resolution_result_set = match self.resolution.result {
+            Some(_) => true,
+            None => false,
+        };
+
+        is_resolved_at_set && is_resolution_result_set
     }
 
     pub fn is_open(&self) -> bool {

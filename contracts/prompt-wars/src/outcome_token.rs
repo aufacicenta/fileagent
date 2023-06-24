@@ -19,18 +19,14 @@ impl OutcomeToken {
             prompt,
             result: None,
             total_supply: initial_supply,
-            is_active: true,
         }
     }
 
     pub fn burn(&mut self, account_id: &AccountId, amount: WrappedBalance) {
-        assert_eq!(self.is_active, true, "ERR_BURN_INACTIVE");
-
         let balance = self.get_balance_of();
 
         assert!(balance >= amount, "ERR_BURN_INSUFFICIENT_BALANCE");
 
-        let new_balance = balance - amount;
         self.total_supply -= amount;
 
         log!(
@@ -40,11 +36,6 @@ impl OutcomeToken {
             account_id,
             self.total_supply()
         );
-    }
-
-    pub fn deactivate(&mut self) {
-        self.is_active = false;
-        self.total_supply = 0;
     }
 
     pub fn set_result(&mut self, result: OutcomeTokenResult) {
@@ -71,7 +62,7 @@ impl OutcomeToken {
         self.prompt.clone()
     }
 
-    pub fn is_active(&self) -> bool {
-        self.is_active
+    pub fn get_result(&self) -> Option<OutcomeTokenResult> {
+        self.result
     }
 }

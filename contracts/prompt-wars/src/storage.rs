@@ -1,6 +1,6 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
-    collections::{LookupMap, UnorderedMap},
+    collections::{LookupMap, UnorderedMap, Vector},
     near_bindgen,
     serde::{Deserialize, Serialize},
     AccountId, BorshStorageKey,
@@ -10,6 +10,7 @@ use shared::{OutcomeId, Price};
 pub type Timestamp = i64;
 pub type WrappedBalance = u128;
 pub type OutcomeTokenResult = f32;
+pub type ResolutionResult = OutcomeId;
 
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
 #[cfg_attr(not(target_arch = "wasm32"), derive(Debug, PartialEq))]
@@ -37,7 +38,7 @@ pub struct Market {
     // Keeps track of Outcomes prices and balances
     pub outcome_tokens: LookupMap<AccountId, OutcomeToken>,
     // Keeps track of the outcome_ids that have bet on the market
-    pub players: Vec<AccountId>,
+    pub players: Vector<AccountId>,
     // Market fees metadata
     pub fees: Fees,
 }
@@ -58,8 +59,6 @@ pub struct OutcomeToken {
     pub result: Option<OutcomeTokenResult>,
     // total supply of this outcome_token
     pub total_supply: WrappedBalance,
-    // can mint more tokens
-    pub is_active: bool,
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Deserialize, Serialize, Clone)]
@@ -79,7 +78,7 @@ pub struct Resolution {
     // When the market is resolved, set only by fn resolve
     pub resolved_at: Option<Timestamp>,
     // When the market is resolved, set only by fn resolve
-    pub result: Option<OutcomeId>,
+    pub result: Option<ResolutionResult>,
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]

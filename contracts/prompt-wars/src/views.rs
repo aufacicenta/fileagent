@@ -1,5 +1,5 @@
 use crate::math;
-use near_sdk::{env, log, near_bindgen, AccountId};
+use near_sdk::{collections::Vector, env, log, near_bindgen, AccountId};
 use num_format::ToFormattedString;
 use shared::OutcomeId;
 
@@ -27,7 +27,7 @@ impl Market {
     }
 
     pub fn get_outcome_ids(&self) -> Vec<AccountId> {
-        self.players.clone()
+        self.players.to_vec()
     }
 
     pub fn get_block_timestamp(&self) -> Timestamp {

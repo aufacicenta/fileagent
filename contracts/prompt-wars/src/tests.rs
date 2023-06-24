@@ -1,12 +1,14 @@
 #[cfg(test)]
 mod tests {
+    use std::result;
+
     use crate::{storage::*, FungibleTokenReceiver, CREATE_OUTCOME_TOKEN_PRICE};
     use chrono::{Duration, Utc};
     use near_sdk::json_types::U128;
     use near_sdk::serde_json::json;
     use near_sdk::test_utils::test_env::{alice, bob, carol};
     use near_sdk::test_utils::VMContextBuilder;
-    use near_sdk::{serde_json, testing_env, AccountId, Balance, PromiseResult};
+    use near_sdk::{log, serde_json, testing_env, AccountId, Balance, PromiseResult};
     use rand::seq::SliceRandom;
     use shared::OutcomeId;
 
@@ -92,6 +94,14 @@ mod tests {
         );
     }
 
+    fn reveal(c: &mut Market, outcome_id: OutcomeId, result: OutcomeTokenResult) {
+        c.reveal(outcome_id, result);
+    }
+
+    fn resolve(c: &mut Market) {
+        c.resolve();
+    }
+
     fn sell(c: &mut Market, payee: AccountId, context: &VMContextBuilder) -> WrappedBalance {
         let amount_sold = c.sell();
 
@@ -131,6 +141,11 @@ mod tests {
 
         let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
         let mut contract: Market = setup_contract(market_data);
+
+        assert_eq!(
+            contract.management.market_creator_account_id,
+            market_creator_account_id()
+        );
 
         let amount = CREATE_OUTCOME_TOKEN_PRICE;
         let prompt =
@@ -298,6 +313,99 @@ mod tests {
     }
 
     #[test]
+    fn sell_resolved() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+        let starts_at = now + Duration::hours(1);
+        let ends_at = starts_at + Duration::hours(1);
+
+        let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
+        let mut contract: Market = setup_contract(market_data);
+
+        let amount = CREATE_OUTCOME_TOKEN_PRICE;
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
+        let player_2 = bob();
+        let player_3 = carol();
+
+        create_outcome_token(
+            &mut contract,
+            player_1.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        create_outcome_token(
+            &mut contract,
+            player_2.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        create_outcome_token(
+            &mut contract,
+            player_3.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        // now is between the reveal period
+        now = ends_at + Duration::minutes(2);
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), false);
+        assert_eq!(contract.is_expired_unresolved(), false);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), false);
+        assert_eq!(contract.is_claiming_window_expired(), false);
+
+        testing_env!(context
+            .signer_account_id(market_creator_account_id())
+            .build());
+
+        let mut outcome_id = alice();
+        let mut result = 0.3;
+
+        reveal(&mut contract, outcome_id, result);
+
+        let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
+        assert_eq!(outcome_token_1.get_result(), Some(result));
+
+        outcome_id = bob();
+        result = 0.2;
+
+        reveal(&mut contract, outcome_id, result);
+
+        let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
+        assert_eq!(outcome_token_2.get_result(), Some(result));
+
+        outcome_id = carol();
+        result = 0.1;
+
+        reveal(&mut contract, outcome_id, result);
+
+        let outcome_token_3: OutcomeToken = contract.get_outcome_token(&player_3);
+        assert_eq!(outcome_token_3.get_result(), Some(result));
+
+        resolve(&mut contract);
+
+        assert_eq!(contract.is_resolved(), true);
+    }
+
+    #[test]
     #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
     fn should_fail_on_create_outcome_token_for_player_after_threshold() {}
 
@@ -316,4 +424,12 @@ mod tests {
     #[test]
     #[should_panic(expected = "ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT")]
     fn should_fail_on_selling_greater_than_balance() {}
+
+    #[test]
+    #[should_panic(expected = "ERR_MARKET_IS_UNDER_RESOLUTION")]
+    fn should_fail_on_selling_under_resolution_window() {}
+
+    #[test]
+    #[should_panic(expected = "ERR_SIGNER_IS_NOT_OWNER")]
+    fn should_fail_on_reveal_not_owner() {}
 }
