@@ -8,6 +8,7 @@ mod tests {
     use near_sdk::test_utils::VMContextBuilder;
     use near_sdk::{serde_json, testing_env, AccountId, Balance, PromiseResult};
     use rand::seq::SliceRandom;
+    use shared::OutcomeId;
 
     const _ATTACHED_DEPOSIT: Balance = 1_000_000_000_000_000_000_000_000; // 1 Near
 
@@ -58,19 +59,7 @@ mod tests {
         context
     }
 
-    fn setup_contract(market: MarketData, res: Option<Resolution>) -> Market {
-        let mut resolution = Resolution {
-            // add 5 minutes
-            reveal_window: market.ends_at + 300_000,
-            // add 5 minutes
-            window: market.ends_at + 300_000 + 300_000,
-            resolved_at: None,
-        };
-
-        if let Some(res) = res {
-            resolution.window = res.window;
-        }
-
+    fn setup_contract(market: MarketData) -> Market {
         let management = Management {
             dao_account_id: dao_account_id(),
             market_creator_account_id: market_creator_account_id(),
@@ -103,6 +92,26 @@ mod tests {
         );
     }
 
+    fn sell(c: &mut Market, payee: AccountId, context: &VMContextBuilder) -> WrappedBalance {
+        let amount_sold = c.sell();
+
+        testing_env!(
+            context.build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(
+                amount_sold.to_string().into_bytes()
+            )],
+        );
+
+        let outcome_id = payee.clone();
+
+        c.on_ft_transfer_callback(amount_sold, payee, outcome_id, amount_sold);
+
+        return amount_sold;
+    }
+
     fn create_market_data(starts_at: i64, ends_at: i64) -> MarketData {
         MarketData {
             image_uri: "abcxyz".to_string(),
@@ -121,7 +130,7 @@ mod tests {
         let ends_at = starts_at + Duration::hours(1);
 
         let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
-        let mut contract: Market = setup_contract(market_data, None);
+        let mut contract: Market = setup_contract(market_data);
 
         let amount = CREATE_OUTCOME_TOKEN_PRICE;
         let prompt =
@@ -138,7 +147,7 @@ mod tests {
             },
         );
 
-        let outcome_token_1: OutcomeToken = contract.get_outcome_token(player_1.clone());
+        let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
 
         assert_eq!(
             outcome_token_1.total_supply(),
@@ -153,7 +162,7 @@ mod tests {
         assert_eq!(outcome_token_1.outcome_id(), player_1.clone());
 
         assert_eq!(
-            contract.balance_of(player_1.clone()),
+            contract.balance_of(&player_1),
             contract.collateral_token.balance
         );
 
@@ -170,7 +179,7 @@ mod tests {
             },
         );
 
-        let outcome_token_2: OutcomeToken = contract.get_outcome_token(player_2.clone());
+        let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
 
         assert_eq!(
             outcome_token_2.total_supply(),
@@ -185,11 +194,107 @@ mod tests {
         assert_eq!(outcome_token_2.outcome_id(), player_2.clone());
 
         assert_eq!(
-            contract.balance_of(player_2.clone()),
+            contract.balance_of(&player_2),
             contract.collateral_token.balance - outcome_token_1.total_supply()
         );
 
         assert_eq!(outcome_token_2.get_prompt(), prompt);
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), true);
+        assert_eq!(contract.is_claiming_window_expired(), false);
+        assert_eq!(contract.is_expired_unresolved(), false);
+        assert_eq!(contract.is_over(), false);
+        assert_eq!(contract.is_resolution_window_expired(), false);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_reveal_window_expired(), false);
+    }
+
+    #[test]
+    fn sell_expired_unresolved() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+        let starts_at = now + Duration::hours(1);
+        let ends_at = starts_at + Duration::hours(1);
+
+        let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
+        let mut contract: Market = setup_contract(market_data);
+
+        let amount = CREATE_OUTCOME_TOKEN_PRICE;
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
+        let player_2 = bob();
+        let player_3 = carol();
+
+        create_outcome_token(
+            &mut contract,
+            player_1.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        create_outcome_token(
+            &mut contract,
+            player_2.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        create_outcome_token(
+            &mut contract,
+            player_3.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        now = ends_at + Duration::hours(1);
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+        assert_eq!(contract.is_claiming_window_expired(), false);
+
+        testing_env!(context.signer_account_id(player_1.clone()).build());
+
+        sell(&mut contract, player_1.clone(), &context);
+
+        let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
+        assert_eq!(outcome_token_1.total_supply(), 0);
+        assert_eq!(contract.balance_of(&player_1), 0);
+
+        testing_env!(context.signer_account_id(player_2.clone()).build());
+
+        sell(&mut contract, player_2.clone(), &context);
+
+        let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
+        assert_eq!(outcome_token_2.total_supply(), 0);
+        assert_eq!(contract.balance_of(&player_2), 0);
+
+        testing_env!(context.signer_account_id(player_3.clone()).build());
+
+        sell(&mut contract, player_3.clone(), &context);
+
+        let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_3);
+        assert_eq!(outcome_token_2.total_supply(), 0);
+        assert_eq!(contract.balance_of(&player_3), 0);
+
+        assert_eq!(contract.collateral_token.balance, 0);
+        assert_eq!(contract.collateral_token.fee_balance, 6_000);
     }
 
     #[test]
@@ -207,4 +312,8 @@ mod tests {
     #[test]
     #[should_panic(expected = "ERR_SET_RESULT_ALREADY_SET")]
     fn should_fail_on_reveal_set_result() {}
+
+    #[test]
+    #[should_panic(expected = "ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT")]
+    fn should_fail_on_selling_greater_than_balance() {}
 }

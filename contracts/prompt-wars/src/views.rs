@@ -19,8 +19,8 @@ impl Market {
         self.fees.fee_ratio
     }
 
-    pub fn get_outcome_token(&self, outcome_id: OutcomeId) -> OutcomeToken {
-        match self.outcome_tokens.get(&outcome_id) {
+    pub fn get_outcome_token(&self, outcome_id: &OutcomeId) -> OutcomeToken {
+        match self.outcome_tokens.get(outcome_id) {
             Some(token) => token,
             None => env::panic_str("ERR_INVALID_outcome_id"),
         }
@@ -57,13 +57,6 @@ impl Market {
         }
     }
 
-    pub fn is_resolved(&self) -> bool {
-        match self.resolution.resolved_at {
-            Some(_) => true,
-            None => false,
-        }
-    }
-
     // Players can join the event before N% of the event time has passed
     pub fn get_buy_sell_timestamp(&self) -> i64 {
         let diff = (self.market.ends_at - self.market.starts_at) as f32
@@ -72,37 +65,7 @@ impl Market {
         self.market.ends_at - diff as i64
     }
 
-    pub fn is_open(&self) -> bool {
-        let limit = self.get_buy_sell_timestamp();
-
-        self.get_block_timestamp() <= limit
-    }
-
-    pub fn is_closed(&self) -> bool {
-        !self.is_open()
-    }
-
-    pub fn is_over(&self) -> bool {
-        self.get_block_timestamp() > self.market.ends_at
-    }
-
-    pub fn is_reveal_window_expired(&self) -> bool {
-        self.get_block_timestamp() > self.resolution.reveal_window
-    }
-
-    pub fn is_resolution_window_expired(&self) -> bool {
-        self.get_block_timestamp() > self.resolution.window
-    }
-
-    pub fn is_expired_unresolved(&self) -> bool {
-        self.is_resolution_window_expired() && !self.is_resolved()
-    }
-
-    pub fn is_claiming_window_expired(&self) -> bool {
-        self.get_block_timestamp() > self.management.self_destruct_window
-    }
-
-    pub fn balance_of(&self, outcome_id: OutcomeId) -> WrappedBalance {
+    pub fn balance_of(&self, outcome_id: &OutcomeId) -> WrappedBalance {
         self.get_outcome_token(outcome_id).get_balance_of()
     }
 
@@ -116,16 +79,17 @@ impl Market {
     // The player gets his deposit back, minus fees
     pub fn get_amount_payable_unresolved(
         &self,
-        amount: WrappedBalance,
         outcome_id: OutcomeId,
     ) -> (WrappedBalance, WrappedBalance) {
+        let amount = self.balance_of(&outcome_id);
+
         // This balance is already minus fees
         let collateral_token_balance = self.collateral_token.balance;
 
-        let outcome_token_balance = self.balance_of(outcome_id);
+        let outcome_token_balance = self.balance_of(&outcome_id);
 
         if amount > outcome_token_balance {
-            env::panic_str("ERR_GET_AMOUNT_PAYABLE_INVALID_AMOUNT");
+            env::panic_str("ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT");
         }
 
         log!(
@@ -139,11 +103,7 @@ impl Market {
     }
 
     // Winner takes all! This method calculates only after resolution
-    pub fn get_amount_payable_resolved(
-        &self,
-        amount: WrappedBalance,
-        outcome_id: OutcomeId,
-    ) -> (WrappedBalance, WrappedBalance) {
+    pub fn get_amount_payable_resolved(&self) -> (WrappedBalance, WrappedBalance) {
         // This balance is already minus fees
         let collateral_token_balance = self.collateral_token.balance;
 
@@ -154,12 +114,11 @@ impl Market {
         let weight = 1;
 
         log!(
-                "get_amount_payable - RESOLVED -- selling: {}, ct_balance: {}, weight: {}, amount_payable: {}",
-                amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                collateral_token_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                weight.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
-            );
+            "get_amount_payable - RESOLVED -- ct_balance: {}, weight: {}, amount_payable: {}",
+            collateral_token_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            weight.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
+        );
 
         (amount_payable, weight)
     }

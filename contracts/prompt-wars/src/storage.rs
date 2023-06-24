@@ -78,6 +78,8 @@ pub struct Resolution {
     pub reveal_window: Timestamp,
     // When the market is resolved, set only by fn resolve
     pub resolved_at: Option<Timestamp>,
+    // When the market is resolved, set only by fn resolve
+    pub result: Option<OutcomeId>,
 }
 
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]

@@ -23,6 +23,14 @@ impl Market {
         }
     }
 
+    pub fn assert_is_winner(&self, player_id: &AccountId) {
+        if let Some(winner) = &self.resolution.result {
+            if winner != player_id {
+                env::panic_str("ERR_PLAYER_IS_NOT_WINNER");
+            }
+        }
+    }
+
     pub fn assert_is_open(&self) {
         if !self.is_open() {
             env::panic_str("ERR_MARKET_IS_CLOSED");
@@ -65,7 +73,7 @@ impl Market {
         }
     }
 
-    pub fn assert_is_valid_outcome(&self, outcome_id: OutcomeId) {
+    pub fn assert_is_valid_outcome(&self, outcome_id: &OutcomeId) {
         self.get_outcome_token(outcome_id);
     }
 }

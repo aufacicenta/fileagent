@@ -21,7 +21,7 @@ impl Market {
                     amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
                 );
 
-                let mut outcome_token = self.get_outcome_token(outcome_id.clone());
+                let mut outcome_token = self.get_outcome_token(&outcome_id);
                 outcome_token.burn(&payee, amount);
 
                 self.update_collateral_token_balance(

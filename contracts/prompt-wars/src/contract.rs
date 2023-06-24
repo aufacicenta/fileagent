@@ -62,6 +62,7 @@ impl Market {
                 window: resolution_window,
                 reveal_window,
                 resolved_at: None,
+                result: None,
             },
             fees: Fees {
                 price: CREATE_OUTCOME_TOKEN_PRICE,
@@ -107,16 +108,17 @@ impl Market {
     }
 
     #[payable]
-    pub fn sell(&mut self, amount: WrappedBalance) -> WrappedBalance {
+    pub fn sell(&mut self) -> WrappedBalance {
         // @TODO if there are participants only in 1 outcome, allow to claim funds after resolution, otherwise funds will be locked
         if self.is_expired_unresolved() {
-            return self.internal_sell_unresolved(amount);
+            return self.internal_sell_unresolved();
         }
 
         self.assert_is_not_under_resolution();
         self.assert_is_resolved();
+        self.assert_is_winner(&env::signer_account_id());
 
-        return self.internal_sell_resolved(amount);
+        return self.internal_sell_resolved();
     }
 
     #[payable]
@@ -124,7 +126,7 @@ impl Market {
         self.assert_only_owner();
         self.assert_is_reveal_window_open();
         self.assert_is_not_resolved();
-        self.assert_is_valid_outcome(outcome_id.clone());
+        self.assert_is_valid_outcome(&outcome_id);
         self.assert_is_resolution_window_open();
 
         let mut outcome_token = self.outcome_tokens.get(&outcome_id).unwrap();
@@ -139,11 +141,14 @@ impl Market {
     pub fn resolve(&mut self, outcome_id: OutcomeId) {
         self.assert_only_owner();
         self.assert_is_not_resolved();
-        self.assert_is_valid_outcome(outcome_id.clone());
+        self.assert_is_valid_outcome(&outcome_id);
         self.assert_is_resolution_window_open();
 
         // @TODO the server (owner) will call this method after the reveal period.
         // @TODO the server should iterate over all participants with a valid outcome_token.result and determine which is closer to 0
+        // Or should the contract iterate over all? What's the cost?
+
+        self.resolution.result = Some(outcome_id.clone());
 
         self.burn_the_losers(outcome_id);
 
@@ -152,12 +157,13 @@ impl Market {
 
     #[private]
     pub fn update_collateral_token_balance(&mut self, amount: WrappedBalance) -> WrappedBalance {
+        self.collateral_token.balance = amount;
+
         log!(
             "update_collateral_token_balance: {}",
             amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
         );
 
-        self.collateral_token.balance = amount;
         self.collateral_token.balance
     }
 
@@ -166,12 +172,16 @@ impl Market {
         &mut self,
         amount: WrappedBalance,
     ) -> WrappedBalance {
+        self.collateral_token.fee_balance += amount;
+
         log!(
-            "update_collateral_token_fee_balance: {}",
-            amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
+            "update_collateral_token_fee_balance, in: {}, total: {}",
+            amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            self.collateral_token
+                .fee_balance
+                .to_formatted_string(&FORMATTED_STRING_LOCALE)
         );
 
-        self.collateral_token.fee_balance += amount;
         self.collateral_token.fee_balance
     }
 }
@@ -197,7 +207,7 @@ impl Market {
 
         self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
-        log!("CREATE_OUTCOME_TOKEN amount: {}, fee_ratio: {}, fee_result: {}, outcome_id: {}, sender_id: {}, supply: {}, amount_mintable: {}, fee_balance: {}",
+        log!("CREATE_OUTCOME_TOKEN amount: {}, fee_ratio: {}, fee_result: {}, outcome_id: {}, sender_id: {}, ot_supply: {}, amount_mintable: {}, ct_balance: {}, fee_balance: {}",
             amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
             self.fees.fee_ratio.to_formatted_string(&FORMATTED_STRING_LOCALE),
             fee.to_formatted_string(&FORMATTED_STRING_LOCALE),
@@ -205,6 +215,7 @@ impl Market {
             outcome_id,
             outcome_token.total_supply().to_formatted_string(&FORMATTED_STRING_LOCALE),
             amount_mintable.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            self.collateral_token.balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
             self.collateral_token.fee_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
         );
 
@@ -215,33 +226,25 @@ impl Market {
     fn burn_the_losers(&mut self, outcome_id: OutcomeId) {
         for p_id in self.players.iter() {
             if p_id != &outcome_id {
-                let mut outcome_token = self.get_outcome_token(p_id.clone());
+                let mut outcome_token = self.get_outcome_token(&p_id);
                 outcome_token.deactivate();
                 self.outcome_tokens.insert(&(p_id), &outcome_token);
             }
         }
     }
 
-    fn internal_sell_unresolved(&mut self, amount: WrappedBalance) -> WrappedBalance {
+    fn internal_sell_unresolved(&mut self) -> WrappedBalance {
         let payee = env::signer_account_id();
 
-        if amount > self.balance_of(payee.clone()) {
-            env::panic_str("ERR_SELL_AMOUNT_GREATER_THAN_BALANCE");
-        }
-
-        let (amount_payable, _weight) = self.get_amount_payable_unresolved(amount, payee.clone());
+        let (amount_payable, _weight) = self.get_amount_payable_unresolved(payee.clone());
 
         self.internal_transfer(payee, amount_payable)
     }
 
-    fn internal_sell_resolved(&mut self, amount: WrappedBalance) -> WrappedBalance {
+    fn internal_sell_resolved(&mut self) -> WrappedBalance {
         let payee = env::signer_account_id();
 
-        if amount > self.balance_of(payee.clone()) {
-            env::panic_str("ERR_SELL_AMOUNT_GREATER_THAN_BALANCE");
-        }
-
-        let (amount_payable, _weight) = self.get_amount_payable_resolved(amount, payee.clone());
+        let (amount_payable, _weight) = self.get_amount_payable_resolved();
 
         self.internal_transfer(payee.clone(), amount_payable)
     }
@@ -255,7 +258,7 @@ impl Market {
             env::panic_str("ERR_CANT_SELL_A_LOSING_OUTCOME");
         }
 
-        let outcome_token = self.get_outcome_token(payee.clone());
+        let outcome_token = self.get_outcome_token(&payee);
 
         log!(
             "TRANSFER amount: {},  account_id: {}, supply: {}, is_resolved: {}, ct_balance: {}, amount_payable: {}",
