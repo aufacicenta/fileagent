@@ -102,7 +102,7 @@ mod tests {
         c.resolve();
     }
 
-    fn sell(c: &mut Market, payee: AccountId, context: &VMContextBuilder) -> WrappedBalance {
+    fn sell(c: &mut Market, context: &VMContextBuilder) -> WrappedBalance {
         let amount_sold = c.sell();
 
         testing_env!(
@@ -115,9 +115,7 @@ mod tests {
             )],
         );
 
-        let outcome_id = payee.clone();
-
-        c.on_ft_transfer_callback(amount_sold, payee, outcome_id, amount_sold);
+        c.on_ft_transfer_callback(amount_sold);
 
         return amount_sold;
     }
@@ -286,7 +284,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_1.clone()).build());
 
-        sell(&mut contract, player_1.clone(), &context);
+        sell(&mut contract, &context);
 
         let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
         assert_eq!(outcome_token_1.total_supply(), 0);
@@ -294,7 +292,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_2.clone()).build());
 
-        sell(&mut contract, player_2.clone(), &context);
+        sell(&mut contract, &context);
 
         let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
         assert_eq!(outcome_token_2.total_supply(), 0);
@@ -302,7 +300,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_3.clone()).build());
 
-        sell(&mut contract, player_3.clone(), &context);
+        sell(&mut contract, &context);
 
         let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_3);
         assert_eq!(outcome_token_2.total_supply(), 0);
@@ -403,33 +401,44 @@ mod tests {
         resolve(&mut contract);
 
         assert_eq!(contract.is_resolved(), true);
+
+        testing_env!(context.signer_account_id(player_3.clone()).build());
+
+        sell(&mut contract, &context);
+
+        assert_eq!(contract.collateral_token.balance, 0);
+        assert_eq!(contract.collateral_token.fee_balance, 6_000);
     }
 
-    #[test]
-    #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
-    fn should_fail_on_create_outcome_token_for_player_after_threshold() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
+    // fn should_fail_on_create_outcome_token_for_player_after_threshold() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_MARKET_RESOLVED")]
-    fn should_fail_on_create_outcome_token_for_player_when_resolved() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_MARKET_RESOLVED")]
+    // fn should_fail_on_create_outcome_token_for_player_when_resolved() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_ASSERT_PRICE_TOO_LOW")]
-    fn should_fail_on_create_outcome_token_for_player_when_amount_lt_price() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_ASSERT_PRICE_TOO_LOW")]
+    // fn should_fail_on_create_outcome_token_for_player_when_amount_lt_price() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_SET_RESULT_ALREADY_SET")]
-    fn should_fail_on_reveal_set_result() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_SET_RESULT_ALREADY_SET")]
+    // fn should_fail_on_reveal_set_result() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT")]
-    fn should_fail_on_selling_greater_than_balance() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT")]
+    // fn should_fail_on_selling_greater_than_balance() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_MARKET_IS_UNDER_RESOLUTION")]
-    fn should_fail_on_selling_under_resolution_window() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_MARKET_IS_UNDER_RESOLUTION")]
+    // fn should_fail_on_selling_under_resolution_window() {}
 
-    #[test]
-    #[should_panic(expected = "ERR_SIGNER_IS_NOT_OWNER")]
-    fn should_fail_on_reveal_not_owner() {}
+    // #[test]
+    // #[should_panic(expected = "ERR_SIGNER_IS_NOT_OWNER")]
+    // fn should_fail_on_reveal_not_owner() {}
+
+    // #[test]
+    // #[should_panic(expected = "ERR_PLAYER_IS_NOT_WINNER")]
+    // fn should_fail_on_sell_player_is_not_winner() {}
 }

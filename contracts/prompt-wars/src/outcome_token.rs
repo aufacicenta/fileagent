@@ -22,22 +22,6 @@ impl OutcomeToken {
         }
     }
 
-    pub fn burn(&mut self, account_id: &AccountId, amount: WrappedBalance) {
-        let balance = self.get_balance_of();
-
-        assert!(balance >= amount, "ERR_BURN_INSUFFICIENT_BALANCE");
-
-        self.total_supply -= amount;
-
-        log!(
-            "Burned {} of outcome_id [{}] for {}. Supply: {}",
-            amount,
-            self.outcome_id,
-            account_id,
-            self.total_supply()
-        );
-    }
-
     pub fn set_result(&mut self, result: OutcomeTokenResult) {
         if let Some(r) = self.result {
             env::panic_str("ERR_SET_RESULT_ALREADY_SET");

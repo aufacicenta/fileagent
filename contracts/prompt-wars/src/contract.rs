@@ -143,14 +143,10 @@ impl Market {
         self.assert_is_not_resolved();
         self.assert_is_resolution_window_open();
 
-        // @TODO the server (owner) will call this method after the reveal period.
-        // @TODO the server should iterate over all participants with a valid outcome_token.result and determine which is closer to 0
-        // Or should the contract iterate over all? What's the cost?
-
         let separator = "=".to_string();
 
-        let mut outcome_id = self.management.market_creator_account_id.clone();
         let mut results: Vector<String> = Vector::new(b"m");
+
         for player in self.players.iter() {
             let outcome_token = self.outcome_tokens.get(&player).unwrap();
 
@@ -171,16 +167,17 @@ impl Market {
 
         let mut sort = results.to_vec();
         sort.sort_by(|a, b| {
-            let result_a = a.split("=").last().unwrap();
-            let result_b = b.split("=").last().unwrap();
+            let result_a = a.split(&separator).last().unwrap();
+            let result_b = b.split(&separator).last().unwrap();
 
             return result_a.partial_cmp(result_b).unwrap();
         });
 
         log!("resolve, sorted results: {:?}", sort);
 
+        // @TODO what happens if 2 or more players have exactly the same result?
         let winner = &sort[0];
-        let result = winner.split("=").next().unwrap();
+        let result = winner.split(&separator).next().unwrap();
 
         log!("resolve, result: {}", result);
 

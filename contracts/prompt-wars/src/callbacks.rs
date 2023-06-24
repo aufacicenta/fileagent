@@ -7,13 +7,7 @@ use crate::{storage::*, FORMATTED_STRING_LOCALE};
 #[near_bindgen]
 impl Market {
     #[private]
-    pub fn on_ft_transfer_callback(
-        &mut self,
-        amount: WrappedBalance,
-        payee: AccountId,
-        outcome_id: OutcomeId,
-        amount_payable: WrappedBalance,
-    ) -> String {
+    pub fn on_ft_transfer_callback(&mut self, amount_payable: WrappedBalance) -> String {
         match env::promise_result(0) {
             PromiseResult::Successful(_result) => {
                 log!(
@@ -21,14 +15,9 @@ impl Market {
                     amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
                 );
 
-                let mut outcome_token = self.get_outcome_token(&outcome_id);
-                outcome_token.burn(&payee, amount);
-
                 self.update_collateral_token_balance(
                     self.collateral_token.balance - amount_payable,
                 );
-
-                self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
                 return amount_payable.to_string();
             }
