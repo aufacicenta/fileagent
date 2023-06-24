@@ -102,9 +102,8 @@ impl Market {
         self.get_block_timestamp() > self.management.self_destruct_window
     }
 
-    pub fn balance_of(&self, outcome_id: OutcomeId, account_id: AccountId) -> WrappedBalance {
-        self.get_outcome_token(outcome_id)
-            .get_balance_of(&account_id)
+    pub fn balance_of(&self, outcome_id: OutcomeId) -> WrappedBalance {
+        self.get_outcome_token(outcome_id).get_balance_of()
     }
 
     pub fn get_amount_mintable(&self, amount: WrappedBalance) -> (WrappedBalance, WrappedBalance) {
@@ -114,67 +113,53 @@ impl Market {
         (amount_mintable, fee)
     }
 
-    pub fn get_amount_payable(
+    // The player gets his deposit back, minus fees
+    pub fn get_amount_payable_unresolved(
         &self,
         amount: WrappedBalance,
         outcome_id: OutcomeId,
-        account_id: AccountId,
     ) -> (WrappedBalance, WrappedBalance) {
-        let ct_balance = self.collateral_token.balance;
+        // This balance is already minus fees
+        let collateral_token_balance = self.collateral_token.balance;
 
-        if self.is_expired_unresolved() {
-            let outcome_token_balance = self.balance_of(outcome_id, account_id);
+        let outcome_token_balance = self.balance_of(outcome_id);
 
-            if amount > outcome_token_balance {
-                env::panic_str("ERR_GET_AMOUNT_PAYABLE_INVALID_AMOUNT");
-            }
-
-            log!(
-                "get_amount_payable - EXPIRED_UNRESOLVED -- selling: {}, ct_balance: {}, amount_payable: {}",
-                amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                ct_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
-            );
-
-            return (amount, 0);
+        if amount > outcome_token_balance {
+            env::panic_str("ERR_GET_AMOUNT_PAYABLE_INVALID_AMOUNT");
         }
 
-        let mut weight = math::complex_div_u128(self.get_precision_decimals(), amount, ct_balance);
-        let mut amount_payable =
-            math::complex_mul_u128(self.get_precision_decimals(), amount, weight);
+        log!(
+            "get_amount_payable_unresolved - EXPIRED_UNRESOLVED -- selling: {}, collateral_token_balance: {}, amount_payable: {}",
+            amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            collateral_token_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
+            amount.to_formatted_string(&FORMATTED_STRING_LOCALE)
+        );
 
-        if self.is_resolved() {
-            let outcome_token = self.get_outcome_token(outcome_id);
+        (amount, 0)
+    }
 
-            if outcome_token.total_supply() <= 0 {
-                env::panic_str("ERR_CANT_SELL_A_LOSING_OUTCOME");
-            }
+    // Winner takes all! This method calculates only after resolution
+    pub fn get_amount_payable_resolved(
+        &self,
+        amount: WrappedBalance,
+        outcome_id: OutcomeId,
+    ) -> (WrappedBalance, WrappedBalance) {
+        // This balance is already minus fees
+        let collateral_token_balance = self.collateral_token.balance;
 
-            weight = math::complex_div_u128(
-                self.get_precision_decimals(),
-                amount,
-                outcome_token.total_supply(),
-            );
+        // In this game, winner takes all
+        let amount_payable = collateral_token_balance;
 
-            amount_payable =
-                math::complex_mul_u128(self.get_precision_decimals(), ct_balance, weight);
+        // 100% of the bag baby!
+        let weight = 1;
 
-            log!(
+        log!(
                 "get_amount_payable - RESOLVED -- selling: {}, ct_balance: {}, weight: {}, amount_payable: {}",
                 amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                ct_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
+                collateral_token_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
                 weight.to_formatted_string(&FORMATTED_STRING_LOCALE),
                 amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
             );
-        } else {
-            log!(
-                "get_amount_payable - UNRESOLVED -- selling: {}, ct_balance: {}, cumulative_weight: {}, amount_payable: {}",
-                amount.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                ct_balance.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                weight.to_formatted_string(&FORMATTED_STRING_LOCALE),
-                amount_payable.to_formatted_string(&FORMATTED_STRING_LOCALE)
-            );
-        }
 
         (amount_payable, weight)
     }

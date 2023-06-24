@@ -56,11 +56,6 @@ pub struct OutcomeToken {
     pub prompt: String,
     // store the result from the image comparison: percentage_diff or pixel_difference
     pub result: Option<OutcomeTokenResult>,
-    // map `AccountId` to corresponding `Balance` in the market
-    #[serde(skip_serializing)]
-    pub balances: UnorderedMap<AccountId, WrappedBalance>,
-    // keep the number of accounts with positive balance. Use for calculating the price_ratio
-    pub accounts_length: u64,
     // total supply of this outcome_token
     pub total_supply: WrappedBalance,
     // can mint more tokens
@@ -120,12 +115,6 @@ pub enum StorageKeys {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct BuyArgs {
-    // id of the outcome that shares are to be purchased from
-    pub outcome_id: OutcomeId,
-}
-
-#[derive(Serialize, Deserialize)]
 pub struct CreateOutcomeTokenArgs {
     // the outcome value, in this case, the prompt submitted to the competition
     pub prompt: String,
@@ -133,7 +122,6 @@ pub struct CreateOutcomeTokenArgs {
 
 #[derive(Serialize, Deserialize)]
 pub enum Payload {
-    BuyArgs(BuyArgs),
     CreateOutcomeTokenArgs(CreateOutcomeTokenArgs),
 }
 

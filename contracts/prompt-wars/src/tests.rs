@@ -11,11 +11,6 @@ mod tests {
 
     const _ATTACHED_DEPOSIT: Balance = 1_000_000_000_000_000_000_000_000; // 1 Near
 
-    const IX_ADDRESS: [u8; 32] = [
-        173, 62, 255, 125, 45, 251, 162, 167, 128, 129, 25, 33, 146, 248, 118, 134, 118, 192, 215,
-        84, 225, 222, 198, 48, 70, 49, 212, 195, 84, 136, 96, 56,
-    ];
-
     fn daniel() -> AccountId {
         AccountId::new_unchecked("daniel.near".to_string())
     }
@@ -90,7 +85,7 @@ mod tests {
             fee_balance: 0,
         };
 
-        let contract = Market::new(market, resolution, management, collateral_token);
+        let contract = Market::new(market, management, collateral_token);
 
         contract
     }
@@ -117,7 +112,7 @@ mod tests {
     }
 
     #[test]
-    fn should_create_outcome_token_for_player() {
+    fn should_create_outcome_token_for_players() {
         let mut context = setup_context();
 
         let now = Utc::now();
@@ -125,40 +120,76 @@ mod tests {
         let starts_at = now + Duration::hours(1);
         let ends_at = starts_at + Duration::hours(1);
 
-        let player_id = alice();
-
         let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
         let mut contract: Market = setup_contract(market_data, None);
 
         let amount = CREATE_OUTCOME_TOKEN_PRICE;
-        let prompt = "prompt".to_string();
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
 
         create_outcome_token(
             &mut contract,
-            player_id.clone(),
+            player_1.clone(),
             amount,
             CreateOutcomeTokenArgs {
                 prompt: prompt.clone(),
             },
         );
 
-        let outcome_token_0: OutcomeToken = contract.get_outcome_token(player_id.clone());
+        let outcome_token_1: OutcomeToken = contract.get_outcome_token(player_1.clone());
 
         assert_eq!(
-            outcome_token_0.total_supply(),
+            outcome_token_1.total_supply(),
             contract.collateral_token.balance
         );
 
-        assert_eq!(outcome_token_0.get_accounts_length(), 1);
-
-        assert_eq!(outcome_token_0.outcome_id(), player_id.clone());
-
         assert_eq!(
-            contract.balance_of(player_id.clone(), player_id.clone()),
+            outcome_token_1.get_balance_of(),
             contract.collateral_token.balance
         );
 
-        assert_eq!(outcome_token_0.get_prompt(), prompt);
+        assert_eq!(outcome_token_1.outcome_id(), player_1.clone());
+
+        assert_eq!(
+            contract.balance_of(player_1.clone()),
+            contract.collateral_token.balance
+        );
+
+        assert_eq!(outcome_token_1.get_prompt(), prompt);
+
+        let player_2 = bob();
+
+        create_outcome_token(
+            &mut contract,
+            player_2.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        let outcome_token_2: OutcomeToken = contract.get_outcome_token(player_2.clone());
+
+        assert_eq!(
+            outcome_token_2.total_supply(),
+            contract.collateral_token.balance - outcome_token_1.total_supply()
+        );
+
+        assert_eq!(
+            outcome_token_2.get_balance_of(),
+            contract.collateral_token.balance - outcome_token_1.total_supply()
+        );
+
+        assert_eq!(outcome_token_2.outcome_id(), player_2.clone());
+
+        assert_eq!(
+            contract.balance_of(player_2.clone()),
+            contract.collateral_token.balance - outcome_token_1.total_supply()
+        );
+
+        assert_eq!(outcome_token_2.get_prompt(), prompt);
     }
 
     #[test]
