@@ -1,34 +1,13 @@
 #[cfg(test)]
 mod tests {
-    use std::result;
-
     use crate::{storage::*, FungibleTokenReceiver, CREATE_OUTCOME_TOKEN_PRICE};
     use chrono::{Duration, Utc};
     use near_sdk::json_types::U128;
     use near_sdk::serde_json::json;
     use near_sdk::test_utils::test_env::{alice, bob, carol};
     use near_sdk::test_utils::VMContextBuilder;
-    use near_sdk::{log, serde_json, testing_env, AccountId, Balance, PromiseResult};
-    use rand::seq::SliceRandom;
+    use near_sdk::{testing_env, AccountId, PromiseResult};
     use shared::OutcomeId;
-
-    const _ATTACHED_DEPOSIT: Balance = 1_000_000_000_000_000_000_000_000; // 1 Near
-
-    fn daniel() -> AccountId {
-        AccountId::new_unchecked("daniel.near".to_string())
-    }
-
-    fn emily() -> AccountId {
-        AccountId::new_unchecked("emily.near".to_string())
-    }
-
-    fn frank() -> AccountId {
-        AccountId::new_unchecked("frank.near".to_string())
-    }
-
-    fn gus() -> AccountId {
-        AccountId::new_unchecked("gus.near".to_string())
-    }
 
     fn dao_account_id() -> AccountId {
         AccountId::new_unchecked("dao_account_id.near".to_string())
@@ -102,7 +81,7 @@ mod tests {
         c.resolve();
     }
 
-    fn sell(c: &mut Market, context: &VMContextBuilder) -> WrappedBalance {
+    fn sell(c: &mut Market, context: &VMContextBuilder, payee: AccountId) -> WrappedBalance {
         let amount_sold = c.sell();
 
         testing_env!(
@@ -115,7 +94,9 @@ mod tests {
             )],
         );
 
-        c.on_ft_transfer_callback(amount_sold);
+        let outcome_id = payee.clone();
+
+        c.on_ft_transfer_callback(amount_sold, outcome_id);
 
         return amount_sold;
     }
@@ -284,7 +265,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_1.clone()).build());
 
-        sell(&mut contract, &context);
+        sell(&mut contract, &context, player_1.clone());
 
         let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
         assert_eq!(outcome_token_1.total_supply(), 0);
@@ -292,7 +273,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_2.clone()).build());
 
-        sell(&mut contract, &context);
+        sell(&mut contract, &context, player_2.clone());
 
         let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
         assert_eq!(outcome_token_2.total_supply(), 0);
@@ -300,7 +281,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_3.clone()).build());
 
-        sell(&mut contract, &context);
+        sell(&mut contract, &context, player_3.clone());
 
         let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_3);
         assert_eq!(outcome_token_2.total_supply(), 0);
@@ -404,7 +385,7 @@ mod tests {
 
         testing_env!(context.signer_account_id(player_3.clone()).build());
 
-        sell(&mut contract, &context);
+        sell(&mut contract, &context, player_3.clone());
 
         assert_eq!(contract.collateral_token.balance, 0);
         assert_eq!(contract.collateral_token.fee_balance, 6_000);

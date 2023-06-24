@@ -1,5 +1,5 @@
 use crate::math;
-use near_sdk::{collections::Vector, env, log, near_bindgen, AccountId};
+use near_sdk::{env, log, near_bindgen, AccountId};
 use num_format::ToFormattedString;
 use shared::OutcomeId;
 

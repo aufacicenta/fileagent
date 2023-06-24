@@ -1,6 +1,6 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
-    collections::{LookupMap, UnorderedMap, Vector},
+    collections::{LookupMap, Vector},
     near_bindgen,
     serde::{Deserialize, Serialize},
     AccountId, BorshStorageKey,

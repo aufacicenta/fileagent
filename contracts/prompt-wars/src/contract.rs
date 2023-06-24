@@ -16,10 +16,8 @@ use crate::storage::*;
 trait Callbacks {
     fn on_ft_transfer_callback(
         &mut self,
-        amount: WrappedBalance,
-        payee: AccountId,
-        outcome_id: OutcomeId,
         amount_payable: WrappedBalance,
+        outcome_id: OutcomeId,
     ) -> String;
 }
 
@@ -137,6 +135,9 @@ impl Market {
         log!("reveal: outcome_id: {}, result: {}", outcome_id, result);
     }
 
+    // Gets the players accounts,
+    // gets their outcome token results if they revealed on time
+    // sorts the results, closest to 0 is first, closest to 0 wins
     #[payable]
     pub fn resolve(&mut self) {
         self.assert_only_owner();
@@ -298,12 +299,7 @@ impl Market {
         let ft_transfer_callback_promise = ext_self::ext(env::current_account_id())
             .with_attached_deposit(0)
             .with_static_gas(GAS_FT_TRANSFER_CALLBACK)
-            .on_ft_transfer_callback(
-                amount_payable,
-                payee,
-                outcome_token.outcome_id,
-                amount_payable,
-            );
+            .on_ft_transfer_callback(amount_payable, outcome_token.outcome_id);
 
         ft_transfer_promise.then(ft_transfer_callback_promise);
 

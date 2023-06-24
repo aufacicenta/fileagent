@@ -1,4 +1,4 @@
-use near_sdk::{env, log, AccountId};
+use near_sdk::{env, log};
 use shared::OutcomeId;
 
 use crate::{
@@ -22,8 +22,19 @@ impl OutcomeToken {
         }
     }
 
+    pub fn burn(&mut self) {
+        self.total_supply -= self.total_supply();
+
+        log!(
+            "Burned {} of outcome_id [{}]. total_supply: {}",
+            self.total_supply(),
+            self.outcome_id,
+            self.total_supply()
+        );
+    }
+
     pub fn set_result(&mut self, result: OutcomeTokenResult) {
-        if let Some(r) = self.result {
+        if let Some(_r) = self.result {
             env::panic_str("ERR_SET_RESULT_ALREADY_SET");
         }
 
