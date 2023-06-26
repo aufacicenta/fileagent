@@ -17,7 +17,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   className,
   datesElement,
 }) => {
-  const { market, resolutionWindow, buySellTimestamp, resolution } = marketContractValues;
+  const { market, resolutionWindow, buySellTimestamp } = marketContractValues;
 
   const marketClosesIn = date.client(market.ends_at - buySellTimestamp!).minutes();
 
@@ -82,6 +82,9 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
                 <Card className={styles["img-prompt-card__stats"]} withSpotlightEffect>
                   <Card.Content className={styles["img-prompt-card__stats--content"]}>
+                    <Typography.Description>Status</Typography.Description>
+                    {/* Open for submissions, revealing, resolving, claim fees, destroy */}
+                    <Typography.Text>Open for submissions</Typography.Text>
                     <Typography.Description>Participants</Typography.Description>
                     <Typography.Text>12,345</Typography.Text>
                     <Typography.Description>Total Price Bag</Typography.Description>
