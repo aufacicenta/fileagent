@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::{storage::*, FungibleTokenReceiver, CREATE_OUTCOME_TOKEN_PRICE};
-    use chrono::{Duration, Utc};
+    use chrono::{Duration, TimeZone, Utc};
     use near_sdk::json_types::U128;
     use near_sdk::serde_json::json;
     use near_sdk::test_utils::test_env::{alice, bob, carol};
@@ -19,10 +19,6 @@ mod tests {
 
     fn market_creator_account_id() -> AccountId {
         AccountId::new_unchecked("market_creator_account_id.near".to_string())
-    }
-
-    fn date(date: chrono::DateTime<chrono::Utc>) -> i64 {
-        date.timestamp_nanos().try_into().unwrap()
     }
 
     fn block_timestamp(date: chrono::DateTime<chrono::Utc>) -> u64 {
@@ -101,11 +97,11 @@ mod tests {
         return amount_sold;
     }
 
-    fn create_market_data(starts_at: i64, ends_at: i64) -> MarketData {
+    fn create_market_data() -> MarketData {
         MarketData {
             image_uri: "abcxyz".to_string(),
-            starts_at,
-            ends_at,
+            starts_at: 0,
+            ends_at: 0,
         }
     }
 
@@ -115,10 +111,8 @@ mod tests {
 
         let now = Utc::now();
         testing_env!(context.block_timestamp(block_timestamp(now)).build());
-        let starts_at = now + Duration::hours(1);
-        let ends_at = starts_at + Duration::hours(1);
 
-        let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
+        let market_data: MarketData = create_market_data();
         let mut contract: Market = setup_contract(market_data);
 
         assert_eq!(
@@ -213,7 +207,7 @@ mod tests {
         let starts_at = now + Duration::hours(1);
         let ends_at = starts_at + Duration::hours(1);
 
-        let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
+        let market_data: MarketData = create_market_data();
         let mut contract: Market = setup_contract(market_data);
 
         let amount = CREATE_OUTCOME_TOKEN_PRICE;
@@ -297,10 +291,8 @@ mod tests {
 
         let mut now = Utc::now();
         testing_env!(context.block_timestamp(block_timestamp(now)).build());
-        let starts_at = now + Duration::hours(1);
-        let ends_at = starts_at + Duration::hours(1);
 
-        let market_data: MarketData = create_market_data(date(starts_at), date(ends_at));
+        let market_data: MarketData = create_market_data();
         let mut contract: Market = setup_contract(market_data);
 
         let amount = CREATE_OUTCOME_TOKEN_PRICE;
@@ -339,7 +331,7 @@ mod tests {
         );
 
         // now is between the reveal period
-        now = ends_at + Duration::minutes(2);
+        now = Utc.timestamp_nanos(contract.get_market_data().ends_at) + Duration::minutes(2);
         testing_env!(context.block_timestamp(block_timestamp(now)).build());
 
         // Check timestamps and flags

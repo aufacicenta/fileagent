@@ -44,16 +44,20 @@ impl Market {
             env::panic_str("ERR_ALREADY_INITIALIZED");
         }
 
-        // Add 5 minutes in nanos
-        let reveal_window = market.ends_at + 300_000_000_000;
-        // Add 5 minutes in nanos
-        let resolution_window = reveal_window + 300_000_000_000;
+        let starts_at: Timestamp = env::block_timestamp().try_into().unwrap();
+        let ends_at: Timestamp = starts_at + STAGE_PERIOD_NANOS;
+        let reveal_window = ends_at + STAGE_PERIOD_NANOS;
+        let resolution_window = reveal_window + STAGE_PERIOD_NANOS;
 
         // 30 days
         let self_destruct_window = resolution_window + 2_592_000 * 1_000_000_000;
 
         Self {
-            market,
+            market: MarketData {
+                starts_at,
+                ends_at,
+                ..market
+            },
             outcome_tokens: LookupMap::new(StorageKeys::OutcomeTokens),
             players: Vector::new(b"m"),
             resolution: Resolution {

@@ -19,6 +19,10 @@ impl Market {
         self.fees.fee_ratio
     }
 
+    pub fn get_price(&self) -> WrappedBalance {
+        self.fees.price
+    }
+
     pub fn get_outcome_token(&self, outcome_id: &OutcomeId) -> OutcomeToken {
         match self.outcome_tokens.get(outcome_id) {
             Some(token) => token,

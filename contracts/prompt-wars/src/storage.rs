@@ -5,7 +5,7 @@ use near_sdk::{
     serde::{Deserialize, Serialize},
     AccountId, BorshStorageKey,
 };
-use shared::{OutcomeId, Price};
+use shared::OutcomeId;
 
 pub type Timestamp = i64;
 pub type WrappedBalance = u128;
@@ -99,13 +99,6 @@ pub struct Fees {
     pub price: WrappedBalance,
     // Decimal fee to charge upon a bet
     pub fee_ratio: WrappedBalance,
-}
-
-#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
-pub struct Pricing {
-    pub value: Price,
-    pub base_currency_symbol: String,
-    pub target_currency_symbol: String,
 }
 
 #[derive(BorshStorageKey, BorshSerialize)]

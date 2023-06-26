@@ -1,7 +1,7 @@
-use near_sdk::{Balance, Gas, ONE_YOCTO};
+use near_sdk::{Gas, ONE_YOCTO};
 use num_format::Locale;
 
-use crate::WrappedBalance;
+use crate::{Timestamp, WrappedBalance};
 
 pub const GAS_CREATE_DAO_PROPOSAL: Gas = Gas(8_000_000_000_000);
 pub const GAS_CREATE_DAO_PROPOSAL_CALLBACK: Gas = Gas(8_000_000_000_000);
@@ -15,13 +15,15 @@ pub const GAS_FT_METADATA: Gas = Gas(2_000_000_000_000);
 pub const GAS_FT_METADATA_CALLBACK: Gas = Gas(2_000_000_000_000);
 pub const GAS_AGGREGATOR_READ: Gas = Gas(8_000_000_000_000);
 
+pub const STAGE_PERIOD_NANOS: Timestamp = 300_000_000_000; // 5 minutes
+
 pub const BUY_SELL_THRESHOLD: f32 = 0.75; // 25% before the event ends
 
 pub const CREATE_OUTCOME_TOKEN_PRICE: WrappedBalance = 10_000_000; // 10 USDT
-pub const FEE_RATIO: Balance = 20_000; // 2%
+pub const FEE_RATIO: WrappedBalance = 20_000; // 2%
 
-pub const BALANCE_PROPOSAL_BOND: Balance = 100_000_000_000_000_000_000_000; // 0.1 Near
-pub const FT_TRANSFER_BOND: Balance = ONE_YOCTO;
+pub const BALANCE_PROPOSAL_BOND: WrappedBalance = 100_000_000_000_000_000_000_000; // 0.1 Near
+pub const FT_TRANSFER_BOND: WrappedBalance = ONE_YOCTO;
 
 pub const FORMATTED_STRING_LOCALE: Locale = Locale::en;
 
