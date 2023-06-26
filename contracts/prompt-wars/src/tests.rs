@@ -391,6 +391,7 @@ mod tests {
         assert_eq!(contract.collateral_token.fee_balance, 6_000);
     }
 
+    // @TODO test for panic ERR_MARKET_IS_CLOSED. labels: 100 USDT
     // #[test]
     // #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
     // fn should_fail_on_create_outcome_token_for_player_after_threshold() {}
