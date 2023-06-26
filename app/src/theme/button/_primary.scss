@@ -6,14 +6,24 @@
   padding: 13px 24px;
   text-transform: capitalize;
   color: var(--color-button-primary-text);
-  background: linear-gradient(94.59deg, var(--color-primary) -14.97%, var(--color-secondary) 100%);
+  background-image: linear-gradient(
+    to top right,
+    var(--color-primary),
+    var(--color-primary-shade-mid),
+    var(--color-primary-shade-low)
+  );
   background-position: center;
-  transition: background-color $duration-medium, color $duration-medium;
+  transition: background-image $duration-medium, color $duration-medium;
 
   &:hover,
   &:focus {
     color: var(--color-button-primary-hover-text);
-    background: linear-gradient(94.59deg, var(--color-secondary) -14.97%, var(--color-primary) 100%);
+    background-image: linear-gradient(
+      to top right,
+      var(--color-primary-shade-low),
+      var(--color-primary-shade-mid),
+      var(--color-primary)
+    );
   }
 
   &:focus {

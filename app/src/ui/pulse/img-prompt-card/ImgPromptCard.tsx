@@ -90,8 +90,8 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   </Card.Content>
                 </Card>
 
-                <Typography.Description className={styles["img-prompt-card__start-end-time--text"]}>
-                  <span>Resolution mechanism</span>
+                <div className={styles["img-prompt-card__start-end-time--resolution"]}>
+                  <Typography.Description flat>Resolution mechanism</Typography.Description>
                   {/* @TODO update to Switchboard feed URL */}
                   <Typography.Anchor
                     href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
@@ -101,9 +101,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     {resolution.feed_id}
                     <Icon name="icon-launch" />
                   </Typography.Anchor>
-                </Typography.Description>
-                <Typography.Description className={styles["img-prompt-card__start-end-time--text"]}>
-                  <span>Contract</span>
+                  <Typography.Description flat>Contract</Typography.Description>
                   <Typography.Anchor
                     href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
                     target="_blank"
@@ -112,7 +110,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     {marketId}
                     <Icon name="icon-launch" />
                   </Typography.Anchor>
-                </Typography.Description>
+                </div>
               </div>
             </div>
           </Grid.Col>

@@ -75,8 +75,12 @@ body[data-theme="dark"] {
   --color-dark-1: #ffffff;
 
   // Brand
-  --color-primary: #ff2fdd;
-  --color-secondary: #5356fc;
+  --color-primary: #6366f1;
+  --color-primary-shade-mid: #818cf8;
+  --color-primary-shade-low: #a5b4fc;
+  --color-secondary: #ffd74b;
+  --color-secondary-shade-mid: #f8d65a;
+  --color-secondary-shade-low: #fce078;
 
   // Background
   --color-background: var(--color-black);

@@ -10,8 +10,27 @@
 
   &__input {
     min-height: 180px;
+    margin-bottom: $space-default;
     padding: $space-default !important;
     font-size: $input-font-size !important;
     background-color: var(--color-market-card-background);
+
+    &--hidden {
+      margin-bottom: 0;
+    }
+  }
+
+  &__negative-prompt {
+    display: none;
+
+    &--trigger {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &--visible {
+      display: block;
+    }
   }
 }

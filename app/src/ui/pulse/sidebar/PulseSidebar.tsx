@@ -6,7 +6,6 @@ import { PulseIcon } from "ui/icons/PulseIcon";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { Icon } from "ui/icon/Icon";
 import { Typography } from "ui/typography/Typography";
-import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { WalletSelectorMobile } from "ui/wallet-selector/WalletSelectorMobile";
 
 import styles from "./PulseSidebar.module.scss";
@@ -94,9 +93,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               </Typography.Anchor>
             </div>
           </div>
-          <div className={styles["pulse-sidebar__footer"]}>
-            <ThemeSelector />
-          </div>
+          <div className={styles["pulse-sidebar__footer"]} />
         </div>
       </div>
     </div>

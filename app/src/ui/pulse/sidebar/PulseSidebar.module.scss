@@ -111,11 +111,16 @@
       &:active,
       &:hover {
         text-decoration: none;
-        background-color: var(--color-secondary);
+        background-image: linear-gradient(
+          to right,
+          var(--color-secondary),
+          var(--color-secondary-shade-mid),
+          var(--color-secondary-shade-low)
+        );
 
         > p,
         span {
-          color: var(--color-dark-1);
+          color: var(--color-black);
         }
       }
 
