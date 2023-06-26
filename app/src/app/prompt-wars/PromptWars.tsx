@@ -68,10 +68,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
         </MainPanel.Container>
       </div>
 
-      {/*
-        @TODO complete the FAQs
-        labels: 100 USDT
-      */}
       {isFAQsModalVisible && <FaqsModal onClose={onClickCloseFAQsModal} />}
     </>
   );
