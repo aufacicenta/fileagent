@@ -56,7 +56,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Anchor
                 className={styles["pulse-sidebar__item--link"]}
-                href="https://github.com/aufacicenta/pulsemarkets-v2-web"
+                href="https://github.com/aufacicenta/pulsemarkets"
                 target="_blank"
                 rel="nofollow"
               >

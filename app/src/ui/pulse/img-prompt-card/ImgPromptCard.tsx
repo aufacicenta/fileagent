@@ -4,7 +4,6 @@ import Countdown from "react-countdown";
 import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
 import { Typography } from "ui/typography/Typography";
-import pulse from "providers/pulse";
 import { Icon } from "ui/icon/Icon";
 import near from "providers/near";
 import date from "providers/date";
@@ -91,16 +90,6 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                 </Card>
 
                 <div className={styles["img-prompt-card__start-end-time--resolution"]}>
-                  <Typography.Description flat>Resolution mechanism</Typography.Description>
-                  {/* @TODO update to Switchboard feed URL */}
-                  <Typography.Anchor
-                    href={`${pulse.getConfig().resolutionMechanism.baseUrl}/${resolution.feed_id}`}
-                    target="_blank"
-                    truncate
-                  >
-                    {resolution.feed_id}
-                    <Icon name="icon-launch" />
-                  </Typography.Anchor>
                   <Typography.Description flat>Contract</Typography.Description>
                   <Typography.Anchor
                     href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}

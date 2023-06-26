@@ -10,7 +10,7 @@ import { Icon } from "ui/icon/Icon";
 import { PromptInputCardProps } from "./PromptInputCard.types";
 import styles from "./PromptInputCard.module.scss";
 
-export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, className }) => {
+export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, className, onClickFAQsButton }) => {
   const [isNegativePromptFieldVisible, displayNegativePromptField] = useState(false);
 
   return (
@@ -57,7 +57,10 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
             <Card.Actions>
               <Typography.Description flat>
                 Submitting your prompt will charge 10 USDT from your wallet. This will cover storage costs and the
-                submission fee. <Typography.Anchor>FAQs</Typography.Anchor>
+                submission fee.{" "}
+                <Typography.Anchor onClick={onClickFAQsButton} href="#">
+                  FAQs
+                </Typography.Anchor>
               </Typography.Description>
               <Button type="submit">Submit</Button>
             </Card.Actions>
