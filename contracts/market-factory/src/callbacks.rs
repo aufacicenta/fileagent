@@ -1,7 +1,22 @@
-use near_sdk::{env, near_bindgen, require, serde_json::json, AccountId, PromiseResult};
+use near_sdk::{
+    env, ext_contract, near_bindgen, require, serde_json::json, AccountId, Promise, PromiseResult,
+};
 
 use crate::consts::*;
 use crate::storage::*;
+
+#[ext_contract(ext_self)]
+trait Callbacks {
+    fn on_create_market_callback(
+        &mut self,
+        market_account_id: AccountId,
+        collateral_token_account_id: AccountId,
+    ) -> (AccountId, AccountId);
+    fn on_ft_storage_deposit_callback(
+        &mut self,
+        market_account_id: AccountId,
+    ) -> (AccountId, AccountId);
+}
 
 #[near_bindgen]
 impl MarketFactory {
@@ -13,39 +28,22 @@ impl MarketFactory {
     ) -> (AccountId, AccountId) {
         match env::promise_result(0) {
             PromiseResult::Successful(_result) => {
-                let create_outcome_tokens_promise = env::promise_create(
-                    market_account_id.clone(),
-                    "create_outcome_tokens",
-                    json!({}).to_string().as_bytes(),
-                    0,
-                    GAS_FOR_CREATE_OUTCOME_TOKENS,
-                );
-
-                let storage_deposit_promise = env::promise_create(
-                    collateral_token_account_id.clone(),
-                    "storage_deposit",
-                    json!({ "account_id": market_account_id, "registration_only": true })
+                let storage_deposit_promise = Promise::new(collateral_token_account_id.clone())
+                    .function_call(
+                    "storage_deposit".to_string(),
+                    json!({ "account_id": market_account_id.clone(), "registration_only": true })
                         .to_string()
-                        .as_bytes(),
+                        .into_bytes(),
                     STORAGE_DEPOSIT_BOND,
                     GAS_FOR_FT_STORAGE_DEPOSIT,
                 );
 
-                let promises =
-                    env::promise_and(&[create_outcome_tokens_promise, storage_deposit_promise]);
+                let storage_deposit_callback_promise = ext_self::ext(env::current_account_id())
+                    .with_attached_deposit(0)
+                    .with_static_gas(GAS_FOR_CREATE_OUTCOME_TOKENS_CALLBACK)
+                    .on_ft_storage_deposit_callback(market_account_id.clone());
 
-                let callback = env::promise_then(
-                    promises,
-                    env::current_account_id(),
-                    "on_create_outcome_tokens_ft_storage_deposit_callback",
-                    json!({ "market_account_id": market_account_id })
-                        .to_string()
-                        .as_bytes(),
-                    0,
-                    GAS_FOR_CREATE_OUTCOME_TOKENS_CALLBACK,
-                );
-
-                env::promise_return(callback);
+                storage_deposit_promise.then(storage_deposit_callback_promise);
 
                 (market_account_id, collateral_token_account_id)
             }
@@ -55,23 +53,15 @@ impl MarketFactory {
     }
 
     #[private]
-    pub fn on_create_outcome_tokens_ft_storage_deposit_callback(
-        &mut self,
-        market_account_id: AccountId,
-    ) -> bool {
-        require!(env::promise_results_count() == 2);
+    pub fn on_ft_storage_deposit_callback(&mut self, market_account_id: AccountId) -> bool {
+        require!(env::promise_results_count() == 1);
 
-        let are_outcome_tokens_created = match env::promise_result(0) {
+        let is_storage_deposit_success = match env::promise_result(0) {
             PromiseResult::Successful(_result) => true,
-            _ => env::panic_str("ERR_ON_CREATE_OUTCOME_TOKENS_CALLBACK_0"),
+            _ => env::panic_str("ERR_ON_FT_STORAGE_DEPOSIT_CALLBACK"),
         };
 
-        let is_storage_deposit_success = match env::promise_result(1) {
-            PromiseResult::Successful(_result) => true,
-            _ => env::panic_str("ERR_ON_FT_STORAGE_DEPOSIT_CALLBACK_1"),
-        };
-
-        if !are_outcome_tokens_created || !is_storage_deposit_success {
+        if !is_storage_deposit_success {
             return false;
         }
 

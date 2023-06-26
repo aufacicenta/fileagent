@@ -1,20 +1,12 @@
 use near_sdk::{
-    collections::UnorderedSet, env, ext_contract, json_types::Base64VecU8, near_bindgen,
-    serde_json, serde_json::Value, AccountId, Promise,
+    collections::UnorderedSet, env, json_types::Base64VecU8, near_bindgen, serde_json,
+    serde_json::Value, AccountId, Promise,
 };
 use std::default::Default;
 
 use crate::consts::*;
+use crate::ext_self;
 use crate::storage::*;
-
-#[ext_contract(ext_self)]
-trait Callbacks {
-    fn on_create_market_callback(
-        &mut self,
-        market_account_id: AccountId,
-        collateral_token_account_id: AccountId,
-    ) -> (AccountId, AccountId);
-}
 
 impl Default for MarketFactory {
     fn default() -> Self {

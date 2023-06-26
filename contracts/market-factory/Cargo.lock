@@ -662,7 +662,7 @@ dependencies = [
  "near-vm-errors",
  "ripemd",
  "serde",
- "sha2 0.9.9",
+ "sha2 0.10.6",
  "sha3",
  "zeropool-bn",
 ]
