@@ -5,6 +5,7 @@ mod tests {
     use chrono::{Duration, Utc};
     use near_sdk::test_utils::test_env::alice;
     use near_sdk::test_utils::VMContextBuilder;
+    use near_sdk::PromiseResult;
     use near_sdk::{serde_json::json, testing_env, AccountId};
 
     const IX_ADDRESS: [u8; 32] = [
@@ -35,7 +36,7 @@ mod tests {
 
     #[test]
     fn create_market() {
-        setup_context();
+        let mut context = setup_context();
 
         let now = Utc::now();
         let starts_at = now + Duration::hours(1);
@@ -43,7 +44,7 @@ mod tests {
 
         let mut contract = setup_contract();
 
-        let name = AccountId::new_unchecked("480c9dbe-a5ec".to_string());
+        let name = "480c9dbe-a5ec".to_string();
         let dao_account_id = AccountId::new_unchecked("dao-account-id.near".to_string());
         let market_creator_account_id =
             AccountId::new_unchecked("market-creator-account-id.near".to_string());
@@ -80,6 +81,38 @@ mod tests {
             },
         });
 
-        contract.create_market(name, args.to_string().into_bytes().to_vec().into());
+        contract.create_market(
+            name.clone().try_into().unwrap(),
+            args.to_string().into_bytes().to_vec().into(),
+        );
+
+        let current_account_id = AccountId::new_unchecked("contract".to_string());
+
+        testing_env!(context
+            .current_account_id(current_account_id.clone())
+            .attached_deposit(STORAGE_DEPOSIT_BOND * 2)
+            .build());
+
+        let market_account_id: AccountId =
+            format!("{}.{}", name.clone(), current_account_id.clone())
+                .parse()
+                .unwrap();
+
+        testing_env!(
+            context.build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        contract.on_create_market_callback(market_account_id.clone(), collateral_token_account_id);
+
+        contract.on_ft_storage_deposit_callback(market_account_id.clone());
+
+        assert_eq!(contract.markets.len(), 1);
+        assert_eq!(contract.get_markets_list(), vec![market_account_id.clone()]);
+        assert_eq!(contract.get_markets_count(), 1);
+        assert_eq!(contract.get_markets(0, 1), vec![market_account_id.clone()]);
     }
 }
