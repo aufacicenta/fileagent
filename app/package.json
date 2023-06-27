@@ -55,7 +55,8 @@
     "react-popper": "^2.2.5",
     "react-transition-group": "^4.4.1",
     "rxjs": "^6.6.6",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.9.0"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
