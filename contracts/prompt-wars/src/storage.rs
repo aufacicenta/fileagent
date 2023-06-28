@@ -81,7 +81,7 @@ pub struct Resolution {
     pub result: Option<ResolutionResult>,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone)]
 pub struct Management {
     // Gets sent fees when claiming window is open
     pub dao_account_id: AccountId,
@@ -93,7 +93,7 @@ pub struct Management {
     pub buy_sell_threshold: f32,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Deserialize, Serialize)]
+#[derive(BorshSerialize, BorshDeserialize, Deserialize, Serialize, Clone)]
 pub struct Fees {
     // Price to charge when creating an outcome token
     pub price: WrappedBalance,

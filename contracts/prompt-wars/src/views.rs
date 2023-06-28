@@ -15,12 +15,16 @@ impl Market {
         self.resolution.clone()
     }
 
-    pub fn get_fee_ratio(&self) -> WrappedBalance {
-        self.fees.fee_ratio
+    pub fn get_fee_data(&self) -> Fees {
+        self.fees.clone()
     }
 
-    pub fn get_price(&self) -> WrappedBalance {
-        self.fees.price
+    pub fn get_management_data(&self) -> Management {
+        self.management.clone()
+    }
+
+    pub fn get_collateral_token_metadata(&self) -> CollateralToken {
+        self.collateral_token.clone()
     }
 
     pub fn get_outcome_token(&self, outcome_id: &OutcomeId) -> OutcomeToken {
@@ -38,22 +42,6 @@ impl Market {
         env::block_timestamp().try_into().unwrap()
     }
 
-    pub fn get_collateral_token_metadata(&self) -> CollateralToken {
-        self.collateral_token.clone()
-    }
-
-    pub fn get_market_creator_account_id(&self) -> AccountId {
-        self.management.market_creator_account_id.clone()
-    }
-
-    pub fn dao_account_id(&self) -> AccountId {
-        self.management.dao_account_id.clone()
-    }
-
-    pub fn resolution_window(&self) -> Timestamp {
-        self.resolution.window
-    }
-
     pub fn resolved_at(&self) -> Timestamp {
         match self.resolution.resolved_at {
             Some(timestamp) => timestamp,
@@ -61,20 +49,12 @@ impl Market {
         }
     }
 
-    // Players can join the event before N% of the event time has passed
-    pub fn get_buy_sell_timestamp(&self) -> i64 {
-        let diff = (self.market.ends_at - self.market.starts_at) as f32
-            * self.management.buy_sell_threshold;
-
-        self.market.ends_at - diff as i64
-    }
-
     pub fn balance_of(&self, outcome_id: &OutcomeId) -> WrappedBalance {
         self.get_outcome_token(outcome_id).get_balance_of()
     }
 
     pub fn get_amount_mintable(&self, amount: WrappedBalance) -> (WrappedBalance, WrappedBalance) {
-        let fee = self.calc_percentage(amount, self.get_fee_ratio());
+        let fee = self.calc_percentage(amount, self.get_fee_data().fee_ratio);
         let amount_mintable = amount - fee;
 
         (amount_mintable, fee)

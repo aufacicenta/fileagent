@@ -19,9 +19,7 @@ impl Market {
     }
 
     pub fn is_open(&self) -> bool {
-        let limit = self.get_buy_sell_timestamp();
-
-        self.get_block_timestamp() <= limit
+        self.get_block_timestamp() <= self.market.ends_at
     }
 
     pub fn is_over(&self) -> bool {

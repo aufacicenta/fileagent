@@ -28,5 +28,4 @@ pub use ft_receiver::*;
 pub mod contract;
 pub use contract::*;
 
-pub mod tests;
-pub use tests::*;
+mod tests;
