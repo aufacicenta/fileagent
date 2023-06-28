@@ -1,6 +1,10 @@
 import { ReactNode } from "react";
 
-import { AccountId, PromptWarsMarketContractValues } from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import {
+  AccountId,
+  Prompt,
+  PromptWarsMarketContractValues,
+} from "providers/near/contracts/prompt-wars/prompt-wars.types";
 
 export type NearPromptWarsMarketContractContextControllerProps = {
   marketId: AccountId;
@@ -10,6 +14,7 @@ export type NearPromptWarsMarketContractContextControllerProps = {
 
 export type NearPromptWarsMarketContractContextContextType = {
   fetchMarketContractValues: () => Promise<void>;
+  ftTransferCall: (prompt: Prompt) => Promise<void>;
   marketId: AccountId;
   // getBalanceOf: PromptWarsMarketContractMethods["balance_of"];
   // getAmountMintable: PromptWarsMarketContractMethods["get_amount_mintable"];
@@ -20,4 +25,9 @@ export type NearPromptWarsMarketContractContextContextType = {
   actions: NearPromptWarsMarketContractContextContextActions;
 };
 
-export type NearPromptWarsMarketContractContextContextActions = { fetchMarketContractValues: { isLoading: boolean } };
+export type NearPromptWarsMarketContractContextContextActions = {
+  fetchMarketContractValues: { isLoading: boolean };
+  ftTransferCall: {
+    isLoading: boolean;
+  };
+};

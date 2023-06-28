@@ -4,6 +4,11 @@ export type AccountId = string;
 export type OutcomeId = AccountId;
 type OutcomeTokenResult = number;
 
+export type Prompt = {
+  value: string;
+  negative_prompt?: string;
+};
+
 export type ResolutionResult = AccountId;
 
 export type MarketData = {

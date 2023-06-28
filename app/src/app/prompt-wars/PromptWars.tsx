@@ -11,11 +11,11 @@ import { PromptInputCard } from "ui/pulse/prompt-input-card/PromptInputCard";
 import { FaqsModal } from "ui/pulse/prompt-wars/faqs-modal/FaqsModal";
 import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars-market-contract/useNearPromptWarsMarketContractContext";
 import { RevealProgressModal } from "ui/pulse/prompt-wars/reveal-progress-modal/RevealProgressModal";
+import { useToastContext } from "hooks/useToastContext/useToastContext";
+import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 
-import { PromptWarsProps } from "./PromptWars.types";
 import styles from "./PromptWars.module.scss";
-
-const onSubmit = async () => undefined;
+import { PromptWarsProps } from "./PromptWars.types";
 
 const onNextCountdownComplete = () => {
   console.log("onNextCountdownComplete");
@@ -32,7 +32,9 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
   const [isWatchRevealProgressModalVisible, displayWatchRevealProgressModal] = useState(false);
 
-  const { marketContractValues, fetchMarketContractValues } = useNearPromptWarsMarketContractContext();
+  const { marketContractValues, fetchMarketContractValues, ftTransferCall } = useNearPromptWarsMarketContractContext();
+
+  const toast = useToastContext();
 
   useEffect(() => {
     fetchMarketContractValues();
@@ -42,6 +44,21 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     // @TODO render PriceMarket skeleton template
     return <GenericLoader />;
   }
+
+  const onSubmit = async (prompt: Prompt) => {
+    if (marketContractValues.isOver) {
+      toast.trigger({
+        variant: "error",
+        // @TODO i18n
+        title: "Market is over",
+        children: <Typography.Text>Cannot purchase market options on this event.</Typography.Text>,
+      });
+
+      return;
+    }
+
+    await ftTransferCall(prompt);
+  };
 
   const onClickCloseFAQsModal = () => {
     displayFAQsModal(false);
@@ -55,7 +72,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     displayWatchRevealProgressModal(false);
   };
 
-  const onClickWatchRevealProgressButton = () => {
+  const onRevealWatchProgressClick = () => {
     displayWatchRevealProgressModal(true);
   };
 
@@ -102,7 +119,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
                   onNextCountdownComplete={onNextCountdownComplete}
                   onResolutionCountdownComplete={onResolutionCountdownComplete}
                   onClaimDepositUnresolved={onClaimDepositUnresolved}
-                  onRevealWatchProgressClick={onClickWatchRevealProgressButton}
+                  onRevealWatchProgressClick={onRevealWatchProgressClick}
                 />
               </Grid.Col>
               <Grid.Col lg={5} xs={12}>

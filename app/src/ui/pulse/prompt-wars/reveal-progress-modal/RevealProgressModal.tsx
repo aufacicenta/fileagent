@@ -20,7 +20,7 @@ export const RevealProgressModal: React.FC<RevealProgressModalProps> = ({
 
   return (
     <Modal
-      className={clsx(styles["faqs-modal"], className)}
+      className={clsx(styles["reveal-progress-modal"], className)}
       isOpened
       aria-labelledby="Prompt Wars Reveal Progress Modal Window"
       onClose={onClose}

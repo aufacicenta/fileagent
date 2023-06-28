@@ -5,15 +5,19 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import {
+  Prompt,
   PromptWarsMarketContractStatus,
   PromptWarsMarketContractValues,
 } from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { FungibleTokenContract } from "providers/near/contracts/fungible-token";
+import currency from "providers/currency";
 
-import { NearPromptWarsMarketContractContext } from "./NearPromptWarsMarketContractContext";
 import {
   NearPromptWarsMarketContractContextContextActions,
   NearPromptWarsMarketContractContextControllerProps,
 } from "./NearPromptWarsMarketContractContextContext.types";
+import { NearPromptWarsMarketContractContext } from "./NearPromptWarsMarketContractContext";
 
 export const NearPromptWarsMarketContractContextController = ({
   children,
@@ -24,10 +28,13 @@ export const NearPromptWarsMarketContractContextController = ({
     fetchMarketContractValues: {
       isLoading: false,
     },
+    ftTransferCall: {
+      isLoading: false,
+    },
   });
 
   const toast = useToastContext();
-  // const walletState = useWalletStateContext();
+  const walletState = useWalletStateContext();
 
   // Open for submissions, revealing, resolving, claim fees, destroy
   const getMarketStatus = (values: PromptWarsMarketContractValues): PromptWarsMarketContractStatus => {
@@ -142,19 +149,72 @@ export const NearPromptWarsMarketContractContextController = ({
     }));
   };
 
-  // const assertWalletConnection = () => {
-  //   if (!walletState.isConnected) {
-  //     toast.trigger({
-  //       variant: "info",
-  //       withTimeout: true,
-  //       // @TODO i18n
-  //       title: "Wallet is not connected",
-  //       children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
-  //     });
+  const assertWalletConnection = () => {
+    if (!walletState.isConnected) {
+      toast.trigger({
+        variant: "info",
+        withTimeout: true,
+        // @TODO i18n
+        title: "Wallet is not connected",
+        children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
+      });
 
-  //     throw new Error("ERR_USE_NEAR_MARKET_CONTRACT_INVALID_WALLET_CONNECTION");
-  //   }
-  // };
+      throw new Error("ERR_USE_NEAR_MARKET_CONTRACT_INVALID_WALLET_CONNECTION");
+    }
+  };
+
+  const ftTransferCall = async (prompt: Prompt) => {
+    if (!marketContractValues) {
+      return;
+    }
+
+    try {
+      assertWalletConnection();
+
+      setActions((prev) => ({
+        ...prev,
+        ftTransferCall: {
+          ...prev.ftTransferCall,
+          isLoading: true,
+        },
+      }));
+
+      const amount = marketContractValues.fees.price.toString();
+      const msg = JSON.stringify({ CreateOutcomeTokenArgs: { prompt: JSON.stringify(prompt) } });
+
+      await FungibleTokenContract.ftTransferCall(
+        walletState.context.wallet!,
+        marketContractValues.collateralToken.id!,
+        {
+          receiver_id: marketId,
+          amount,
+          msg,
+        },
+      );
+
+      toast.trigger({
+        variant: "confirmation",
+        withTimeout: false,
+        // @TODO i18n
+        title: "Your prompt was successfully submitted",
+        children: (
+          <Typography.Text>{`Transferred USDT ${currency.convert.toDecimalsPrecisionString(
+            amount,
+            marketContractValues.collateralToken.decimals!,
+          )} to ${marketId}`}</Typography.Text>
+        ),
+      });
+
+      fetchMarketContractValues();
+    } catch {
+      toast.trigger({
+        variant: "error",
+        // @TODO i18n
+        title: "Failed to make transfer call",
+        children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
+      });
+    }
+  };
 
   // const getBalanceOf = async (outcome_id: OutcomeId) => {
   //   try {
@@ -270,6 +330,7 @@ export const NearPromptWarsMarketContractContextController = ({
   const props = {
     fetchMarketContractValues,
     marketContractValues,
+    ftTransferCall,
     // getBalanceOf,
     // getAmountMintable,
     // getAmountPayableResolved,

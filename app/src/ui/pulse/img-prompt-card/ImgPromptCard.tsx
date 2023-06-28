@@ -65,7 +65,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
         <>
           <Typography.Text flat>{status}</Typography.Text>
           <Typography.MiniDescription onClick={onClaimDepositUnresolved}>
-            Claim back your deposit.
+            Claim back your deposit
           </Typography.MiniDescription>
         </>
       );

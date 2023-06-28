@@ -24,7 +24,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
       return;
     }
 
-    nearWalletSelectorContext.initModal(near.getConfig().marketFactoryAccountId);
+    nearWalletSelectorContext.initModal(near.getConfig().factoryWalletId);
   }, [nearWalletSelectorContext.selector]);
 
   const handleOnConnectWalletClick = () => {

@@ -1,6 +1,6 @@
 export type Styles = {
-  "faqs-modal": string;
-  "faqs-modal__item": string;
+  "reveal-progress-modal": string;
+  "reveal-progress-modal__item": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

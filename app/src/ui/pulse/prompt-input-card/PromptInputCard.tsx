@@ -7,6 +7,9 @@ import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import currency from "providers/currency";
 
 import { PromptInputCardProps } from "./PromptInputCard.types";
 import styles from "./PromptInputCard.module.scss";
@@ -19,9 +22,16 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
 }) => {
   const [isNegativePromptFieldVisible, displayNegativePromptField] = useState(false);
 
-  const { status } = marketContractValues;
+  const wallet = useWalletStateContext();
+  const nearWalletSelectorContext = useNearWalletSelectorContext();
+
+  const { status, fees, collateralToken } = marketContractValues;
 
   const isDisabled = status !== PromptWarsMarketContractStatus.OPEN;
+
+  const handleOnDisplayWidgetClick = () => {
+    nearWalletSelectorContext.modal?.show();
+  };
 
   return (
     <RFForm
@@ -34,7 +44,7 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
                 Write your prompt down 👇
               </Typography.Headline3>
               <Field
-                name="prompt"
+                name="value"
                 component="textarea"
                 className={clsx(styles["prompt-input-card__input"], "input-field", "materialize-textarea")}
                 placeholder="Write your prompt here..."
@@ -53,7 +63,7 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
                 })}
               >
                 <Field
-                  name="negativePrompt"
+                  name="negative_prompt"
                   component="textarea"
                   className={clsx(
                     styles["prompt-input-card__input"],
@@ -68,15 +78,22 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
             </Card.Content>
             <Card.Actions>
               <Typography.Description flat>
-                Submitting your prompt will charge 10 USDT from your wallet. This will cover storage costs and the
-                submission fee.{" "}
+                Submitting your prompt will charge USDT{" "}
+                {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)} from your wallet.
+                This will cover storage costs and the submission fee.{" "}
                 <Typography.Anchor onClick={onClickFAQsButton} href="#">
                   FAQs
                 </Typography.Anchor>
               </Typography.Description>
-              <Button type="submit" disabled={isDisabled}>
-                Submit
-              </Button>
+              {!wallet.isConnected ? (
+                <Button color="secondary" variant="outlined" onClick={handleOnDisplayWidgetClick}>
+                  Connect to play
+                </Button>
+              ) : (
+                <Button type="submit" disabled={isDisabled}>
+                  Submit
+                </Button>
+              )}
             </Card.Actions>
           </Card>
         </form>
