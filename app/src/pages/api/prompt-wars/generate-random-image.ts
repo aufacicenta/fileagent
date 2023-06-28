@@ -2,21 +2,20 @@
 // https://source.unsplash.com/random/512x512?sport - this is unsplash random photo generator, we can also feed the Stable Diffusion API with random prompts created by ChatGPT
 
 // Once an image is created, store its IPFS hash in a database with an is_used flag set to false, set to true when we've used this image
+// Or don't store anything, just chain the API calls, create a market just after this endpoint
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export const config = {
-  runtime: "edge",
-};
-
-export default async function Fn(request: NextRequest) {
+// @TODO fetch images from generators, upload them to IPFS and create a market
+// labels: 500 USDT
+export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
-    return NextResponse.json({
-      name: `Hello, from ${request.url} I'm an Edge Function!`,
-    });
+    // @TODO authenticate the request, only this server should be able to execute this endpoint
+    // labels: 100 USDT
+
+    response.status(200).json({ image_uri: "TODO" });
   } catch (error) {
-    return NextResponse.json({
-      error: `Error from ${request.url}: ${(error as Error).message}`,
-    });
+    console.log(error);
+    response.status(500).json({ error: (error as Error).message });
   }
 }

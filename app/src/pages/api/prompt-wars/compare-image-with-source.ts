@@ -8,20 +8,17 @@
 // Error if there's no prompt associated to the account
 // Error if it's still no time to reveal the prompt
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export const config = {
-  runtime: "edge",
-};
-
-export default async function Fn(request: NextRequest) {
+// @TODO compare the prompt result image with the source image
+// labels: 500 USDT
+export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
-    return NextResponse.json({
-      name: `Hello, from ${request.url} I'm an Edge Function!`,
-    });
+    // @TODO authenticate the request, only this server should be able to execute this endpoint
+    // labels: 100 USDT
+    response.status(200).json({ result: 0 });
   } catch (error) {
-    return NextResponse.json({
-      error: `Error from ${request.url}: ${(error as Error).message}`,
-    });
+    console.log(error);
+    response.status(500).json({ error: (error as Error).message });
   }
 }

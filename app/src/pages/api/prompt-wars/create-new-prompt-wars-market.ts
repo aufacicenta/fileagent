@@ -21,6 +21,8 @@ import { CollateralToken, Management, MarketData } from "providers/near/contract
 import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 
+// @TODO authenticate the request, only this server should be able to execute this endpoint
+// labels: 100 USDT
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
     // @TODO get image_uri from IPFS database, should not repeat.
@@ -68,15 +70,8 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     logger.info({ promptWarsMarketArgs, id });
 
     response.status(200).json(promptWarsMarketArgs);
-
-    // return NextResponse.json({
-    //   name: `Hello, from ${request.url} I'm an Edge Function!`,
-    // });
   } catch (error) {
     console.log(error);
     response.status(500).json({ error: (error as Error).message });
-    // return NextResponse.json({
-    //   error: `Error from ${request.url}: ${(error as Error).message}`,
-    // });
   }
 }
