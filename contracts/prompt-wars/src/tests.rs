@@ -388,29 +388,50 @@ mod tests {
     // #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
     // fn should_fail_on_create_outcome_token_for_player_after_threshold() {}
 
+    // @TODO test for ERR_MARKET_RESOLVED
+    // labels: 100 USDT
+
     // #[test]
     // #[should_panic(expected = "ERR_MARKET_RESOLVED")]
     // fn should_fail_on_create_outcome_token_for_player_when_resolved() {}
+
+    // @TODO test for ERR_ASSERT_PRICE_TOO_LOW
+    // labels: 100 USDT
 
     // #[test]
     // #[should_panic(expected = "ERR_ASSERT_PRICE_TOO_LOW")]
     // fn should_fail_on_create_outcome_token_for_player_when_amount_lt_price() {}
 
+    // @TODO test for ERR_SET_RESULT_ALREADY_SET
+    // labels: 100 USDT
+
     // #[test]
     // #[should_panic(expected = "ERR_SET_RESULT_ALREADY_SET")]
     // fn should_fail_on_reveal_set_result() {}
+
+    // @TODO test for ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT
+    // labels: 100 USDT
 
     // #[test]
     // #[should_panic(expected = "ERR_GET_AMOUNT_PAYABLE_UNRESOLVED_INVALID_AMOUNT")]
     // fn should_fail_on_selling_greater_than_balance() {}
 
+    // @TODO test for ERR_MARKET_IS_UNDER_RESOLUTION
+    // labels: 100 USDT
+
     // #[test]
     // #[should_panic(expected = "ERR_MARKET_IS_UNDER_RESOLUTION")]
     // fn should_fail_on_selling_under_resolution_window() {}
 
+    // @TODO test for ERR_SIGNER_IS_NOT_OWNER
+    // labels: 100 USDT
+
     // #[test]
     // #[should_panic(expected = "ERR_SIGNER_IS_NOT_OWNER")]
     // fn should_fail_on_reveal_not_owner() {}
+
+    // @TODO test for ERR_PLAYER_IS_NOT_WINNER
+    // labels: 100 USDT
 
     // #[test]
     // #[should_panic(expected = "ERR_PLAYER_IS_NOT_WINNER")]
