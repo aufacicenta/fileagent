@@ -8,6 +8,7 @@ import { Icon } from "ui/icon/Icon";
 import near from "providers/near";
 import currency from "providers/currency";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import ipfs from "providers/ipfs";
 
 import { ImgPromptCardProps } from "./ImgPromptCard.types";
 import styles from "./ImgPromptCard.module.scss";
@@ -81,7 +82,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
             <Card withSpotlightEffect>
               <Card.Content className={styles["img-prompt-card__current-img-card--box"]}>
                 <div className={styles["img-prompt-card__current-img-card--file"]}>
-                  <img src="/prompt-wars/toast.jpg" alt="current" />
+                  <img src={ipfs.asHttpsURL(market.image_uri)} alt="current" />
                 </div>
               </Card.Content>
             </Card>
