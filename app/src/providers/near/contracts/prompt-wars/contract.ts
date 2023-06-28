@@ -121,17 +121,6 @@ export class PromptWarsMarketContract {
     }
   }
 
-  async get_buy_sell_timestamp() {
-    try {
-      const result = await this.contract.get_buy_sell_timestamp();
-
-      return date.extractNanoseconds(result);
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_PW_MARKET_CONTRACT_GET_BUY_SELL_TIMESTAMP");
-    }
-  }
-
   async get_outcome_ids() {
     try {
       const result = await this.contract.get_outcome_ids();

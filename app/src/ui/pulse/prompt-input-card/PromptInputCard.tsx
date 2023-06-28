@@ -6,12 +6,22 @@ import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
+import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 
 import { PromptInputCardProps } from "./PromptInputCard.types";
 import styles from "./PromptInputCard.module.scss";
 
-export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, className, onClickFAQsButton }) => {
+export const PromptInputCard: React.FC<PromptInputCardProps> = ({
+  onSubmit,
+  className,
+  onClickFAQsButton,
+  marketContractValues,
+}) => {
   const [isNegativePromptFieldVisible, displayNegativePromptField] = useState(false);
+
+  const { status } = marketContractValues;
+
+  const isDisabled = status !== PromptWarsMarketContractStatus.OPEN;
 
   return (
     <RFForm
@@ -28,6 +38,7 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
                 component="textarea"
                 className={clsx(styles["prompt-input-card__input"], "input-field", "materialize-textarea")}
                 placeholder="Write your prompt here..."
+                disabled={isDisabled}
               />
               <Typography.Description
                 onClick={() => displayNegativePromptField(!isNegativePromptFieldVisible)}
@@ -51,6 +62,7 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
                     "materialize-textarea",
                   )}
                   placeholder="Write your negative prompt here..."
+                  disabled={isDisabled}
                 />
               </div>
             </Card.Content>
@@ -62,7 +74,9 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({ onSubmit, clas
                   FAQs
                 </Typography.Anchor>
               </Typography.Description>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={isDisabled}>
+                Submit
+              </Button>
             </Card.Actions>
           </Card>
         </form>

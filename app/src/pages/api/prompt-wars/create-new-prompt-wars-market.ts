@@ -21,7 +21,7 @@ import { CollateralToken, Management, MarketData } from "providers/near/contract
 import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 
-export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
+export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
     // @TODO get image_uri from IPFS database, should not repeat.
     // When fetched, make sure to change the is_used flag to true

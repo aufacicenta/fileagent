@@ -92,20 +92,14 @@
 
   &__mini-description {
     @include miniDescription();
+
+    &--as-button {
+      @include link();
+      font-size: $font-size-mini-description;
+    }
   }
 
   &__link {
-    @include font-properties($typography-link);
-    @include normalizeTypography;
-    font-size: inherit;
-    color: var(--color-typography-link);
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    &--button {
-      text-decoration: none;
-    }
+    @include link();
   }
 }

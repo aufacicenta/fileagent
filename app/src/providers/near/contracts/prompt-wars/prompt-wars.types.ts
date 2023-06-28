@@ -52,7 +52,6 @@ export type PromptWarsMarketContractValues = {
   fees: Fees;
   management: Management;
   collateralToken: CollateralToken;
-  buySellTimestamp: Timestamp;
   outcomeIds: Array<OutcomeId>;
   isResolved: boolean;
   isOpen: boolean;
@@ -61,7 +60,19 @@ export type PromptWarsMarketContractValues = {
   isResolutionWindowExpired: boolean;
   isExpiredUnresolved: boolean;
   isClaimingWindowExpired: boolean;
+
+  status: PromptWarsMarketContractStatus;
 };
+
+export enum PromptWarsMarketContractStatus {
+  LOADING = "Loading",
+  OPEN = "Open",
+  REVEALING = "Revealing",
+  RESOLVING = "Resolving",
+  RESOLVED = "Resolved",
+  UNRESOLVED = "Unresolved",
+  CLOSED = "Closed",
+}
 
 export type PromptWarsMarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
@@ -73,7 +84,6 @@ export type PromptWarsMarketContractMethods = {
   get_outcome_ids: () => Promise<Array<AccountId>>;
   get_block_timestamp: () => Promise<Timestamp>;
   resolved_at: () => Promise<Timestamp>;
-  get_buy_sell_timestamp: () => Promise<Timestamp>;
   balance_of: (outcome_id: OutcomeId) => Promise<WrappedBalance>;
   get_amount_mintable: (amount: WrappedBalance) => Promise<Array<WrappedBalance>>;
   get_amount_payable_unresolved: () => Promise<Array<WrappedBalance>>;

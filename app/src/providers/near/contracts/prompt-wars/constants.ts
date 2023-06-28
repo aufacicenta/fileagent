@@ -8,7 +8,6 @@ export const VIEW_METHODS = [
   "get_outcome_ids",
   "get_block_timestamp",
   "resolved_at",
-  "get_buy_sell_timestamp",
   "balance_of",
   "get_amount_mintable",
   "get_amount_payable_unresolved",

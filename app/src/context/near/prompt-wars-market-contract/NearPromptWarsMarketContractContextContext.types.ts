@@ -10,7 +10,6 @@ export type NearPromptWarsMarketContractContextControllerProps = {
 
 export type NearPromptWarsMarketContractContextContextType = {
   fetchMarketContractValues: () => Promise<void>;
-  bettingPeriodExpired: () => boolean;
   marketId: AccountId;
   // getBalanceOf: PromptWarsMarketContractMethods["balance_of"];
   // getAmountMintable: PromptWarsMarketContractMethods["get_amount_mintable"];

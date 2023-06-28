@@ -1,6 +1,9 @@
 @import "src/theme/base";
 @import "./variables";
 
+@mixin normalizeTypography {
+  margin-top: 0;
+}
 @mixin headline1 {
   @include font-properties($typography-headline-1);
   @include normalizeTypography;
@@ -76,4 +79,20 @@
   @include font-properties($typography-mini-description);
   @include normalizeTypography;
   color: var(--color-typography-mini-description);
+}
+@mixin link {
+  @include font-properties($typography-link);
+  @include normalizeTypography;
+  font-size: inherit;
+  text-decoration: none;
+  color: var(--color-typography-link);
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &--button {
+    text-decoration: none;
+  }
 }
