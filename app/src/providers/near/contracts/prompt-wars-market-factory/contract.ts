@@ -32,6 +32,9 @@ export class PromptWarsMarketFactory {
     const contractId = near.getConfig().factoryWalletId;
     const methodName = "create_market";
 
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("4000000000000000000000000");
+
     const args = {
       name,
       args: base64args,
@@ -41,8 +44,8 @@ export class PromptWarsMarketFactory {
       contractId,
       methodName,
       args,
-      gas: new BN("300000000000000"),
-      attachedDeposit: new BN("4000000000000000000000000"),
+      gas,
+      attachedDeposit,
     });
 
     logger.info(response);

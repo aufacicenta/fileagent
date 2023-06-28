@@ -6,10 +6,10 @@ import { PromptWarsLogo } from "ui/icons/PromptWarsLogo";
 import { Grid } from "ui/grid/Grid";
 import { Typography } from "ui/typography/Typography";
 import { ImgPromptCard } from "ui/pulse/img-prompt-card/ImgPromptCard";
-import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { GenericLoader } from "ui/generic-loader/GenericLoader";
 import { PromptInputCard } from "ui/pulse/prompt-input-card/PromptInputCard";
 import { FaqsModal } from "ui/pulse/prompt-wars/faqs-modal/FaqsModal";
+import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars-market-contract/useNearPromptWarsMarketContractContext";
 
 import { PromptWarsProps } from "./PromptWars.types";
 import styles from "./PromptWars.module.scss";
@@ -19,7 +19,7 @@ const onSubmit = async () => undefined;
 export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) => {
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
 
-  const { marketContractValues, fetchMarketContractValues } = useNearMarketContractContext();
+  const { marketContractValues, fetchMarketContractValues } = useNearPromptWarsMarketContractContext();
 
   useEffect(() => {
     fetchMarketContractValues();

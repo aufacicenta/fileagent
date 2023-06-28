@@ -1,9 +1,9 @@
-import { CollateralTokenMetadata, Management, MarketData } from "../prompt-wars/prompt-wars.types";
+import { CollateralToken, Management, MarketData } from "../prompt-wars/prompt-wars.types";
 
 export type DeployPromptWarsMarketContractArgs = {
   market: MarketData;
   management: Management;
-  collateral_token: CollateralTokenMetadata;
+  collateral_token: CollateralToken;
 };
 
 export type PromptWarsMarketFactoryContractValues = {

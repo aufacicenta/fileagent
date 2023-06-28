@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
-import { MarketContractValues } from "providers/near/contracts/market/market.types";
+import { PromptWarsMarketContractValues } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 
 export type ImgPromptCardProps = {
-  marketContractValues: MarketContractValues;
+  marketContractValues: PromptWarsMarketContractValues;
   marketId: string;
   currentResultElement?: ReactNode;
   datesElement?: ReactNode;

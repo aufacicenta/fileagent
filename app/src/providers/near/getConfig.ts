@@ -21,8 +21,8 @@ const MAINNET_AMM_FACTORY_ACCOUNT_ID = "factory.pulsemarkets.near";
 const TESTNET_SIGNER_WALLET_ID = "pw-server.pulsemarkets.testnet";
 const MAINNET_SIGNER_WALLET_ID = "pw-server.pulsemarkets.near";
 
-const TESTNET_FACTORY_WALLET_ID = "pw-factory-1.pulsemarkets.testnet";
-const MAINNET_FACTORY_WALLET_ID = "pw-factory-1.pulsemarkets.near";
+const TESTNET_FACTORY_WALLET_ID = "pw-factory.pulsemarkets.testnet";
+const MAINNET_FACTORY_WALLET_ID = "pw-factory.pulsemarkets.near";
 
 const TESTNET_CONFIG = {
   marketFactoryAccountId: TESTNET_AMM_FACTORY_ACCOUNT_ID,

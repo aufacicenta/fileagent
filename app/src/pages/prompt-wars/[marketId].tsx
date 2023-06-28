@@ -5,8 +5,8 @@ import Head from "next/head";
 
 import { DashboardLayout } from "layouts/dashboard-layout/DashboardLayout";
 import { PriceMarketContainerProps } from "app/market/price-market/PriceMarket.types";
-import { PriceMarketContract } from "providers/near/contracts/price-market";
 import { PromptWarsContainer } from "app/prompt-wars/PromptWarsContainer";
+import { PromptWarsContainerProps } from "app/prompt-wars/PromptWars.types";
 
 const Page: NextPage<PriceMarketContainerProps> = ({ marketId, head }) => (
   <DashboardLayout>
@@ -27,14 +27,10 @@ export const getServerSideProps = async ({ locale, params }: GetServerSidePropsC
 
   const marketId = params?.marketId;
 
-  const contract = await PriceMarketContract.loadFromGuestConnection(marketId as string);
-  const market = await contract.getMarketData();
-  const price = await contract.getPricingData();
-
-  const head: PriceMarketContainerProps["head"] = {
-    title: "Pulse Price Markets",
-    description: `${PriceMarketContract.getDescription(market, price!)} —&nbsp;Bet now!`,
-    url: `https://app.pulsemarkets.org/market/price/${marketId}`,
+  const head: PromptWarsContainerProps["head"] = {
+    title: "Prompt Wars",
+    description: `Earn from your prompt engineering skills competing with the world best!`,
+    url: `https://app.pulsemarkets.org/prompt-wars/${marketId}`,
   };
 
   return {

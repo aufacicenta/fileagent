@@ -11,32 +11,23 @@
 // This server NEAR wallet is the only one that can call "reveal" when ready
 // This server NEAR wallet is the only one that can call "resolve" when ready
 
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import { NextApiRequest, NextApiResponse } from "next";
 
 import logger from "providers/logger";
-import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 import { DeployPromptWarsMarketContractArgs } from "providers/near/contracts/prompt-wars-market-factory/prompt-wars-market-factory.types";
 import pulse from "providers/pulse";
-import {
-  CollateralTokenMetadata,
-  Management,
-  MarketData,
-} from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import { CollateralToken, Management, MarketData } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import near from "providers/near";
+import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 
-export const config = {
-  runtime: "edge",
-};
-
-export default async function Fn(request: NextRequest) {
+export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
     // @TODO get image_uri from IPFS database, should not repeat.
     // When fetched, make sure to change the is_used flag to true
     // labels: 100 USDT
     const market: MarketData = {
-      image_uri: "TODO",
+      image_uri: "bafybeifdh3nf5duckpcpq5hgspg5g6fhnrx4vpabciqs6zcvfx43dpqd24/toast.jpg",
       //   Set to 0, it will be set in the contract initialization
       starts_at: 0,
       //   Set to 0, it will be set in the contract initialization
@@ -55,7 +46,7 @@ export default async function Fn(request: NextRequest) {
     const { accountId, decimals } = pulse.getConfig().COLLATERAL_TOKENS[0];
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const collateral_token: CollateralTokenMetadata = {
+    const collateral_token: CollateralToken = {
       id: accountId,
       decimals,
       balance: 0,
@@ -68,20 +59,24 @@ export default async function Fn(request: NextRequest) {
       collateral_token,
     };
 
-    logger.info({ promptWarsMarketArgs });
-
     const id = `pw-${uuidv4().slice(0, 4)}`;
 
     // @TODO deploy and init prompt wars contract
     // labels: 250 USDT
     await PromptWarsMarketFactory.createMarket(id, promptWarsMarketArgs);
 
-    return NextResponse.json({
-      name: `Hello, from ${request.url} I'm an Edge Function!`,
-    });
+    logger.info({ promptWarsMarketArgs, id });
+
+    response.status(200).json(promptWarsMarketArgs);
+
+    // return NextResponse.json({
+    //   name: `Hello, from ${request.url} I'm an Edge Function!`,
+    // });
   } catch (error) {
-    return NextResponse.json({
-      error: `Error from ${request.url}: ${(error as Error).message}`,
-    });
+    console.log(error);
+    response.status(500).json({ error: (error as Error).message });
+    // return NextResponse.json({
+    //   error: `Error from ${request.url}: ${(error as Error).message}`,
+    // });
   }
 }
