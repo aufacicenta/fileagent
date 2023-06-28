@@ -26,7 +26,7 @@ mod tests {
     }
 
     fn setup_contract() -> MarketFactory {
-        let contract = MarketFactory::new();
+        let contract = MarketFactory::default();
         contract
     }
 

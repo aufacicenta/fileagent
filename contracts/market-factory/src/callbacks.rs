@@ -40,7 +40,7 @@ impl MarketFactory {
 
                 let storage_deposit_callback_promise = ext_self::ext(env::current_account_id())
                     .with_attached_deposit(0)
-                    .with_static_gas(GAS_FOR_CREATE_OUTCOME_TOKENS_CALLBACK)
+                    .with_static_gas(GAS_FOR_FT_STORAGE_DEPOSIT_CALLBACK)
                     .on_ft_storage_deposit_callback(market_account_id.clone());
 
                 storage_deposit_promise.then(storage_deposit_callback_promise);
@@ -65,7 +65,7 @@ impl MarketFactory {
             return false;
         }
 
-        self.markets.insert(&market_account_id);
+        self.markets.push(&market_account_id);
 
         true
     }

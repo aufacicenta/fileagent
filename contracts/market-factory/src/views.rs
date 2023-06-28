@@ -13,7 +13,7 @@ impl MarketFactory {
     }
 
     pub fn get_markets(&self, from_index: u64, limit: u64) -> Vec<AccountId> {
-        let elements = self.markets.as_vector();
+        let elements = &self.markets;
 
         (from_index..std::cmp::min(from_index + limit, elements.len()))
             .filter_map(|index| elements.get(index))

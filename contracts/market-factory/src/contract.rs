@@ -1,6 +1,6 @@
 use near_sdk::{
-    collections::UnorderedSet, env, json_types::Base64VecU8, near_bindgen, serde_json,
-    serde_json::Value, AccountId, Promise,
+    collections::Vector, env, json_types::Base64VecU8, near_bindgen, serde_json, serde_json::Value,
+    AccountId, Promise,
 };
 use std::default::Default;
 
@@ -10,23 +10,14 @@ use crate::storage::*;
 
 impl Default for MarketFactory {
     fn default() -> Self {
-        env::panic_str("MarketFactory should be initialized before usage")
+        Self {
+            markets: Vector::new(b"d".to_vec()),
+        }
     }
 }
 
 #[near_bindgen]
 impl MarketFactory {
-    #[init]
-    pub fn new() -> Self {
-        if env::state_exists() {
-            env::panic_str("ERR_ALREADY_INITIALIZED");
-        }
-
-        Self {
-            markets: UnorderedSet::new(b"d".to_vec()),
-        }
-    }
-
     #[payable]
     pub fn create_market(&mut self, name: AccountId, args: Base64VecU8) -> Promise {
         let market_account_id: AccountId = format!("{}.{}", name, env::current_account_id())
