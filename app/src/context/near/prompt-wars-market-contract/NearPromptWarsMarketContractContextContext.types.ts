@@ -20,7 +20,7 @@ export type NearPromptWarsMarketContractContextContextType = {
   // getAmountMintable: PromptWarsMarketContractMethods["get_amount_mintable"];
   // getAmountPayableResolved: PromptWarsMarketContractMethods["get_amount_payable_resolved"];
   // getAmountPayableUnresolved: PromptWarsMarketContractMethods["get_amount_payable_unresolved"];
-  // sell: PromptWarsMarketContractMethods["sell"];
+  sell: () => Promise<void>;
   marketContractValues?: PromptWarsMarketContractValues;
   actions: NearPromptWarsMarketContractContextContextActions;
 };

@@ -9,6 +9,7 @@ import near from "providers/near";
 import currency from "providers/currency";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import ipfs from "providers/ipfs";
+import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 
 import { ImgPromptCardProps } from "./ImgPromptCard.types";
 import styles from "./ImgPromptCard.module.scss";
@@ -24,6 +25,8 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   onClaimDepositUnresolved,
   onRevealWatchProgressClick,
 }) => {
+  const walletState = useWalletStateContext();
+
   const { market, resolution, outcomeIds, collateralToken, status } = marketContractValues;
 
   const nextImageLoadTime = resolution.window;
@@ -111,7 +114,12 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     <Typography.Description>Status</Typography.Description>
                     {getStatusElement()}
                     <Typography.Description>Participants</Typography.Description>
-                    <Typography.Text>{outcomeIds.length}</Typography.Text>
+                    <Typography.Text flat={outcomeIds.includes(walletState.address as string)}>
+                      {outcomeIds.length}
+                    </Typography.Text>
+                    <Typography.MiniDescription>
+                      {outcomeIds.includes(walletState.address as string) ? "You're in!" : null}
+                    </Typography.MiniDescription>
                     <Typography.Description>Total Price Bag</Typography.Description>
                     <Typography.Text flat>
                       USDT{" "}
@@ -119,23 +127,19 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     </Typography.Text>
                   </Card.Content>
                 </Card>
-
-                <div className={styles["img-prompt-card__start-end-time--resolution"]}>
-                  <Typography.Description flat>Contract</Typography.Description>
-                  <Typography.Anchor
-                    href={`${near.getConfig().explorerUrl}/accounts/${marketId}`}
-                    target="_blank"
-                    truncate
-                  >
-                    {marketId}
-                    <Icon name="icon-launch" />
-                  </Typography.Anchor>
-                </div>
               </div>
             </div>
           </Grid.Col>
         </Grid.Row>
       </Card.Content>
+      <Card.Actions>
+        <div className={styles["img-prompt-card__start-end-time--resolution"]}>
+          <Typography.Description flat>Contract</Typography.Description>
+          <Typography.Anchor href={`${near.getConfig().explorerUrl}/accounts/${marketId}`} target="_blank">
+            {marketId} <Icon name="icon-launch" />
+          </Typography.Anchor>
+        </div>
+      </Card.Actions>
     </Card>
   );
 };

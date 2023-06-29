@@ -1,5 +1,7 @@
 import { Contract } from "near-api-js";
 import * as nearAPI from "near-api-js";
+import { BN } from "bn.js";
+import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
 
 import near from "providers/near";
 import date from "providers/date";
@@ -49,6 +51,37 @@ export class PromptWarsMarketContract {
     const contract = near.initContract<PromptWarsMarketContractMethods>(account, contractAddress, contractMethods);
 
     return [new PromptWarsMarketContract(contract), contract];
+  }
+
+  static async sell(wallet: Wallet, contractAddress: AccountId) {
+    try {
+      const gas = new BN("300000000000000");
+      const deposit = "0";
+
+      const response = await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: contractAddress,
+            actions: [
+              {
+                type: "FunctionCall",
+                params: {
+                  methodName: "sell",
+                  args: {},
+                  gas: gas.toString(),
+                  deposit,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      near.unwrapFinalExecutionOutcome(response as Array<FinalExecutionOutcome>);
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_MARKET_CONTRACT_SELL");
+    }
   }
 
   async get_market_data() {

@@ -23,16 +23,12 @@ const onNextCountdownComplete = () => {
   // labels: 100 USDT
 };
 
-const onClaimDepositUnresolved = () => {
-  // @TODO call sell on the prompt wars contract to get the deposit back
-  // labels: 100 USDT
-};
-
 export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) => {
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
   const [isWatchRevealProgressModalVisible, displayWatchRevealProgressModal] = useState(false);
 
-  const { marketContractValues, fetchMarketContractValues, ftTransferCall } = useNearPromptWarsMarketContractContext();
+  const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell } =
+    useNearPromptWarsMarketContractContext();
 
   const toast = useToastContext();
 
@@ -58,6 +54,10 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     }
 
     await ftTransferCall(prompt);
+  };
+
+  const onClaimDepositUnresolved = async () => {
+    await sell();
   };
 
   const onClickCloseFAQsModal = () => {

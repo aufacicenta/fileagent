@@ -296,36 +296,29 @@ export const NearPromptWarsMarketContractContextController = ({
   //   return [0, 0];
   // };
 
-  // const sell = async (args: SellArgs) => {
-  //   try {
-  //     assertWalletConnection();
+  const sell = async () => {
+    try {
+      assertWalletConnection();
 
-  //     await PromptWarsMarketContract.sell(walletState.context.wallet!, marketId, args);
+      await PromptWarsMarketContract.sell(walletState.context.wallet!, marketId);
 
-  //     toast.trigger({
-  //       variant: "confirmation",
-  //       withTimeout: false,
-  //       // @TODO i18n
-  //       title: "Success",
-  //       children: (
-  //         <Typography.Text>{`Sold ${currency.convert.toDecimalsPrecisionString(
-  //           args.amount,
-  //           marketContractValues?.collateralTokenMetadata?.decimals!,
-  //         )} of "${marketContractValues?.market.options[args.outcome_id]}"`}</Typography.Text>
-  //       ),
-  //     });
-  //   } catch {
-  //     toast.trigger({
-  //       variant: "error",
-  //       withTimeout: true,
-  //       // @TODO i18n
-  //       title: "Failed to call sell method",
-  //       children: (
-  //         <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-  //       ),
-  //     });
-  //   }
-  // };
+      toast.trigger({
+        variant: "confirmation",
+        withTimeout: false,
+        title: "Success",
+        children: <Typography.Text>Check your new wallet balance.</Typography.Text>,
+      });
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        title: "Failed to call sell method",
+        children: (
+          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
+        ),
+      });
+    }
+  };
 
   const props = {
     fetchMarketContractValues,
@@ -335,7 +328,7 @@ export const NearPromptWarsMarketContractContextController = ({
     // getAmountMintable,
     // getAmountPayableResolved,
     // getAmountPayableUnresolved,
-    // sell,
+    sell,
     actions,
     marketId,
   };
