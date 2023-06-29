@@ -16,10 +16,6 @@ export type NearPromptWarsMarketContractContextContextType = {
   fetchMarketContractValues: () => Promise<void>;
   ftTransferCall: (prompt: Prompt) => Promise<void>;
   marketId: AccountId;
-  // getBalanceOf: PromptWarsMarketContractMethods["balance_of"];
-  // getAmountMintable: PromptWarsMarketContractMethods["get_amount_mintable"];
-  // getAmountPayableResolved: PromptWarsMarketContractMethods["get_amount_payable_resolved"];
-  // getAmountPayableUnresolved: PromptWarsMarketContractMethods["get_amount_payable_unresolved"];
   sell: () => Promise<void>;
   marketContractValues?: PromptWarsMarketContractValues;
   actions: NearPromptWarsMarketContractContextContextActions;

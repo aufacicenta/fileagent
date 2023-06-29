@@ -29,7 +29,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     // When fetched, make sure to change the is_used flag to true
     // labels: 100 USDT
     const market: MarketData = {
-      image_uri: "bafybeifdh3nf5duckpcpq5hgspg5g6fhnrx4vpabciqs6zcvfx43dpqd24/toast.jpg",
+      image_uri: "bafybeigb5am5yjzxep7hk55vcduatk5z5mceig5vrwqzzjmhxg65vigwbm/toast.jpg",
       //   Set to 0, it will be set in the contract initialization
       starts_at: 0,
       //   Set to 0, it will be set in the contract initialization
@@ -47,7 +47,6 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     const { accountId, decimals } = pulse.getConfig().COLLATERAL_TOKENS[0];
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     const collateral_token: CollateralToken = {
       id: accountId,
       decimals,
@@ -63,8 +62,6 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     const id = `pw-${uuidv4().slice(0, 4)}`;
 
-    // @TODO deploy and init prompt wars contract
-    // labels: 250 USDT
     await PromptWarsMarketFactory.createMarket(id, promptWarsMarketArgs);
 
     logger.info({ promptWarsMarketArgs, id });

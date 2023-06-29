@@ -57,7 +57,7 @@ export class MarketFactoryContract {
     return near.initContract<MarketFactoryContractMethods>(account, contractAddress, contractMethods);
   }
 
-  async getMarketsList() {
+  async get_markets_list() {
     try {
       if (this.contract) {
         const result = await this.contract.get_markets_list();

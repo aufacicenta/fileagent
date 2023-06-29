@@ -36,7 +36,6 @@ export const NearPromptWarsMarketContractContextController = ({
   const toast = useToastContext();
   const walletState = useWalletStateContext();
 
-  // Open for submissions, revealing, resolving, claim fees, destroy
   const getMarketStatus = (values: PromptWarsMarketContractValues): PromptWarsMarketContractStatus => {
     if (!values) {
       return PromptWarsMarketContractStatus.LOADING;
@@ -135,7 +134,6 @@ export const NearPromptWarsMarketContractContextController = ({
       toast.trigger({
         variant: "error",
         withTimeout: true,
-        // @TODO i18n
         title: "Failed to fetch market data",
         children: <Typography.Text>Try refreshing the page, or check your internet connection.</Typography.Text>,
       });
@@ -154,7 +152,6 @@ export const NearPromptWarsMarketContractContextController = ({
       toast.trigger({
         variant: "info",
         withTimeout: true,
-        // @TODO i18n
         title: "Wallet is not connected",
         children: <Typography.Text>Check your internet connection, your NEAR balance and try again.</Typography.Text>,
       });
@@ -195,7 +192,6 @@ export const NearPromptWarsMarketContractContextController = ({
       toast.trigger({
         variant: "confirmation",
         withTimeout: false,
-        // @TODO i18n
         title: "Your prompt was successfully submitted",
         children: (
           <Typography.Text>{`Transferred USDT ${currency.convert.toDecimalsPrecisionString(
@@ -209,92 +205,11 @@ export const NearPromptWarsMarketContractContextController = ({
     } catch {
       toast.trigger({
         variant: "error",
-        // @TODO i18n
         title: "Failed to make transfer call",
         children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
       });
     }
   };
-
-  // const getBalanceOf = async (outcome_id: OutcomeId) => {
-  //   try {
-  //     const contract = await PromptWarsMarketContract.loadFromGuestConnection(marketId);
-  //     const balance = await contract.balanceOf(outcome_id);
-
-  //     return balance;
-  //   } catch {
-  //     return 0;
-  //   }
-  // };
-
-  // const getAmountMintable = async () => {
-  //   try {
-  //     assertWalletConnection();
-
-  //     const [contract] = await PromptWarsMarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
-  //     const balance = await contract.getAmountMintable();
-
-  //     return balance;
-  //   } catch {
-  //     toast.trigger({
-  //       variant: "error",
-  //       withTimeout: true,
-  //       // @TODO i18n
-  //       title: "Failed to fetch amount mintable",
-  //       children: (
-  //         <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-  //       ),
-  //     });
-  //   }
-
-  //   return [0, 0, 0, 0, 0];
-  // };
-
-  // const getAmountPayableResolved = async (args: GetAmountPayableArgs) => {
-  //   try {
-  //     assertWalletConnection();
-
-  //     const [contract] = await PromptWarsMarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
-  //     const balance = await contract.getAmountPayableResolved(args);
-
-  //     return balance;
-  //   } catch {
-  //     toast.trigger({
-  //       variant: "error",
-  //       withTimeout: true,
-  //       // @TODO i18n
-  //       title: "Failed to fetch amount payable",
-  //       children: (
-  //         <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-  //       ),
-  //     });
-  //   }
-
-  //   return [0, 0];
-  // };
-
-  // const getAmountPayableUnresolved = async (args: GetAmountPayableArgs) => {
-  //   try {
-  //     assertWalletConnection();
-
-  //     const [contract] = await PromptWarsMarketContract.loadFromWalletConnection(walletState.context.connection!, marketId);
-  //     const balance = await contract.getAmountPayableUnresolved(args);
-
-  //     return balance;
-  //   } catch {
-  //     toast.trigger({
-  //       variant: "error",
-  //       withTimeout: true,
-  //       // @TODO i18n
-  //       title: "Failed to fetch amount payable",
-  //       children: (
-  //         <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-  //       ),
-  //     });
-  //   }
-
-  //   return [0, 0];
-  // };
 
   const sell = async () => {
     try {
@@ -324,10 +239,6 @@ export const NearPromptWarsMarketContractContextController = ({
     fetchMarketContractValues,
     marketContractValues,
     ftTransferCall,
-    // getBalanceOf,
-    // getAmountMintable,
-    // getAmountPayableResolved,
-    // getAmountPayableUnresolved,
     sell,
     actions,
     marketId,

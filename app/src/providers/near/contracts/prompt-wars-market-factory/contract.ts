@@ -40,14 +40,12 @@ export class PromptWarsMarketFactory {
       args: base64args,
     };
 
-    const response = await account.functionCall({
+    await account.functionCall({
       contractId,
       methodName,
       args,
       gas,
       attachedDeposit,
     });
-
-    logger.info(response);
   }
 }

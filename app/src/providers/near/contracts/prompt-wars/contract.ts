@@ -5,8 +5,16 @@ import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
 
 import near from "providers/near";
 import date from "providers/date";
+import logger from "providers/logger";
 
-import { AccountId, PromptWarsMarketContractMethods, PromptWarsMarketContractValues } from "./prompt-wars.types";
+import {
+  AccountId,
+  GetOutcomeTokenArgs,
+  OutcomeId,
+  OutcomeTokenResult,
+  PromptWarsMarketContractMethods,
+  PromptWarsMarketContractValues,
+} from "./prompt-wars.types";
 import { CHANGE_METHODS, VIEW_METHODS } from "./constants";
 
 export class PromptWarsMarketContract {
@@ -82,6 +90,28 @@ export class PromptWarsMarketContract {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_SELL");
     }
+  }
+
+  static async reveal(contractId: AccountId, outcome_id: OutcomeId, result: OutcomeTokenResult) {
+    logger.info(`revealing Prompt Wars prompt result for  with account ${near.getConfig().serverWalletId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "reveal";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("0");
+
+    const args = { outcome_id, result };
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
   }
 
   async get_market_data() {
@@ -162,6 +192,17 @@ export class PromptWarsMarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_PW_MARKET_CONTRACT_GET_OUTCOME_IDS");
+    }
+  }
+
+  async get_outcome_token(args: GetOutcomeTokenArgs) {
+    try {
+      const result = await this.contract.get_outcome_token(args);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_PW_MARKET_CONTRACT_GET_OUTCOME_TOKEN");
     }
   }
 

@@ -2,7 +2,7 @@ type Timestamp = number;
 type WrappedBalance = number;
 export type AccountId = string;
 export type OutcomeId = AccountId;
-type OutcomeTokenResult = number;
+export type OutcomeTokenResult = number;
 
 export type Prompt = {
   value: string;
@@ -79,13 +79,17 @@ export enum PromptWarsMarketContractStatus {
   CLOSED = "Closed",
 }
 
+export type GetOutcomeTokenArgs = {
+  outcome_id: OutcomeId;
+};
+
 export type PromptWarsMarketContractMethods = {
   get_market_data: () => Promise<MarketData>;
   get_resolution_data: () => Promise<Resolution>;
   get_fee_data: () => Promise<Fees>;
   get_management_data: () => Promise<Management>;
   get_collateral_token_metadata: () => Promise<CollateralToken>;
-  get_outcome_token: (outcome_id: OutcomeId) => Promise<OutcomeToken>;
+  get_outcome_token: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken>;
   get_outcome_ids: () => Promise<Array<AccountId>>;
   get_block_timestamp: () => Promise<Timestamp>;
   resolved_at: () => Promise<Timestamp>;
