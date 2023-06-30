@@ -19,9 +19,6 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   marketContractValues,
   className,
   datesElement,
-  onMainCountdownComplete,
-  onNextCountdownComplete,
-  onResolutionCountdownComplete,
   onClaimDepositUnresolved,
   onRevealWatchProgressClick,
 }) => {
@@ -48,7 +45,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
         <>
           <Typography.Text flat>{status}</Typography.Text>
           <Typography.MiniDescription>
-            <Countdown date={resolution.window} onComplete={onResolutionCountdownComplete} />
+            <Countdown date={resolution.window} />
           </Typography.MiniDescription>
         </>
       );
@@ -96,12 +93,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                 <Card.Content className={styles["img-prompt-card__countdown--content"]}>
                   <Typography.Description>Time left</Typography.Description>
                   <Typography.Headline3 flat>
-                    <Countdown date={market.ends_at} onComplete={onMainCountdownComplete} />
+                    <Countdown date={market.ends_at} />
                   </Typography.Headline3>
                   {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
                     <Typography.MiniDescription flat>
-                      Next image will load in{" "}
-                      <Countdown date={nextImageLoadTime} onComplete={onNextCountdownComplete} />
+                      Next image will load in <Countdown date={nextImageLoadTime} />
                     </Typography.MiniDescription>
                   )}
                 </Card.Content>

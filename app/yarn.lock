@@ -1204,6 +1204,11 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
+"@types/node-cron@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node-cron/-/node-cron-3.0.8.tgz#c4d774b86bf8250d1e9046e08b17875c21ae64eb"
+  integrity sha512-+z5VrCvLwiJUohbRSgHdyZnHzAaLuD/E2bBANw+NQ1l05Crj8dIxb/kKK+OEqRitV2Wr/LYLuEBenGDsHZVV5Q==
+
 "@types/node@*":
   version "17.0.12"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.12.tgz#f7aa331b27f08244888c47b7df126184bc2339c5"

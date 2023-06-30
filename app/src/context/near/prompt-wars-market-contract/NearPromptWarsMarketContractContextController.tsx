@@ -75,60 +75,64 @@ export const NearPromptWarsMarketContractContextController = ({
     try {
       // Wait 1 second to allow flags to change
       setTimeout(async () => {
-        const contract = await PromptWarsMarketContract.loadFromGuestConnection(marketId);
+        try {
+          const contract = await PromptWarsMarketContract.loadFromGuestConnection(marketId);
 
-        const [
-          market,
-          resolution,
-          fees,
-          management,
-          collateralToken,
-          outcomeIds,
-          isResolved,
-          isOpen,
-          isOver,
-          isRevealWindowExpired,
-          isResolutionWindowExpired,
-          isExpiredUnresolved,
-          isClaimingWindowExpired,
-        ] = await Promise.all([
-          contract.get_market_data(),
-          contract.get_resolution_data(),
-          contract.get_fee_data(),
-          contract.get_management_data(),
-          contract.get_collateral_token_metadata(),
-          contract.get_outcome_ids(),
-          contract.is_resolved(),
-          contract.is_open(),
-          contract.is_over(),
-          contract.is_reveal_window_expired(),
-          contract.is_resolution_window_expired(),
-          contract.is_expired_unresolved(),
-          contract.is_claiming_window_expired(),
-        ]);
+          const [
+            market,
+            resolution,
+            fees,
+            management,
+            collateralToken,
+            outcomeIds,
+            isResolved,
+            isOpen,
+            isOver,
+            isRevealWindowExpired,
+            isResolutionWindowExpired,
+            isExpiredUnresolved,
+            isClaimingWindowExpired,
+          ] = await Promise.all([
+            contract.get_market_data(),
+            contract.get_resolution_data(),
+            contract.get_fee_data(),
+            contract.get_management_data(),
+            contract.get_collateral_token_metadata(),
+            contract.get_outcome_ids(),
+            contract.is_resolved(),
+            contract.is_open(),
+            contract.is_over(),
+            contract.is_reveal_window_expired(),
+            contract.is_resolution_window_expired(),
+            contract.is_expired_unresolved(),
+            contract.is_claiming_window_expired(),
+          ]);
 
-        const values: PromptWarsMarketContractValues = {
-          market,
-          resolution,
-          fees,
-          management,
-          collateralToken,
-          outcomeIds,
-          isResolved,
-          isOpen,
-          isOver,
-          isRevealWindowExpired,
-          isResolutionWindowExpired,
-          isExpiredUnresolved,
-          isClaimingWindowExpired,
-          status: PromptWarsMarketContractStatus.LOADING,
-        };
+          const values: PromptWarsMarketContractValues = {
+            market,
+            resolution,
+            fees,
+            management,
+            collateralToken,
+            outcomeIds,
+            isResolved,
+            isOpen,
+            isOver,
+            isRevealWindowExpired,
+            isResolutionWindowExpired,
+            isExpiredUnresolved,
+            isClaimingWindowExpired,
+            status: PromptWarsMarketContractStatus.LOADING,
+          };
 
-        const status = getMarketStatus(values);
+          const status = getMarketStatus(values);
 
-        values.status = status;
+          values.status = status;
 
-        setMarketContractValues(values);
+          setMarketContractValues(values);
+        } catch (error) {
+          console.log(error);
+        }
       }, 1000);
     } catch {
       toast.trigger({

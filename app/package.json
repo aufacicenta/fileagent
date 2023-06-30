@@ -66,6 +66,7 @@
     "@types/bn.js": "^5.1.0",
     "@types/lodash": "^4.14.177",
     "@types/node": "^14.14.35",
+    "@types/node-cron": "^3.0.8",
     "@types/pixelmatch": "^5.2.4",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.9",

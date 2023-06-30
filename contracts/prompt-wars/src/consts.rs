@@ -15,7 +15,8 @@ pub const GAS_FT_METADATA: Gas = Gas(2_000_000_000_000);
 pub const GAS_FT_METADATA_CALLBACK: Gas = Gas(2_000_000_000_000);
 pub const GAS_AGGREGATOR_READ: Gas = Gas(8_000_000_000_000);
 
-pub const STAGE_PERIOD_NANOS: Timestamp = 300_000_000_000; // 5 minutes
+pub const EVENT_PERIOD_NANOS: Timestamp = 300_000_000_000; // 5 minutes
+pub const STAGE_PERIOD_NANOS: Timestamp = 180_000_000_000; // 3 minutes
 
 pub const BUY_SELL_THRESHOLD: f32 = 0.75; // 25% before the event ends
 

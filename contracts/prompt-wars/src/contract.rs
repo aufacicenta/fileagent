@@ -45,7 +45,7 @@ impl Market {
         }
 
         let starts_at: Timestamp = env::block_timestamp().try_into().unwrap();
-        let ends_at: Timestamp = starts_at + STAGE_PERIOD_NANOS;
+        let ends_at: Timestamp = starts_at + EVENT_PERIOD_NANOS;
         let reveal_window = ends_at + STAGE_PERIOD_NANOS;
         let resolution_window = reveal_window + STAGE_PERIOD_NANOS;
 

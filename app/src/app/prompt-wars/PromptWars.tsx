@@ -18,12 +18,6 @@ import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
 
-const onNextCountdownComplete = () => {
-  console.log("onNextCountdownComplete");
-  // @TODO fetch new image
-  // labels: 100 USDT
-};
-
 export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) => {
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
   const [isWatchRevealProgressModalVisible, displayWatchRevealProgressModal] = useState(false);
@@ -35,6 +29,16 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
   useEffect(() => {
     fetchMarketContractValues();
+  }, [marketId]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchMarketContractValues();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [marketId]);
 
   if (!marketContractValues) {
@@ -77,21 +81,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     displayWatchRevealProgressModal(true);
   };
 
-  const onMainCountdownComplete = () => {
-    console.log("onMainCountdownComplete");
-    fetchMarketContractValues();
-  };
-
-  const onRevealCountdownComplete = () => {
-    console.log("onRevealCountdownComplete");
-    fetchMarketContractValues();
-  };
-
-  const onResolutionCountdownComplete = () => {
-    console.log("onResolutionCountdownComplete");
-    fetchMarketContractValues();
-  };
-
   return (
     <>
       <div className={clsx(styles["prompt-wars"], className)}>
@@ -102,7 +91,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
               <Typography.Description flat>
                 Compete against the best prompt engineers
                 <br /> writing the prompt that will render the image on display.{" "}
-                <Typography.Anchor onClick={onRevealWatchProgressClick} href="#">
+                <Typography.Anchor onClick={onClickFAQsButton} href="#">
                   FAQs
                 </Typography.Anchor>
               </Typography.Description>
@@ -111,14 +100,11 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
           <div className={styles["prompt-wars__game-row"]}>
             <Grid.Row>
-              <Grid.Col lg={7} xs={12}>
+              <Grid.Col lg={7} xs={12} className={styles["prompt-wars__game-row--col-left"]}>
                 <ImgPromptCard
                   marketId={marketId}
                   marketContractValues={marketContractValues}
                   datesElement={<></>}
-                  onMainCountdownComplete={onMainCountdownComplete}
-                  onNextCountdownComplete={onNextCountdownComplete}
-                  onResolutionCountdownComplete={onResolutionCountdownComplete}
                   onClaimDepositUnresolved={onClaimDepositUnresolved}
                   onRevealWatchProgressClick={onRevealWatchProgressClick}
                 />
@@ -141,7 +127,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
       {isWatchRevealProgressModalVisible && (
         <RevealProgressModal
           onClose={onClickCloseWatchRevealProgressModal}
-          onRevealCountdownComplete={onRevealCountdownComplete}
           marketContractValues={marketContractValues}
         />
       )}

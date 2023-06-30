@@ -12,10 +12,14 @@
     margin-bottom: $space-ml;
 
     &--description {
+      @include atLargeTablet {
+        margin-top: 0;
+        margin-left: $space-default;
+      }
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-left: $space-default;
+      margin-top: $space-default;
       border: 1px solid white;
       border-radius: $border-radius-card;
       padding: $space-default;
@@ -24,5 +28,9 @@
 
   &__game-row {
     margin-bottom: $space-ml;
+
+    &--col-left {
+      margin-bottom: $space-ml;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import Replicate from "replicate";
+import WebSocket from "ws";
 import { NextApiRequest, NextApiResponse } from "next";
 import Jimp from "jimp";
 
@@ -140,7 +141,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       }),
     );
 
-    response.status(200).json({ result: 0 });
+    response.status(200).json({ outcomeIds });
   } catch (error) {
     logger.error(error);
 

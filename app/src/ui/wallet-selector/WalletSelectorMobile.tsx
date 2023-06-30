@@ -30,6 +30,9 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
     }
   };
 
+  // @TODO PulseSidebar fix mobile layout issues
+  // add a logout button
+  // labels: 100 USDT
   return (
     <div className={clsx(className)}>
       <Button

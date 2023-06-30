@@ -25,7 +25,6 @@ export const RevealProgressModal: React.FC<RevealProgressModalProps> = ({
   onClose,
   className,
   marketContractValues,
-  onRevealCountdownComplete,
 }) => {
   const [stageDescription, setStageDescription] = useState("Loading");
   const [gettingSourceImageStage, setGettingSourceImageStage] = useState<GettingSourceImgUrlStageProps | undefined>();
@@ -89,7 +88,7 @@ export const RevealProgressModal: React.FC<RevealProgressModalProps> = ({
       <Modal.Header onClose={onClose}>
         <Typography.Headline2 flat>Reveal Progress: {stageDescription}</Typography.Headline2>
         <Typography.MiniDescription flat>
-          <Countdown date={resolution.reveal_window} onComplete={onRevealCountdownComplete} />
+          <Countdown date={resolution.reveal_window} />
         </Typography.MiniDescription>
       </Modal.Header>
       <Modal.Content>
