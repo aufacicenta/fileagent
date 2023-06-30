@@ -113,6 +113,28 @@ export class PromptWarsMarketContract {
     });
   }
 
+  static async resolve(contractId: AccountId) {
+    console.log(`resolving Prompt Wars with account ${near.getConfig().serverWalletId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "resolve";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("0");
+
+    const args = {};
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
   async get_market_data() {
     try {
       const result = await this.contract.get_market_data();

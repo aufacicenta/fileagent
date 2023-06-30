@@ -1,6 +1,8 @@
 import near from "providers/near";
 
 import getConfig from "./getConfig";
+import getLatestMarketId from "./prompt-wars/getLatestMarketId";
+import isMarketActive from "./prompt-wars/isMarketActive";
 import * as constants from "./constants";
 
 const isMainnet = () => near.getConfig().networkId !== "testnet";
@@ -20,4 +22,8 @@ export default {
   getCollateralTokenIconByAccountId,
   constants,
   isMainnet,
+  promptWars: {
+    getLatestMarketId,
+    isMarketActive,
+  },
 };

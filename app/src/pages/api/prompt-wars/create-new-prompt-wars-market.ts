@@ -21,34 +21,14 @@ import { CollateralToken, Management, MarketData } from "providers/near/contract
 import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
-import { MarketFactoryContract } from "providers/near/contracts/market-factory";
-
-const latestMarketIsActive = async () => {
-  const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
-  const marketsList = await marketFactory.get_markets_list();
-
-  if (!marketsList) {
-    logger.error("ERR_FAILED_TO_FETCH_MARKETS");
-
-    return false;
-  }
-
-  const latestMarketId = marketsList.pop();
-  const latestMarketContract = await PromptWarsMarketContract.loadFromGuestConnection(latestMarketId!);
-  const [is_over, is_reveal_window_expired, is_resolution_window_expired] = await Promise.all([
-    latestMarketContract.is_over(),
-    latestMarketContract.is_reveal_window_expired(),
-    latestMarketContract.is_resolution_window_expired(),
-  ]);
-
-  return !is_over || !is_reveal_window_expired || !is_resolution_window_expired;
-};
 
 // @TODO authenticate the request, only this server should be able to execute this endpoint
 // labels: 100 USDT
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
-    if (await latestMarketIsActive()) {
+    const latestMarketId = await pulse.promptWars.getLatestMarketId();
+
+    if (await pulse.promptWars.isMarketActive(latestMarketId!)) {
       throw new Error("ERR_LATEST_MARKET_IS_STILL_ACTIVE");
     }
 
@@ -99,7 +79,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     const marketData = await marketContract.get_market_data();
     const resolution = await marketContract.get_resolution_data();
 
-    let ms = marketData.ends_at - marketData.starts_at + 1000;
+    let ms = marketData.ends_at - marketData.starts_at;
 
     logger.info(`setting timeout to call the reveal API endpoint for market ${marketId} in ${ms} ms`);
     setTimeout(async () => {
@@ -111,12 +91,13 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       }
     }, ms);
 
-    ms = resolution.window - marketData.ends_at + 1000;
+    ms = resolution.window - marketData.ends_at;
 
     logger.info(`setting timeout to call the resolution API endpoint for market ${marketId} in ${ms} ms`);
     setTimeout(async () => {
       try {
         logger.info(`calling resolution API endpoint for market ${marketId}`);
+        await fetch(`${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve-prompt-wars-market`);
       } catch (error) {
         logger.error(error);
       }
