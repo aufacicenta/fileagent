@@ -30,7 +30,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
 
     setOutcomeToken({
       outcomeId: ot.outcome_id,
-      outputImgUrl: ot.output_img_uri!,
+      outputImgUrl: ipfs.asHttpsURL(ot.output_img_uri!),
       prompt: JSON.parse(ot.prompt).value,
       negativePrompt: JSON.parse(ot.prompt).negative_prompt,
       result: ot.result!,
@@ -46,7 +46,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
 
     setWinnerOutcomeToken({
       outcomeId: ot.outcome_id,
-      outputImgUrl: ot.output_img_uri!,
+      outputImgUrl: ipfs.asHttpsURL(ot.output_img_uri!),
       prompt: JSON.parse(ot.prompt).value,
       negativePrompt: JSON.parse(ot.prompt).negative_prompt,
       result: ot.result!,

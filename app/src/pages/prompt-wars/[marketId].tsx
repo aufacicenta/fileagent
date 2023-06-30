@@ -29,7 +29,7 @@ export const getServerSideProps = async ({ locale, params }: GetServerSidePropsC
 
   const head: PromptWarsContainerProps["head"] = {
     title: "Prompt Wars",
-    description: `Earn from your prompt engineering skills competing with the world best!`,
+    description: `Earn USDT from your prompt engineering skills competing with the world best!`,
     url: `https://app.pulsemarkets.org/prompt-wars/${marketId}`,
   };
 

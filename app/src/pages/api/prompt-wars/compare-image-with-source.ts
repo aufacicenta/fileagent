@@ -94,6 +94,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
         logger.info({ input });
 
         const [outputImgURL] = (await replicate.run(model, { input })) as Array<string>;
+        const ipfsOutputImgURL = await ipfs.getFileAsIPFSUrl(outputImgURL);
 
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
@@ -101,13 +102,13 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
               JSON.stringify({
                 stage: WebsocketBroadcastStage.GETTING_OUTPUT_IMG_URL,
                 stageDescription: "Getting the output image",
-                outputImgURL,
+                outputImgURL: ipfsOutputImgURL,
               } as GettingOutputImgUrlStageProps),
             );
           }
         });
 
-        logger.info({ outputImgURL });
+        logger.info({ outputImgURL, ipfsOutputImgURL });
 
         const destImg = await Jimp.read(outputImgURL);
 
@@ -127,7 +128,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
         logger.info({ percent });
 
-        await PromptWarsMarketContract.reveal(marketId!, outcome_id, percent, outputImgURL);
+        await PromptWarsMarketContract.reveal(marketId!, outcome_id, percent, ipfsOutputImgURL);
       }),
     );
 
