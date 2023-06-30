@@ -6,11 +6,30 @@ import logger from "providers/logger";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import ipfs from "providers/ipfs";
+import websockets from "providers/websockets";
+import {
+  ComparingImagesStageProps,
+  FetchingPromptStageProps,
+  GettingOutputImgUrlStageProps,
+  GettingSourceImgUrlStageProps,
+  WebsocketBroadcastStage,
+} from "providers/websockets/prompt-wars.types";
 
 const DEFAULT_IMG_DIMENSIONS = { width: 512, height: 512 };
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
+  const wss = websockets.server.init();
+
   try {
+    const fn = () =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true);
+        }, 60000);
+      });
+
+    await fn();
+
     // @TODO authenticate the request, only this server should be able to execute this endpoint
     // labels: 100 USDT
     const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
@@ -35,10 +54,23 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     }
 
     const { image_uri } = await market.get_market_data();
+    const sourceImgURL = ipfs.asHttpsURL(image_uri);
+
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(
+          JSON.stringify({
+            stage: WebsocketBroadcastStage.GETTING_SOURCE_IMAGE_URL,
+            stageDescription: "Getting source image URL",
+            sourceImgURL,
+          } as GettingSourceImgUrlStageProps),
+        );
+      }
+    });
 
     logger.info({ marketId, image_uri });
 
-    const sourceImg = await Jimp.read(ipfs.asHttpsURL(image_uri));
+    const sourceImg = await Jimp.read(sourceImgURL);
 
     const outcomeIds = await market.get_outcome_ids();
 
@@ -56,6 +88,19 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
         const { value, negative_prompt } = JSON.parse(prompt);
 
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                stage: WebsocketBroadcastStage.FETCHING_PROMPT,
+                stageDescription: `Fetching prompt from ${outcome_id}`,
+                prompt: value,
+                negative_prompt,
+              } as FetchingPromptStageProps),
+            );
+          }
+        });
+
         logger.info({ value, negative_prompt });
 
         const input = {
@@ -66,14 +111,37 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
         logger.info({ input });
 
-        const [output] = (await replicate.run(model, { input })) as Array<string>;
+        const [outputImgURL] = (await replicate.run(model, { input })) as Array<string>;
 
-        logger.info({ output });
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                stage: WebsocketBroadcastStage.GETTING_OUTPUT_IMG_URL,
+                stageDescription: "Getting the output image",
+                outputImgURL,
+              } as GettingOutputImgUrlStageProps),
+            );
+          }
+        });
 
-        const output_img_url = output;
-        const destImg = await Jimp.read(output_img_url);
+        logger.info({ outputImgURL });
+
+        const destImg = await Jimp.read(outputImgURL);
 
         const { percent } = Jimp.diff(sourceImg, destImg);
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                stage: WebsocketBroadcastStage.COMPARING_IMAGES,
+                stageDescription: "Comparing images",
+                percent,
+              } as ComparingImagesStageProps),
+            );
+          }
+        });
 
         logger.info({ percent });
 
@@ -87,4 +155,6 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     response.status(500).json({ error: (error as Error).message });
   }
+
+  wss?.close();
 }

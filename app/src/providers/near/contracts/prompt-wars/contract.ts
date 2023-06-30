@@ -5,7 +5,6 @@ import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
 
 import near from "providers/near";
 import date from "providers/date";
-import logger from "providers/logger";
 
 import {
   AccountId,
@@ -93,7 +92,7 @@ export class PromptWarsMarketContract {
   }
 
   static async reveal(contractId: AccountId, outcome_id: OutcomeId, result: OutcomeTokenResult) {
-    logger.info(`revealing Prompt Wars prompt result for  with account ${near.getConfig().serverWalletId}`);
+    console.log(`revealing Prompt Wars prompt result for  with account ${near.getConfig().serverWalletId}`);
 
     const connection = await near.getPrivateKeyConnection();
     const account = await connection.account(near.getConfig().serverWalletId);

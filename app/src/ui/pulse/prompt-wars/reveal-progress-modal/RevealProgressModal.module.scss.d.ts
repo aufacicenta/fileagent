@@ -1,6 +1,10 @@
 export type Styles = {
   "reveal-progress-modal": string;
+  "reveal-progress-modal__img-col": string;
+  "reveal-progress-modal__img-col--content": string;
   "reveal-progress-modal__item": string;
+  "reveal-progress-modal__modal-actions": string;
+  "reveal-progress-modal__modal-actions--row": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

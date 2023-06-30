@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-add-event-listener */
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
@@ -101,7 +102,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
               <Typography.Description flat>
                 Compete against the best prompt engineers
                 <br /> writing the prompt that will render the image on display.{" "}
-                <Typography.Anchor onClick={onClickFAQsButton} href="#">
+                <Typography.Anchor onClick={onRevealWatchProgressClick} href="#">
                   FAQs
                 </Typography.Anchor>
               </Typography.Description>
