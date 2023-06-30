@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Jimp from "jimp";
 
 import logger from "providers/logger";
-import { MarketFactoryContract } from "providers/near/contracts/market-factory";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import ipfs from "providers/ipfs";
 import websockets from "providers/websockets";
@@ -15,6 +14,7 @@ import {
   GettingSourceImgUrlStageProps,
   WebsocketBroadcastStage,
 } from "providers/websockets/prompt-wars.types";
+import pulse from "providers/pulse";
 
 const DEFAULT_IMG_DIMENSIONS = { width: 512, height: 512 };
 
@@ -22,17 +22,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
   const wss = websockets.server.init();
 
   try {
-    // @TODO authenticate the request, only this server should be able to execute this endpoint
-    // labels: 100 USDT
-    const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
-    const marketsList = await marketFactory.get_markets_list();
-
-    if (!marketsList) {
-      throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
-    }
-
-    // Should be the latest active market, still within the reveal and resolution window
-    const marketId = marketsList.pop();
+    const marketId = await pulse.promptWars.getLatestMarketId();
 
     const market = await PromptWarsMarketContract.loadFromGuestConnection(marketId!);
 
@@ -137,7 +127,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
         logger.info({ percent });
 
-        await PromptWarsMarketContract.reveal(marketId!, outcome_id, percent);
+        await PromptWarsMarketContract.reveal(marketId!, outcome_id, percent, outputImgURL);
       }),
     );
 

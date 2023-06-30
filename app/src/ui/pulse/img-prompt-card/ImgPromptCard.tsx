@@ -20,6 +20,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   className,
   datesElement,
   onClaimDepositUnresolved,
+  onClaimDepositResolved,
   onRevealWatchProgressClick,
 }) => {
   const walletState = useWalletStateContext();
@@ -54,8 +55,12 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.RESOLVED) {
       return (
         <>
-          <Typography.Text flat>{status}</Typography.Text>
-          <Typography.MiniDescription>Claim your earnings! (If you won 😅)</Typography.MiniDescription>
+          <Typography.Text flat>
+            {status}: {resolution?.result} 🎉
+          </Typography.Text>
+          <Typography.MiniDescription onClick={onClaimDepositResolved}>
+            Claim your earnings! (If you won 😅)
+          </Typography.MiniDescription>
         </>
       );
     }

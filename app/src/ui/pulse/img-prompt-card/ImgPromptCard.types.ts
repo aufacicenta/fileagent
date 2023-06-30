@@ -4,6 +4,7 @@ import { PromptWarsMarketContractValues } from "providers/near/contracts/prompt-
 
 export type ImgPromptCardProps = {
   onClaimDepositUnresolved: () => void;
+  onClaimDepositResolved: () => void;
   onRevealWatchProgressClick: () => void;
   marketContractValues: PromptWarsMarketContractValues;
   marketId: string;

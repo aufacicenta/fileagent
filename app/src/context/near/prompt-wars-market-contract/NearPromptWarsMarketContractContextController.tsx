@@ -49,12 +49,12 @@ export const NearPromptWarsMarketContractContextController = ({
       return PromptWarsMarketContractStatus.REVEALING;
     }
 
-    if (values?.isOver && !values.isResolutionWindowExpired) {
-      return PromptWarsMarketContractStatus.RESOLVING;
+    if (values?.isOver && values.isResolved) {
+      return PromptWarsMarketContractStatus.RESOLVED;
     }
 
-    if (values?.isOver && values.isResolutionWindowExpired && values.isResolved) {
-      return PromptWarsMarketContractStatus.RESOLVED;
+    if (values?.isOver && !values.isResolutionWindowExpired) {
+      return PromptWarsMarketContractStatus.RESOLVING;
     }
 
     if (values?.isOver && values.isExpiredUnresolved) {

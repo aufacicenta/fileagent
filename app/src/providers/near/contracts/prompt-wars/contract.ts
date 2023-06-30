@@ -91,7 +91,12 @@ export class PromptWarsMarketContract {
     }
   }
 
-  static async reveal(contractId: AccountId, outcome_id: OutcomeId, result: OutcomeTokenResult) {
+  static async reveal(
+    contractId: AccountId,
+    outcome_id: OutcomeId,
+    result: OutcomeTokenResult,
+    output_img_uri: string,
+  ) {
     console.log(`revealing Prompt Wars prompt result for  with account ${near.getConfig().serverWalletId}`);
 
     const connection = await near.getPrivateKeyConnection();
@@ -102,7 +107,7 @@ export class PromptWarsMarketContract {
     const gas = new BN("300000000000000");
     const attachedDeposit = new BN("0");
 
-    const args = { outcome_id, result };
+    const args = { outcome_id, result, output_img_uri };
 
     await account.functionCall({
       contractId,

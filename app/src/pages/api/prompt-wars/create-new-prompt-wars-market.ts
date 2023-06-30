@@ -22,8 +22,6 @@ import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 
-// @TODO authenticate the request, only this server should be able to execute this endpoint
-// labels: 100 USDT
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
     const latestMarketId = await pulse.promptWars.getLatestMarketId();
