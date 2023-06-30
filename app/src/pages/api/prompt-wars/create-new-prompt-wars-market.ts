@@ -21,6 +21,7 @@ import { CollateralToken, Management, MarketData } from "providers/near/contract
 import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
+import ipfs from "providers/ipfs";
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
@@ -30,11 +31,10 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       throw new Error("ERR_LATEST_MARKET_IS_STILL_ACTIVE");
     }
 
-    // @TODO get image_uri from IPFS database, should not repeat.
-    // When fetched, make sure to change the is_used flag to true
-    // labels: 100 USDT
+    const image_uri = await ipfs.getFileAsIPFSUrl("https://source.unsplash.com/random/512x512");
+
     const market: MarketData = {
-      image_uri: "bafybeigb5am5yjzxep7hk55vcduatk5z5mceig5vrwqzzjmhxg65vigwbm/toast.jpg",
+      image_uri,
       //   Set to 0, it will be set in the contract initialization
       starts_at: 0,
       //   Set to 0, it will be set in the contract initialization
@@ -78,24 +78,28 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     const resolution = await marketContract.get_resolution_data();
 
     let ms = marketData.ends_at - marketData.starts_at;
+    const revealEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/compare-image-with-source`;
 
-    logger.info(`setting timeout to call the reveal API endpoint for market ${marketId} in ${ms} ms`);
+    logger.info(`setting timeout to call the reveal API endpoint ${revealEndpoint} for market ${marketId} in ${ms} ms`);
     setTimeout(async () => {
       try {
-        logger.info(`calling the reveal API endpoint for market ${marketId}`);
-        await fetch(`${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/compare-image-with-source`);
+        logger.info(`calling the reveal API endpoint ${revealEndpoint} for market ${marketId}`);
+        await fetch(revealEndpoint);
       } catch (error) {
         logger.error(error);
       }
     }, ms);
 
-    ms = resolution.window - marketData.ends_at;
+    ms = resolution.reveal_window - marketData.starts_at;
+    const resolveEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve-prompt-wars-market`;
 
-    logger.info(`setting timeout to call the resolution API endpoint for market ${marketId} in ${ms} ms`);
+    logger.info(
+      `setting timeout to call the resolution API endpoint ${resolveEndpoint} for market ${marketId} in ${ms} ms`,
+    );
     setTimeout(async () => {
       try {
-        logger.info(`calling resolution API endpoint for market ${marketId}`);
-        await fetch(`${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve-prompt-wars-market`);
+        logger.info(`calling resolution API endpoint ${resolveEndpoint} for market ${marketId}`);
+        await fetch(resolveEndpoint);
       } catch (error) {
         logger.error(error);
       }

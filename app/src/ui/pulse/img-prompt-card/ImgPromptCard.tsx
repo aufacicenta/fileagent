@@ -96,7 +96,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       <Card.Content>
         <Grid.Row>
           <Grid.Col lg={7}>
-            <Card withSpotlightEffect>
+            <Card withSpotlightEffect className={styles["img-prompt-card__current-img-card"]}>
               <Card.Content className={styles["img-prompt-card__current-img-card--box"]}>
                 <div className={styles["img-prompt-card__current-img-card--file"]}>
                   <img src={ipfs.asHttpsURL(market.image_uri)} alt="current" />

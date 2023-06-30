@@ -4,6 +4,11 @@
   display: block;
 
   &__current-img-card {
+    @include atLargeTablet {
+      margin-bottom: 0;
+    }
+    margin-bottom: $space-default;
+
     &--box {
       background-color: var(--color-market-card-background-contrast);
     }

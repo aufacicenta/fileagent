@@ -3,6 +3,7 @@ export type Styles = {
   "img-prompt-card__countdown": string;
   "img-prompt-card__countdown--content": string;
   "img-prompt-card__countdown--content-warn": string;
+  "img-prompt-card__current-img-card": string;
   "img-prompt-card__current-img-card--box": string;
   "img-prompt-card__current-img-card--file": string;
   "img-prompt-card__right-column": string;
