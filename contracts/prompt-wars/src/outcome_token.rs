@@ -18,6 +18,7 @@ impl OutcomeToken {
             outcome_id: outcome_id.clone(),
             prompt,
             result: None,
+            output_img_uri: None,
             total_supply: initial_supply,
         }
     }
@@ -41,6 +42,14 @@ impl OutcomeToken {
         self.result = Some(result);
     }
 
+    pub fn set_output_img_uri(&mut self, output_img_uri: String) {
+        if let Some(_r) = &self.output_img_uri {
+            env::panic_str("ERR_SET_OUTPUT_IMG_URI_ALREADY_SET");
+        }
+
+        self.output_img_uri = Some(output_img_uri);
+    }
+
     pub fn get_balance_of(&self) -> WrappedBalance {
         self.total_supply
     }
@@ -59,5 +68,9 @@ impl OutcomeToken {
 
     pub fn get_result(&self) -> Option<OutcomeTokenResult> {
         self.result
+    }
+
+    pub fn get_output_img_uri(&self) -> Option<String> {
+        self.output_img_uri.clone()
     }
 }

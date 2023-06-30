@@ -69,8 +69,13 @@ mod tests {
         );
     }
 
-    fn reveal(c: &mut Market, outcome_id: OutcomeId, result: OutcomeTokenResult) {
-        c.reveal(outcome_id, result);
+    fn reveal(
+        c: &mut Market,
+        outcome_id: OutcomeId,
+        result: OutcomeTokenResult,
+        output_img_uri: String,
+    ) {
+        c.reveal(outcome_id, result, output_img_uri);
     }
 
     fn resolve(c: &mut Market) {
@@ -349,29 +354,44 @@ mod tests {
 
         let mut outcome_id = alice();
         let mut result = 0.3;
+        let output_img_uri = "".to_string();
 
-        reveal(&mut contract, outcome_id, result);
+        reveal(&mut contract, outcome_id, result, output_img_uri.clone());
 
         let outcome_token_1: OutcomeToken = contract.get_outcome_token(&player_1);
         assert_eq!(outcome_token_1.get_result(), Some(result));
+        assert_eq!(
+            outcome_token_1.get_output_img_uri(),
+            Some(output_img_uri.clone())
+        );
 
         outcome_id = bob();
         result = 0.2;
 
-        reveal(&mut contract, outcome_id, result);
+        reveal(&mut contract, outcome_id, result, output_img_uri.clone());
 
         let outcome_token_2: OutcomeToken = contract.get_outcome_token(&player_2);
         assert_eq!(outcome_token_2.get_result(), Some(result));
+        assert_eq!(
+            outcome_token_2.get_output_img_uri(),
+            Some(output_img_uri.clone())
+        );
 
         outcome_id = carol();
         result = 0.1;
 
-        reveal(&mut contract, outcome_id, result);
+        reveal(&mut contract, outcome_id, result, output_img_uri.clone());
 
         let outcome_token_3: OutcomeToken = contract.get_outcome_token(&player_3);
         assert_eq!(outcome_token_3.get_result(), Some(result));
+        assert_eq!(
+            outcome_token_3.get_output_img_uri(),
+            Some(output_img_uri.clone())
+        );
 
         resolve(&mut contract);
+
+        contract.get_outcome_ids();
 
         assert_eq!(contract.is_resolved(), true);
 

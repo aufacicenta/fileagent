@@ -55,6 +55,8 @@ pub struct OutcomeToken {
     pub outcome_id: OutcomeId,
     // the outcome value, in this case, the prompt submitted to the competition
     pub prompt: String,
+    // the outcome value, in this case, the prompt submitted to the competition
+    pub output_img_uri: Option<String>,
     // store the result from the image comparison: percentage_diff or pixel_difference
     pub result: Option<OutcomeTokenResult>,
     // total supply of this outcome_token

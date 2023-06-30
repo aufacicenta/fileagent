@@ -59,7 +59,7 @@ impl Market {
                 ..market
             },
             outcome_tokens: LookupMap::new(StorageKeys::OutcomeTokens),
-            players: Vector::new(b"m"),
+            players: Vector::new(b"p"),
             resolution: Resolution {
                 window: resolution_window,
                 reveal_window,
@@ -124,7 +124,12 @@ impl Market {
     }
 
     // During the resolution period, this method is called by the server (owner), setting the OutcomeTokenResult of each player
-    pub fn reveal(&mut self, outcome_id: OutcomeId, result: OutcomeTokenResult) {
+    pub fn reveal(
+        &mut self,
+        outcome_id: OutcomeId,
+        result: OutcomeTokenResult,
+        output_img_uri: String,
+    ) {
         self.assert_only_owner();
         self.assert_is_reveal_window_open();
         self.assert_is_not_resolved();
@@ -133,6 +138,7 @@ impl Market {
 
         let mut outcome_token = self.outcome_tokens.get(&outcome_id).unwrap();
         outcome_token.set_result(result);
+        outcome_token.set_output_img_uri(output_img_uri);
 
         self.outcome_tokens.insert(&outcome_id, &outcome_token);
 
@@ -150,9 +156,9 @@ impl Market {
 
         let separator = "=".to_string();
 
-        let mut results: Vector<String> = Vector::new(b"m");
+        let mut results: Vector<String> = Vector::new(b"r");
 
-        for player in self.players.iter() {
+        for player in self.get_outcome_ids().clone() {
             let outcome_token = self.outcome_tokens.get(&player).unwrap();
 
             if outcome_token.result.is_none() {
