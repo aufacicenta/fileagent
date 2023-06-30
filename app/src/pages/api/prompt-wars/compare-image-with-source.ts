@@ -21,15 +21,6 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
   const wss = websockets.server.init();
 
   try {
-    const fn = () =>
-      new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 60000);
-      });
-
-    await fn();
-
     // @TODO authenticate the request, only this server should be able to execute this endpoint
     // labels: 100 USDT
     const marketFactory = await MarketFactoryContract.loadFromGuestConnection();

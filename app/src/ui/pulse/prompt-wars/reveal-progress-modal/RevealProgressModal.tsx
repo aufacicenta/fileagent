@@ -36,7 +36,11 @@ export const RevealProgressModal: React.FC<RevealProgressModalProps> = ({
   const { resolution } = marketContractValues;
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://${window.location.hostname}:${process.env.NEXT_PUBLIC_WEBSOCKETS_PORT}`);
+    const ws = new WebSocket(
+      `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.hostname}:${
+        process.env.NEXT_PUBLIC_WEBSOCKETS_PORT
+      }`,
+    );
 
     ws.addEventListener("message", (msg) => {
       console.log(msg.data, JSON.parse(msg.data));
