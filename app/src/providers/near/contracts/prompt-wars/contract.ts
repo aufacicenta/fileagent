@@ -214,7 +214,7 @@ export class PromptWarsMarketContract {
     try {
       const result = await this.contract.get_outcome_ids();
 
-      return result;
+      return result.sort((a, b) => a.localeCompare(b));
     } catch (error) {
       console.log(error);
       throw new Error("ERR_PW_MARKET_CONTRACT_GET_OUTCOME_IDS");

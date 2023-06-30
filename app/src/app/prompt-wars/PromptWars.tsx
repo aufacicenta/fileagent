@@ -14,6 +14,7 @@ import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars
 import { RevealProgressModal } from "ui/pulse/prompt-wars/reveal-progress-modal/RevealProgressModal";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
+import { ResultsModal } from "ui/pulse/prompt-wars/results-modal/ResultsModal";
 
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
@@ -21,6 +22,7 @@ import { PromptWarsProps } from "./PromptWars.types";
 export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) => {
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
   const [isWatchRevealProgressModalVisible, displayWatchRevealProgressModal] = useState(false);
+  const [isResultsModalVisible, displayResultsModal] = useState(false);
 
   const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell } =
     useNearPromptWarsMarketContractContext();
@@ -85,6 +87,14 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     displayWatchRevealProgressModal(true);
   };
 
+  const onClickCloseResultsModal = () => {
+    displayResultsModal(false);
+  };
+
+  const onClickSeeResults = () => {
+    displayResultsModal(true);
+  };
+
   return (
     <>
       <div className={clsx(styles["prompt-wars"], className)}>
@@ -111,6 +121,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
                   datesElement={<></>}
                   onClaimDepositUnresolved={onClaimDepositUnresolved}
                   onRevealWatchProgressClick={onRevealWatchProgressClick}
+                  onClickSeeResults={onClickSeeResults}
                   onClaimDepositResolved={onClaimDepositResolved}
                 />
               </Grid.Col>
@@ -134,6 +145,10 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
           onClose={onClickCloseWatchRevealProgressModal}
           marketContractValues={marketContractValues}
         />
+      )}
+
+      {isResultsModalVisible && (
+        <ResultsModal onClose={onClickCloseResultsModal} marketContractValues={marketContractValues} />
       )}
     </>
   );

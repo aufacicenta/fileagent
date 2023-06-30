@@ -18,9 +18,6 @@ import { Card } from "ui/card/Card";
 import { RevealProgressModalProps } from "./RevealProgressModal.types";
 import styles from "./RevealProgressModal.module.scss";
 
-// @TODO implement RevealProgressModal
-// Should fetch a batch of outcome_id prompts revealing status via a websocket and display the comparison to the users
-// labels: 500 USDT
 export const RevealProgressModal: React.FC<RevealProgressModalProps> = ({
   onClose,
   className,

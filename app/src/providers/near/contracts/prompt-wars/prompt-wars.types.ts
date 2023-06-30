@@ -49,6 +49,7 @@ export type OutcomeToken = {
   prompt: string;
   total_supply: WrappedBalance;
   result?: OutcomeTokenResult;
+  output_img_uri?: string;
 };
 
 export type PromptWarsMarketContractValues = {

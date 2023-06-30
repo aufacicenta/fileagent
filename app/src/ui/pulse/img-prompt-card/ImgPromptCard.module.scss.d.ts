@@ -12,6 +12,7 @@ export type Styles = {
   "img-prompt-card__stats": string;
   "img-prompt-card__stats--content": string;
   "img-prompt-card__stats--content-warn": string;
+  "img-prompt-card__status--winner": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

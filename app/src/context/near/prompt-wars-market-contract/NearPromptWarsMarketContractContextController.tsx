@@ -5,6 +5,7 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import {
+  GetOutcomeTokenArgs,
   Prompt,
   PromptWarsMarketContractStatus,
   PromptWarsMarketContractValues,
@@ -18,6 +19,8 @@ import {
   NearPromptWarsMarketContractContextControllerProps,
 } from "./NearPromptWarsMarketContractContextContext.types";
 import { NearPromptWarsMarketContractContext } from "./NearPromptWarsMarketContractContext";
+
+let marketContract: PromptWarsMarketContract;
 
 export const NearPromptWarsMarketContractContextController = ({
   children,
@@ -239,11 +242,35 @@ export const NearPromptWarsMarketContractContextController = ({
     }
   };
 
+  const getOutcomeToken = async (args: GetOutcomeTokenArgs) => {
+    try {
+      if (!marketContract) {
+        marketContract = await PromptWarsMarketContract.loadFromGuestConnection(marketId);
+      }
+
+      const outcomeToken = await marketContract.get_outcome_token(args);
+
+      return outcomeToken;
+    } catch {
+      toast.trigger({
+        variant: "error",
+        withTimeout: true,
+        title: "Failed to get outcome token",
+        children: (
+          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
+        ),
+      });
+    }
+
+    return undefined;
+  };
+
   const props = {
     fetchMarketContractValues,
     marketContractValues,
     ftTransferCall,
     sell,
+    getOutcomeToken,
     actions,
     marketId,
   };

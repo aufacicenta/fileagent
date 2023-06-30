@@ -22,6 +22,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   onClaimDepositUnresolved,
   onClaimDepositResolved,
   onRevealWatchProgressClick,
+  onClickSeeResults,
 }) => {
   const walletState = useWalletStateContext();
 
@@ -56,11 +57,22 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>
-            {status}: {resolution?.result} 🎉
+            {status}
+            <br />
+            <span className={styles["img-prompt-card__status--winner"]}>{resolution?.result}</span> 🎉
           </Typography.Text>
-          <Typography.MiniDescription onClick={onClaimDepositResolved}>
-            Claim your earnings! (If you won 😅)
-          </Typography.MiniDescription>
+          <Grid.Row nogutter>
+            <Grid.Col lg={7}>
+              <Typography.MiniDescription onClick={onClaimDepositResolved}>
+                Claim your earnings!
+                <br />
+                (If you won 😅)
+              </Typography.MiniDescription>
+            </Grid.Col>
+            <Grid.Col lg={5}>
+              <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
+            </Grid.Col>
+          </Grid.Row>
         </>
       );
     }

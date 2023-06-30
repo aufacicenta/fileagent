@@ -6,6 +6,7 @@ export type ImgPromptCardProps = {
   onClaimDepositUnresolved: () => void;
   onClaimDepositResolved: () => void;
   onRevealWatchProgressClick: () => void;
+  onClickSeeResults: () => void;
   marketContractValues: PromptWarsMarketContractValues;
   marketId: string;
   currentResultElement?: ReactNode;

@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 import {
   AccountId,
+  GetOutcomeTokenArgs,
+  OutcomeToken,
   Prompt,
   PromptWarsMarketContractValues,
 } from "providers/near/contracts/prompt-wars/prompt-wars.types";
@@ -15,8 +17,9 @@ export type NearPromptWarsMarketContractContextControllerProps = {
 export type NearPromptWarsMarketContractContextContextType = {
   fetchMarketContractValues: () => Promise<void>;
   ftTransferCall: (prompt: Prompt) => Promise<void>;
-  marketId: AccountId;
   sell: () => Promise<void>;
+  getOutcomeToken: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken | undefined>;
+  marketId: AccountId;
   marketContractValues?: PromptWarsMarketContractValues;
   actions: NearPromptWarsMarketContractContextContextActions;
 };

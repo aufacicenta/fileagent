@@ -32,6 +32,12 @@
     }
   }
 
+  &__status {
+    &--winner {
+      color: var(--color-status-warning);
+    }
+  }
+
   &__stats {
     background-color: var(--color-market-card-background-contrast);
 
