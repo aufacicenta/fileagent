@@ -196,8 +196,8 @@ impl Market {
         self.resolution.resolved_at = Some(self.get_block_timestamp());
     }
 
-    pub fn claim_fees_resolved(&mut self) {
-        self.assert_is_resolution_expired();
+    pub fn claim_fees(&mut self) {
+        self.assert_is_resolution_window_expired();
         self.assert_fees_not_claimed();
 
         let payee = self.management.dao_account_id.clone();

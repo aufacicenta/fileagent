@@ -413,7 +413,7 @@ mod tests {
             vec![PromiseResult::Successful(vec![])],
         );
 
-        contract.claim_fees_resolved();
+        contract.claim_fees();
         contract.on_claim_fees_resolved_callback();
 
         assert_eq!(contract.get_fee_data().claimed_at.is_some(), true);

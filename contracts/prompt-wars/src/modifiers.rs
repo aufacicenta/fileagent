@@ -49,7 +49,7 @@ impl Market {
         }
     }
 
-    pub fn assert_is_resolution_expired(&self) {
+    pub fn assert_is_resolution_window_expired(&self) {
         if !self.is_resolution_window_expired() {
             env::panic_str("ERR_RESOLUTION_WINDOW_NOT_EXPIRED");
         }
