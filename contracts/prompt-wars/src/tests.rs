@@ -401,6 +401,11 @@ mod tests {
 
         assert_eq!(contract.collateral_token.balance, 0);
         assert_eq!(contract.collateral_token.fee_balance, 6_000);
+
+        contract.claim_fees_resolved();
+        contract.on_claim_fees_resolved_callback();
+
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), true);
     }
 
     // @TODO test for panic ERR_MARKET_IS_CLOSED. labels: 100 USDT
@@ -456,4 +461,11 @@ mod tests {
     // #[test]
     // #[should_panic(expected = "ERR_PLAYER_IS_NOT_WINNER")]
     // fn should_fail_on_sell_player_is_not_winner() {}
+
+    // @TODO test for ERR_FEES_CLAIMED
+    // labels: 100 USDT
+
+    // #[test]
+    // #[should_panic(expected = "ERR_FEES_CLAIMED")]
+    // fn should_fail_on_fees_claimed_after_resolution() {}
 }

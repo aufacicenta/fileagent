@@ -19,6 +19,7 @@ trait Callbacks {
         amount_payable: WrappedBalance,
         outcome_id: OutcomeId,
     ) -> String;
+    fn on_claim_fees_resolved_callback(&mut self, payee: AccountId) -> Option<Timestamp>;
 }
 
 #[ext_contract(ext_feed_parser)]
@@ -69,6 +70,7 @@ impl Market {
             fees: Fees {
                 price: CREATE_OUTCOME_TOKEN_PRICE,
                 fee_ratio: FEE_RATIO,
+                claimed_at: None,
             },
             collateral_token: CollateralToken {
                 balance: 0,
@@ -111,14 +113,11 @@ impl Market {
 
     #[payable]
     pub fn sell(&mut self) -> WrappedBalance {
-        // @TODO if there are participants only in 1 outcome, allow to claim funds after resolution, otherwise funds will be locked
         if self.is_expired_unresolved() {
             return self.internal_sell_unresolved();
         }
 
-        self.assert_is_not_under_resolution();
         self.assert_is_resolved();
-        self.assert_is_winner(&env::signer_account_id());
 
         return self.internal_sell_resolved();
     }
@@ -197,6 +196,27 @@ impl Market {
         self.resolution.resolved_at = Some(self.get_block_timestamp());
     }
 
+    pub fn claim_fees_resolved(&mut self) {
+        self.assert_is_resolved();
+        self.assert_fees_not_claimed();
+
+        let payee = self.management.dao_account_id.clone();
+
+        let amount_payable = self.collateral_token.fee_balance;
+
+        let ft_transfer_promise = ext_ft_core::ext(self.collateral_token.id.clone())
+            .with_attached_deposit(FT_TRANSFER_BOND)
+            .with_static_gas(GAS_FT_TRANSFER)
+            .ft_transfer(payee.clone(), U128::from(amount_payable), None);
+
+        let ft_transfer_callback_promise = ext_self::ext(env::current_account_id())
+            .with_attached_deposit(0)
+            .with_static_gas(GAS_FT_TRANSFER_CALLBACK)
+            .on_claim_fees_resolved_callback(payee);
+
+        ft_transfer_promise.then(ft_transfer_callback_promise);
+    }
+
     #[private]
     pub fn update_collateral_token_balance(&mut self, amount: WrappedBalance) -> WrappedBalance {
         self.collateral_token.balance = amount;
@@ -273,11 +293,13 @@ impl Market {
     }
 
     fn internal_sell_resolved(&mut self) -> WrappedBalance {
-        let payee = env::signer_account_id();
+        let payee = self.resolution.result.clone().unwrap();
+
+        self.assert_is_winner(&payee);
 
         let (amount_payable, _weight) = self.get_amount_payable_resolved();
 
-        self.internal_transfer(payee.clone(), amount_payable)
+        self.internal_transfer(payee, amount_payable)
     }
 
     fn internal_transfer(

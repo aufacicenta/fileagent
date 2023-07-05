@@ -101,6 +101,8 @@ pub struct Fees {
     pub price: WrappedBalance,
     // Decimal fee to charge upon a bet
     pub fee_ratio: WrappedBalance,
+    // When fees got sent to the DAO
+    pub claimed_at: Option<Timestamp>,
 }
 
 #[derive(BorshStorageKey, BorshSerialize)]

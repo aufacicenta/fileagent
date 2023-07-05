@@ -33,4 +33,24 @@ impl Market {
             _ => env::panic_str("ERR_ON_FT_TRANSFER_CALLBACK"),
         }
     }
+
+    #[private]
+    pub fn on_claim_fees_resolved_callback(&mut self) -> Option<Timestamp> {
+        match env::promise_result(0) {
+            PromiseResult::Successful(_result) => {
+                self.fees.claimed_at = Some(self.get_block_timestamp());
+
+                log!(
+                    "on_claim_fees_resolved_callback: {:?}",
+                    self.fees.claimed_at
+                );
+
+                self.fees.claimed_at.unwrap()
+            }
+            // On error, the funds were transfered back to the sender
+            _ => env::panic_str("ERR_ON_FT_TRANSFER_CALLBACK"),
+        };
+
+        None
+    }
 }
