@@ -10,6 +10,12 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     await PromptWarsMarketContract.resolve(marketId!);
 
+    await PromptWarsMarketContract.sellResolved(marketId!);
+
+    await PromptWarsMarketContract.claimFees(marketId!);
+
+    await PromptWarsMarketContract.selfDestruct(marketId!);
+
     response.status(200).json({ marketId });
   } catch (error) {
     logger.error(error);

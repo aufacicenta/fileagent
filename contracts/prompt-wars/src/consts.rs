@@ -21,7 +21,7 @@ pub const STAGE_PERIOD_NANOS: Timestamp = 180_000_000_000; // 3 minutes
 pub const BUY_SELL_THRESHOLD: f32 = 0.75; // 25% before the event ends
 
 pub const CREATE_OUTCOME_TOKEN_PRICE: WrappedBalance = 10_000_000; // 10 USDT
-pub const FEE_RATIO: WrappedBalance = 20_000; // 2%
+pub const FEE_RATIO: WrappedBalance = 200_000; // 20%
 
 pub const BALANCE_PROPOSAL_BOND: WrappedBalance = 100_000_000_000_000_000_000_000; // 0.1 Near
 pub const FT_TRANSFER_BOND: WrappedBalance = ONE_YOCTO;

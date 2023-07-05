@@ -140,6 +140,72 @@ export class PromptWarsMarketContract {
     });
   }
 
+  static async sellResolved(contractId: AccountId) {
+    console.log(`calling sell resolved Prompt Wars with account ${near.getConfig().serverWalletId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "sell";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("0");
+
+    const args = {};
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
+  static async claimFees(contractId: AccountId) {
+    console.log(`calling claim_fees Prompt Wars with account ${near.getConfig().serverWalletId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "claim_fees";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("0");
+
+    const args = {};
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
+  static async selfDestruct(contractId: AccountId) {
+    console.log(`calling self_destruct Prompt Wars with account ${near.getConfig().serverWalletId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "self_destruct";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("0");
+
+    const args = {};
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
   async get_market_data() {
     try {
       const result = await this.contract.get_market_data();
@@ -295,17 +361,6 @@ export class PromptWarsMarketContract {
     } catch (error) {
       console.log(error);
       throw new Error("ERR_PW_MARKET_CONTRACT_IS_EXPIRED_UNRESOLVED");
-    }
-  }
-
-  async is_claiming_window_expired() {
-    try {
-      const result = await this.contract.is_claiming_window_expired();
-
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error("ERR_PW_MARKET_CONTRACT_IS_CLAIMING_WINDOW_EXPIRED");
     }
   }
 }

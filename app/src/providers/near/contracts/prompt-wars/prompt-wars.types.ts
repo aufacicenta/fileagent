@@ -65,7 +65,6 @@ export type PromptWarsMarketContractValues = {
   isRevealWindowExpired: boolean;
   isResolutionWindowExpired: boolean;
   isExpiredUnresolved: boolean;
-  isClaimingWindowExpired: boolean;
 
   status: PromptWarsMarketContractStatus;
 };
@@ -106,7 +105,6 @@ export type PromptWarsMarketContractMethods = {
   is_reveal_window_expired: () => Promise<boolean>;
   is_resolution_window_expired: () => Promise<boolean>;
   is_expired_unresolved: () => Promise<boolean>;
-  is_claiming_window_expired: () => Promise<boolean>;
   // mutators
   sell: (args: { name: string; args: string }, gas?: number, amount?: string | null) => Promise<boolean>;
   reveal: (

@@ -78,7 +78,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     const resolution = await marketContract.get_resolution_data();
 
     let ms = marketData.ends_at - marketData.starts_at;
-    const revealEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/compare-image-with-source`;
+    const revealEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/reveal`;
 
     logger.info(`setting timeout to call the reveal API endpoint ${revealEndpoint} for market ${marketId} in ${ms} ms`);
     setTimeout(async () => {
@@ -91,7 +91,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     }, ms);
 
     ms = resolution.reveal_window - marketData.starts_at;
-    const resolveEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve-prompt-wars-market`;
+    const resolveEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve`;
 
     logger.info(
       `setting timeout to call the resolution API endpoint ${resolveEndpoint} for market ${marketId} in ${ms} ms`,

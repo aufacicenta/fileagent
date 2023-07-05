@@ -94,7 +94,6 @@ export const NearPromptWarsMarketContractContextController = ({
             isRevealWindowExpired,
             isResolutionWindowExpired,
             isExpiredUnresolved,
-            isClaimingWindowExpired,
           ] = await Promise.all([
             contract.get_market_data(),
             contract.get_resolution_data(),
@@ -108,7 +107,6 @@ export const NearPromptWarsMarketContractContextController = ({
             contract.is_reveal_window_expired(),
             contract.is_resolution_window_expired(),
             contract.is_expired_unresolved(),
-            contract.is_claiming_window_expired(),
           ]);
 
           const values: PromptWarsMarketContractValues = {
@@ -124,7 +122,6 @@ export const NearPromptWarsMarketContractContextController = ({
             isRevealWindowExpired,
             isResolutionWindowExpired,
             isExpiredUnresolved,
-            isClaimingWindowExpired,
             status: PromptWarsMarketContractStatus.LOADING,
           };
 

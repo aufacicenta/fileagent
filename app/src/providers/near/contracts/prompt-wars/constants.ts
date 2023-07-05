@@ -20,7 +20,6 @@ export const VIEW_METHODS = [
   "is_reveal_window_expired",
   "is_resolution_window_expired",
   "is_expired_unresolved",
-  "is_claiming_window_expired",
 ];
 
-export const CHANGE_METHODS = ["sell", "reveal", "resolve"];
+export const CHANGE_METHODS = ["sell", "reveal", "resolve", "claim_fees", "self_destruct"];
