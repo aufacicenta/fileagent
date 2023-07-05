@@ -23,6 +23,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   onClaimDepositResolved,
   onRevealWatchProgressClick,
   onClickSeeResults,
+  onNextGameCountdownComplete,
 }) => {
   const walletState = useWalletStateContext();
 
@@ -114,7 +115,8 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   </Typography.Headline3>
                   {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
                     <Typography.MiniDescription flat>
-                      Next image will load in <Countdown date={nextImageLoadTime} />
+                      Next image will load in{" "}
+                      <Countdown date={nextImageLoadTime} onComplete={onNextGameCountdownComplete} />
                     </Typography.MiniDescription>
                   )}
                 </Card.Content>

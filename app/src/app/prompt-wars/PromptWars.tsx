@@ -15,6 +15,7 @@ import { RevealProgressModal } from "ui/pulse/prompt-wars/reveal-progress-modal/
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import { ResultsModal } from "ui/pulse/prompt-wars/results-modal/ResultsModal";
+import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
 
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
@@ -26,6 +27,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
   const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell } =
     useNearPromptWarsMarketContractContext();
+  const { fetchLatestPriceMarket } = useNearMarketFactoryContractContext();
 
   const toast = useToastContext();
 
@@ -95,6 +97,10 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     displayResultsModal(true);
   };
 
+  const onNextGameCountdownComplete = () => {
+    fetchLatestPriceMarket();
+  };
+
   return (
     <>
       <div className={clsx(styles["prompt-wars"], className)}>
@@ -123,6 +129,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
                   onRevealWatchProgressClick={onRevealWatchProgressClick}
                   onClickSeeResults={onClickSeeResults}
                   onClaimDepositResolved={onClaimDepositResolved}
+                  onNextGameCountdownComplete={onNextGameCountdownComplete}
                 />
               </Grid.Col>
               <Grid.Col lg={5} xs={12}>
