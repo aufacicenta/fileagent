@@ -298,6 +298,17 @@ export class PromptWarsMarketContract {
     }
   }
 
+  async get_block_timestamp() {
+    try {
+      const result = await this.contract.get_block_timestamp();
+
+      return date.extractNanoseconds(result);
+    } catch (error) {
+      console.log(error);
+      throw new Error("ERR_PW_MARKET_CONTRACT_GET_BLOCK_TIMESTAMP");
+    }
+  }
+
   async is_resolved() {
     try {
       const result = await this.contract.is_resolved();

@@ -22,6 +22,7 @@ import near from "providers/near";
 import { PromptWarsMarketFactory } from "providers/near/contracts/prompt-wars-market-factory/contract";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import ipfs from "providers/ipfs";
+import { routes } from "hooks/useRoutes/useRoutes";
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
@@ -78,7 +79,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     const resolution = await marketContract.get_resolution_data();
 
     let ms = marketData.ends_at - marketData.starts_at;
-    const revealEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/reveal`;
+    const revealEndpoint = routes.api.promptWars.reveal();
 
     logger.info(`setting timeout to call the reveal API endpoint ${revealEndpoint} for market ${marketId} in ${ms} ms`);
     setTimeout(async () => {
@@ -91,7 +92,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     }, ms);
 
     ms = resolution.reveal_window - marketData.starts_at;
-    const resolveEndpoint = `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve`;
+    const resolveEndpoint = routes.api.promptWars.resolve();
 
     logger.info(
       `setting timeout to call the resolution API endpoint ${resolveEndpoint} for market ${marketId} in ${ms} ms`,
@@ -100,6 +101,19 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       try {
         logger.info(`calling resolution API endpoint ${resolveEndpoint} for market ${marketId}`);
         await fetch(resolveEndpoint);
+      } catch (error) {
+        logger.error(error);
+      }
+    }, ms);
+
+    ms = resolution.window - marketData.starts_at;
+    const createEndpoint = routes.api.promptWars.create();
+
+    logger.info(`setting timeout to call the create API endpoint ${createEndpoint} for market ${marketId} in ${ms} ms`);
+    setTimeout(async () => {
+      try {
+        logger.info(`calling create API endpoint ${createEndpoint} for market ${marketId}`);
+        await fetch(createEndpoint);
       } catch (error) {
         logger.error(error);
       }
