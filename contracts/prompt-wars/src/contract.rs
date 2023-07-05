@@ -197,7 +197,7 @@ impl Market {
     }
 
     pub fn claim_fees_resolved(&mut self) {
-        self.assert_is_resolved();
+        self.assert_is_resolution_expired();
         self.assert_fees_not_claimed();
 
         let payee = self.management.dao_account_id.clone();
@@ -215,6 +215,17 @@ impl Market {
             .on_claim_fees_resolved_callback(payee);
 
         ft_transfer_promise.then(ft_transfer_callback_promise);
+    }
+
+    pub fn self_destruct(&mut self) {
+        self.assert_only_owner();
+
+        if !self.fees.claimed_at.is_some() {
+            env::panic_str("ERR_SELF_DESTRUCT_FEES_UNCLAIMED");
+        }
+
+        Promise::new(env::current_account_id())
+            .delete_account(self.management.market_creator_account_id.clone());
     }
 
     #[private]

@@ -49,15 +49,15 @@ impl Market {
         }
     }
 
-    pub fn assert_is_reveal_window_open(&self) {
-        if self.is_reveal_window_expired() {
-            env::panic_str("ERR_REVEAL_WINDOW_EXPIRED");
+    pub fn assert_is_resolution_expired(&self) {
+        if !self.is_resolution_window_expired() {
+            env::panic_str("ERR_RESOLUTION_WINDOW_NOT_EXPIRED");
         }
     }
 
-    pub fn assert_is_claiming_window_open(&self) {
-        if self.is_claiming_window_expired() {
-            env::panic_str("ERR_CLAIMING_WINDOW_EXPIRED");
+    pub fn assert_is_reveal_window_open(&self) {
+        if self.is_reveal_window_expired() {
+            env::panic_str("ERR_REVEAL_WINDOW_EXPIRED");
         }
     }
 

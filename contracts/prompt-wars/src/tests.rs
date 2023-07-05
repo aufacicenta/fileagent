@@ -195,7 +195,6 @@ mod tests {
 
         // Check timestamps and flags
         assert_eq!(contract.is_open(), true);
-        assert_eq!(contract.is_claiming_window_expired(), false);
         assert_eq!(contract.is_expired_unresolved(), false);
         assert_eq!(contract.is_over(), false);
         assert_eq!(contract.is_resolution_window_expired(), false);
@@ -260,7 +259,6 @@ mod tests {
         assert_eq!(contract.is_expired_unresolved(), true);
         assert_eq!(contract.is_resolved(), false);
         assert_eq!(contract.is_resolution_window_expired(), true);
-        assert_eq!(contract.is_claiming_window_expired(), false);
 
         testing_env!(context.signer_account_id(player_1.clone()).build());
 
@@ -346,7 +344,6 @@ mod tests {
         assert_eq!(contract.is_expired_unresolved(), false);
         assert_eq!(contract.is_resolved(), false);
         assert_eq!(contract.is_resolution_window_expired(), false);
-        assert_eq!(contract.is_claiming_window_expired(), false);
 
         testing_env!(context
             .signer_account_id(market_creator_account_id())
@@ -402,10 +399,26 @@ mod tests {
         assert_eq!(contract.collateral_token.balance, 0);
         assert_eq!(contract.collateral_token.fee_balance, 6_000);
 
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
         contract.claim_fees_resolved();
         contract.on_claim_fees_resolved_callback();
 
         assert_eq!(contract.get_fee_data().claimed_at.is_some(), true);
+
+        contract.self_destruct();
     }
 
     // @TODO test for panic ERR_MARKET_IS_CLOSED. labels: 100 USDT

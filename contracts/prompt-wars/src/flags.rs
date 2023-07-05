@@ -37,8 +37,4 @@ impl Market {
     pub fn is_expired_unresolved(&self) -> bool {
         self.is_resolution_window_expired() && !self.is_resolved()
     }
-
-    pub fn is_claiming_window_expired(&self) -> bool {
-        self.get_block_timestamp() > self.management.self_destruct_window
-    }
 }
