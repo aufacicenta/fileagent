@@ -133,6 +133,7 @@ const MiniDescription: React.FC<TypographyProps> = ({ children, className, flat,
       [styles.typography__flat]: flat,
       [styles["typography__align--center"]]: align === "center",
       [styles["typography__align--right"]]: align === "right",
+      [styles["typography__mini-description--as-button"]]: props.onClick,
     })}
     {...props}
   >

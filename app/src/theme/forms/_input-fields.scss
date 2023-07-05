@@ -297,17 +297,13 @@ textarea.materialize-textarea {
 
 textarea {
   width: 100%;
-  height: $input-height;
-  background-color: transparent;
-
-  &.materialize-textarea {
-    box-sizing: border-box;
-    min-height: $input-height;
-    padding: 0.8rem 0 0.8rem 0; /* prevents text jump on Enter keypress */
-    overflow-y: hidden; /* prevents scroll bar flash */
-    line-height: normal;
-    resize: none;
-  }
+  min-height: 180px;
+  padding: $space-default;
+  font-size: $input-font-size;
+  overflow-y: hidden; /* prevents scroll bar flash */
+  line-height: normal;
+  resize: none;
+  box-sizing: border-box;
 }
 
 // For textarea autoresize

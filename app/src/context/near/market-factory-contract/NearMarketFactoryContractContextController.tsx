@@ -57,7 +57,7 @@ export const NearMarketFactoryContractContextController = ({
 
     try {
       const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
-      const marketsList = await marketFactory.getMarketsList();
+      const marketsList = await marketFactory.get_markets_list();
 
       if (!marketsList) {
         throw new Error("ERR_FAILED_TO_FETCH_MARKETS");
@@ -91,7 +91,7 @@ export const NearMarketFactoryContractContextController = ({
   const fetchLatestPriceMarket = async () => {
     try {
       const marketFactory = await MarketFactoryContract.loadFromGuestConnection();
-      const marketsList = await marketFactory.getMarketsList();
+      const marketsList = await marketFactory.get_markets_list();
 
       if (!marketsList) {
         throw new Error("ERR_FAILED_TO_FETCH_MARKETS");

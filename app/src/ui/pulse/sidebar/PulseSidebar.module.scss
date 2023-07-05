@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/ui/typography/variables";
 
 @mixin visible($width) {
   width: $width;
@@ -110,15 +111,21 @@
       &:active,
       &:hover {
         text-decoration: none;
-        background-color: var(--color-secondary);
+        background-image: linear-gradient(
+          to right,
+          var(--color-secondary),
+          var(--color-secondary-shade-mid),
+          var(--color-secondary-shade-low)
+        );
 
         > p,
         span {
-          color: var(--color-dark-1);
+          color: var(--color-black);
         }
       }
 
       p {
+        font-weight: $font-weight-bold;
         color: var(--color-typography-text);
         opacity: 0;
       }

@@ -1,7 +1,7 @@
-$font-family-display: "Manrope", "korolev", "quiche-sans", "desire-pro", "Helvetica Neue", "Helvetica", Arial,
+$font-family-display: "Figtree", "Manrope", "korolev", "quiche-sans", "desire-pro", "Helvetica Neue", "Helvetica", Arial,
   sans-serif !default;
-$font-family-text: "Manrope", "aglet-sans", "brother-1816", "houschka-pro", "input-mono-narrow", "Helvetica Neue",
-  "Helvetica", Arial, sans-serif !default;
+$font-family-text: "Figtree", "Manrope", "aglet-sans", "brother-1816", "houschka-pro", "input-mono-narrow",
+  "Helvetica Neue", "Helvetica", Arial, sans-serif !default;
 $font-family-monospace: "GT America Mono" !default;
 $font-family-base: $font-family-text !default;
 $font-size-base: 16 !default;
@@ -27,7 +27,7 @@ $font-size-subtitle-semi-bold: $font-size-subtitle;
 $font-size-button-label: $font-size-text;
 $font-size-mini-button-label: rem(12);
 $font-size-description: rem(12);
-$font-size-mini-description: rem(12);
+$font-size-mini-description: rem(11);
 
 $typography-headline-1: (
   font: (

@@ -1,0 +1,84 @@
+@import "src/theme/base";
+
+.img-prompt-card {
+  display: block;
+
+  &__current-img-card {
+    @include atLargeTablet {
+      margin-bottom: 0;
+    }
+    margin-bottom: $space-default;
+
+    &--box {
+      background-color: var(--color-market-card-background-contrast);
+    }
+
+    &--file {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  &__countdown {
+    margin-bottom: $space-default;
+    border: 1px solid var(--color-market-fees-card-background);
+    background-color: var(--color-market-card-background-contrast);
+
+    &--content {
+      padding-top: $space-default;
+      padding-bottom: $space-default;
+      text-align: right;
+
+      &-warn {
+        color: var(--color-status-warning);
+      }
+    }
+  }
+
+  &__status {
+    &--winner {
+      color: var(--color-status-warning);
+    }
+  }
+
+  &__stats {
+    background-color: var(--color-market-card-background-contrast);
+
+    &--content {
+      padding-top: $space-default;
+      padding-bottom: $space-default;
+      text-align: right;
+
+      &-warn {
+        color: var(--color-status-warning);
+      }
+    }
+  }
+
+  &__start-end-time {
+    display: block;
+
+    &--text {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        margin-left: 3px;
+        text-decoration: none;
+      }
+    }
+
+    &--resolution {
+      text-align: right;
+    }
+  }
+
+  &__right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+}

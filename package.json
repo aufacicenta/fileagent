@@ -33,6 +33,7 @@
     "husky": "^7.0.4",
     "jest": "^27.4.7",
     "lint-staged": "^12.1.2",
+    "node-sass": "^9.0.0",
     "prettier": "^2.4.1",
     "stylelint": "^14.16.1",
     "stylelint-config-prettier": "^9.0.4",

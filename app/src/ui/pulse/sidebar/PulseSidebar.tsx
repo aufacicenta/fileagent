@@ -6,7 +6,6 @@ import { PulseIcon } from "ui/icons/PulseIcon";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { Icon } from "ui/icon/Icon";
 import { Typography } from "ui/typography/Typography";
-import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { WalletSelectorMobile } from "ui/wallet-selector/WalletSelectorMobile";
 
 import styles from "./PulseSidebar.module.scss";
@@ -36,11 +35,11 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               <WalletSelectorMobile />
             </div>
             <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.latestTrends()}>
+              <Typography.Link className={styles["pulse-sidebar__item--link"]} href={routes.dashboard.promptWars()}>
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-icons2" />
+                  <Icon name="icon-portrait2" />
                 </div>
-                <Typography.Description flat>{t("pulseSidebar.item.dashboard")}</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.promptWars")}</Typography.Description>
               </Typography.Link>
             </div>
             <div className={styles["pulse-sidebar__divider"]}>
@@ -49,7 +48,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Anchor
                 className={styles["pulse-sidebar__item--link"]}
-                href="https://github.com/aufacicenta/pulsemarkets-v2-web"
+                href="https://github.com/aufacicenta/pulsemarkets"
                 target="_blank"
                 rel="nofollow"
               >
@@ -86,9 +85,7 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
               </Typography.Anchor>
             </div>
           </div>
-          <div className={styles["pulse-sidebar__footer"]}>
-            <ThemeSelector />
-          </div>
+          <div className={styles["pulse-sidebar__footer"]} />
         </div>
       </div>
     </div>

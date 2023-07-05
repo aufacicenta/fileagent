@@ -3,5 +3,11 @@
     "source.organizeImports": false,
     "source.fixAll": true,
     "source.fixAll.stylelint": true
-  }
+  },
+  "rust-analyzer.linkedProjects": [
+    "./contracts/prompt-wars/Cargo.toml",
+    "./contracts/market-factory/Cargo.toml",
+    "./contracts/feed-parser/Cargo.toml",
+    "./contracts/shared/Cargo.toml"
+  ]
 }

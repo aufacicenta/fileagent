@@ -43,11 +43,11 @@ export class MarketFactoryContract {
 
     const account = await connection.account(near.getConfig().guestWalletId);
     const contractMethods = { viewMethods: VIEW_METHODS, changeMethods: CHANGE_METHODS };
-    const contractAddress = near.getConfig().marketFactoryAccountId;
+    const contractAddress = near.getConfig().factoryWalletId;
 
     const contract = near.initContract<MarketFactoryContractMethods>(account, contractAddress, contractMethods);
 
-    return new MarketFactoryContract(near.getConfig().marketFactoryAccountId, contract);
+    return new MarketFactoryContract(near.getConfig().factoryWalletId, contract);
   }
 
   static async loadFromWalletConnection(connection: WalletConnection, contractAddress: string) {
@@ -57,7 +57,7 @@ export class MarketFactoryContract {
     return near.initContract<MarketFactoryContractMethods>(account, contractAddress, contractMethods);
   }
 
-  async getMarketsList() {
+  async get_markets_list() {
     try {
       if (this.contract) {
         const result = await this.contract.get_markets_list();

@@ -63,6 +63,7 @@ $dropzone-file-preview-sidebar-width-open: 420px;
     @content;
   }
 }
+
 @mixin withSidebar {
   display: flex;
 }
@@ -71,10 +72,6 @@ $dropzone-file-preview-sidebar-width-open: 420px;
     padding-top: $navbar-height / $divisor;
   }
   padding-top: $navbar-height-mobile / $divisor;
-}
-@mixin normalizeTypography {
-  margin-top: 0;
-  padding: 0;
 }
 @mixin noSelect {
   user-select: none;
