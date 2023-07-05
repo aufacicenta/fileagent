@@ -98,7 +98,9 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
   };
 
   const onNextGameCountdownComplete = () => {
-    fetchLatestPriceMarket();
+    setTimeout(() => {
+      fetchLatestPriceMarket();
+    }, 10000);
   };
 
   return (
