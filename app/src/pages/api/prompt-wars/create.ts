@@ -107,6 +107,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     }, ms);
 
     ms = resolution.window - marketData.starts_at;
+    ms += 10000;
     const createEndpoint = routes.api.promptWars.create();
 
     logger.info(`setting timeout to call the create API endpoint ${createEndpoint} for market ${marketId} in ${ms} ms`);
