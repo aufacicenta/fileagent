@@ -27,6 +27,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
   const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell } =
     useNearPromptWarsMarketContractContext();
+
   const { fetchLatestPriceMarket } = useNearMarketFactoryContractContext();
 
   const toast = useToastContext();
@@ -100,7 +101,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
   const onNextGameCountdownComplete = () => {
     setTimeout(() => {
       fetchLatestPriceMarket();
-    }, 10000);
+    }, 20000);
   };
 
   return (
