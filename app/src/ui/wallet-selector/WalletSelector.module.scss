@@ -100,7 +100,6 @@
       left: 0;
       z-index: $z-index-navigation;
       width: 100%;
-      height: #{82 + 62}px;
       padding: $space-s;
       overflow-y: auto;
       background-color: var(--color-background-contrast);
@@ -135,11 +134,20 @@
     }
   }
 
-  &--mobile {
-    &__button {
+  &__mobile {
+    margin-right: -$space-default;
+    margin-left: -$space-default;
+    padding: $space-default;
+    background-color: black;
+
+    &--button {
       width: 100%;
-      margin: $space-m 0;
       text-transform: lowercase;
+    }
+
+    &--logout {
+      margin-top: $space-default;
+      text-align: center;
     }
   }
 }

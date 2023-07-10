@@ -56,13 +56,13 @@
   }
 
   &_inverse {
-    border-color: $color-black;
-    color: $color-black;
+    border-color: var(--color-back);
+    color: var(--color-back);
 
     &:hover {
-      border-color: $color-black;
+      border-color: var(--color-back);
       color: var(--color-white);
-      background-color: $color-black;
+      background-color: var(--color-back);
     }
   }
 

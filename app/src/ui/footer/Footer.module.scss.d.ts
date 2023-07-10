@@ -13,6 +13,7 @@ export type Styles = {
   "footer__cta-banner--link": string;
   "footer__cta-banner--welcome": string;
   "footer__powered-by": string;
+  footer__right: string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
