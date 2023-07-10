@@ -45,13 +45,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                   [styles["dashboard-layout__with-top-alert"]]: false,
                 })}
               >
+                <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
+
                 <PulseSidebar
                   isOpen={isSidebarOpen}
                   handleOpen={() => setSidebarVisibility(true)}
                   handleClose={() => setSidebarVisibility(false)}
                 />
-
-                <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
 
                 <MainPanel>{children}</MainPanel>
               </div>

@@ -16,6 +16,7 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import { ResultsModal } from "ui/pulse/prompt-wars/results-modal/ResultsModal";
 import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
+import { Footer } from "ui/footer/Footer";
 
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
@@ -108,43 +109,45 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     <>
       <div className={clsx(styles["prompt-wars"], className)}>
         <MainPanel.Container>
-          <div className={styles["prompt-wars__title-row"]}>
-            <PromptWarsLogo />
-            <div className={styles["prompt-wars__title-row--description"]}>
-              <Typography.Description flat>
-                Compete against the best prompt engineers
-                <br /> writing the prompt that will render the image on display.{" "}
-                <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                  FAQs
-                </Typography.Anchor>
-              </Typography.Description>
+          <Grid.Container>
+            <div className={styles["prompt-wars__title-row"]}>
+              <PromptWarsLogo className={styles["prompt-wars__logo"]} />
+              <div className={styles["prompt-wars__title-row--description"]}>
+                <Typography.Description flat>
+                  Compete against the best prompt engineers writing the prompt that will render the image on display.{" "}
+                  <Typography.Anchor onClick={onClickFAQsButton} href="#">
+                    FAQs
+                  </Typography.Anchor>
+                </Typography.Description>
+              </div>
             </div>
-          </div>
 
-          <div className={styles["prompt-wars__game-row"]}>
-            <Grid.Row>
-              <Grid.Col lg={7} xs={12} className={styles["prompt-wars__game-row--col-left"]}>
-                <ImgPromptCard
-                  marketId={marketId}
-                  marketContractValues={marketContractValues}
-                  datesElement={<></>}
-                  onClaimDepositUnresolved={onClaimDepositUnresolved}
-                  onRevealWatchProgressClick={onRevealWatchProgressClick}
-                  onClickSeeResults={onClickSeeResults}
-                  onClaimDepositResolved={onClaimDepositResolved}
-                  onNextGameCountdownComplete={onNextGameCountdownComplete}
-                />
-              </Grid.Col>
-              <Grid.Col lg={5} xs={12}>
-                <PromptInputCard
-                  onSubmit={onSubmit}
-                  onClickFAQsButton={onClickFAQsButton}
-                  marketContractValues={marketContractValues}
-                />
-              </Grid.Col>
-            </Grid.Row>
-          </div>
+            <div className={styles["prompt-wars__game-row"]}>
+              <Grid.Row>
+                <Grid.Col lg={7} xs={12} className={styles["prompt-wars__game-row--col-left"]}>
+                  <ImgPromptCard
+                    marketId={marketId}
+                    marketContractValues={marketContractValues}
+                    datesElement={<></>}
+                    onClaimDepositUnresolved={onClaimDepositUnresolved}
+                    onRevealWatchProgressClick={onRevealWatchProgressClick}
+                    onClickSeeResults={onClickSeeResults}
+                    onClaimDepositResolved={onClaimDepositResolved}
+                    onNextGameCountdownComplete={onNextGameCountdownComplete}
+                  />
+                </Grid.Col>
+                <Grid.Col lg={5} xs={12}>
+                  <PromptInputCard
+                    onSubmit={onSubmit}
+                    onClickFAQsButton={onClickFAQsButton}
+                    marketContractValues={marketContractValues}
+                  />
+                </Grid.Col>
+              </Grid.Row>
+            </div>
+          </Grid.Container>
         </MainPanel.Container>
+        <Footer />
       </div>
 
       {/* @TODO complete the FAQs. labels: 100 USDT */}

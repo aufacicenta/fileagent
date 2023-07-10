@@ -1,11 +1,11 @@
 import { Hidden } from "react-grid-system";
 
 import { Grid } from "ui/grid/Grid";
-import { PulseSymbolIcon } from "ui/icons/PulseSymbolIcon";
 import { Icon } from "ui/icon/Icon";
 import { WalletSelector } from "ui/wallet-selector/WalletSelector";
 import { Typography } from "ui/typography/Typography";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { PromptWarsLogo } from "ui/icons/PromptWarsLogo";
 
 import { WalletSelectorNavbarProps } from "./WalletSelectorNavbar.types";
 import styles from "./WalletSelectorNavbar.module.scss";
@@ -20,7 +20,7 @@ export const WalletSelectorNavbar: React.FC<WalletSelectorNavbarProps> = ({ onCl
           <Grid.Col lg={3} sm={3} xs={6}>
             <div className={styles["wallet-selector-navbar__logo-mobile"]}>
               <Typography.Link href={routes.dashboard.latestTrends()}>
-                <PulseSymbolIcon />
+                <PromptWarsLogo />
               </Typography.Link>
             </div>
           </Grid.Col>

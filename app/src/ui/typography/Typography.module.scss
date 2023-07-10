@@ -84,10 +84,7 @@
   }
 
   &__description {
-    @include font-properties($typography-description);
-    @include normalizeTypography;
-    margin-bottom: $space-xs;
-    color: var(--color-typography-description);
+    @include description();
   }
 
   &__mini-description {
