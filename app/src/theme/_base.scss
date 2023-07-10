@@ -6,64 +6,41 @@
 @import "./utilities/font-properties";
 @import "_variables";
 
-$color-primary: #f8d663;
-$color-black: #000000;
-
-$max-container-width: 1720px;
-
-$dropzone-file-preview-sidebar-width-shrink: 77px;
-$dropzone-file-preview-sidebar-width-open: 420px;
-
-// min-width 360px
 @mixin atMobile {
   @media (min-width: $mq-small) {
     @content;
   }
 }
-
-// min-width 480px
 @mixin atTablet {
   @media (min-width: $mq-medium) {
     @content;
   }
 }
-
-// min-width 768px
 @mixin atLargeTablet {
   @media (min-width: $mq-large) {
     @content;
   }
 }
-
-// min-width 1000px
 @mixin atDesktop {
   @media (min-width: $mq-large-plus) {
     @content;
   }
 }
-
-// min-width 1280px
 @mixin atLargeDesktop {
   @media (min-width: $mq-x-large) {
     @content;
   }
 }
-
-// Special breakpoint only for landing page
 @mixin atXLargeDesktop {
   @media (min-width: 1366px) {
     @content;
   }
 }
-
-// Special breakpoint only for landing page
-// min-width: 1720px
 @mixin atXXLargeDesktop {
   @media (min-width: $max-container-width) {
     @content;
   }
 }
-
 @mixin withSidebar {
   display: flex;
 }

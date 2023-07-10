@@ -27,20 +27,19 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
   const handleOnConnectWalletClick = () => {
     if (!wallet.isConnected) {
       nearWalletSelectorContext.modal?.show();
+    } else {
+      nearWalletSelectorContext.signOut();
     }
   };
 
-  // @TODO PulseSidebar fix mobile layout issues
-  // add a logout button
-  // labels: 100 USDT
   return (
-    <div className={clsx(className)}>
+    <div className={clsx(styles["wallet-selector__mobile"], className)}>
       <Button
         size="xs"
         color="primary"
         variant="outlined"
         onClick={handleOnConnectWalletClick}
-        className={styles["wallet-selector--mobile__button"]}
+        className={styles["wallet-selector__mobile--button"]}
         rightIcon={<Icon name={wallet.address ? "icon-power" : "icon-power-crossed"} />}
       >
         {wallet.isConnected ? (
@@ -51,7 +50,18 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
           "Connect Wallet"
         )}
       </Button>
+
       {wallet.isConnected ? <BalancePill /> : null}
+
+      {wallet.isConnected ? (
+        <Typography.Description
+          flat
+          onClick={handleOnConnectWalletClick}
+          className={styles["wallet-selector__mobile--logout"]}
+        >
+          Disconnect
+        </Typography.Description>
+      ) : null}
     </div>
   );
 };
