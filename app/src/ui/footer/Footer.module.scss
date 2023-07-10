@@ -7,6 +7,10 @@
   &__right {
     padding: $space-default;
     text-align: right;
+
+    a {
+      display: inline-block;
+    }
   }
 
   &__powered-by {
