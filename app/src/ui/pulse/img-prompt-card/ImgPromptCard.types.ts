@@ -6,7 +6,6 @@ export type ImgPromptCardProps = {
   onNextGameCountdownComplete: () => void;
   onClaimDepositUnresolved: () => void;
   onClaimDepositResolved: () => void;
-  onRevealWatchProgressClick: () => void;
   onClickSeeResults: () => void;
   marketContractValues: PromptWarsMarketContractValues;
   marketId: string;
