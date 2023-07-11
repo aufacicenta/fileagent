@@ -30,27 +30,14 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
             <div className={styles["pulse-sidebar__item"]}>
               <Typography.Anchor
                 className={styles["pulse-sidebar__item--link"]}
-                href="https://github.com/aufacicenta/pulsemarkets"
+                href="https://app.ref.finance/#near|usdt.tether-token.near"
                 target="_blank"
                 rel="nofollow"
               >
                 <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-file-code" />
+                  <Icon name="icon-shuffle" />
                 </div>
-                <Typography.Description flat>{t("pulseSidebar.item.code")}</Typography.Description>
-              </Typography.Anchor>
-            </div>
-            <div className={styles["pulse-sidebar__item"]}>
-              <Typography.Anchor
-                className={styles["pulse-sidebar__item--link"]}
-                href="https://docs.pulsemarkets.org"
-                target="_blank"
-                rel="nofollow"
-              >
-                <div className={styles["pulse-sidebar__item--icon"]}>
-                  <Icon name="icon-reading" />
-                </div>
-                <Typography.Description flat>{t("pulseSidebar.item.docs")}</Typography.Description>
+                <Typography.Description flat>{t("pulseSidebar.item.swap")}</Typography.Description>
               </Typography.Anchor>
             </div>
             <div className={styles["pulse-sidebar__item"]}>
@@ -64,6 +51,19 @@ export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, h
                   <Icon name="icon-flip-horizontal2" />
                 </div>
                 <Typography.Description flat>{t("pulseSidebar.item.bridge")}</Typography.Description>
+              </Typography.Anchor>
+            </div>
+            <div className={styles["pulse-sidebar__item"]}>
+              <Typography.Anchor
+                className={styles["pulse-sidebar__item--link"]}
+                href="https://github.com/aufacicenta/pulsemarkets/issues"
+                target="_blank"
+                rel="nofollow"
+              >
+                <div className={styles["pulse-sidebar__item--icon"]}>
+                  <Icon name="icon-bubbles" />
+                </div>
+                <Typography.Description flat>{t("pulseSidebar.item.feedback")}</Typography.Description>
               </Typography.Anchor>
             </div>
           </div>
