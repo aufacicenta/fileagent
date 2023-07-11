@@ -111,10 +111,9 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
             <PromptWarsLogo />
             <div className={styles["prompt-wars__title-row--description"]}>
               <Typography.Description flat>
-                Compete against the best prompt engineers
-                <br /> writing the prompt that will render the image on display.{" "}
+                {t("promptWars.description")}
                 <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                  FAQs
+                  {t("promptWars.faqs")}
                 </Typography.Anchor>
               </Typography.Description>
             </div>
