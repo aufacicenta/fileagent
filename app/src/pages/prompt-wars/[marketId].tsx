@@ -9,7 +9,7 @@ import { PromptWarsContainer } from "app/prompt-wars/PromptWarsContainer";
 import { PromptWarsContainerProps } from "app/prompt-wars/PromptWars.types";
 
 const Page: NextPage<PriceMarketContainerProps> = ({ marketId, head }) => (
-  <DashboardLayout>
+  <DashboardLayout marketId={marketId}>
     <Head>
       <title>{head.title}</title>
       <meta property="og:title" content={head.title} />

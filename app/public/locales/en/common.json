@@ -8,6 +8,8 @@
   "pulseSidebar.item.code": "Github",
   "pulseSidebar.item.docs": "Docs",
   "pulseSidebar.item.bridge": "Bridge",
+  "pulseSidebar.item.swap": "Swap",
+  "pulseSidebar.item.feedback": "Feedback",
   "button.createMarket": "Create Market",
   "toast.cta.dismiss": "Dismiss"
 }

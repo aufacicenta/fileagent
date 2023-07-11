@@ -15,7 +15,6 @@ import { MarketCardProps } from "./MarketCard.types";
 import styles from "./MarketCard.module.scss";
 import { MarketOptions } from "./market-options/MarketOptions";
 import { MarketOptionsProgress } from "./market-options-progress/MarketOptionsProgress";
-import { CollateralTokenBalance } from "./collateral-token-balance/CollateralTokenBalance";
 
 const getRandomImage = () => {
   const num = Math.floor(Math.random() * (23 - 1) + 1);
@@ -111,9 +110,6 @@ export const MarketCard: React.FC<MarketCardProps> = ({
                 <div className={styles["market-card__market-options--stats"]}>
                   <Typography.Description className={styles["market-card__market-options--stats-stat"]} flat>
                     <span>Total Value Locked:</span>
-                    <span>
-                      <CollateralTokenBalance />
-                    </span>
                   </Typography.Description>
                 </div>
               </Card.Content>

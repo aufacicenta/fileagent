@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 
-import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { Typography } from "ui/typography/Typography";
-import { AccountId, OutcomeId } from "../market/market.types";
+import { AccountId } from "../market/market.types";
 import currency from "providers/currency";
-import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 
 import { FungibleTokenContract } from ".";
 import { FungibleTokenMetadata } from "./fungible-token.types";
 
 export default ({ contractAddress }: { contractAddress?: string }) => {
-  const [actions, setActions] = useState<{ ftTransferCall: { isLoading: boolean } }>({
+  const [actions, setActions] = useState<{
+    ftTransferCall: { isLoading: boolean };
+    balanceOf: { isLoading: boolean };
+  }>({
     ftTransferCall: {
+      isLoading: false,
+    },
+    balanceOf: {
       isLoading: false,
     },
   });
   const [metadata, setMetadata] = useState<FungibleTokenMetadata>();
   const [guestContract, setGuestContract] = useState<FungibleTokenContract>();
+  const [balanceOf, setBalanceOf] = useState("0.00");
 
-  const toast = useToastContext();
   const walletState = useWalletStateContext();
   const { connection } = walletState.context;
-  const { marketContractValues } = useNearMarketContractContext();
 
   const assertWalletConnection = () => {
     if (!walletState.isConnected) {
@@ -96,64 +98,31 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
     }
   };
 
-  const getBalanceOf = async (accountId: AccountId) => {
+  const getBalanceOf = async (account_id: AccountId) => {
     try {
-      assertGuestContractConnection();
-      assertContractMetadata();
-
-      const balance = await guestContract!.ftBalanceOf({ account_id: accountId });
-
-      return currency.convert.toDecimalsPrecisionString(balance, metadata!.decimals);
-    } catch {
-      return "0.00";
-    }
-  };
-
-  const ftTransferCall = async (receiverId: AccountId, amount: string, outcomeId: OutcomeId) => {
-    try {
-      assertWalletConnection();
-      assertContractAddress();
-
       setActions((prev) => ({
         ...prev,
-        ftTransferCall: {
-          ...prev.ftTransferCall,
+        balanceOf: {
+          ...prev.balanceOf,
           isLoading: true,
         },
       }));
 
-      const msg = JSON.stringify({ BuyArgs: { outcome_id: outcomeId } });
+      const contract = await FungibleTokenContract.loadFromGuestConnection(contractAddress!);
+      const ftMetadata = await contract!.ftMetadata();
 
-      await FungibleTokenContract.ftTransferCall(walletState.context.wallet!, contractAddress!, {
-        receiver_id: receiverId,
-        amount,
-        msg,
-      });
+      const balance = await contract!.ftBalanceOf({ account_id });
 
-      toast.trigger({
-        variant: "confirmation",
-        withTimeout: false,
-        // @TODO i18n
-        title: "Your bet was made successfully",
-        children: (
-          <Typography.Text>{`Bought ${currency.convert.toDecimalsPrecisionString(amount, metadata?.decimals!)} ${
-            metadata?.symbol
-          } of "${marketContractValues?.market.options[outcomeId]}"`}</Typography.Text>
-        ),
-      });
-    } catch {
-      toast.trigger({
-        variant: "error",
-        // @TODO i18n
-        title: "Failed to make transfer call",
-        children: <Typography.Text>Check your internet connection, connect your wallet and try again.</Typography.Text>,
-      });
+      setBalanceOf(currency.convert.toDecimalsPrecisionString(balance, ftMetadata!.decimals));
+    } catch (error) {
+      console.log(error);
+      setBalanceOf("0.00");
     }
 
     setActions((prev) => ({
       ...prev,
-      ftTransferCall: {
-        ...prev.ftTransferCall,
+      balanceOf: {
+        ...prev.balanceOf,
         isLoading: false,
       },
     }));
@@ -163,7 +132,8 @@ export default ({ contractAddress }: { contractAddress?: string }) => {
     contract: FungibleTokenContract,
     getWalletBalance,
     getBalanceOf,
-    ftTransferCall,
+    ftTransferCall: (_marketId: string, _amount: string, _outcomeId: number) => undefined,
+    balanceOf,
     metadata,
     actions,
   };

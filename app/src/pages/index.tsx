@@ -5,12 +5,14 @@ import Head from "next/head";
 
 import { DashboardLayout } from "layouts/dashboard-layout/DashboardLayout";
 import { HomeContainer } from "app/home/HomeContainer";
+import { AccountId } from "providers/near/contracts/market/market.types";
+import pulse from "providers/pulse";
 
-const Index: NextPage = () => {
+const Index: NextPage<{ marketId: AccountId }> = ({ marketId }) => {
   const { t } = useTranslation("head");
 
   return (
-    <DashboardLayout>
+    <DashboardLayout marketId={marketId}>
       <Head>
         <title>{t("head.og.title")}</title>
         <meta name="description" content={t("head.og.description")} />
@@ -19,7 +21,7 @@ const Index: NextPage = () => {
         <meta property="og:url" content="https://app.pulsemarkets.org/" />
       </Head>
 
-      <HomeContainer />
+      <HomeContainer marketId={marketId} />
     </DashboardLayout>
   );
 };
@@ -27,9 +29,12 @@ const Index: NextPage = () => {
 export const getStaticProps = async ({ locale }: GetStaticPropsContext) => {
   await i18n?.reloadResources();
 
+  const marketId = await pulse.promptWars.getLatestMarketId();
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, ["common", "head", "home", "swap-card", "price-market"])),
+      marketId,
     },
   };
 };

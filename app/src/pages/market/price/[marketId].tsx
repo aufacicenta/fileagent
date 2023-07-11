@@ -9,7 +9,7 @@ import { PriceMarketContainerProps } from "app/market/price-market/PriceMarket.t
 import { PriceMarketContract } from "providers/near/contracts/price-market";
 
 const Page: NextPage<PriceMarketContainerProps> = ({ marketId, head }) => (
-  <DashboardLayout>
+  <DashboardLayout marketId={marketId}>
     <Head>
       <title>{head.title}</title>
       <meta property="og:title" content={head.title} />
