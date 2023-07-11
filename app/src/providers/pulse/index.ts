@@ -1,6 +1,7 @@
 import near from "providers/near";
 
 import getConfig from "./getConfig";
+import getDefaultCollateralToken from "./getDefaultCollateralToken";
 import getLatestMarketId from "./prompt-wars/getLatestMarketId";
 import isMarketActive from "./prompt-wars/isMarketActive";
 import * as constants from "./constants";
@@ -20,6 +21,7 @@ export default {
   getCollateralTokenBySymbol,
   getCollateralTokenByAccountId,
   getCollateralTokenIconByAccountId,
+  getDefaultCollateralToken,
   constants,
   isMainnet,
   promptWars: {

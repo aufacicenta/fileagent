@@ -7,6 +7,9 @@ import { Icon } from "ui/icon/Icon";
 import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
 import near from "providers/near";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import pulse from "providers/pulse";
+import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
+import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars-market-contract/useNearPromptWarsMarketContractContext";
 
 import { WalletSelectorProps } from "./WalletSelector.types";
 import styles from "./WalletSelector.module.scss";
@@ -16,7 +19,10 @@ import "@near-wallet-selector/modal-ui/styles.css";
 export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => {
   const [isWidgetVisible, setIsWidgetVisible] = useState(false);
 
+  const { marketId } = useNearPromptWarsMarketContractContext();
+
   const nearWalletSelectorContext = useNearWalletSelectorContext();
+
   const wallet = useWalletStateContext();
 
   useEffect(() => {
@@ -67,9 +73,18 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
           />
           <div className={styles["wallet-selector__widget"]}>
             <div className={styles["wallet-selector__balance"]}>
-              <Typography.Description>Balance</Typography.Description>
+              <Typography.Description>Native Balance</Typography.Description>
               <Typography.Text>{wallet.balance}</Typography.Text>
-              <Typography.MiniDescription>
+              <Typography.Description>
+                Balance <code>@{pulse.getDefaultCollateralToken().accountId}</code>
+              </Typography.Description>
+              <Typography.Text>
+                <CollateralTokenBalance
+                  accountId={wallet.address || marketId}
+                  contractAddress={pulse.getDefaultCollateralToken().accountId}
+                />
+              </Typography.Text>
+              <Typography.MiniDescription flat>
                 <Typography.Anchor href={`${wallet.explorer}/accounts/${wallet.address}`} target="_blank">
                   {wallet.isConnected && wallet.address}
                 </Typography.Anchor>

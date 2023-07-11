@@ -2,6 +2,8 @@ import clsx from "clsx";
 
 import { Typography } from "ui/typography/Typography";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import pulse from "providers/pulse";
+import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
 
 import { BalancePillProps } from "./BalancePill.types";
 import styles from "./BalancePill.module.scss";
@@ -12,14 +14,19 @@ export const BalancePill: React.FC<BalancePillProps> = ({ className }) => {
   return (
     <div className={clsx(styles["balance-pill"], className)}>
       <div className={styles["balance-pill__wrapper"]}>
-        <div>
-          <Typography.Description flat>Balance:</Typography.Description>
-        </div>
-        <div className={styles["balance-pill__wrapper--amount"]}>
-          <Typography.Description inline truncate>
-            {wallet.balance}
-          </Typography.Description>
-        </div>
+        <Typography.Description>Native Balance</Typography.Description>
+        <Typography.Text truncate className={styles["balance-pill__wrapper--amount"]}>
+          {wallet.balance}
+        </Typography.Text>
+        <Typography.Description>
+          Balance <code>@{pulse.getDefaultCollateralToken().accountId}</code>
+        </Typography.Description>
+        <Typography.Text flat inline truncate className={styles["balance-pill__wrapper--amount"]}>
+          <CollateralTokenBalance
+            accountId={wallet.address!}
+            contractAddress={pulse.getDefaultCollateralToken().accountId}
+          />
+        </Typography.Text>
       </div>
     </div>
   );
