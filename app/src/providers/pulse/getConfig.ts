@@ -1,6 +1,6 @@
 import near from "providers/near";
 
-export default () => ({
+const config = {
   priceMarket: {
     defaultBaseCurrency: {
       symbol: "BTC",
@@ -31,4 +31,6 @@ export default () => ({
     { value: "startups", label: "Startups", icon: "🚀" },
     { value: "crypto", label: "Crypto", icon: "🚀" },
   ],
-});
+};
+
+export default () => config;

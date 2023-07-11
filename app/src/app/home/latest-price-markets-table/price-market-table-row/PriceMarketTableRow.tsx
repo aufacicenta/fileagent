@@ -4,7 +4,6 @@ import Countdown from "react-countdown";
 
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { Typography } from "ui/typography/Typography";
-import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import currency from "providers/currency";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
@@ -65,9 +64,7 @@ export const PriceMarketTableRow: React.FC<PriceMarketTableRowProps> = ({ classN
         <Typography.Description flat>{marketContractValues.market.description}</Typography.Description>
       </td>
       <td>
-        <Typography.Description flat>
-          <CollateralTokenBalance />
-        </Typography.Description>
+        <Typography.Description flat />
       </td>
       <td>
         <Typography.Description flat>{getOutcomeTokensPosition()}</Typography.Description>

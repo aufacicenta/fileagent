@@ -21,7 +21,6 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   datesElement,
   onClaimDepositUnresolved,
   onClaimDepositResolved,
-  onRevealWatchProgressClick,
   onClickSeeResults,
   onNextGameCountdownComplete,
 }) => {
@@ -35,12 +34,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
   const getStatusElement = () => {
     if (status === PromptWarsMarketContractStatus.REVEALING) {
-      return (
-        <>
-          <Typography.Text flat>{status}</Typography.Text>
-          <Typography.MiniDescription onClick={onRevealWatchProgressClick}>Watch progress</Typography.MiniDescription>
-        </>
-      );
+      return <Typography.Text flat>{status}</Typography.Text>;
     }
 
     if (status === PromptWarsMarketContractStatus.RESOLVING) {
