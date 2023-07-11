@@ -29,7 +29,7 @@ export const getStaticProps = async ({ locale }: GetStaticPropsContext) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ["common", "head", "home", "swap-card", "price-market"])),
+      ...(await serverSideTranslations(locale!, ["common", "head", "prompt-wars"])),
     },
   };
 };
