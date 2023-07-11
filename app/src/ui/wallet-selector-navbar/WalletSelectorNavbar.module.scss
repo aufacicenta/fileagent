@@ -158,7 +158,6 @@
       flex-direction: column;
       justify-content: center;
       height: $navbar-height-mobile;
-      padding: $space-default;
 
       p {
         margin: 0;
@@ -181,7 +180,7 @@
       @include atLargeTablet {
         display: none;
       }
-      font-size: $font-size-headline-1;
+      font-size: 24px;
       color: var(--color-typography-text);
     }
 

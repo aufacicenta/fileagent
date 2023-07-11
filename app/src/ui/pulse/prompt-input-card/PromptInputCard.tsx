@@ -10,6 +10,7 @@ import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
 import currency from "providers/currency";
+import pulse from "providers/pulse";
 
 import { PromptInputCardProps } from "./PromptInputCard.types";
 import styles from "./PromptInputCard.module.scss";
@@ -79,8 +80,9 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
             <Card.Actions>
               <Typography.Description flat>
                 Submitting your prompt will charge USDT{" "}
-                {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)} from your wallet.
-                This will cover storage costs and the submission fee.{" "}
+                {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)}{" "}
+                <code>{pulse.getConfig().COLLATERAL_TOKENS[0].accountId}</code> from your wallet. This will cover
+                storage costs and the submission fee.{" "}
                 <Typography.Anchor onClick={onClickFAQsButton} href="#">
                   FAQs
                 </Typography.Anchor>

@@ -1,25 +1,28 @@
 @import "src/theme/base";
+@import "src/ui/typography/mixins";
 
 .footer {
-  display: block;
+  background-color: black;
+
+  &__right {
+    padding: $space-default;
+    text-align: right;
+
+    a {
+      display: inline-block;
+    }
+  }
 
   &__powered-by {
+    @include description;
     display: flex;
-
-    p {
-      color: var(--color-background);
-    }
-
-    > div,
-    a {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+    justify-content: flex-end;
+    color: var(--color-typography-text);
 
     svg {
-      width: 112px;
+      width: 18px;
       fill: var(--color-background);
+      margin-right: $space-xs;
     }
   }
 

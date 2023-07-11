@@ -1,7 +1,17 @@
 @import "src/theme/base";
 
 .prompt-wars {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  &__logo {
+    @include atLargeTablet {
+      display: block;
+    }
+    display: none;
+  }
 
   &__title-row {
     @include atLargeTablet {
@@ -13,6 +23,7 @@
 
     &--description {
       @include atLargeTablet {
+        max-width: 280px;
         margin-top: 0;
         margin-left: $space-default;
       }
@@ -20,8 +31,6 @@
       flex-direction: column;
       justify-content: center;
       margin-top: $space-default;
-      border: 1px solid white;
-      border-radius: $border-radius-card;
       padding: $space-default;
     }
   }

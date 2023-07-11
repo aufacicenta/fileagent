@@ -2,19 +2,22 @@
 
 .balance-pill {
   position: relative;
+  margin-top: $space-m;
   border-radius: $border-radius-pill;
   padding: 1px;
   background: linear-gradient(to left, var(--color-theme-button-dark), var(--color-theme-button-light));
 
   &__wrapper {
+    @include atLargeTablet {
+      justify-content: center;
+      align-items: center;
+    }
     display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: $border-radius-pill;
     padding: $space-s $space-default;
     background-color: var(--color-dark-10);
 
-    div {
+    > div {
       padding: $space-xs;
 
       p {

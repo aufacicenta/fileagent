@@ -18,6 +18,7 @@ const Index: NextPage = () => {
         <meta property="og:description" content={t("head.og.description")} />
         <meta property="og:url" content="https://app.pulsemarkets.org/" />
       </Head>
+
       <HomeContainer />
     </DashboardLayout>
   );
