@@ -154,10 +154,8 @@ impl Market {
         self.assert_is_resolution_window_open();
 
         if self.get_outcome_ids().is_empty() {
-            self.internal_set_resolution_result(
-                self.get_management_data().market_creator_account_id,
-            );
-
+            self.resolution.resolved_at = Some(self.get_block_timestamp());
+            log!("resolve, market ended with 0 participants");
             return;
         }
 
