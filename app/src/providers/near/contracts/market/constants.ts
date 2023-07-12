@@ -17,6 +17,7 @@ export const VIEW_METHODS = [
   "is_closed",
   "is_over",
   "is_resolution_window_expired",
+  "is_self_destruct_window_expired",
   "balance_of",
   "get_amount_mintable",
   "get_amount_payable",

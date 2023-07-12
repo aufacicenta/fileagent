@@ -380,6 +380,22 @@ export class PromptWarsMarketContract {
     }
   }
 
+  async is_self_destruct_window_expired() {
+    try {
+      const result = await this.contract.is_self_destruct_window_expired();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+
+      if ((error as TypedError)?.type === "AccountDoesNotExist") {
+        return true;
+      }
+
+      throw new Error("ERR_PW_MARKET_CONTRACT_IS_SELF_DESTRUCT_WINDOW_EXPIRED");
+    }
+  }
+
   async is_expired_unresolved() {
     try {
       const result = await this.contract.is_expired_unresolved();
