@@ -14,7 +14,6 @@ import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 import near from "providers/near";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { DEFAULT_NETWORK_ENV } from "providers/near/getConfig";
 import { WalletSelectorChain } from "context/wallet-selector/WalletSelectorContext.types";
 
 import { NearWalletSelectorContextControllerProps } from "./NearWalletSelectorContext.types";
@@ -59,7 +58,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       walletStateContext.setIsConnected(s.isSignedIn());
       walletStateContext.setAddress(account.accountId);
-      walletStateContext.setNetwork(DEFAULT_NETWORK_ENV);
+      walletStateContext.setNetwork(near.getConfig().networkId as NetworkId);
       walletStateContext.setChain(WalletSelectorChain.near);
       walletStateContext.setExplorer(near.getConfig().explorerUrl);
 
@@ -84,29 +83,37 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
   useEffect(() => {
     (async () => {
-      const walletSelector = await setupWalletSelector({
-        network: near.getConfig().networkId as NetworkId,
-        modules: [
-          setupNearWallet(),
-          setupMyNearWallet(),
-          setupNearFi(),
-          setupHereWallet(),
-          setupMathWallet(),
-          setupSender(),
-          setupNightly(),
-          setupMeteorWallet(),
-          setupLedger(),
-          setupCoin98Wallet(),
-        ],
-      });
+      try {
+        const network = near.getConfig().networkId as NetworkId;
 
-      const onSignedInSub = walletSelector.on("signedIn", () => onSignedIn(walletSelector));
+        const walletSelector = await setupWalletSelector({
+          network,
+          modules: [
+            setupNearWallet(),
+            setupMyNearWallet(),
+            setupNearFi(),
+            setupHereWallet(),
+            setupMathWallet(),
+            setupSender(),
+            setupNightly(),
+            setupMeteorWallet(),
+            setupLedger(),
+            setupCoin98Wallet(),
+          ],
+        });
 
-      setSelector(walletSelector);
+        const onSignedInSub = walletSelector.on("signedIn", () => onSignedIn(walletSelector));
 
-      return () => {
-        onSignedInSub.remove();
-      };
+        setSelector(walletSelector);
+
+        return () => {
+          onSignedInSub.remove();
+        };
+      } catch (error) {
+        console.log(error);
+      }
+
+      return undefined;
     })();
   }, []);
 

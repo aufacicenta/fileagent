@@ -51,7 +51,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       buy_sell_threshold: 0,
     };
 
-    const { accountId, decimals } = pulse.getConfig().COLLATERAL_TOKENS[0];
+    const { accountId, decimals } = pulse.getDefaultCollateralToken();
 
     const collateral_token: CollateralToken = {
       id: accountId,
