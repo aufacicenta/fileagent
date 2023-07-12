@@ -153,6 +153,14 @@ impl Market {
         self.assert_is_not_resolved();
         self.assert_is_resolution_window_open();
 
+        if self.get_outcome_ids().is_empty() {
+            self.internal_set_resolution_result(
+                self.get_management_data().market_creator_account_id,
+            );
+
+            return;
+        }
+
         let separator = "=".to_string();
 
         let mut results: Vector<String> = Vector::new(b"r");
@@ -192,8 +200,6 @@ impl Market {
         log!("resolve, result: {}", result);
 
         self.internal_set_resolution_result(AccountId::new_unchecked(result.to_string()));
-
-        self.resolution.resolved_at = Some(self.get_block_timestamp());
     }
 
     pub fn claim_fees(&mut self) {
@@ -219,8 +225,12 @@ impl Market {
 
     pub fn self_destruct(&mut self) {
         self.assert_only_owner();
+        self.assert_is_resolution_window_expired();
 
-        if !self.fees.claimed_at.is_some() {
+        if !self.get_outcome_ids().is_empty()
+            && !self.fees.claimed_at.is_some()
+            && self.collateral_token.fee_balance > 0
+        {
             env::panic_str("ERR_SELF_DESTRUCT_FEES_UNCLAIMED");
         }
 
@@ -351,6 +361,7 @@ impl Market {
 
     fn internal_set_resolution_result(&mut self, result: ResolutionResult) {
         self.resolution.result = Some(result);
+        self.resolution.resolved_at = Some(self.get_block_timestamp());
 
         log!(
             "internal_set_resolution_result, result: {:?}",
