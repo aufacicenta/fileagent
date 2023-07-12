@@ -7,7 +7,7 @@ export const DEFAULT_RESOLUTION_WINDOW_DAY_SPAN = 3; // days
 export const DEFAULT_CLAIMING_WINDOW_DAY_SPAN = 30; // days
 
 const TESTNET_GUEST_WALLET_ID = "pulsemarkets.testnet";
-const MAINNET_GUEST_WALLET_ID = "pulsemarkets.near";
+const MAINNET_GUEST_WALLET_ID = "promptwars.near";
 
 const TESTNET_DAO_ACCOUNT_ID = "pulse-dao.sputnikv2.testnet";
 const MAINNET_DAO_ACCOUNT_ID = "pulse-dao.sputnik-dao.near";
@@ -19,10 +19,10 @@ const TESTNET_AMM_FACTORY_ACCOUNT_ID = "market-factory-2.pulsemarkets.testnet";
 const MAINNET_AMM_FACTORY_ACCOUNT_ID = "factory.pulsemarkets.near";
 
 const TESTNET_SIGNER_WALLET_ID = "pw-server.pulsemarkets.testnet";
-const MAINNET_SIGNER_WALLET_ID = "pw-server.pulsemarkets.near";
+const MAINNET_SIGNER_WALLET_ID = "server.promptwars.near";
 
 const TESTNET_FACTORY_WALLET_ID = "pw-factory.pulsemarkets.testnet";
-const MAINNET_FACTORY_WALLET_ID = "pw-factory.pulsemarkets.near";
+const MAINNET_FACTORY_WALLET_ID = "factory.promptwars.near";
 
 const TESTNET_CONFIG = {
   marketFactoryAccountId: TESTNET_AMM_FACTORY_ACCOUNT_ID,
