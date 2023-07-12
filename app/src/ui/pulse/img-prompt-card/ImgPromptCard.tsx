@@ -37,9 +37,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>{status}</Typography.Text>
-          <Typography.MiniDescription>
-            <Countdown date={resolution.reveal_window} />
-          </Typography.MiniDescription>
+          <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
         </>
       );
     }

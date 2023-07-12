@@ -69,7 +69,16 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
       <Modal.Header onClose={onClose}>
         <Typography.Headline2 flat>Results</Typography.Headline2>
         <Typography.Text flat>
-          Winner: {resolution?.result}, {winnerOutcomeToken?.result}
+          Winner:{" "}
+          <>
+            {resolution?.result ? (
+              <>
+                {resolution?.result}, {winnerOutcomeToken?.result}
+              </>
+            ) : (
+              "TBD"
+            )}
+          </>
         </Typography.Text>
       </Modal.Header>
       <Modal.Content>
@@ -141,7 +150,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
           <Grid.Col lg={3}>
             <Typography.Description>Negative Prompt</Typography.Description>
             <Typography.Text className={styles["results-modal__modal-actions--text"]}>
-              {outcomeToken?.negativePrompt || "Loading"}
+              {outcomeToken?.negativePrompt || "n/a"}
             </Typography.Text>
           </Grid.Col>
           <Grid.Col lg={3}>
