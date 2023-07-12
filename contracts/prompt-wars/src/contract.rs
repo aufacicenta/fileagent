@@ -20,6 +20,11 @@ trait Callbacks {
         outcome_id: OutcomeId,
     ) -> String;
     fn on_claim_fees_resolved_callback(&mut self, payee: AccountId) -> Option<Timestamp>;
+    fn on_claim_balance_self_destruct_callback(
+        &mut self,
+        payee: AccountId,
+        amount_payable: WrappedBalance,
+    ) -> Option<Timestamp>;
 }
 
 #[ext_contract(ext_feed_parser)]
@@ -208,6 +213,11 @@ impl Market {
 
         let amount_payable = self.collateral_token.fee_balance;
 
+        if amount_payable == 0 {
+            self.fees.claimed_at = Some(self.get_block_timestamp());
+            env::panic_str("ERR_CLAIM_FEES_AMOUNT_PAYABLE_IS_ZERO");
+        }
+
         let ft_transfer_promise = ext_ft_core::ext(self.collateral_token.id.clone())
             .with_attached_deposit(FT_TRANSFER_BOND)
             .with_static_gas(GAS_FT_TRANSFER)
@@ -225,6 +235,10 @@ impl Market {
         self.assert_only_owner();
         self.assert_is_resolution_window_expired();
 
+        if !self.is_self_destruct_window_expired() {
+            env::panic_str("ERR_SELF_DESTRUCT_WINDOW_NOT_EXPIRED");
+        }
+
         if !self.get_outcome_ids().is_empty()
             && !self.fees.claimed_at.is_some()
             && self.collateral_token.fee_balance > 0
@@ -232,8 +246,21 @@ impl Market {
             env::panic_str("ERR_SELF_DESTRUCT_FEES_UNCLAIMED");
         }
 
-        Promise::new(env::current_account_id())
-            .delete_account(self.management.market_creator_account_id.clone());
+        let payee = self.management.dao_account_id.clone();
+
+        let amount_payable = self.collateral_token.balance;
+
+        let ft_transfer_promise = ext_ft_core::ext(self.collateral_token.id.clone())
+            .with_attached_deposit(FT_TRANSFER_BOND)
+            .with_static_gas(GAS_FT_TRANSFER)
+            .ft_transfer(payee.clone(), U128::from(amount_payable), None);
+
+        let ft_transfer_callback_promise = ext_self::ext(env::current_account_id())
+            .with_attached_deposit(0)
+            .with_static_gas(GAS_FT_TRANSFER_CALLBACK)
+            .on_claim_balance_self_destruct_callback(payee, amount_payable);
+
+        ft_transfer_promise.then(ft_transfer_callback_promise);
     }
 
     #[private]
