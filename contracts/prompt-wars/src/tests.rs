@@ -421,6 +421,102 @@ mod tests {
         contract.self_destruct();
     }
 
+    #[test]
+    fn self_destruct_resolved_no_players() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        testing_env!(context
+            .signer_account_id(market_creator_account_id())
+            .build());
+
+        resolve(&mut contract);
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), false);
+        assert_eq!(contract.is_resolved(), true);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+
+        contract.self_destruct();
+    }
+
+    #[test]
+    #[should_panic(expected = "ERR_SELF_DESTRUCT_FEES_UNCLAIMED")]
+    fn err_self_destruct_unresolved() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        let amount = CREATE_OUTCOME_TOKEN_PRICE;
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
+
+        create_outcome_token(
+            &mut contract,
+            player_1.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+
+        contract.self_destruct();
+    }
+
     // @TODO test for panic ERR_MARKET_IS_CLOSED. labels: 100 USDT
     // #[test]
     // #[should_panic(expected = "ERR_MARKET_IS_CLOSED")]
