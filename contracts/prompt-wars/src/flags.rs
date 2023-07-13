@@ -30,6 +30,10 @@ impl Market {
         self.get_block_timestamp() > self.resolution.reveal_window
     }
 
+    pub fn is_self_destruct_window_expired(&self) -> bool {
+        self.get_block_timestamp() > self.management.self_destruct_window
+    }
+
     pub fn is_resolution_window_expired(&self) -> bool {
         self.get_block_timestamp() > self.resolution.window
     }

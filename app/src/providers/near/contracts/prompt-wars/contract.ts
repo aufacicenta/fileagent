@@ -2,6 +2,7 @@ import { Contract } from "near-api-js";
 import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
 import { FinalExecutionOutcome, Wallet } from "@near-wallet-selector/core";
+import { TypedError } from "near-api-js/lib/providers";
 
 import near from "providers/near";
 import date from "providers/date";
@@ -338,6 +339,11 @@ export class PromptWarsMarketContract {
       return result;
     } catch (error) {
       console.log(error);
+
+      if ((error as TypedError)?.type === "AccountDoesNotExist") {
+        return true;
+      }
+
       throw new Error("ERR_PW_MARKET_CONTRACT_IS_OVER");
     }
   }
@@ -349,6 +355,11 @@ export class PromptWarsMarketContract {
       return result;
     } catch (error) {
       console.log(error);
+
+      if ((error as TypedError)?.type === "AccountDoesNotExist") {
+        return true;
+      }
+
       throw new Error("ERR_PW_MARKET_CONTRACT_IS_REVEAL_WINDOW_EXPIRED");
     }
   }
@@ -360,7 +371,28 @@ export class PromptWarsMarketContract {
       return result;
     } catch (error) {
       console.log(error);
+
+      if ((error as TypedError)?.type === "AccountDoesNotExist") {
+        return true;
+      }
+
       throw new Error("ERR_PW_MARKET_CONTRACT_IS_RESOLUTION_WINDOW_EXPIRED");
+    }
+  }
+
+  async is_self_destruct_window_expired() {
+    try {
+      const result = await this.contract.is_self_destruct_window_expired();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+
+      if ((error as TypedError)?.type === "AccountDoesNotExist") {
+        return true;
+      }
+
+      throw new Error("ERR_PW_MARKET_CONTRACT_IS_SELF_DESTRUCT_WINDOW_EXPIRED");
     }
   }
 

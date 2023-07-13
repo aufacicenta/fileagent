@@ -1,4 +1,4 @@
-import { GetStaticPropsContext, NextPage } from "next";
+import { GetServerSidePropsContext, NextPage } from "next";
 import { i18n, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
@@ -26,7 +26,7 @@ const Index: NextPage<{ marketId: AccountId }> = ({ marketId }) => {
   );
 };
 
-export const getStaticProps = async ({ locale }: GetStaticPropsContext) => {
+export const getServerSideProps = async ({ locale }: GetServerSidePropsContext) => {
   await i18n?.reloadResources();
 
   const marketId = await pulse.promptWars.getLatestMarketId();

@@ -1,4 +1,4 @@
-use near_sdk::{env, log, near_bindgen, PromiseResult};
+use near_sdk::{env, log, near_bindgen, AccountId, Promise, PromiseResult};
 use num_format::ToFormattedString;
 use shared::OutcomeId;
 
@@ -48,7 +48,30 @@ impl Market {
                 self.fees.claimed_at.unwrap()
             }
             // On error, the funds were transfered back to the sender
-            _ => env::panic_str("ERR_ON_FT_TRANSFER_CALLBACK"),
+            _ => env::panic_str("ERR_ON_CLAIM_FEES_RESOLVED_CALLBACK"),
+        };
+
+        None
+    }
+
+    #[private]
+    pub fn on_claim_balance_self_destruct_callback(
+        &mut self,
+        payee: AccountId,
+        amount_payable: WrappedBalance,
+    ) -> Option<Timestamp> {
+        match env::promise_result(0) {
+            PromiseResult::Successful(_result) => {
+                log!(
+                    "on_claim_balance_self_destruct_callback, payee: {}, amount_payable: {}",
+                    payee,
+                    amount_payable
+                );
+
+                Promise::new(env::current_account_id())
+                    .delete_account(self.management.market_creator_account_id.clone());
+            }
+            _ => env::panic_str("ERR_ON_CLAIM_BALANCE_SELF_DESTRUCT_CALLBACK"),
         };
 
         None

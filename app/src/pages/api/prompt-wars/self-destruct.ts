@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import logger from "providers/logger";
 import { PromptWarsMarketContract } from "providers/near/contracts/prompt-wars/contract";
 import { MarketFactoryContract } from "providers/near/contracts/market-factory";
-import pulse from "providers/pulse";
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
@@ -13,11 +12,15 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
     await Promise.all(
       marketsList!.map(async (marketId) => {
         try {
-          if (await pulse.promptWars.isMarketActive(marketId!)) {
+          const contract = await PromptWarsMarketContract.loadFromGuestConnection(marketId!);
+          const is_self_destruct_window_expired = await contract.is_self_destruct_window_expired();
+
+          if (!is_self_destruct_window_expired) {
             throw new Error("ERR_LATEST_MARKET_IS_STILL_ACTIVE");
           }
 
           await PromptWarsMarketContract.selfDestruct(marketId);
+
           logger.info(`self_destruct method called for market ${marketId}`);
         } catch (error) {
           logger.error(error);

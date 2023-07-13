@@ -418,6 +418,256 @@ mod tests {
 
         assert_eq!(contract.get_fee_data().claimed_at.is_some(), true);
 
+        // now is after the self_destruct window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        contract.self_destruct();
+        contract.on_claim_balance_self_destruct_callback(
+            contract.get_management_data().dao_account_id,
+            contract.get_collateral_token_metadata().balance,
+        );
+    }
+
+    #[test]
+    fn self_destruct_resolved_no_players() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        testing_env!(context
+            .signer_account_id(market_creator_account_id())
+            .build());
+
+        resolve(&mut contract);
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_resolution_data().resolved_at.is_some(), true);
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+
+        // now is after the self_destruct window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        contract.self_destruct();
+        contract.on_claim_balance_self_destruct_callback(
+            contract.get_management_data().dao_account_id,
+            contract.get_collateral_token_metadata().balance,
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "ERR_CLAIM_FEES_AMOUNT_PAYABLE_IS_ZERO")]
+    fn err_claim_fees_zero_balance() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        testing_env!(context
+            .signer_account_id(market_creator_account_id())
+            .build());
+
+        resolve(&mut contract);
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_resolution_data().resolved_at.is_some(), true);
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+        assert_eq!(contract.get_collateral_token_metadata().fee_balance, 0);
+
+        contract.claim_fees();
+    }
+
+    #[test]
+    #[should_panic(expected = "ERR_SELF_DESTRUCT_FEES_UNCLAIMED")]
+    fn err_self_destruct_unresolved() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        let amount = CREATE_OUTCOME_TOKEN_PRICE;
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
+
+        create_outcome_token(
+            &mut contract,
+            player_1.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+
+        // now is after the self_destruct window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        contract.self_destruct();
+        contract.on_claim_balance_self_destruct_callback(
+            contract.get_management_data().dao_account_id,
+            contract.get_collateral_token_metadata().balance,
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "ERR_SELF_DESTRUCT_WINDOW_NOT_EXPIRED")]
+    fn err_self_destruct_window_not_expired() {
+        let mut context = setup_context();
+
+        let mut now = Utc::now();
+        testing_env!(context.block_timestamp(block_timestamp(now)).build());
+
+        let market_data: MarketData = create_market_data();
+        let mut contract: Market = setup_contract(market_data);
+
+        let amount = CREATE_OUTCOME_TOKEN_PRICE;
+        let prompt =
+            json!({ "value": "a prompt", "negative_prompt": "a negative prompt" }).to_string();
+
+        let player_1 = alice();
+
+        create_outcome_token(
+            &mut contract,
+            player_1.clone(),
+            amount,
+            CreateOutcomeTokenArgs {
+                prompt: prompt.clone(),
+            },
+        );
+
+        // now is after the resolution window
+        // called by owner
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::minutes(2);
+        testing_env!(
+            context
+                .block_timestamp(block_timestamp(now))
+                .signer_account_id(market_creator_account_id())
+                .build(),
+            near_sdk::VMConfig::test(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![PromiseResult::Successful(vec![])],
+        );
+
+        // Check timestamps and flags
+        assert_eq!(contract.is_open(), false);
+        assert_eq!(contract.is_over(), true);
+        assert_eq!(contract.is_reveal_window_expired(), true);
+        assert_eq!(contract.is_expired_unresolved(), true);
+        assert_eq!(contract.is_resolved(), false);
+        assert_eq!(contract.is_resolution_window_expired(), true);
+
+        assert_eq!(contract.get_fee_data().claimed_at.is_some(), false);
+
         contract.self_destruct();
     }
 

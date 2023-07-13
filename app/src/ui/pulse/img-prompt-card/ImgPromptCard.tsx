@@ -34,7 +34,12 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
   const getStatusElement = () => {
     if (status === PromptWarsMarketContractStatus.REVEALING) {
-      return <Typography.Text flat>{status}</Typography.Text>;
+      return (
+        <>
+          <Typography.Text flat>{status}</Typography.Text>
+          <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
+        </>
+      );
     }
 
     if (status === PromptWarsMarketContractStatus.RESOLVING) {
