@@ -104,7 +104,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
         <MainPanel.Container>
           <Grid.Container>
             <div className={styles["prompt-wars__title-row"]}>
-              <PromptWarsLogo />
+              <PromptWarsLogo className={styles["prompt-wars__logo"]} />
               <div className={styles["prompt-wars__title-row--description"]}>
                 <Typography.Description flat>
                   {t("promptWars.description")}{" "}

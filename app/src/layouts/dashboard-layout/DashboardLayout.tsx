@@ -11,6 +11,7 @@ import { NearWalletSelectorContextController } from "context/near/wallet-selecto
 import { WalletStateContextController } from "context/wallet/state/WalletStateContextController";
 import { NearMarketFactoryContractContextController } from "context/near/market-factory-contract/NearMarketFactoryContractContextController";
 import { NearPromptWarsMarketContractContextController } from "context/near/prompt-wars-market-contract/NearPromptWarsMarketContractContextController";
+import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
 
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
@@ -48,6 +49,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, mark
                   })}
                 >
                   <WalletSelectorNavbar onClickSidebarVisibility={() => setSidebarVisibility(true)} />
+
+                  <LocaleSelector />
 
                   <PulseSidebar
                     isOpen={isSidebarOpen}
