@@ -1,7 +1,8 @@
 export type Styles = {
-  "main-panel": string;
-  "main-panel__container": string;
-  "main-panel__container--paddingX": string;
+  "previous-rounds-table-row": string;
+  "previous-rounds-table-row__link": string;
+  "previous-rounds-table-row__resolved": string;
+  "previous-rounds-table-row__thumbnail": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

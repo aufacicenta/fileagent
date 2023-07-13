@@ -6,6 +6,7 @@ export type MainPanelProps = {
 };
 
 export type MainPanelContainerProps = {
+  paddingX?: boolean;
   children: ReactNode;
   className?: string;
 };

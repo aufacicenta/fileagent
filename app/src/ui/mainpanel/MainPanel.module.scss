@@ -17,5 +17,14 @@
     max-width: 1540px;
     margin-right: auto;
     margin-left: auto;
+
+    &--paddingX {
+      @include atLargeTablet {
+        padding-right: $space-xl;
+        padding-left: $space-xl;
+      }
+      padding-right: $space-default;
+      padding-left: $space-default;
+    }
   }
 }
