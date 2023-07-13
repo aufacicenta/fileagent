@@ -55,8 +55,8 @@ impl Market {
         let reveal_window = ends_at + STAGE_PERIOD_NANOS;
         let resolution_window = reveal_window + STAGE_PERIOD_NANOS;
 
-        // 30 days
-        let self_destruct_window = resolution_window + 2_592_000 * 1_000_000_000;
+        // 7 days
+        let self_destruct_window = resolution_window + 604_800_000_000_000;
 
         Self {
             market: MarketData {
