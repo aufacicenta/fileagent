@@ -1,9 +1,15 @@
 {
-  "pulseSidebar.item.dashboard": "Dashboard",
-  "pulseSidebar.item.sportAndBetting": "Sport & Betting",
-  "pulseSidebar.item.bets": "Bets",
-  "pulseSidebar.item.profile": "Profile",
-  "pulseSidebar.item.close": "Close",
-  "button.createMarket": "Create Market",
+  "pulseSidebar.item.dashboard": "Últimos Mercados",
+  "pulseSidebar.item.promptWars": "Prompt Wars",
+  "pulseSidebar.item.sportAndBetting": "Deporte y Apuestas", 
+  "pulseSidebar.item.bets": "Apuestas",
+  "pulseSidebar.item.profile": "Perfil",
+  "pulseSidebar.item.close": "Cerrar",
+  "pulseSidebar.item.code": "Github",
+  "pulseSidebar.item.docs": "Documentos",
+  "pulseSidebar.item.bridge": "Bridge", estoy dejandola como bridge luego de hacer una investigacion sobre el termino
+  "pulseSidebar.item.swap": "Intercambio",
+  "pulseSidebar.item.feedback": "Comentarios",
+  "button.createMarket": "Crear Mercado",
   "toast.cta.dismiss": "Dismiss"
 }
