@@ -9,8 +9,14 @@ export const MainPanel: React.FC<MainPanelProps> & { Container: React.FC<MainPan
   className,
 }) => <main className={clsx(styles["main-panel"], className)}>{children}</main>;
 
-const Container: React.FC<MainPanelContainerProps> = ({ children, className }) => (
-  <div className={clsx(styles["main-panel__container"], className)}>{children}</div>
+const Container: React.FC<MainPanelContainerProps> = ({ children, className, paddingX }) => (
+  <div
+    className={clsx(styles["main-panel__container"], className, {
+      [styles["main-panel__container--paddingX"]]: paddingX,
+    })}
+  >
+    {children}
+  </div>
 );
 
 MainPanel.Container = Container;

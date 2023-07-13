@@ -1,9 +1,8 @@
-
-
 import { {{{pascalCase name}}} } from './{{{pascalCase name}}}';
+import { {{pascalCase name}}ContainerProps } from './{{pascalCase name}}.types';
 
-export const {{{pascalCase name}}}Container = () => {
+export const {{{pascalCase name}}}Container = ({}: {{{pascalCase name}}}ContainerProps) => {
   return (
-    <{{{pascalCase name}}}>Test</{{{pascalCase name}}}>
+    <{{{pascalCase name}}} />
   );
 };

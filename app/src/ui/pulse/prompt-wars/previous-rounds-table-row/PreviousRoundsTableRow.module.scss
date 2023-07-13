@@ -1,0 +1,22 @@
+@import "src/theme/base";
+@import "src/ui/typography/mixins";
+
+.previous-rounds-table-row {
+  td {
+    vertical-align: middle;
+  }
+
+  &__link {
+    @include miniDescription;
+  }
+
+  &__thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius;
+  }
+
+  &__resolved {
+    color: var(--color-status-success);
+  }
+}
