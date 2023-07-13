@@ -10,6 +10,7 @@
   "pulseSidebar.item.bridge": "Bridge",
   "pulseSidebar.item.swap": "Swap",
   "pulseSidebar.item.feedback": "Feedback",
+  "pulseSidebar.item.previousMarkets": "See All Rounds",
   "button.createMarket": "Create Market",
   "toast.cta.dismiss": "Dismiss"
 }

@@ -100,49 +100,47 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
   return (
     <>
-      <div className={clsx(styles["prompt-wars"], className)}>
-        <MainPanel.Container>
-          <Grid.Container>
-            <div className={styles["prompt-wars__title-row"]}>
-              <PromptWarsLogo className={styles["prompt-wars__logo"]} />
-              <div className={styles["prompt-wars__title-row--description"]}>
-                <Typography.Description flat>
-                  {t("promptWars.description")}{" "}
-                  <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                    {t("promptWars.faqs")}
-                  </Typography.Anchor>
-                </Typography.Description>
-              </div>
+      <MainPanel.Container className={clsx(styles["prompt-wars"], className)}>
+        <Grid.Container>
+          <div className={styles["prompt-wars__title-row"]}>
+            <PromptWarsLogo className={styles["prompt-wars__logo"]} />
+            <div className={styles["prompt-wars__title-row--description"]}>
+              <Typography.Description flat>
+                {t("promptWars.description")}{" "}
+                <Typography.Anchor onClick={onClickFAQsButton} href="#">
+                  {t("promptWars.faqs")}
+                </Typography.Anchor>
+              </Typography.Description>
             </div>
+          </div>
 
-            <div className={styles["prompt-wars__game-row"]}>
-              <Grid.Row>
-                <Grid.Col lg={7} xs={12} className={styles["prompt-wars__game-row--col-left"]}>
-                  <ImgPromptCard
-                    marketId={marketId}
-                    marketContractValues={marketContractValues}
-                    datesElement={<></>}
-                    onClaimDepositUnresolved={onClaimDepositUnresolved}
-                    onClickSeeResults={onClickSeeResults}
-                    onClaimDepositResolved={onClaimDepositResolved}
-                    onNextGameCountdownComplete={onNextGameCountdownComplete}
-                  />
-                </Grid.Col>
-                <Grid.Col lg={5} xs={12}>
-                  <PromptInputCard
-                    onSubmit={onSubmit}
-                    onClickFAQsButton={onClickFAQsButton}
-                    marketContractValues={marketContractValues}
-                  />
-                </Grid.Col>
-              </Grid.Row>
-            </div>
-          </Grid.Container>
-        </MainPanel.Container>
-        <Footer />
-      </div>
+          <div className={styles["prompt-wars__game-row"]}>
+            <Grid.Row>
+              <Grid.Col lg={7} xs={12} className={styles["prompt-wars__game-row--col-left"]}>
+                <ImgPromptCard
+                  marketId={marketId}
+                  marketContractValues={marketContractValues}
+                  datesElement={<></>}
+                  onClaimDepositUnresolved={onClaimDepositUnresolved}
+                  onClickSeeResults={onClickSeeResults}
+                  onClaimDepositResolved={onClaimDepositResolved}
+                  onNextGameCountdownComplete={onNextGameCountdownComplete}
+                />
+              </Grid.Col>
+              <Grid.Col lg={5} xs={12}>
+                <PromptInputCard
+                  onSubmit={onSubmit}
+                  onClickFAQsButton={onClickFAQsButton}
+                  marketContractValues={marketContractValues}
+                />
+              </Grid.Col>
+            </Grid.Row>
+          </div>
+        </Grid.Container>
+      </MainPanel.Container>
 
-      {/* @TODO complete the FAQs. labels: 100 USDT */}
+      <Footer />
+
       {isFAQsModalVisible && <FaqsModal onClose={onClickCloseFAQsModal} />}
 
       {isResultsModalVisible && (
