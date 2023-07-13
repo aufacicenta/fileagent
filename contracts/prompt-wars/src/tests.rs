@@ -420,7 +420,7 @@ mod tests {
 
         // now is after the self_destruct window
         // called by owner
-        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(8);
         testing_env!(
             context
                 .block_timestamp(block_timestamp(now))
@@ -482,7 +482,7 @@ mod tests {
 
         // now is after the self_destruct window
         // called by owner
-        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(8);
         testing_env!(
             context
                 .block_timestamp(block_timestamp(now))
@@ -599,7 +599,7 @@ mod tests {
 
         // now is after the self_destruct window
         // called by owner
-        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(31);
+        now = Utc.timestamp_nanos(contract.get_resolution_data().window) + Duration::days(8);
         testing_env!(
             context
                 .block_timestamp(block_timestamp(now))
