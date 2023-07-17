@@ -26,12 +26,12 @@
         max-width: 280px;
         margin-top: 0;
         margin-left: $space-default;
+        padding: $space-default;
       }
       display: flex;
       flex-direction: column;
       justify-content: center;
       margin-top: $space-default;
-      padding: $space-default;
     }
   }
 

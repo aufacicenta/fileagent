@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { PreviousRoundsTable } from "ui/pulse/prompt-wars/previous-rounds-table/PreviousRoundsTable";
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Card } from "ui/card/Card";
-import { Footer } from "ui/footer/Footer";
 
 import { PreviousRoundsProps } from "./PreviousRounds.types";
 import styles from "./PreviousRounds.module.scss";
@@ -17,7 +16,5 @@ export const PreviousRounds: React.FC<PreviousRoundsProps> = ({ className, marke
         </Card.Content>
       </Card>
     </MainPanel.Container>
-
-    <Footer />
   </>
 );
