@@ -58,8 +58,8 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
       toast.trigger({
         variant: "error",
         // @TODO i18n
-        title: "Market is over",
-        children: <Typography.Text>Cannot purchase market options on this event.</Typography.Text>,
+        title: t("promptWars.marketisover.title"),
+        children: <Typography.Text>{t("promptwars.marketisover.description")}</Typography.Text>,
       });
 
       return;

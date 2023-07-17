@@ -1,4 +1,5 @@
 {
     "promptWars.description": "Compite contra los mejores ingenieros de prompts escribiendo el prompt que generará la imagen en pantalla.",
-    "promptWars.faqs":  "Preguntas frecuentes"
+    "promptWars.faqs":  "Preguntas frecuentes",
+    "promptWars.marketisover": "El mercardo ha finalizado" 
 }
