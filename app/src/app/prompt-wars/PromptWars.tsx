@@ -58,7 +58,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
       toast.trigger({
         variant: "error",
         // @TODO i18n
-        title: t("promptWars.marketisover.title"),
+        title: t("promptWars.marketisover.title"), // es necesario colocar las llaves aqui?
         children: <Typography.Text>{t("promptwars.marketisover.description")}</Typography.Text>,
       });
 

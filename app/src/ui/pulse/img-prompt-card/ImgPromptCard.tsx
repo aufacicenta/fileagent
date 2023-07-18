@@ -30,6 +30,8 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
   const nextImageLoadTime = resolution.window;
 
+  const { t } = useTranslation(["img-prompt-card"]); // está esto correcto así?
+
   const getDatesElement = () => datesElement;
 
   const getStatusElement = () => {
@@ -37,7 +39,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>{status}</Typography.Text>
-          <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
+          <Typography.MiniDescription onClick={onClickSeeResults}>{t("imgPromptWars.status.miniDescription.seeResults")}</Typography.MiniDescription>
         </>
       );
     }
@@ -157,3 +159,4 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     </Card>
   );
 };
+
