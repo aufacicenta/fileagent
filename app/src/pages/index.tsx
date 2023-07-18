@@ -33,7 +33,7 @@ export const getServerSideProps = async ({ locale }: GetServerSidePropsContext) 
 
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ["common", "head", "prompt-wars"])),
+      ...(await serverSideTranslations(locale!, ["common", "head", "prompt-wars", "img-prompt-card"])),
       marketId,
     },
   };

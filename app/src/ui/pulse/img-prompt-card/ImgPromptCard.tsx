@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Countdown from "react-countdown";
+import { useTranslation } from "next-i18next";
 
 import { Card } from "ui/card/Card";
 import { Grid } from "ui/grid/Grid";
@@ -38,8 +39,10 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.REVEALING) {
       return (
         <>
-          <Typography.Text flat>{status}</Typography.Text>
-          <Typography.MiniDescription onClick={onClickSeeResults}>{t("imgPromptWars.status.miniDescription.seeResults")}</Typography.MiniDescription>
+          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
+          <Typography.MiniDescription onClick={onClickSeeResults}>
+            {t("imgPromptWars.status.miniDescription.seeResults")}
+          </Typography.MiniDescription>
         </>
       );
     }
@@ -47,7 +50,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.RESOLVING) {
       return (
         <>
-          <Typography.Text flat>{status}</Typography.Text>
+          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
           <Typography.MiniDescription>
             <Countdown date={resolution.window} />
           </Typography.MiniDescription>
@@ -59,7 +62,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>
-            {status}
+            {t(`imgPromptWars.status.${status.toLowerCase()}`)}
             <br />
             <span className={styles["img-prompt-card__status--winner"]}>{resolution?.result}</span> 🎉
           </Typography.Text>
@@ -82,7 +85,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.UNRESOLVED) {
       return (
         <>
-          <Typography.Text flat>{status}</Typography.Text>
+          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
           <Typography.MiniDescription onClick={onClaimDepositUnresolved}>
             Claim back your deposit
           </Typography.MiniDescription>
@@ -90,7 +93,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       );
     }
 
-    return <Typography.Text>{status}</Typography.Text>;
+    return <Typography.Text>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>;
   };
 
   return (
@@ -159,4 +162,3 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     </Card>
   );
 };
-
