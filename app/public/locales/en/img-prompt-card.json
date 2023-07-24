@@ -6,7 +6,10 @@
   "imgPromptWars.status.description.timeLeft": "Time left",
   "imgPromptWars.status.description.status": "Status",
   "imgPromptWars.status.description.totalPriceBag": "Total Price Bag",
-  "imgPromptWars.status.description.contract": "Contract"
+  "imgPromptWars.status.description.contract": "Contract",
+  "imgPromptWars.status.revealing": "reveal",
+  "imgPromptWars.status.unresolved": "unresolved",
+  "imgPromptWars.nextImage.prefix": "Next image will load in"
   
 
 
