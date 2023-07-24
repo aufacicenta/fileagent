@@ -136,7 +136,9 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   <Card.Content className={styles["img-prompt-card__stats--content"]}>
                     <Typography.Description>{t("promptWars.status.description.status")}</Typography.Description>
                     {getStatusElement()}
-                    <Typography.Description>Participants</Typography.Description>
+                    <Typography.Description>
+                      {t("imgPromptWars.status.description.participants")}
+                    </Typography.Description>
                     <Typography.Text flat={outcomeIds.includes(walletState.address as string)}>
                       {outcomeIds.length}
                     </Typography.Text>
@@ -144,6 +146,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                       {outcomeIds.includes(walletState.address as string) ? "You're in!" : null}
                     </Typography.MiniDescription>
                     <Typography.Description>{t("promptWars.status.description.totalPriceBag")}</Typography.Description>
+                    <Typography.Description>{t("imgPromptWars.status.description.totalPriceBag")}</Typography.Description>
                     <Typography.Text flat>
                       USDT{" "}
                       {currency.convert.toDecimalsPrecisionString(collateralToken.balance, collateralToken.decimals)}
@@ -158,6 +161,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       <Card.Actions>
         <div className={styles["img-prompt-card__start-end-time--resolution"]}>
           <Typography.Description flat>{t("promptWars.status.description.contract")}</Typography.Description>
+          <Typography.Description flat>{t("imgPromptWars.status.description.contract")}</Typography.Description>
           <Typography.Anchor href={`${near.getConfig().explorerUrl}/accounts/${marketId}`} target="_blank">
             {marketId} <Icon name="icon-launch" />
           </Typography.Anchor>
