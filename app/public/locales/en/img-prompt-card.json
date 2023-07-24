@@ -1,5 +1,19 @@
 {
   "imgPromptWars.status.miniDescription.seeResults": "See results",
   "imgPromptWars.status.miniDescription.claimEarnings": "Claim your earnings!",
-  "imgPromptWars.status.miniDescription.ifYouWon": "(If you won 😅)"
+  "imgPromptWars.status.miniDescription.ifYouWon": "(If you won 😅)",
+  "imgPromptWars.status.miniDescription.claimBackDeposit": "Claim back your deposit",
+  "imgPromptWars.status.description.timeLeft": "Time left",
+  "imgPromptWars.status.description.status": "Status",
+  "imgPromptWars.status.description.totalPriceBag": "Total Price Bag",
+  "imgPromptWars.status.description.contract": "Contract"
+  
+
+
+
+
+
+
+
+
 }
