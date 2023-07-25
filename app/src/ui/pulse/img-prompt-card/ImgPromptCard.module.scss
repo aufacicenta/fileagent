@@ -35,6 +35,10 @@
         color: var(--color-status-warning);
       }
     }
+
+    &--button {
+      margin-top: $space-default;
+    }
   }
 
   &__status {

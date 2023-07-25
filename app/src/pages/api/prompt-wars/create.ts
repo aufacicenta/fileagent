@@ -106,23 +106,10 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
       }
     }, ms);
 
-    ms = resolution.window - marketData.starts_at;
-    ms += 10000;
-    const createEndpoint = routes.api.promptWars.create();
-
-    logger.info(`setting timeout to call the create API endpoint ${createEndpoint} for market ${marketId} in ${ms} ms`);
-    setTimeout(async () => {
-      try {
-        logger.info(`calling create API endpoint ${createEndpoint} for market ${marketId}`);
-        await fetch(createEndpoint);
-      } catch (error) {
-        logger.error(error);
-      }
-    }, ms);
-
-    response.status(200).json(promptWarsMarketArgs);
+    response.status(200).json({ promptWarsMarketArgs, id });
   } catch (error) {
     logger.error(error);
+
     response.status(500).json({ error: (error as Error).message });
   }
 }

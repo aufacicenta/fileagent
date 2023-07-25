@@ -13,6 +13,7 @@ import {
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
 import { FungibleTokenContract } from "providers/near/contracts/fungible-token";
 import currency from "providers/currency";
+import { useRoutes } from "hooks/useRoutes/useRoutes";
 
 import {
   NearPromptWarsMarketContractContextContextActions,
@@ -34,9 +35,15 @@ export const NearPromptWarsMarketContractContextController = ({
     ftTransferCall: {
       isLoading: false,
     },
+    create: {
+      isLoading: false,
+    },
   });
 
+  const routes = useRoutes();
+
   const toast = useToastContext();
+
   const walletState = useWalletStateContext();
 
   const getMarketStatus = (values: PromptWarsMarketContractValues): PromptWarsMarketContractStatus => {
@@ -262,6 +269,41 @@ export const NearPromptWarsMarketContractContextController = ({
     return undefined;
   };
 
+  const create = async () => {
+    setActions((prev) => ({
+      ...prev,
+      create: {
+        isLoading: true,
+      },
+    }));
+
+    try {
+      const response = await fetch(routes.api.promptWars.create());
+
+      if (!response.ok) {
+        throw new Error("ERR_USE_NEAR_PROMPT_WARS_MARKET_CONTRACT_CREATE_FAILED");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+
+      toast.trigger({
+        variant: "error",
+        withTimeout: false,
+        title: "Failed to create a new market",
+        children: <Typography.Text>The server must have run out of funds. Please try again later.</Typography.Text>,
+      });
+    }
+
+    setActions((prev) => ({
+      ...prev,
+      create: {
+        isLoading: false,
+      },
+    }));
+  };
+
   const props = {
     fetchMarketContractValues,
     marketContractValues,
@@ -270,6 +312,7 @@ export const NearPromptWarsMarketContractContextController = ({
     getOutcomeToken,
     actions,
     marketId,
+    create,
   };
 
   return (

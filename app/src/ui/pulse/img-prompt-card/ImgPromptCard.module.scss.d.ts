@@ -1,6 +1,7 @@
 export type Styles = {
   "img-prompt-card": string;
   "img-prompt-card__countdown": string;
+  "img-prompt-card__countdown--button": string;
   "img-prompt-card__countdown--content": string;
   "img-prompt-card__countdown--content-warn": string;
   "img-prompt-card__current-img-card": string;
