@@ -246,9 +246,16 @@ impl Market {
             env::panic_str("ERR_SELF_DESTRUCT_FEES_UNCLAIMED");
         }
 
-        let payee = self.management.dao_account_id.clone();
-
         let amount_payable = self.collateral_token.balance;
+
+        if amount_payable == 0 {
+            Promise::new(env::current_account_id())
+                .delete_account(self.management.market_creator_account_id.clone());
+
+            return;
+        }
+
+        let payee = self.management.dao_account_id.clone();
 
         let ft_transfer_promise = ext_ft_core::ext(self.collateral_token.id.clone())
             .with_attached_deposit(FT_TRANSFER_BOND)
