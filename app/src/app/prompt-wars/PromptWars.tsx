@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-add-event-listener */
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
@@ -138,7 +137,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
         </Grid.Container>
       </MainPanel.Container>
 
-      {/* @TODO complete the FAQs. labels: 100 USDT */}
       {isFAQsModalVisible && <FaqsModal onClose={onClickCloseFAQsModal} />}
 
       {isResultsModalVisible && (

@@ -31,7 +31,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
   const nextImageLoadTime = resolution.window;
 
-  const { t } = useTranslation(["img-prompt-card"]); // está esto correcto así?
+  const { t } = useTranslation(["prompt-wars"]);
 
   const getDatesElement = () => datesElement;
 
@@ -39,9 +39,9 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.REVEALING) {
       return (
         <>
-          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
+          <Typography.Text flat>{t(`promptWars.status.${status}`)}</Typography.Text>
           <Typography.MiniDescription onClick={onClickSeeResults}>
-            {t("imgPromptWars.status.miniDescription.seeResults")}
+            {t("promptWars.status.miniDescription.seeResults")}
           </Typography.MiniDescription>
         </>
       );
@@ -50,7 +50,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.RESOLVING) {
       return (
         <>
-          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
+          <Typography.Text flat>{t(`promptWars.status.${status}`)}</Typography.Text>
           <Typography.MiniDescription>
             <Countdown date={resolution.window} />
           </Typography.MiniDescription>
@@ -62,16 +62,16 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>
-            {t(`imgPromptWars.status.${status.toLowerCase()}`)}
+            {t(`promptWars.status.${status}`)}
             <br />
             <span className={styles["img-prompt-card__status--winner"]}>{resolution?.result}</span> 🎉
           </Typography.Text>
           <Grid.Row nogutter>
             <Grid.Col lg={7}>
               <Typography.MiniDescription onClick={onClaimDepositResolved}>
-                {t("imgPromptWars.status.miniDescription.claimEarnings")}
+                {t("promptWars.status.miniDescription.claimEarnings")}
                 <br />
-                {t("imgPromptWars.status.miniDescription.ifYouWon")}
+                {t("promptWars.status.miniDescription.ifYouWon")}
               </Typography.MiniDescription>
             </Grid.Col>
             <Grid.Col lg={5}>
@@ -85,15 +85,15 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
     if (status === PromptWarsMarketContractStatus.UNRESOLVED) {
       return (
         <>
-          <Typography.Text flat>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>
+          <Typography.Text flat>{t(`promptWars.status.${status}`)}</Typography.Text>
           <Typography.MiniDescription onClick={onClaimDepositUnresolved}>
-            {t("imgPromptWars.status.miniDescription.claimBackDeposit")}
+            {t("promptWars.status.miniDescription.claimBackDeposit")}
           </Typography.MiniDescription>
         </>
       );
     }
 
-    return <Typography.Text>{t(`imgPromptWars.status.${status.toLowerCase()}`)}</Typography.Text>;
+    return <Typography.Text>{t(`promptWars.status.${status}`)}</Typography.Text>;
   };
 
   return (
@@ -113,13 +113,13 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
             <div className={styles["img-prompt-card__right-column"]}>
               <Card className={styles["img-prompt-card__countdown"]}>
                 <Card.Content className={styles["img-prompt-card__countdown--content"]}>
-                  <Typography.Description>{t("imgPromptWars.status.description.timeLeft")}</Typography.Description>
+                  <Typography.Description>{t("promptWars.status.description.timeLeft")}</Typography.Description>
                   <Typography.Headline3 flat>
                     <Countdown date={market.ends_at} />
                   </Typography.Headline3>
                   {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
                     <Typography.MiniDescription flat>
-                      {t("imgPromptWars.nextImage.prefix")}{" "}
+                      {t("promptWars.nextImage.prefix")}{" "}
                       <Countdown date={nextImageLoadTime} onComplete={onNextGameCountdownComplete} />
                     </Typography.MiniDescription>
                   )}
@@ -130,7 +130,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
 
                 <Card className={styles["img-prompt-card__stats"]} withSpotlightEffect>
                   <Card.Content className={styles["img-prompt-card__stats--content"]}>
-                    <Typography.Description>{t("imgPromptWars.status.description.status")}</Typography.Description>
+                    <Typography.Description>{t("promptWars.status.description.status")}</Typography.Description>
                     {getStatusElement()}
                     <Typography.Description>Participants</Typography.Description>
                     <Typography.Text flat={outcomeIds.includes(walletState.address as string)}>
@@ -139,7 +139,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     <Typography.MiniDescription>
                       {outcomeIds.includes(walletState.address as string) ? "You're in!" : null}
                     </Typography.MiniDescription>
-                    <Typography.Description>{t("imgPromptWars.status.description.totalPriceBag")}</Typography.Description>
+                    <Typography.Description>{t("promptWars.status.description.totalPriceBag")}</Typography.Description>
                     <Typography.Text flat>
                       USDT{" "}
                       {currency.convert.toDecimalsPrecisionString(collateralToken.balance, collateralToken.decimals)}
@@ -153,7 +153,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       </Card.Content>
       <Card.Actions>
         <div className={styles["img-prompt-card__start-end-time--resolution"]}>
-          <Typography.Description flat>{t("imgPromptWars.status.description.contract")}</Typography.Description>
+          <Typography.Description flat>{t("promptWars.status.description.contract")}</Typography.Description>
           <Typography.Anchor href={`${near.getConfig().explorerUrl}/accounts/${marketId}`} target="_blank">
             {marketId} <Icon name="icon-launch" />
           </Typography.Anchor>

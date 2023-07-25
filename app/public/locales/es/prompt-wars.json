@@ -1,7 +1,15 @@
 {
-    "promptWars.description": "Compite contra los mejores ingenieros de prompts escribiendo el prompt que generará la imagen en pantalla.",
-    "promptWars.faqs":  "Preguntas frecuentes",
-    "promptWars.marketisover.title": "El mercardo ha finalizado",
-    "promptWars.marketisover.description": "Cannot purchase market options on this event." 
-    
+  "promptWars.description": "Compete against the best prompt engineers writing the prompt that will render the image on display.",
+  "promptWars.faqs": "FAQs",
+  "promptWars.status.miniDescription.seeResults": "See results",
+  "promptWars.status.miniDescription.claimEarnings": "Claim your earnings!",
+  "promptWars.status.miniDescription.ifYouWon": "(If you won 😅)",
+  "promptWars.status.miniDescription.claimBackDeposit": "Claim back your deposit",
+  "promptWars.status.description.timeLeft": "Time left",
+  "promptWars.status.description.status": "Status",
+  "promptWars.status.description.totalPriceBag": "Total Price Bag",
+  "promptWars.status.description.contract": "Contract",
+  "promptWars.status.Revealing": "Reveal",
+  "promptWars.status.Unresolved": "Unresolved",
+  "promptWars.nextImage.prefix": "Next image will load in"
 }
