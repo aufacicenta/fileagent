@@ -10,6 +10,7 @@ import currency from "providers/currency";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import ipfs from "providers/ipfs";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { Button } from "ui/button/Button";
 
 import { ImgPromptCardProps } from "./ImgPromptCard.types";
 import styles from "./ImgPromptCard.module.scss";
@@ -22,13 +23,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   onClaimDepositUnresolved,
   onClaimDepositResolved,
   onClickSeeResults,
-  onNextGameCountdownComplete,
+  onClickCreateNewGame,
 }) => {
   const walletState = useWalletStateContext();
 
   const { market, resolution, outcomeIds, collateralToken, status } = marketContractValues;
-
-  const nextImageLoadTime = resolution.window;
 
   const getDatesElement = () => datesElement;
 
@@ -113,10 +112,15 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                     <Countdown date={market.ends_at} />
                   </Typography.Headline3>
                   {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
-                    <Typography.MiniDescription flat>
-                      Next image will load in{" "}
-                      <Countdown date={nextImageLoadTime} onComplete={onNextGameCountdownComplete} />
-                    </Typography.MiniDescription>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="xs"
+                      className={styles["img-prompt-card__countdown--button"]}
+                      onClick={onClickCreateNewGame}
+                    >
+                      Create a new game
+                    </Button>
                   )}
                 </Card.Content>
               </Card>

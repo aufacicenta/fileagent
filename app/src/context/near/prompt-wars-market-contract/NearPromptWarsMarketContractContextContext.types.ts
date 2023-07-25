@@ -18,6 +18,7 @@ export type NearPromptWarsMarketContractContextContextType = {
   fetchMarketContractValues: () => Promise<void>;
   ftTransferCall: (prompt: Prompt) => Promise<void>;
   sell: () => Promise<void>;
+  create: () => Promise<void>;
   getOutcomeToken: (args: GetOutcomeTokenArgs) => Promise<OutcomeToken | undefined>;
   marketId: AccountId;
   marketContractValues?: PromptWarsMarketContractValues;
@@ -27,6 +28,9 @@ export type NearPromptWarsMarketContractContextContextType = {
 export type NearPromptWarsMarketContractContextContextActions = {
   fetchMarketContractValues: { isLoading: boolean };
   ftTransferCall: {
+    isLoading: boolean;
+  };
+  create: {
     isLoading: boolean;
   };
 };
