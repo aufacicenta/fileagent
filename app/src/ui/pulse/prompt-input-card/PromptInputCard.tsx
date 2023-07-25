@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { Field, Form as RFForm } from "react-final-form";
 import { useState } from "react";
-import { useTranslation } from "next-i18next";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
@@ -33,8 +32,6 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
 
   const handleOnDisplayWidgetClick = () => {
     nearWalletSelectorContext.modal?.show();
-    
-    const { t } = useTranslation(["img-prompt-card"]);
   };
 
   return (
