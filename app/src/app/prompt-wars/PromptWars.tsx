@@ -16,7 +16,6 @@ import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import { ResultsModal } from "ui/pulse/prompt-wars/results-modal/ResultsModal";
 import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
-import { Footer } from "ui/footer/Footer";
 
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
@@ -139,8 +138,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
         </Grid.Container>
       </MainPanel.Container>
 
-      <Footer />
-
+      {/* @TODO complete the FAQs. labels: 100 USDT */}
       {isFAQsModalVisible && <FaqsModal onClose={onClickCloseFAQsModal} />}
 
       {isResultsModalVisible && (
