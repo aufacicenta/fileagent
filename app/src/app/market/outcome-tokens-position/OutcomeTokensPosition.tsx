@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect } from "react";
 
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { Typography } from "ui/typography/Typography";
 import { Card } from "ui/card/Card";
 import currency from "providers/currency";

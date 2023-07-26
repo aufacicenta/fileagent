@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { AccountId } from "../market/market.types";
 import currency from "providers/currency";
 

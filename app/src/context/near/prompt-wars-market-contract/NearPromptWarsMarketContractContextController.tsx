@@ -11,7 +11,7 @@ import {
   PromptWarsMarketContractStatus,
   PromptWarsMarketContractValues,
 } from "providers/near/contracts/prompt-wars/prompt-wars.types";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { FungibleTokenContract } from "providers/near/contracts/fungible-token";
 import currency from "providers/currency";
 import { useRoutes } from "hooks/useRoutes/useRoutes";

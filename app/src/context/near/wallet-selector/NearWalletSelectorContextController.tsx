@@ -13,7 +13,7 @@ import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 import near from "providers/near";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { WalletSelectorChain } from "context/wallet-selector/WalletSelectorContext.types";
 
 import { NearWalletSelectorContextControllerProps } from "./NearWalletSelectorContext.types";

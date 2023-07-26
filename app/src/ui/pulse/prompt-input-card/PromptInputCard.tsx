@@ -7,8 +7,8 @@ import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
+import { useNearWalletSelectorContext } from "context/near/wallet-selector/useNearWalletSelectorContext";
 import currency from "providers/currency";
 import pulse from "providers/pulse";
 

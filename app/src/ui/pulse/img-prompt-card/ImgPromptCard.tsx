@@ -9,7 +9,7 @@ import near from "providers/near";
 import currency from "providers/currency";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import ipfs from "providers/ipfs";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { Button } from "ui/button/Button";
 
 import { ImgPromptCardProps } from "./ImgPromptCard.types";

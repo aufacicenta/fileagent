@@ -2,11 +2,11 @@ import clsx from "clsx";
 import { useEffect } from "react";
 
 import { Button } from "../button/Button";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
-import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import { useNearWalletSelectorContext } from "context/near/wallet-selector/useNearWalletSelectorContext";
 import near from "providers/near";
 
 import styles from "./WalletSelector.module.scss";
