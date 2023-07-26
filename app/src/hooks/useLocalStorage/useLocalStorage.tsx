@@ -15,7 +15,9 @@ function get<T>(key: string, type: string = "{}", chain: string = "", fallback?:
 }
 
 const set = (key: string, value: unknown = {}) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  const val = typeof value === "object" ? JSON.stringify(value) : value;
+
+  localStorage.setItem(key, val as string);
 };
 
 export const useLocalStorage = () => ({

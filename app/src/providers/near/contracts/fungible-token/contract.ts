@@ -2,7 +2,7 @@ import { Contract, WalletConnection } from "near-api-js";
 import * as nearAPI from "near-api-js";
 import { BN } from "bn.js";
 import { Wallet } from "@near-wallet-selector/core";
-import { FinalExecutionOutcome, FinalExecutionStatus } from "near-api-js/lib/providers";
+import { FinalExecutionOutcome } from "near-api-js/lib/providers";
 
 import near from "providers/near";
 import { AccountId } from "../market/market.types";
@@ -55,36 +55,22 @@ export class FungibleTokenContract {
     try {
       const gas = new BN("60000000000000");
 
-      const response = await wallet.signAndSendTransactions({
-        transactions: [
+      const response = await wallet.signAndSendTransaction({
+        receiverId: contractAddress,
+        actions: [
           {
-            receiverId: contractAddress,
-            actions: [
-              {
-                type: "FunctionCall",
-                params: {
-                  methodName: "ft_transfer_call",
-                  args,
-                  gas: gas.toString(),
-                  deposit: "1",
-                },
-              },
-            ],
+            type: "FunctionCall",
+            params: {
+              methodName: "ft_transfer_call",
+              args,
+              gas: gas.toString(),
+              deposit: "1",
+            },
           },
         ],
       });
 
-      const [result] = response as Array<FinalExecutionOutcome>;
-
-      console.log(result);
-
-      if ((result?.status as FinalExecutionStatus)?.SuccessValue) {
-        const value = atob((result.status as FinalExecutionStatus)?.SuccessValue!).replaceAll('"', "");
-
-        console.log({ value });
-
-        return value;
-      }
+      near.unwrapFinalExecutionOutcome(response as FinalExecutionOutcome);
     } catch (error) {
       console.log(error);
 

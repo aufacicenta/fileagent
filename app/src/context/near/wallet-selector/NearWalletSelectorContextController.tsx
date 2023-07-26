@@ -15,6 +15,9 @@ import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 import near from "providers/near";
 import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { WalletSelectorChain } from "context/wallet-selector/WalletSelectorContext.types";
+import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { setupGuestWallet } from "providers/near/wallet-selector/setupGuestWallet";
+import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 
 import { NearWalletSelectorContextControllerProps } from "./NearWalletSelectorContext.types";
 import { NearWalletSelectorContext } from "./NearWalletSelectorContext";
@@ -24,6 +27,9 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   const [modal, setModal] = useState<WalletSelectorModal>();
 
   const walletStateContext = useWalletStateContext();
+
+  const routes = useRoutes();
+  const ls = useLocalStorage();
 
   const onSignedIn = async (s: WalletSelector) => {
     try {
@@ -63,6 +69,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       walletStateContext.setExplorer(near.getConfig().explorerUrl);
 
       const accountBalance = await near.getAccountBalance(nearAPI, account.accountId);
+
       walletStateContext.setBalance(near.formatAccountBalance(accountBalance.available, 8));
     } catch (error) {
       console.log(error);
@@ -89,6 +96,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         const walletSelector = await setupWalletSelector({
           network,
           modules: [
+            setupGuestWallet(),
             setupNearWallet(),
             setupMyNearWallet(),
             setupNearFi(),
@@ -136,6 +144,23 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       }
     })();
   }, [selector]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch(routes.api.promptWars.createGuestAccount());
+        const result = await response.json();
+
+        ls.set(Object.keys(result)[0], result[Object.keys(result)[0]]);
+        ls.set(Object.keys(result)[1], result[Object.keys(result)[1]]);
+        ls.set(Object.keys(result)[2], result[Object.keys(result)[2]]);
+
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   const initModal = (contractId: string) => {
     setModal(
