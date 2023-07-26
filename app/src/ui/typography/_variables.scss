@@ -24,6 +24,7 @@ $font-size-text-bold: $font-size-text;
 $font-size-subtitle: rem(16);
 $font-size-subtitle-semi-bold: $font-size-subtitle;
 $font-size-button-label: $font-size-text;
+$font-size-sm-button-label: rem(12);
 $font-size-mini-button-label: rem(10);
 $font-size-description: rem(12);
 $font-size-mini-description: rem(11);
@@ -122,6 +123,14 @@ $typography-subtitle: (
 $typography-button-label: (
   font: (
     size: $font-size-button-label,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+  ),
+);
+
+$typography-sm-button-label: (
+  font: (
+    size: $font-size-sm-button-label,
     weight: $font-weight-regular,
     fontFamily: $font-family-text,
   ),

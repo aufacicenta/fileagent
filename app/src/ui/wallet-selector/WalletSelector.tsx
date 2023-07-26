@@ -54,7 +54,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
         onClick={handleOnDisplayWidgetClick}
         rightIcon={<Icon name={wallet.address ? "icon-power" : "icon-power-crossed"} />}
         className={styles["wallet-selector__button"]}
-        size="xs"
+        size="s"
       >
         {wallet.isConnected ? (
           <Typography.Text inline truncate flat>

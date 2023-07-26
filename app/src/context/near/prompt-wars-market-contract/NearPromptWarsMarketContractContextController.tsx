@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { setTimeout } from "timers";
+import { useRouter } from "next/router";
 
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
@@ -41,6 +42,7 @@ export const NearPromptWarsMarketContractContextController = ({
   });
 
   const routes = useRoutes();
+  const router = useRouter();
 
   const toast = useToastContext();
 
@@ -284,7 +286,7 @@ export const NearPromptWarsMarketContractContextController = ({
         throw new Error("ERR_USE_NEAR_PROMPT_WARS_MARKET_CONTRACT_CREATE_FAILED");
       }
 
-      window.location.reload();
+      router.push(routes.dashboard.promptWars.home());
     } catch (error) {
       console.log(error);
 

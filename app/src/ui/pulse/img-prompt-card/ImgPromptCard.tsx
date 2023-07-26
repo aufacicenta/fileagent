@@ -111,10 +111,10 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   <Typography.Headline3 flat>
                     <Countdown date={market.ends_at} />
                   </Typography.Headline3>
-                  {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
+                  {marketContractValues.isResolutionWindowExpired && (
                     <Button
                       variant="outlined"
-                      color="primary"
+                      color="success"
                       size="xs"
                       className={styles["img-prompt-card__countdown--button"]}
                       onClick={onClickCreateNewGame}
