@@ -24,7 +24,8 @@ $font-size-text-bold: $font-size-text;
 $font-size-subtitle: rem(16);
 $font-size-subtitle-semi-bold: $font-size-subtitle;
 $font-size-button-label: $font-size-text;
-$font-size-mini-button-label: rem(12);
+$font-size-sm-button-label: rem(12);
+$font-size-mini-button-label: rem(10);
 $font-size-description: rem(12);
 $font-size-mini-description: rem(11);
 
@@ -127,6 +128,14 @@ $typography-button-label: (
   ),
 );
 
+$typography-sm-button-label: (
+  font: (
+    size: $font-size-sm-button-label,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+  ),
+);
+
 $typography-mini-button-label: (
   font: (
     size: $font-size-mini-button-label,
@@ -162,10 +171,10 @@ $typography-link: (
   ),
 );
 
-$font-size-1: rem(11) !default; //0.6875
-$font-size-2: rem(13) !default; //0.8125
-$font-size-3: rem(14) !default; //0.875
-$font-size-4: rem(15) !default; //0.9375
-$font-size-5: rem(16) !default; //1
+$font-size-1: rem(11) !default;
+$font-size-2: rem(13) !default;
+$font-size-3: rem(14) !default;
+$font-size-4: rem(15) !default;
+$font-size-5: rem(16) !default;
 
 $line-height-baseline: 1.6 !default;

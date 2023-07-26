@@ -14,7 +14,6 @@ import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Prompt } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import { ResultsModal } from "ui/pulse/prompt-wars/results-modal/ResultsModal";
-import { useNearMarketFactoryContractContext } from "context/near/market-factory-contract/useNearMarketFactoryContractContext";
 
 import styles from "./PromptWars.module.scss";
 import { PromptWarsProps } from "./PromptWars.types";
@@ -23,12 +22,10 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
   const [isFAQsModalVisible, displayFAQsModal] = useState(false);
   const [isResultsModalVisible, displayResultsModal] = useState(false);
 
-  const { t } = useTranslation(["prompt-wars"]);
-
-  const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell } =
+  const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell, create, actions } =
     useNearPromptWarsMarketContractContext();
 
-  const { fetchLatestPriceMarket } = useNearMarketFactoryContractContext();
+  const { t } = useTranslation(["prompt-wars"]);
 
   const toast = useToastContext();
 
@@ -46,7 +43,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     };
   }, [marketId]);
 
-  if (!marketContractValues) {
+  if (!marketContractValues || actions.create.isLoading) {
     // @TODO render PriceMarket skeleton template
     return <GenericLoader />;
   }
@@ -90,10 +87,8 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     displayResultsModal(true);
   };
 
-  const onNextGameCountdownComplete = () => {
-    setTimeout(() => {
-      fetchLatestPriceMarket();
-    }, 20000);
+  const onClickCreateNewGame = async () => {
+    await create();
   };
 
   return (
@@ -122,7 +117,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
                   onClaimDepositUnresolved={onClaimDepositUnresolved}
                   onClickSeeResults={onClickSeeResults}
                   onClaimDepositResolved={onClaimDepositResolved}
-                  onNextGameCountdownComplete={onNextGameCountdownComplete}
+                  onClickCreateNewGame={onClickCreateNewGame}
                 />
               </Grid.Col>
               <Grid.Col lg={5} xs={12}>

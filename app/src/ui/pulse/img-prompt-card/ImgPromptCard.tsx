@@ -11,6 +11,7 @@ import currency from "providers/currency";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
 import ipfs from "providers/ipfs";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { Button } from "ui/button/Button";
 
 import { ImgPromptCardProps } from "./ImgPromptCard.types";
 import styles from "./ImgPromptCard.module.scss";
@@ -23,13 +24,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   onClaimDepositUnresolved,
   onClaimDepositResolved,
   onClickSeeResults,
-  onNextGameCountdownComplete,
+  onClickCreateNewGame,
 }) => {
   const walletState = useWalletStateContext();
 
   const { market, resolution, outcomeIds, collateralToken, status } = marketContractValues;
-
-  const nextImageLoadTime = resolution.window;
 
   const { t } = useTranslation(["prompt-wars"]);
 
@@ -117,11 +116,16 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   <Typography.Headline3 flat>
                     <Countdown date={market.ends_at} />
                   </Typography.Headline3>
-                  {![PromptWarsMarketContractStatus.OPEN, PromptWarsMarketContractStatus.LOADING].includes(status) && (
-                    <Typography.MiniDescription flat>
-                      {t("promptWars.nextImage.prefix")}{" "}
-                      <Countdown date={nextImageLoadTime} onComplete={onNextGameCountdownComplete} />
-                    </Typography.MiniDescription>
+                  {marketContractValues.isResolutionWindowExpired && (
+                    <Button
+                      variant="outlined"
+                      color="success"
+                      size="xs"
+                      className={styles["img-prompt-card__countdown--button"]}
+                      onClick={onClickCreateNewGame}
+                    >
+                      Create a new game
+                    </Button>
                   )}
                 </Card.Content>
               </Card>
