@@ -136,7 +136,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
   } catch (error) {
     logger.error(error);
 
-    response.status(500).json({ error: (error as Error).message });
+    response.status(500).json(error);
   }
 
   wss?.close();

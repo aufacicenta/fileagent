@@ -93,7 +93,7 @@ $HALF_LOADER_SIZE: 15px;
   }
 
   &--small {
-    @include font-properties($typography-button-label);
+    @include font-properties($typography-sm-button-label);
     padding: 4px 20px;
   }
 
