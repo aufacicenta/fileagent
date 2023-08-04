@@ -7,7 +7,7 @@
   "promptWars.status.miniDescription.claimBackDeposit": "Reclama tu depósito",
   "promptWars.status.description.timeLeft": "Tiempo restante",
   "promptWars.status.description.status": "Estatus",
-  "promptWars.status.description.totalPriceBag": "Total Price Bag", // esta traduccion es un reto ya que la traduccion literal no es usada en español
+  "promptWars.status.description.totalPriceBag": "Total Price Bag",
   "promptWars.status.description.contract": "Contrato",
   "promptWars.status.Revealing": "Revelar",
   "promptWars.status.Unresolved": "No resuelto",
@@ -19,6 +19,6 @@
   "promptWars.button.createNewGame": "Crear un nuevo juego",
   "promptWars.description.usdt": "USDT",
   "promptWars.negativePrompt.add": "Añade un prompt negativo",
-  "promptWars.description.coverStorageFee": "desde su wallet. Esto cubrirá los gastos de almacenamiento y la comisión de participación.", // con comision de participacion se refiere a gas fees o directamente funding para el proyecto?
+  "promptWars.description.coverStorageFee": "desde su wallet. Esto cubrirá los gastos de almacenamiento y la comisión de participación.",
   "promptWars.headline.writeNegativePromptHere": "Escribe tu prompt negativo aquí…"
 }
