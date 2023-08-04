@@ -52,8 +52,7 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     if (marketContractValues.isOver) {
       toast.trigger({
         variant: "error",
-        // @TODO i18n
-        title: t("promptWars.marketisover.title"), // es necesario colocar las llaves aqui?
+        title: t("promptWars.marketisover.title"),
         children: <Typography.Text>{t("promptwars.marketisover.description")}</Typography.Text>,
       });
 

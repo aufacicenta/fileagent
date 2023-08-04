@@ -2,6 +2,7 @@ import Countdown from "react-countdown";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
 
 import { Grid } from "ui/grid/Grid";
 import { MarketCard } from "ui/pulse/market-card/MarketCard";
@@ -41,6 +42,8 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
     fetchMarketContractValues,
     selectedOutcomeToken,
   } = useNearMarketContractContext();
+
+  const { t } = useTranslation();
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);
