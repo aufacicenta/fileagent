@@ -11,5 +11,19 @@
   "promptWars.status.description.contract": "Contract",
   "promptWars.status.Revealing": "Reveal",
   "promptWars.status.Unresolved": "Unresolved",
-  "promptWars.nextImage.prefix": "Next image will load in"
+  "promptWars.nextImage.prefix": "Next image will load in",
+  "promptWars.headline.writePromptHere": "Write your prompt down 👇",
+  "promptWars.placeholder.writePromptHere": "Write your prompt here...",
+  "promptWars.description.submittingChargesUsdt": "Submitting your prompt will charge USDT",
+  "promptWars.button.connectToPlay": "Connect to play",
+  "promptWars.button.createNewGame": "Create a new game",
+  "promptWars.description.usdt": "USDT",
+  "promptWars.negativePrompt.add": "Add a negative prompt",
+  "promptWars.description.coverStorageFee": "from your wallet. This will cover storage costs and the submission fee.",
+  "promptWars.headline.writeNegativePromptHere": "Write your negative prompt here...",
+  "promptWars.connectWallet": "Connect Wallet",
+  "promptWars.disconnect": "Disconnect",
+  "promptWars.presentation": "presentation",
+  "promptWars.balance": "Balance",
+  "promptWars.connect": "Connect"
 }

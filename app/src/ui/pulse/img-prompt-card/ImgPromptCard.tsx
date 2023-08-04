@@ -124,7 +124,7 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                       className={styles["img-prompt-card__countdown--button"]}
                       onClick={onClickCreateNewGame}
                     >
-                      Create a new game
+                      {t("promptWars.button.createNewGame")}
                     </Button>
                   )}
                 </Card.Content>
@@ -146,9 +146,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                       {outcomeIds.includes(walletState.address as string) ? "You're in!" : null}
                     </Typography.MiniDescription>
                     <Typography.Description>{t("promptWars.status.description.totalPriceBag")}</Typography.Description>
-                    <Typography.Description>{t("imgPromptWars.status.description.totalPriceBag")}</Typography.Description>
+                    <Typography.Description>
+                      {t("imgPromptWars.status.description.totalPriceBag")}
+                    </Typography.Description>
                     <Typography.Text flat>
-                      USDT{" "}
+                      {t("promptWars.description.usdt")}{" "}
                       {currency.convert.toDecimalsPrecisionString(collateralToken.balance, collateralToken.decimals)}
                     </Typography.Text>
                   </Card.Content>

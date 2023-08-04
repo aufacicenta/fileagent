@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { Field, Form as RFForm } from "react-final-form";
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
@@ -34,6 +35,8 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
     nearWalletSelectorContext.modal?.show();
   };
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   return (
     <RFForm
       onSubmit={onSubmit}
@@ -42,21 +45,21 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
           <Card className={clsx(styles["prompt-input-card"], className)} withSpotlightEffect>
             <Card.Content>
               <Typography.Headline3 className={styles["prompt-input-card__title"]}>
-                Write your prompt down 👇
+                {t("promptWars.headline.writePromptHere")}
               </Typography.Headline3>
               <Field
                 name="value"
                 component="textarea"
                 className={clsx(styles["prompt-input-card__input"], "input-field", "materialize-textarea")}
-                placeholder="Write your prompt here..."
+                placeholder={t("promptWars.placeholder.writePromptHere")}
                 disabled={isDisabled}
               />
               <Typography.Description
                 onClick={() => displayNegativePromptField(!isNegativePromptFieldVisible)}
                 className={styles["prompt-input-card__negative-prompt--trigger"]}
               >
-                <Icon name={isNegativePromptFieldVisible ? "icon-chevron-down" : "icon-chevron-right"} /> Add a negative
-                prompt
+                <Icon name={isNegativePromptFieldVisible ? "icon-chevron-down" : "icon-chevron-right"} />
+                {t("promptWars.negativePrompt.add")}
               </Typography.Description>
               <div
                 className={clsx(styles["prompt-input-card__negative-prompt"], {
@@ -72,28 +75,28 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
                     "input-field",
                     "materialize-textarea",
                   )}
-                  placeholder="Write your negative prompt here..."
+                  placeholder={t("promptWars.headline.writeNegativePromptHere")}
                   disabled={isDisabled}
                 />
               </div>
             </Card.Content>
             <Card.Actions>
               <Typography.Description flat>
-                Submitting your prompt will charge USDT{" "}
+                {t("promptWars.description.submittingChargesUsdt")}{" "}
                 {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)}{" "}
-                <code>{pulse.getConfig().COLLATERAL_TOKENS[0].accountId}</code> from your wallet. This will cover
-                storage costs and the submission fee.{" "}
+                <code>{pulse.getConfig().COLLATERAL_TOKENS[0].accountId}</code>
+                {t("promptWars.description.coverStorageFee")}{" "}
                 <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                  FAQs
+                  {t("promptWars.faqs")}
                 </Typography.Anchor>
               </Typography.Description>
               {!wallet.isConnected ? (
                 <Button color="secondary" variant="outlined" onClick={handleOnDisplayWidgetClick}>
-                  Connect to play
+                  {t("promptWars.button.connectToPlay")}
                 </Button>
               ) : (
                 <Button type="submit" disabled={isDisabled}>
-                  Submit
+                  {t("priceMarket.createPriceMarketModal.form.submit")}
                 </Button>
               )}
             </Card.Actions>

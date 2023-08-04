@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import { useTranslation } from "next-i18next";
 
 import { Button } from "../button/Button";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
@@ -32,6 +33,8 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
     }
   };
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   return (
     <div className={clsx(styles["wallet-selector__mobile"], className)}>
       <Button
@@ -59,7 +62,7 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
           onClick={handleOnConnectWalletClick}
           className={styles["wallet-selector__mobile--logout"]}
         >
-          Disconnect
+          {t("promptWars.disconnect")}
         </Typography.Description>
       ) : null}
     </div>

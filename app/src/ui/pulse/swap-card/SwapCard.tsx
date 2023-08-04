@@ -172,8 +172,8 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       toast.trigger({
         variant: "error",
         // @TODO i18n
-        title: "Market is over",
-        children: <Typography.Text>Cannot purchase market options on this event.</Typography.Text>,
+        title: "Market Is Over", //  it shows error when i translate it
+        children: <Typography.Text>{t("swapCard.cannotPurchase")}</Typography.Text>,
       });
 
       return;
@@ -261,10 +261,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return (
         <>
           <Button fullWidth onClick={onClickResolveMarket} className={styles["swap-card__button--resolve-market"]}>
-            Resolve Market
+            {t("swapCard.resolveMarket")}
           </Button>
           <Typography.MiniDescription align="center" flat>
-            Time left to resolve: <Countdown date={timeLeft} onComplete={onResolutionWindowCountdownComplete} />
+            {t("swapCard.timeLeft")} <Countdown date={timeLeft} onComplete={onResolutionWindowCountdownComplete} />
           </Typography.MiniDescription>
         </>
       );
@@ -275,7 +275,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
         <>
           <Typography.MiniDescription>Market was not resolved</Typography.MiniDescription>
           <Button fullWidth type="submit">
-            Withdraw your bet
+            {t("swapCard.withdraw")}
           </Button>
         </>
       );
@@ -289,7 +289,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
           </Button>
           {resolution.resolved_at && (
             <Typography.MiniDescription align="center" flat>
-              Resolved at: {date.fromTimestampWithOffset(resolution.resolved_at, market.utc_offset)}
+              {t("swapCard.resolvedAt")} {date.fromTimestampWithOffset(resolution.resolved_at, market.utc_offset)}
             </Typography.MiniDescription>
           )}
         </>
@@ -302,10 +302,10 @@ export const SwapCard: React.FC<SwapCardProps> = ({
       return (
         <>
           <Button fullWidth disabled>
-            Betting is over
+            {t("swapCard.title.bettingExpired")}
           </Button>
           <Typography.MiniDescription align="center" flat>
-            Time left before resolution:{" "}
+            {t("swapCard.timeLeftResolution")}{" "}
             <Countdown date={timeLeft} onComplete={onTimeLeftBeforeResolutionCountdownComplete} />
           </Typography.MiniDescription>
         </>
@@ -358,13 +358,13 @@ export const SwapCard: React.FC<SwapCardProps> = ({
                     className={styles["swap-card__balance--half"]}
                     onClick={() => onClickHalfBalance(form.mutators.setFromTokenInputValue())}
                   >
-                    Half
+                    {t("swapCard.half")}
                   </Typography.Description>
                   <Typography.Description
                     className={styles["swap-card__balance--max"]}
                     onClick={() => onClickMaxBalance(form.mutators.setFromTokenInputValue())}
                   >
-                    Max
+                    {t("swapCard.max")}
                   </Typography.Description>
                 </div>
               </div>
