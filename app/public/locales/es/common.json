@@ -5,11 +5,12 @@
   "pulseSidebar.item.bets": "Apuestas",
   "pulseSidebar.item.profile": "Perfil",
   "pulseSidebar.item.close": "Cerrar",
-  "pulseSidebar.item.code": "Github",
+  "pulseSidebar.item.code": "GitHub",
   "pulseSidebar.item.docs": "Documentos",
   "pulseSidebar.item.bridge": "Bridge",
   "pulseSidebar.item.swap": "Intercambio",
   "pulseSidebar.item.feedback": "Comentarios",
   "button.createMarket": "Crear Mercado",
-  "toast.cta.dismiss": "Dismiss"
+  "toast.cta.dismiss": "Descartar",
+  "pulseSidebar.item.previousMarkets": "Ver Todas las Rondas"
 }

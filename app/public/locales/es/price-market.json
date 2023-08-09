@@ -12,5 +12,12 @@
   "priceMarket.createPriceMarketModal.input.marketEndTime": "Hora",
   "priceMarket.createPriceMarketModal.input.marketEndTimezone": "Huso horario",
   "priceMarket.createPriceMarketModal.input.marketStartDate": "Fecha",
-  "priceMarket.createPriceMarketModal.input.marketStartTime": "Hora"
+  "priceMarket.createPriceMarketModal.input.marketStartTime": "Hora",
+  "priceMarket.description.createNextMarketPriceEarnFees": "Crea el siguiente precio de mercado y gana comisiones",
+  "priceMarket.button.createNextPriceMarket": "Crea el Siguiente Precio de Mercado",
+  "priceMarket.description.currentPrice": "Precio actual",
+  "priceMarket.description.timeLeftToBet": "Tiempo restante para votar",
+  "priceMarket.miniDescription.betsEnd": "* La apuesta termina en",
+  "priceMarket.description.bettingEnded": "Cerraron las apuestas",
+  "priceMarket.description.beReady": "prepárate para la siguiente ronda!"
 }

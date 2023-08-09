@@ -12,7 +12,7 @@
   "latestTrends.createMarketModal.input.collateralToken": "Token de garantía",
   "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.aaaa | Hora UTC",
   "latestTrends.createMarketModal.input.marketOptions": "Opciones del mercado",
-  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Opciones", // en ingles falta la (S)
+  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Opciones",
   "latestTrends.createMarketModal.form.submit": "Enviar",
   "latestTrends.createMarketModal.input.marketEndDate": "Fecha",
   "latestTrends.createMarketModal.input.marketEndTime": "Hora",

@@ -160,7 +160,6 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       <Card.Actions>
         <div className={styles["img-prompt-card__start-end-time--resolution"]}>
           <Typography.Description flat>{t("promptWars.status.description.contract")}</Typography.Description>
-          <Typography.Description flat>{t("imgPromptWars.status.description.contract")}</Typography.Description>
           <Typography.Anchor href={`${near.getConfig().explorerUrl}/accounts/${marketId}`} target="_blank">
             {marketId} <Icon name="icon-launch" />
           </Typography.Anchor>

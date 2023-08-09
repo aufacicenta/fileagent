@@ -19,6 +19,5 @@
   "priceMarket.description.timeLeftToBet": "Time left to bet",
   "priceMarket.miniDescription.betsEnd": "* Bets end",
   "priceMarket.description.bettingEnded": "Betting ended",
-  "priceMarket.description.beReady": "be ready for the next round!",
-  "priceMarket": ""
+  "priceMarket.description.beReady": "be ready for the next round!"
 }
