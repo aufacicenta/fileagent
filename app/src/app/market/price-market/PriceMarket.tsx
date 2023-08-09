@@ -1,8 +1,8 @@
 import Countdown from "react-countdown";
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { useTranslation } from "next-i18next";
 
 import { Grid } from "ui/grid/Grid";
 import { MarketCard } from "ui/pulse/market-card/MarketCard";
@@ -30,6 +30,7 @@ const CreatePriceMarketModal = dynamic<CreatePriceMarketModalProps>(
 );
 
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId }) => {
+  const { t } = useTranslation(["price-market"]);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
   const [isBettingEnabled, setIsBettingEnabled] = useState(true);
   const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
@@ -42,8 +43,6 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
     fetchMarketContractValues,
     selectedOutcomeToken,
   } = useNearMarketContractContext();
-
-  const { t } = useTranslation();
 
   const updateCurrentPrice = async () => {
     const price = await switchboard.fetchCurrentPrice(switchboard.jobs.testnet.near.btcUsd);

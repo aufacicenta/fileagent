@@ -6,7 +6,7 @@ export const useWalletSelectorContext = () => {
   const context = useContext(WalletSelectorContext);
 
   if (context === undefined) {
-    throw new Error("useWalletSelectorContext must be used within a WalletSelectorContext");
+    throw new Error("useWalletSelectorContext must be used within a WalletSelectorContext"); // debo traducir esto?
   }
 
   return context;

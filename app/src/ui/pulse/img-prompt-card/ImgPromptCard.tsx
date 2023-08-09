@@ -136,19 +136,16 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
                   <Card.Content className={styles["img-prompt-card__stats--content"]}>
                     <Typography.Description>{t("promptWars.status.description.status")}</Typography.Description>
                     {getStatusElement()}
-                    <Typography.Description>
-                      {t("imgPromptWars.status.description.participants")}
-                    </Typography.Description>
+                    <Typography.Description>{t("promptWars.status.description.participants")}</Typography.Description>
                     <Typography.Text flat={outcomeIds.includes(walletState.address as string)}>
                       {outcomeIds.length}
                     </Typography.Text>
                     <Typography.MiniDescription>
-                      {outcomeIds.includes(walletState.address as string) ? "You're in!" : null}
+                      {outcomeIds.includes(walletState.address as string)
+                        ? t("promptWars.status.description.youReIn")
+                        : null}
                     </Typography.MiniDescription>
                     <Typography.Description>{t("promptWars.status.description.totalPriceBag")}</Typography.Description>
-                    <Typography.Description>
-                      {t("imgPromptWars.status.description.totalPriceBag")}
-                    </Typography.Description>
                     <Typography.Text flat>
                       {t("promptWars.description.usdt")}{" "}
                       {currency.convert.toDecimalsPrecisionString(collateralToken.balance, collateralToken.decimals)}

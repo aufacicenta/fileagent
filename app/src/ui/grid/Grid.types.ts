@@ -14,7 +14,7 @@ export type GridProps = {
 };
 
 export type ColProps = RGSColProps & {
-  justifyContent?: "end" | "center";
+  justifyContent?: "end" | "center"; // debo traducir?
   children: ReactNode;
   className?: string;
   ref?: LegacyRef<Col>;

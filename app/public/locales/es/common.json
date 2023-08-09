@@ -7,7 +7,7 @@
   "pulseSidebar.item.close": "Cerrar",
   "pulseSidebar.item.code": "Github",
   "pulseSidebar.item.docs": "Documentos",
-  "pulseSidebar.item.bridge": "Bridge", // estoy dejandola como bridge luego de hacer una investigacion sobre el termino
+  "pulseSidebar.item.bridge": "Bridge",
   "pulseSidebar.item.swap": "Intercambio",
   "pulseSidebar.item.feedback": "Comentarios",
   "button.createMarket": "Crear Mercado",
