@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 
 import { Typography } from "ui/typography/Typography";
 import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
@@ -11,10 +12,12 @@ import styles from "./BalancePill.module.scss";
 export const BalancePill: React.FC<BalancePillProps> = ({ className }) => {
   const wallet = useWalletStateContext();
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   return (
     <div className={clsx(styles["balance-pill"], className)}>
       <div className={styles["balance-pill__wrapper"]}>
-        <Typography.Description>Native Balance</Typography.Description>
+        <Typography.Description>{t("promptWars.walletSelector.nativeBalance")}</Typography.Description>
         <Typography.Text truncate className={styles["balance-pill__wrapper--amount"]}>
           {wallet.balance}
         </Typography.Text>

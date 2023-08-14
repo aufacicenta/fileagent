@@ -30,10 +30,11 @@ const CreatePriceMarketModal = dynamic<CreatePriceMarketModalProps>(
 );
 
 export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId }) => {
-  const { t } = useTranslation(["price-market"]);
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
   const [isBettingEnabled, setIsBettingEnabled] = useState(true);
   const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
+
+  const { t } = useTranslation(["price-market"]);
 
   const {
     marketContractValues,

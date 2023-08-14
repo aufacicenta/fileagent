@@ -18,6 +18,7 @@
   "promptWars.placeholder.writePromptHere": "Write your prompt here…",
   "promptWars.description.submittingChargesUsdt": "Submitting your prompt will charge USDT",
   "promptWars.button.connectToPlay": "Connect to play",
+  "promptWars.button.submitPrompt": "Submit Prompt",
   "promptWars.button.createNewGame": "Create a new game",
   "promptWars.description.usdt": "USDT",
   "promptWars.negativePrompt.add": "Add a negative prompt",
@@ -58,5 +59,6 @@
   "promptWars.closeIcon.crossedLines": "Crossed lines",
   "promptWars.footer.madeByAufacicenta": "Made by Aufacicenta,",
   "promptWars.footer.poweredByPulseProtocol": "powered by Pulse Protocol",
-  "promptWars.OutcomeTokensPosition.miniDescription": "Connect wallet to load balances"
+  "promptWars.OutcomeTokensPosition.miniDescription": "Connect wallet to load balances",
+  "promptWars.walletSelector.nativeBalance": "Native Balance"
 }

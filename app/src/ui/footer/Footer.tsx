@@ -23,7 +23,7 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
                 target="_blank"
                 className={styles["footer__powered-by"]}
               >
-                <AufacicentaIcon /> {t("promptWars.Footer.madeByAufacicenta")}
+                <AufacicentaIcon /> {t("promptWars.footer.madeByAufacicenta")}
               </Typography.Anchor>
               <Typography.Anchor
                 flat

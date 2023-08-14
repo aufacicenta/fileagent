@@ -80,25 +80,27 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
                 />
               </div>
             </Card.Content>
-            <Card.Actions>
-              <Typography.Description flat>
-                {t("promptWars.description.submittingChargesUsdt")}{" "}
-                {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)}{" "}
-                <code>{pulse.getConfig().COLLATERAL_TOKENS[0].accountId}</code>
-                {t("promptWars.description.coverStorageFee")}{" "}
-                <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                  {t("promptWars.faqs")}
-                </Typography.Anchor>
-              </Typography.Description>
-              {!wallet.isConnected ? (
-                <Button color="secondary" variant="outlined" onClick={handleOnDisplayWidgetClick}>
-                  {t("promptWars.button.connectToPlay")}
-                </Button>
-              ) : (
-                <Button type="submit" disabled={isDisabled}>
-                  {t("priceMarket.createPriceMarketModal.form.submit")}
-                </Button>
-              )}
+            <Card.Actions className={styles["prompt-input-card__actions"]}>
+              <div>
+                {!wallet.isConnected ? (
+                  <Button color="secondary" variant="outlined" onClick={handleOnDisplayWidgetClick}>
+                    {t("promptWars.button.connectToPlay")}
+                  </Button>
+                ) : (
+                  <Button type="submit" disabled={isDisabled}>
+                    {t("promptWars.button.submitPrompt")}
+                  </Button>
+                )}
+                <Typography.Description flat>
+                  {t("promptWars.description.submittingChargesUsdt")}{" "}
+                  {currency.convert.toDecimalsPrecisionString(fees.price, collateralToken.decimals)}{" "}
+                  <code>{pulse.getConfig().COLLATERAL_TOKENS[0].accountId}</code>{" "}
+                  {t("promptWars.description.coverStorageFee")}{" "}
+                  <Typography.Anchor onClick={onClickFAQsButton} href="#">
+                    {t("promptWars.faqs")}
+                  </Typography.Anchor>
+                </Typography.Description>
+              </div>
             </Card.Actions>
           </Card>
         </form>

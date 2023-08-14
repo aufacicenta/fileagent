@@ -171,8 +171,7 @@ export const SwapCard: React.FC<SwapCardProps> = ({
     if (isOver) {
       toast.trigger({
         variant: "error",
-        // @TODO i18n
-        title: "Market Is Over", //  it shows error when i translate it
+        title: "Market Is Over",
         children: <Typography.Text>{t("swapCard.cannotPurchase")}</Typography.Text>,
       });
 

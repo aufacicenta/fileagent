@@ -50,7 +50,7 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
             {wallet.address}
           </Typography.Text>
         ) : (
-          "Connect Wallet"
+          t("promptWars.connectWallet")
         )}
       </Button>
 

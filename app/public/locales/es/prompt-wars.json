@@ -17,6 +17,7 @@
   "promptWars.description.submittingChargesUsdt": "Al enviar su prompt se le cobrará USDT",
   "promptWars.button.connectToPlay": "Conéctate para jugar",
   "promptWars.button.createNewGame": "Crear un nuevo juego",
+  "promptWars.button.submitPrompt": "Enviar Prompt",
   "promptWars.description.usdt": "USDT",
   "promptWars.negativePrompt.add": "Añade un prompt negativo",
   "promptWars.description.coverStorageFee": "desde su wallet. Esto cubrirá los gastos de almacenamiento y la comisión de participación.",
@@ -58,5 +59,6 @@
   "promptWars.closeIcon.crossedLines": "Lineas cruzadas",
   "promptWars.footer.madeByAufacicenta": "Hecho por Aufacicenta,",
   "promptWars.footer.poweredByPulseProtocol": "Impulsado por Pulse Protocol",
-  "promptWars.OutcomeTokensPosition.miniDescription": "Conecta tu wallet para cargar los balances"
+  "promptWars.OutcomeTokensPosition.miniDescription": "Conecta tu wallet para cargar los balances",
+  "promptWars.walletSelector.nativeBalance": "Balance Nativo"
 }

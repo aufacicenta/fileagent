@@ -33,4 +33,12 @@
       display: block;
     }
   }
+
+  &__actions {
+    text-align: right;
+
+    button {
+      margin-bottom: $space-default;
+    }
+  }
 }

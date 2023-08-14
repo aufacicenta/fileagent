@@ -64,7 +64,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
             {wallet.address}
           </Typography.Text>
         ) : (
-          "Connect Wallet"
+          t("promptWars.connectWallet")
         )}
       </Button>
       {isWidgetVisible && (
@@ -76,7 +76,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
           />
           <div className={styles["wallet-selector__widget"]}>
             <div className={styles["wallet-selector__balance"]}>
-              <Typography.Description>Native Balance</Typography.Description>
+              <Typography.Description>{t("promptWars.walletSelector.nativeBalance")}</Typography.Description>
               <Typography.Text>{wallet.balance}</Typography.Text>
               <Typography.Description>
                 {t("promptWars.balance")} <code>@{pulse.getDefaultCollateralToken().accountId}</code>
