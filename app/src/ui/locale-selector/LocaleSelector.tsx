@@ -8,7 +8,7 @@ import { Icon } from "ui/icon/Icon";
 import { LocaleSelectorProps } from "./LocaleSelector.types";
 import styles from "./LocaleSelector.module.scss";
 
-export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ children, className }) => {
+export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ className }) => {
   const { locale, locales, asPath } = useRouter();
   const [nextLocale, setNextLocale] = useState<string | undefined>(undefined);
 
@@ -24,13 +24,10 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ children, classN
   }, [getNextLocale]);
 
   return (
-    <>
-      <div className={clsx(styles["locale-selector"], className)}>
-        <Typography.Link href={asPath} locale={nextLocale}>
-          <Icon name="icon-network" /> {nextLocale}
-        </Typography.Link>
-      </div>
-      {children}
-    </>
+    <div className={clsx(styles["locale-selector"], className)}>
+      <Typography.Link href={asPath} locale={nextLocale}>
+        <Icon name="icon-network" /> {nextLocale}
+      </Typography.Link>
+    </div>
   );
 };

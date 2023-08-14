@@ -1,0 +1,23 @@
+{
+  "priceMarket.createPriceMarketModal.title": "Crear Precio de Mercado",
+  "priceMarket.createPriceMarketModal.marketDetails": "Detalles del mercado",
+  "priceMarket.createPriceMarketModal.input.descriptionOfTheMarket": "Descripción del mercado",
+  "priceMarket.createPriceMarketModal.input.descriptionOfTheMarket.placeholder": "Descripción",
+  "priceMarket.createPriceMarketModal.input.marketEndDatetime": "¿Cuándo cierra este mercado?",
+  "priceMarket.createPriceMarketModal.input.marketStartDatetime": "¿Cuándo abre este mercado?",
+  "priceMarket.createPriceMarketModal.input.marketOptions": "Opciones del mercado",
+  "priceMarket.createPriceMarketModal.input.marketOptions.placeholder": "Opciones",
+  "priceMarket.createPriceMarketModal.form.submit": "Enviar",
+  "priceMarket.createPriceMarketModal.input.marketEndDate": "Fecha",
+  "priceMarket.createPriceMarketModal.input.marketEndTime": "Hora",
+  "priceMarket.createPriceMarketModal.input.marketEndTimezone": "Huso horario",
+  "priceMarket.createPriceMarketModal.input.marketStartDate": "Fecha",
+  "priceMarket.createPriceMarketModal.input.marketStartTime": "Hora",
+  "priceMarket.description.createNextMarketPriceEarnFees": "Crea el siguiente precio de mercado y gana comisiones",
+  "priceMarket.button.createNextPriceMarket": "Crea el Siguiente Precio de Mercado",
+  "priceMarket.description.currentPrice": "Precio actual",
+  "priceMarket.description.timeLeftToBet": "Tiempo restante para votar",
+  "priceMarket.miniDescription.betsEnd": "* La apuesta termina en",
+  "priceMarket.description.bettingEnded": "Cerraron las apuestas",
+  "priceMarket.description.beReady": "prepárate para la siguiente ronda!"
+}

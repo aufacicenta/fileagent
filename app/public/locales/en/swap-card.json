@@ -1,5 +1,6 @@
 {
   "swapCard.title": "Market Is Open",
+  "swapCard.title.marketOver": "Market Is Over",
   "swapCard.title.claim": "Market Ended",
   "swapCard.title.bettingExpired": "Betting Is Over",
   "swapCard.title.underResolution": "Market Is Under Resolution",
@@ -11,5 +12,13 @@
   "swapCard.swap": "Swap",
   "swapCard.buy": "Place Your Bet",
   "swapCard.buying": "Placing your bet",
-  "swapCard.sell": "Claim Your Earnings"
+  "swapCard.sell": "Claim Your Earnings",
+  "swapCard.cannotPurchase": "Cannot purchase market options on this event.",
+  "swapCard.resolveMarket": "Resolve Market",
+  "swapCard.timeLeftResolve": "Time left to resolve:",
+  "swapCard.withdraw": "Withdraw your bet",
+  "swapCard.resolvedAt": "Resolved at:",
+  "swapCard.timeLeftResolution": "Time left before resolution:",
+  "swapCard.max": "Max",
+  "swapCard.half": "Half"
 }

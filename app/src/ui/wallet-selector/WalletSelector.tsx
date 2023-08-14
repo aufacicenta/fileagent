@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import { Button } from "../button/Button";
 import { Typography } from "ui/typography/Typography";
@@ -46,6 +47,8 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
     }
   };
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   return (
     <div className={clsx(styles["wallet-selector"], className)}>
       <Button
@@ -61,7 +64,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
             {wallet.address}
           </Typography.Text>
         ) : (
-          "Connect Wallet"
+          t("promptWars.connectWallet")
         )}
       </Button>
       {isWidgetVisible && (
@@ -73,10 +76,10 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
           />
           <div className={styles["wallet-selector__widget"]}>
             <div className={styles["wallet-selector__balance"]}>
-              <Typography.Description>Native Balance</Typography.Description>
+              <Typography.Description>{t("promptWars.walletSelector.nativeBalance")}</Typography.Description>
               <Typography.Text>{wallet.balance}</Typography.Text>
               <Typography.Description>
-                Balance <code>@{pulse.getDefaultCollateralToken().accountId}</code>
+                {t("promptWars.balance")} <code>@{pulse.getDefaultCollateralToken().accountId}</code>
               </Typography.Description>
               <Typography.Text>
                 <CollateralTokenBalance

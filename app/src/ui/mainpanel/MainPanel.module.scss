@@ -3,7 +3,7 @@
 .main-panel {
   @include withNavbar;
   @include atLargeTablet {
-    height: 100vh;
+    min-height: 100vh;
     overflow-y: auto;
   }
   position: relative;

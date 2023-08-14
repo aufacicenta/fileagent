@@ -1,5 +1,6 @@
 export type Styles = {
   "prompt-input-card": string;
+  "prompt-input-card__actions": string;
   "prompt-input-card__input": string;
   "prompt-input-card__input--hidden": string;
   "prompt-input-card__negative-prompt": string;

@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import { Card } from "ui/card/Card";
 import { Typography } from "ui/typography/Typography";
@@ -14,6 +15,8 @@ export const MarketFeesCard: React.FC<MarketFeesCardProps> = ({ className }) => 
 
   const onCloseLearnMoreModal = () => displayLearnModal(false);
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   return (
     <>
       <Modal
@@ -22,13 +25,13 @@ export const MarketFeesCard: React.FC<MarketFeesCardProps> = ({ className }) => 
         onClose={onCloseLearnMoreModal}
       >
         <Modal.Header onClose={onCloseLearnMoreModal}>
-          <Typography.Headline2 flat>Stake $PULSE to earn market fees</Typography.Headline2>
+          <Typography.Headline2 flat>{t("promptWars.marketFeesCard.stakeToEarn")} </Typography.Headline2>
         </Modal.Header>
         <Modal.Content>
-          <Typography.TextLead>2% of this market total value is distributed by:</Typography.TextLead>
-          <Typography.Text>80% for market creator</Typography.Text>
-          <Typography.Text>15% for $PULSE stakers</Typography.Text>
-          <Typography.Text flat>5% for market publisher</Typography.Text>
+          <Typography.TextLead>{t("promptWars.marketFeesCard.percentageDistributedBy")}:</Typography.TextLead>
+          <Typography.Text>{t("promptWars.marketFeesCard.percentageDistributedCreators")}</Typography.Text>
+          <Typography.Text>{t("promptWars.marketFeesCard.percentageDistributedStakers")}</Typography.Text>
+          <Typography.Text flat>{t("promptWars.marketFeesCard.percentageDistributedPublisher")}</Typography.Text>
         </Modal.Content>
         <Modal.Actions>
           <Typography.Anchor
@@ -37,17 +40,15 @@ export const MarketFeesCard: React.FC<MarketFeesCardProps> = ({ className }) => 
             target="_blank"
             as="button"
           >
-            Stake $PULSE now!
+            {t("promptWars.marketFeesCard.stakeNow")}
           </Typography.Anchor>
         </Modal.Actions>
       </Modal>
 
       <Card className={clsx(styles["market-fees-card"], className)}>
         <Card.Content>
-          <Typography.Headline2>Disclaimer</Typography.Headline2>
-          <Typography.Text>
-            This is a beta dApp. Pulse contracts have not been audited. Use at your own risk.
-          </Typography.Text>
+          <Typography.Headline2>{t("promptWars.marketFeesCard.disclaimer")}</Typography.Headline2>
+          <Typography.Text>{t("promptWars.marketFeesCard.disclaimerDescription")}</Typography.Text>
         </Card.Content>
       </Card>
     </>
