@@ -9,6 +9,8 @@ import near from "providers/near";
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
+    // @TODO ensure only one guest account per IP address or device identifier
+    // labels: 100 USDT, P1
     logger.info(`creating Prompt Wars guest account for: GENERATE FROM npm biri ID`);
 
     const accountId = near.getConfig().guestWalletId;
