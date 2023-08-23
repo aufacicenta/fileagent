@@ -202,6 +202,14 @@ export const NearPromptWarsMarketContractContextController = ({
         },
       );
 
+      setActions((prev) => ({
+        ...prev,
+        ftTransferCall: {
+          ...prev.ftTransferCall,
+          isLoading: false,
+        },
+      }));
+
       toast.trigger({
         variant: "confirmation",
         withTimeout: false,
