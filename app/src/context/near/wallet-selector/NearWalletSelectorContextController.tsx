@@ -59,6 +59,11 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
     } catch (error) {
       console.log(error);
     }
+
+    walletStateContext.setActions((prev) => ({
+      ...prev,
+      isGettingGuestWallet: false,
+    }));
   };
 
   const onSignedIn = async (s: WalletSelector) => {
@@ -178,9 +183,16 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   useEffect(() => {
     (async () => {
       try {
-        if (ls.get("near_app_wallet_auth_key")) {
+        if (ls.get("near_app_wallet_auth_key") !== null) {
+          console.log(`existing non-guest wallet connected`);
+
           return;
         }
+
+        walletStateContext.setActions((prev) => ({
+          ...prev,
+          isGettingGuestWallet: true,
+        }));
 
         const walletAuthKey = ls.get<{
           accountId: string;
@@ -207,6 +219,11 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         initGuestConnection(accountId);
       } catch (error) {
         console.log(error);
+
+        walletStateContext.setActions((prev) => ({
+          ...prev,
+          isGettingGuestWallet: false,
+        }));
       }
     })();
   }, []);

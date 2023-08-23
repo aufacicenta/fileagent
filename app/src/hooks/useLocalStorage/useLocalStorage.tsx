@@ -1,5 +1,11 @@
-function get<T>(key: string, type: string = "{}"): T {
-  const value = JSON.parse(localStorage.getItem(key) || type);
+function get<T>(key: string): T | null {
+  const item = localStorage.getItem(key);
+
+  if (item === null) {
+    return null;
+  }
+
+  const value = JSON.parse(item);
 
   return value;
 }

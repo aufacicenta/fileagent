@@ -21,6 +21,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       as: TagName = "button",
       "aria-label": ariaLabel,
       fullWidth = false,
+      animate,
       ...restProps
     },
     ref,
@@ -54,6 +55,8 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         [styles["button--full-width"]]: fullWidth,
         // link
         [styles["button--link"]]: TagName === "a",
+        // animations
+        [styles["button__animate--pulse"]]: animate === "pulse",
       },
       className,
     );

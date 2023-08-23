@@ -65,5 +65,6 @@
   "promptWars.footer.madeByAufacicenta": "Made by Aufacicenta,",
   "promptWars.footer.poweredByPulseProtocol": "powered by Pulse Protocol",
   "promptWars.OutcomeTokensPosition.miniDescription": "Connect wallet to load balances",
-  "promptWars.walletSelector.nativeBalance": "Native Balance"
+  "promptWars.walletSelector.nativeBalance": "Native Balance",
+  "promptWars.walletSelector.isSettingGuestWallet": "Initializing Guest Wallet"
 }

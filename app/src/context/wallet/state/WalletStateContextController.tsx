@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
 import { NetworkId } from "@near-wallet-selector/core";
 
-import { Address, Balance, Chain, Context, Explorer, IsConnected } from "./WalletStateContext.types";
+import { Address, Balance, Chain, Context, Explorer, IsConnected, StateActions } from "./WalletStateContext.types";
 import { WalletStateContext } from "./WalletStateContext";
 
 export const WalletStateContextController = ({ children }: { children: ReactNode }) => {
@@ -17,6 +17,9 @@ export const WalletStateContextController = ({ children }: { children: ReactNode
     guest: {
       address: "",
     },
+  });
+  const [actions, setActions] = useState<StateActions>({
+    isGettingGuestWallet: false,
   });
 
   const reset = () => {
@@ -36,6 +39,7 @@ export const WalletStateContextController = ({ children }: { children: ReactNode
     setBalance,
     setIsConnected,
     setContext,
+    setActions,
     network,
     address,
     explorer,
@@ -44,6 +48,7 @@ export const WalletStateContextController = ({ children }: { children: ReactNode
     isConnected,
     reset,
     context,
+    actions,
   };
 
   return <WalletStateContext.Provider value={props}>{children}</WalletStateContext.Provider>;

@@ -18,6 +18,10 @@ export type Context = {
   guest: { address: Address };
 };
 
+export type StateActions = {
+  isGettingGuestWallet: boolean;
+};
+
 export type WalletStateContextType = {
   reset: () => void;
   setAddress: Dispatch<SetStateAction<Address>>;
@@ -27,6 +31,7 @@ export type WalletStateContextType = {
   setChain: Dispatch<SetStateAction<Chain>>;
   setIsConnected: Dispatch<SetStateAction<IsConnected>>;
   setContext: Dispatch<SetStateAction<Context>>;
+  setActions: Dispatch<SetStateAction<StateActions>>;
   address: Address;
   network: Network;
   explorer: Explorer;
@@ -34,4 +39,5 @@ export type WalletStateContextType = {
   chain: Chain;
   isConnected: IsConnected;
   context: Context;
+  actions: StateActions;
 };

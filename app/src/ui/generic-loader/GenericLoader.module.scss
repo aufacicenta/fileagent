@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/ui/animations/pulse";
 
 .generic-loader {
   position: fixed;
@@ -17,19 +18,5 @@
 
   &__logo {
     animation: pulse 1s infinite;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-  }
-
-  70% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(0.95);
   }
 }

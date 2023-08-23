@@ -1,5 +1,6 @@
 export type Styles = {
   button: string;
+  "button__animate--pulse": string;
   button__content: string;
   "button__content--disabled": string;
   "button__content--loading": string;
@@ -44,6 +45,7 @@ export type Styles = {
   "button-primary_invert": string;
   "button-primary_large": string;
   "button-primary_medium": string;
+  pulse: string;
   spin: string;
   "z-depth-0": string;
   "z-depth-1": string;
