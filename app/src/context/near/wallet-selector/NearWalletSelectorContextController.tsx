@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NetworkId, setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
+import { BrowserWallet, NetworkId, setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
 import { setupModal, WalletSelectorModal } from "@near-wallet-selector/modal-ui";
 import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupNearFi } from "@near-wallet-selector/nearfi";
@@ -39,7 +39,13 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       const { near: nearAPI, wallet: nearWalletConnection } = connection;
 
+      const wallet = await selector?.wallet("guest-wallet");
+      await (wallet as BrowserWallet).signIn({ contractId: near.getConfig().factoryWalletId });
+
+      console.log({ wallet });
+
       walletStateContext.setContext({
+        wallet,
         connection: nearWalletConnection,
         provider: nearAPI,
         guest: {
@@ -158,7 +164,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       return undefined;
     })();
-  }, []);
+  }, [walletStateContext.actions.isGettingGuestWallet]);
 
   useEffect(() => {
     if (!selector) {

@@ -29,6 +29,7 @@ export const WalletStateContextController = ({ children }: { children: ReactNode
     setAddress(undefined);
     setBalance("0.00");
     setIsConnected(false);
+    setActions({ isGettingGuestWallet: false });
   };
 
   const props = {

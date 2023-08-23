@@ -17,6 +17,8 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
   const wallet = useWalletStateContext();
   const nearWalletSelectorContext = useNearWalletSelectorContext();
 
+  const { t } = useTranslation(["prompt-wars"]);
+
   useEffect(() => {
     if (!nearWalletSelectorContext.selector) {
       return;
@@ -32,8 +34,6 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
       nearWalletSelectorContext.signOut();
     }
   };
-
-  const { t } = useTranslation(["prompt-wars"]);
 
   return (
     <div className={clsx(styles["wallet-selector__mobile"], className)}>
