@@ -51,6 +51,50 @@ export class FungibleTokenContract {
     return new FungibleTokenContract(contractAddress, contract);
   }
 
+  static async register(contractId: AccountId, accountId: AccountId) {
+    console.log(`register ${accountId} on ${contractId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "storage_deposit";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN(near.parseNearAmount("0.1") as string);
+
+    const args = { account_id: accountId, registration_only: true };
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
+  static async staticFtTransferCall(contractId: AccountId, amount: string, accountId: AccountId) {
+    console.log(`static transfer ${amount} to ${accountId} from ${contractId}`);
+
+    const connection = await near.getPrivateKeyConnection();
+    const account = await connection.account(near.getConfig().serverWalletId);
+
+    const methodName = "ft_transfer";
+
+    const gas = new BN("300000000000000");
+    const attachedDeposit = new BN("1");
+
+    const args: Omit<FtTransferCallArgs, "msg"> = { receiver_id: accountId, amount };
+
+    await account.functionCall({
+      contractId,
+      methodName,
+      args,
+      gas,
+      attachedDeposit,
+    });
+  }
+
   static async ftTransferCall(wallet: Wallet, contractAddress: AccountId, args: FtTransferCallArgs) {
     try {
       const gas = new BN("60000000000000");

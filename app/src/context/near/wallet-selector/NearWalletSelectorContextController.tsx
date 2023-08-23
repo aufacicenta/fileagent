@@ -31,6 +31,36 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   const routes = useRoutes();
   const ls = useLocalStorage();
 
+  const initGuestConnection = async (accountId: string) => {
+    console.log(`initGuestConnection: ${accountId}`);
+
+    try {
+      const connection = await near.initWalletConnection();
+
+      const { near: nearAPI, wallet: nearWalletConnection } = connection;
+
+      walletStateContext.setContext({
+        connection: nearWalletConnection,
+        provider: nearAPI,
+        guest: {
+          address: accountId,
+        },
+      });
+
+      walletStateContext.setIsConnected(true);
+      walletStateContext.setAddress(accountId);
+      walletStateContext.setNetwork(near.getConfig().networkId as NetworkId);
+      walletStateContext.setChain(WalletSelectorChain.near);
+      walletStateContext.setExplorer(near.getConfig().explorerUrl);
+
+      const accountBalance = await near.getAccountBalance(nearAPI, accountId);
+
+      walletStateContext.setBalance(near.formatAccountBalance(accountBalance.available, 8));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSignedIn = async (s: WalletSelector) => {
     try {
       const connection = await near.initWalletConnection();
@@ -81,11 +111,11 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       const wallet = await selector?.wallet()!;
 
       await wallet.signOut();
-
-      walletStateContext.reset();
     } catch (error) {
       console.log(error);
     }
+
+    walletStateContext.reset();
   };
 
   useEffect(() => {
@@ -148,6 +178,21 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   useEffect(() => {
     (async () => {
       try {
+        if (ls.get("near_app_wallet_auth_key")) {
+          return;
+        }
+
+        const walletAuthKey = ls.get<{
+          accountId: string;
+          allKeys: Array<string>;
+        }>("promptwars_wallet_auth_key");
+
+        if (walletAuthKey !== null && /^guest-/i.test(walletAuthKey?.accountId)) {
+          initGuestConnection(walletAuthKey.accountId);
+
+          return;
+        }
+
         const response = await fetch(routes.api.promptWars.createGuestAccount());
         const result = await response.json();
 
@@ -156,6 +201,10 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         ls.set(Object.keys(result)[2], result[Object.keys(result)[2]]);
 
         console.log(result);
+
+        const { accountId } = result.promptwars_wallet_auth_key;
+
+        initGuestConnection(accountId);
       } catch (error) {
         console.log(error);
       }

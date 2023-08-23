@@ -1,15 +1,5 @@
-import _ from "lodash";
-
-function get<T>(key: string, type: string = "{}", chain: string = "", fallback?: string | number): T {
+function get<T>(key: string, type: string = "{}"): T {
   const value = JSON.parse(localStorage.getItem(key) || type);
-
-  if (Array.isArray(value)) {
-    return value as unknown as T;
-  }
-
-  if (typeof value === "object") {
-    return _.get(value, chain, fallback || "");
-  }
 
   return value;
 }

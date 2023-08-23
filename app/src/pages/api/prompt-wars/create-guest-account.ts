@@ -6,12 +6,12 @@ import { BN } from "bn.js";
 
 import logger from "providers/logger";
 import near from "providers/near";
+import { FungibleTokenContract } from "providers/near/contracts/fungible-token/contract";
+import pulse from "providers/pulse";
 
 export default async function Fn(_request: NextApiRequest, response: NextApiResponse) {
   try {
-    // @TODO ensure only one guest account per IP address or device identifier
-    // labels: 100 USDT, P1
-    logger.info(`creating Prompt Wars guest account for: GENERATE FROM npm biri ID`);
+    logger.info(`creating Prompt Wars guest account`);
 
     const accountId = near.getConfig().guestWalletId;
 
@@ -27,16 +27,11 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     logger.info(publicKey.toString(), id, accountId);
 
-    const newAccount = await account.createAccount(
-      id,
-      publicKey,
-      new BN(nearAPI.utils.format.parseNearAmount("0.3") as string),
-    );
+    await account.createAccount(id, publicKey, new BN(nearAPI.utils.format.parseNearAmount("0.3") as string));
 
-    // @TODO transfer 0.1 USDT collateral to register the new account
-    // labels: 100 USDT
+    await FungibleTokenContract.register(pulse.getDefaultCollateralToken().accountId, id);
 
-    logger.info(newAccount);
+    await FungibleTokenContract.staticFtTransferCall(pulse.getDefaultCollateralToken().accountId, "50000", id);
 
     response.status(200).json({
       promptwars_wallet_auth_key: { accountId: id, allKeys: [publicKey.toString()] },
