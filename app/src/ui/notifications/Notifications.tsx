@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 
 import { Icon } from "ui/icon/Icon";
 import { Dropdown } from "ui/dropdown/Dropdown";
@@ -9,6 +10,8 @@ import styles from "./Notifications.module.scss";
 import { NotificationsProps } from "./Notifications.types";
 
 export const Notifications: React.FC<NotificationsProps> = ({ className }) => {
+  const { t } = useTranslation(["prompt-wars"]);
+
   // Dummy variables
   const dummyNotifications = [];
   const dummyNotificationsAmount = 0;
@@ -44,7 +47,7 @@ export const Notifications: React.FC<NotificationsProps> = ({ className }) => {
           </div>
           <div className={styles["notifications__header--actions"]}>
             <Button color="primary" size="xs">
-              Clear All
+              {t("promptWars.notifications.clearAll.")}
             </Button>
           </div>
         </div>

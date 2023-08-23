@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import { useTranslation } from "next-i18next";
 
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
@@ -19,6 +20,8 @@ export const OutcomeTokensPosition: React.FC<OutcomeTokensPositionProps> = ({ cl
   useEffect(() => {
     calculateTotalOutcomeTokensPosition();
   }, [marketContractValues, walletState.isConnected]);
+
+  const { t } = useTranslation(["prompt-wars"]);
 
   return (
     <Card className={clsx(styles["outcome-tokens-position__card"], className)}>
@@ -44,7 +47,9 @@ export const OutcomeTokensPosition: React.FC<OutcomeTokensPositionProps> = ({ cl
             ))}
           </>
         ) : (
-          <Typography.MiniDescription align="center">Connect wallet to load balances</Typography.MiniDescription>
+          <Typography.MiniDescription align="center">
+            {t("promptWars.OutcomeTokensPosition.miniDescription")}
+          </Typography.MiniDescription>
         )}
       </Card.Content>
     </Card>

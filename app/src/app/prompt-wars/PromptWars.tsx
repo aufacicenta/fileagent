@@ -1,6 +1,6 @@
-/* eslint-disable unicorn/prefer-add-event-listener */
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { PromptWarsLogo } from "ui/icons/PromptWarsLogo";
@@ -24,6 +24,8 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
 
   const { marketContractValues, fetchMarketContractValues, ftTransferCall, sell, create, actions } =
     useNearPromptWarsMarketContractContext();
+
+  const { t } = useTranslation(["prompt-wars"]);
 
   const toast = useToastContext();
 
@@ -50,9 +52,8 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     if (marketContractValues.isOver) {
       toast.trigger({
         variant: "error",
-        // @TODO i18n
-        title: "Market is over",
-        children: <Typography.Text>Cannot purchase market options on this event.</Typography.Text>,
+        title: t("promptWars.marketisover.title"),
+        children: <Typography.Text>{t("promptwars.marketisover.description")}</Typography.Text>,
       });
 
       return;
@@ -97,9 +98,9 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
             <PromptWarsLogo className={styles["prompt-wars__logo"]} />
             <div className={styles["prompt-wars__title-row--description"]}>
               <Typography.Description flat>
-                Compete against the best prompt engineers writing the prompt that will render the image on display.{" "}
+                {t("promptWars.description")}{" "}
                 <Typography.Anchor onClick={onClickFAQsButton} href="#">
-                  FAQs
+                  {t("promptWars.faqs")}
                 </Typography.Anchor>
               </Typography.Description>
             </div>
@@ -130,7 +131,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
         </Grid.Container>
       </MainPanel.Container>
 
-      {/* @TODO complete the FAQs. labels: 100 USDT */}
       {isFAQsModalVisible && <FaqsModal onClose={onClickCloseFAQsModal} />}
 
       {isResultsModalVisible && (

@@ -1,5 +1,6 @@
 import Countdown from "react-countdown";
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
@@ -32,6 +33,8 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
   const [currentPrice, setCurrentPrice] = useState<string | undefined>(currency.convert.toFormattedString(0));
   const [isBettingEnabled, setIsBettingEnabled] = useState(true);
   const [isCreatePriceMarketModalVisible, setIsCreatePriceMarketModalVisible] = useState(false);
+
+  const { t } = useTranslation(["price-market"]);
 
   const {
     marketContractValues,
@@ -97,9 +100,11 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
     if (isResolved || (isOver && isResolutionWindowExpired)) {
       return (
         <div className={styles["price-market__current-result-element--create-market"]}>
-          <Typography.Description align="right">Create the next price market and earn fees</Typography.Description>
+          <Typography.Description align="right">
+            {t("priceMarket.description.createNextMarketPriceEarnFees")}
+          </Typography.Description>
           <Button size="xs" variant="outlined" color="success" onClick={onClickCreateMarketButton}>
-            Create Next Price Market
+            {t("priceMarket.button.createNextPriceMarket")}
           </Button>
         </div>
       );
@@ -109,11 +114,11 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
       <>
         <Grid.Row>
           <Grid.Col className={styles["price-market__current-result-element--current-price"]}>
-            <Typography.Description>Current price</Typography.Description>
+            <Typography.Description>{t("priceMarket.description.currentPrice")}</Typography.Description>
             <Typography.Headline3>{currentPrice}</Typography.Headline3>
           </Grid.Col>
           <Grid.Col className={styles["price-market__current-result-element--time-left"]}>
-            <Typography.Description>Time left to bet</Typography.Description>
+            <Typography.Description>{t("priceMarket.description.timeLeftToBet")}</Typography.Description>
             <Typography.Headline3
               className={clsx({
                 [styles["price-market__current-result-element--time-left-warn"]]: isBettingPeriodEnding(),
@@ -124,7 +129,7 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
           </Grid.Col>
         </Grid.Row>
         <Typography.MiniDescription align="center" flat>
-          * Bets end {diff}.
+          {t("priceMarket.miniDescription.betsEnd")} {diff}.
         </Typography.MiniDescription>
       </>
     );
@@ -134,7 +139,9 @@ export const PriceMarket: React.FC<PriceMarketProps> = ({ className, marketId })
     if (bettingPeriodExpired()) {
       return (
         <Typography.Description className={styles["price-market__start-end-time--text"]}>
-          <span>Betting ended</span> <span>be ready for the next round!</span>
+          <span>{t("priceMarket.description.bettingEnded")}</span>
+          {t("priceMarket.description.beReady")}
+          <span />
         </Typography.Description>
       );
     }
