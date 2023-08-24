@@ -40,9 +40,10 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       const { near: nearAPI, wallet: nearWalletConnection } = connection;
 
       const wallet = await selector?.wallet("guest-wallet");
-      await (wallet as BrowserWallet).signIn({ contractId: near.getConfig().factoryWalletId });
 
       console.log({ wallet });
+
+      await (wallet as BrowserWallet)?.signIn({ contractId: near.getConfig().factoryWalletId });
 
       walletStateContext.setContext({
         wallet,
@@ -164,7 +165,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       return undefined;
     })();
-  }, [walletStateContext.actions.isGettingGuestWallet]);
+  }, []);
 
   useEffect(() => {
     if (!selector) {
@@ -218,6 +219,8 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         ls.set(Object.keys(result)[0], result[Object.keys(result)[0]]);
         ls.set(Object.keys(result)[1], result[Object.keys(result)[1]]);
         ls.set(Object.keys(result)[2], result[Object.keys(result)[2]]);
+
+        console.log(result);
 
         const { accountId } = result.promptwars_wallet_auth_key;
 

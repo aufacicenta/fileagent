@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 
 import { Button } from "../button/Button";
@@ -8,7 +7,6 @@ import { BalancePill } from "ui/pulse/sidebar/balance-pill/BalancePill";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
 import { useNearWalletSelectorContext } from "context/near/wallet-selector/useNearWalletSelectorContext";
-import near from "providers/near";
 
 import styles from "./WalletSelector.module.scss";
 import { WalletSelectorProps } from "./WalletSelector.types";
@@ -18,14 +16,6 @@ export const WalletSelectorMobile: React.FC<WalletSelectorProps> = ({ className 
   const nearWalletSelectorContext = useNearWalletSelectorContext();
 
   const { t } = useTranslation(["prompt-wars"]);
-
-  useEffect(() => {
-    if (!nearWalletSelectorContext.selector) {
-      return;
-    }
-
-    nearWalletSelectorContext.initModal(near.getConfig().marketFactoryAccountId);
-  }, [nearWalletSelectorContext.selector]);
 
   const handleOnConnectWalletClick = () => {
     if (!wallet.isConnected) {

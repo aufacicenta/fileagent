@@ -61,22 +61,11 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
       return (
         <>
           <Typography.Text flat>
-            {t(`promptWars.status.${status}`)}
+            {t(`promptWars.status.${status}`)} 🎉
             <br />
-            <span className={styles["img-prompt-card__status--winner"]}>{resolution?.result}</span> 🎉
+            <span className={styles["img-prompt-card__status--winner"]}>{resolution?.result}</span>
           </Typography.Text>
-          <Grid.Row nogutter>
-            <Grid.Col lg={7}>
-              <Typography.MiniDescription onClick={onClaimDepositResolved}>
-                {t("promptWars.status.miniDescription.claimEarnings")}
-                <br />
-                {t("promptWars.status.miniDescription.ifYouWon")}
-              </Typography.MiniDescription>
-            </Grid.Col>
-            <Grid.Col lg={5}>
-              <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
-            </Grid.Col>
-          </Grid.Row>
+          <Typography.MiniDescription onClick={onClickSeeResults}>See results</Typography.MiniDescription>
         </>
       );
     }
