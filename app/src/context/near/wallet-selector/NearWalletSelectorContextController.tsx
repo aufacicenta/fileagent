@@ -41,8 +41,6 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
 
       const wallet = await selector?.wallet("guest-wallet");
 
-      console.log({ wallet });
-
       await (wallet as BrowserWallet)?.signIn({ contractId: near.getConfig().factoryWalletId });
 
       walletStateContext.setContext({

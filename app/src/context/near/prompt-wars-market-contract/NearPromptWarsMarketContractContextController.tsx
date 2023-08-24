@@ -265,15 +265,8 @@ export const NearPromptWarsMarketContractContextController = ({
       const outcomeToken = await marketContract.get_outcome_token(args);
 
       return outcomeToken;
-    } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        title: "Failed to get outcome token",
-        children: (
-          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-        ),
-      });
+    } catch (error) {
+      console.log(error);
     }
 
     return undefined;

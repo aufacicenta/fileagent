@@ -19,7 +19,7 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
 
   const contract = useNearPromptWarsMarketContractContext();
 
-  const { resolution, market, outcomeIds } = marketContractValues;
+  const { resolution, market, outcomeIds, isResolved } = marketContractValues;
 
   const getOutcomeToken = async (outcome_id: OutcomeId) => {
     const ot = await contract.getOutcomeToken({ outcome_id });
@@ -54,6 +54,12 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ onClose, className, 
   };
 
   useEffect(() => {
+    if (!isResolved) {
+      getOutcomeToken(outcomeIds[0]);
+
+      return;
+    }
+
     getWinnerOutcomeToken();
     getOutcomeToken(resolution.result!);
   }, []);
