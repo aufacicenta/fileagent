@@ -27,7 +27,7 @@ export default async function Fn(_request: NextApiRequest, response: NextApiResp
 
     logger.info(publicKey.toString(), id, accountId);
 
-    await account.createAccount(id, publicKey, new BN(nearAPI.utils.format.parseNearAmount("0.3") as string));
+    await account.createAccount(id, publicKey, new BN(nearAPI.utils.format.parseNearAmount("0.2") as string));
 
     await FungibleTokenContract.register(pulse.getDefaultCollateralToken().accountId, id);
 
