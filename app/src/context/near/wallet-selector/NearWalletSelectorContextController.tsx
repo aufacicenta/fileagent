@@ -219,7 +219,9 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         ls.set(Object.keys(result)[1], result[Object.keys(result)[1]]);
         ls.set(Object.keys(result)[2], result[Object.keys(result)[2]]);
 
-        window.location.reload();
+        const { accountId } = result.promptwars_wallet_auth_key;
+
+        initGuestConnection(accountId);
       } catch (error) {
         console.log(error);
 
