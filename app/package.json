@@ -9,7 +9,7 @@
     "dev": "next dev -p 3003",
     "dev:debug": "NODE_OPTIONS='--inspect=9300' next dev -p 3003 & npm run scss:class-types:watch",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3003",
     "scss:class-types": "tsm 'src/**/**/*.scss' --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass src --logLevel silent",
     "scss:class-types:watch": "npm run scss:class-types -- --watch",
     "plop": "plop"

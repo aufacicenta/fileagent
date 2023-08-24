@@ -1,6 +1,9 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import Script from "next/script";
 
+import loader from "ui/generic-loader/generic-loader";
+import { LoadingSpinner } from "ui/icons/LoadingSpinner";
+
 export default function Document() {
   return (
     <Html>
@@ -12,19 +15,30 @@ export default function Document() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="/prompt-wars/reddit-ad.png" />
 
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-T6PR3QEEGR" />
-        <Script id="google-analytics">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+        <style>{loader}</style>
 
-          gtag('config', 'G-T6PR3QEEGR');
-        `}
-        </Script>
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script async src="https://www.googletagmanager.com/gtag/js?id=G-T6PR3QEEGR" />
+            <Script id="google-analytics">
+              {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-T6PR3QEEGR');
+            `}
+            </Script>
+          </>
+        )}
       </Head>
       <body>
+        <div id="global-loader">
+          <LoadingSpinner className="spinner" />
+        </div>
+
         <Main />
+
         <NextScript />
       </body>
     </Html>
