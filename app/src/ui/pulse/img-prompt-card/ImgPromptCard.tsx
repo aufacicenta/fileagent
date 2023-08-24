@@ -22,7 +22,6 @@ export const ImgPromptCard: React.FC<ImgPromptCardProps> = ({
   className,
   datesElement,
   onClaimDepositUnresolved,
-  onClaimDepositResolved,
   onClickSeeResults,
   onClickCreateNewGame,
 }) => {
