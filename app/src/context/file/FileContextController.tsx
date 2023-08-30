@@ -4,6 +4,7 @@ import React, { useCallback } from "react";
 import { useObservable } from "hooks/useObservable/useObservable";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 import { useMessageContext } from "context/message/useMessageContext";
+import supabase from "providers/supabase";
 
 import { FileContext } from "./FileContext";
 import { FileContextControllerProps } from "./FileContext.types";
@@ -17,31 +18,33 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
 
   const upload = useCallback(async (file: DropzoneFileExtended) => {
     try {
-      let progress = 0;
+      await supabase.uploadFile("user", file);
 
-      const interval = setInterval(() => {
-        progress += 10;
+      // let progress = 0;
 
-        file.setProgress(file.upload!.uuid, progress);
+      // const interval = setInterval(() => {
+      //   progress += 10;
 
-        if (progress === 100) {
-          messageContext.updateMessage({
-            role: "assistant",
-            content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
-            type: "file",
-            file,
-            id: file.upload!.uuid,
-          });
+      //   file.setProgress(file.upload!.uuid, progress);
 
-          clearInterval(interval);
+      //   if (progress === 100) {
+      //     messageContext.updateMessage({
+      //       role: "assistant",
+      //       content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
+      //       type: "file",
+      //       file,
+      //       id: file.upload!.uuid,
+      //     });
 
-          queue();
+      //     clearInterval(interval);
 
-          return;
-        }
+      //     queue();
 
-        console.log({ progress, file: file.name });
-      }, 1000);
+      //     return;
+      //   }
+
+      //   console.log({ progress, file: file.name });
+      // }, 1000);
 
       // const result = await minty.addFileToIPFS<IPFSFile>(
       //   file,
