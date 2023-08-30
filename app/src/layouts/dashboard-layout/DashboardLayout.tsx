@@ -59,7 +59,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, mark
                     handleClose={() => setSidebarVisibility(false)}
                   />
 
-                  <MainPanel>
+                  <MainPanel withNavBar>
                     {children}
 
                     <Footer />
