@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import { useObservable } from "hooks/useObservable/useObservable";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
@@ -9,10 +9,9 @@ import { FileContext } from "./FileContext";
 import { FileContextControllerProps } from "./FileContext.types";
 
 export const FileContextController = ({ children }: FileContextControllerProps) => {
-  const [_files, setFiles] = useState<DropzoneFileExtended[]>([]);
   const observable = useObservable();
 
-  let queuedFiles: DropzoneFileExtended[] = [];
+  const queuedFiles: DropzoneFileExtended[] = [];
 
   const messageContext = useMessageContext();
 
@@ -36,7 +35,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
 
           clearInterval(interval);
 
-          queue(queuedFiles);
+          queue();
 
           return;
         }
@@ -69,13 +68,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
     }
   }, []);
 
-  const queue = useCallback(($files: DropzoneFileExtended[]) => {
-    console.log({ $files, queuedFiles });
-
-    if (queuedFiles.length === 0) {
-      queuedFiles = $files;
-    }
-
+  const queue = useCallback(() => {
     if (queuedFiles.length === 0) {
       return;
     }
@@ -86,9 +79,11 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
   }, []);
 
   const extendFileObjects = ($files: Array<DropzoneFileExtended>) => {
-    $files.forEach((file) => {
+    const extendFile = (file: DropzoneFileExtended) => {
       file.progressObservable = observable.create(file.upload!.uuid, 0);
       file.setProgress = observable.set;
+
+      queuedFiles.push(file);
 
       messageContext.appendMessage({
         role: "assistant",
@@ -97,9 +92,20 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
         file,
         id: file.upload!.uuid,
       });
-    });
+    };
 
-    setFiles((prev) => [...prev, ...$files]);
+    try {
+      if (typeof $files === "object" && !Array.isArray($files)) {
+        for (let i = 0; i < ($files as FileList).length; i += 1) {
+          const file = ($files as FileList).item(i);
+          extendFile(file as DropzoneFileExtended);
+        }
+      } else {
+        $files.forEach((file) => extendFile(file));
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     return $files;
   };

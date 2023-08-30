@@ -15,7 +15,8 @@ export const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
   const fileContext = useFileContext();
 
   const onAddedFiles = (files: DropzoneJS.DropzoneFile[]) => {
-    fileContext.queue(fileContext.extendFileObjects(files as Array<DropzoneFileExtended>));
+    fileContext.extendFileObjects(files as Array<DropzoneFileExtended>);
+    fileContext.queue();
   };
 
   useEffect(() => {
