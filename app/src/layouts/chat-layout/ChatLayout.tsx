@@ -7,6 +7,7 @@ import { MainPanel } from "ui/mainpanel/MainPanel";
 import { ToastContextController } from "context/toast/ToastContextController";
 import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
 import { FileContextController } from "context/file/FileContextController";
+import { MessageContextController } from "context/message/MessageContextController";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
@@ -28,17 +29,19 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
       </Head>
-      <FileContextController>
-        <ToastContextController>
-          <div id="modal-root" />
-          <div id="dropdown-portal" />
-          <div className={clsx(styles["chat-layout"])}>
-            <LocaleSelector />
+      <MessageContextController>
+        <FileContextController>
+          <ToastContextController>
+            <div id="modal-root" />
+            <div id="dropdown-portal" />
+            <div className={clsx(styles["chat-layout"])}>
+              <LocaleSelector />
 
-            <MainPanel>{children}</MainPanel>
-          </div>
-        </ToastContextController>
-      </FileContextController>
+              <MainPanel>{children}</MainPanel>
+            </div>
+          </ToastContextController>
+        </FileContextController>
+      </MessageContextController>
     </>
   );
 };

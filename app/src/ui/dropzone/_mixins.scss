@@ -1,0 +1,26 @@
+@mixin avatar {
+  &__avatar {
+    padding: $space-default;
+    color: var(--color-typography-text);
+
+    &-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: black;
+    }
+  }
+}
+@mixin content {
+  &__content {
+    padding: $space-default;
+
+    p {
+      white-space: pre-line;
+    }
+  }
+}

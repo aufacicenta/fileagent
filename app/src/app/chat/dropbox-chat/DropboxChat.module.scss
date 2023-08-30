@@ -42,7 +42,7 @@
     @include atLargeTablet {
       padding-bottom: 320px;
     }
-    padding-bottom: 242px;
+    padding-bottom: 260px;
     overflow-y: scroll;
 
     &--item {
@@ -60,42 +60,6 @@
 
       &:last-child {
         border-bottom: none;
-      }
-    }
-
-    &--item-avatar {
-      padding: $space-default;
-      color: var(--color-typography-text);
-
-      &-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background-color: black;
-      }
-    }
-
-    &--item-content {
-      padding: $space-default;
-    }
-  }
-
-  &__filedrop-message {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    text-align: left;
-
-    p {
-      color: var(--color-typography-description);
-
-      span {
-        font-size: $font-size-headline-3 !important;
       }
     }
   }

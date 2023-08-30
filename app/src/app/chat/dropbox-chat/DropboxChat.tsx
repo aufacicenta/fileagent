@@ -2,16 +2,20 @@ import clsx from "clsx";
 import { Field, useForm } from "react-final-form";
 
 import { Card } from "ui/card/Card";
-import { Icon } from "ui/icon/Icon";
-import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { Dropzone } from "ui/dropzone/Dropzone";
+import { useMessageContext } from "context/message/useMessageContext";
+import { ChatContextMessage } from "context/message/MessageContext.types";
+import { MessageTextType } from "ui/dropzone/message-text-type/MessageTextType";
+import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 
 import { DropboxChatProps } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
 
-export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit, messages }) => {
+export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit }) => {
   const form = useForm();
+
+  const { messages } = useMessageContext();
 
   const onKeyDown = async (event: KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -21,23 +25,26 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit, m
     }
   };
 
+  const getMessageTypeComponent = (message: ChatContextMessage) => {
+    switch (message.type) {
+      case "text":
+        return (
+          <MessageTextType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
+        );
+      case "file":
+        return (
+          <MessageFileType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <form onSubmit={onSubmit} className={clsx(styles["dropbox-chat"], className)}>
       <div className={styles["dropbox-chat__messages"]}>
-        {messages.map((message) => (
-          <div className={styles["dropbox-chat__messages--item"]} key={message.content?.slice(0, 5).trim()}>
-            <div>
-              <div className={styles["dropbox-chat__messages--item-avatar"]}>
-                <div className={styles["dropbox-chat__messages--item-avatar-box"]}>
-                  <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />
-                </div>
-              </div>
-              <div className={styles["dropbox-chat__messages--item-content"]}>
-                <Typography.Text>{message.content}</Typography.Text>
-              </div>
-            </div>
-          </div>
-        ))}
+        {messages.map((message) => getMessageTypeComponent(message))}
       </div>
 
       <div className={styles["dropbox-chat__textarea"]}>

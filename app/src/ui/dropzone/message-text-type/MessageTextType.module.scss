@@ -1,0 +1,8 @@
+@import "src/theme/base";
+@import "src/ui/dropzone/mixins";
+
+.message-text-type {
+  @include avatar;
+  @include content;
+  display: block;
+}

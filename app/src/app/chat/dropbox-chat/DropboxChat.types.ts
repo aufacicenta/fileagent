@@ -1,4 +1,3 @@
-import { ChatCompletionMessage } from "openai/resources/chat";
 import { ReactNode } from "react";
 
 export type ChatFormValues = {
@@ -19,7 +18,6 @@ export type DropboxChatProps = {
         | undefined
       >
     | undefined;
-  messages: Array<ChatCompletionMessage>;
   children?: ReactNode;
   className?: string;
 };

@@ -7,5 +7,7 @@ export type FileContextControllerProps = {
 };
 
 export type FileContextType = {
-  extendFileObjects: (files: Array<DropzoneFileExtended>) => void;
+  extendFileObjects: (files: Array<DropzoneFileExtended>) => Array<DropzoneFileExtended>;
+  upload: (file: DropzoneFileExtended) => void;
+  queue: (files: Array<DropzoneFileExtended>) => void;
 };

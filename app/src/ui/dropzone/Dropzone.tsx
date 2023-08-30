@@ -14,6 +14,10 @@ let dropzone: DropzoneJS | undefined;
 export const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
   const fileContext = useFileContext();
 
+  const onAddedFiles = (files: DropzoneJS.DropzoneFile[]) => {
+    fileContext.queue(fileContext.extendFileObjects(files as Array<DropzoneFileExtended>));
+  };
+
   useEffect(() => {
     if (dropzone) {
       return;
@@ -27,9 +31,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({ className }) => {
         uploadMultiple: true,
       });
 
-      dropzone.on("addedfiles", (files: DropzoneJS.DropzoneFile[]) => {
-        fileContext.extendFileObjects(files as Array<DropzoneFileExtended>);
-      });
+      dropzone.on("addedfiles", onAddedFiles);
     } catch (error) {
       console.log(error);
     }

@@ -1,10 +1,8 @@
 export type Styles = {
-  "dropbox-chat": string;
-  "dropbox-chat__messages": string;
-  "dropbox-chat__messages--item": string;
-  "dropbox-chat__textarea": string;
-  "dropbox-chat__textarea--card": string;
-  "dropbox-chat__textarea--card-field": string;
+  "message-file-type": string;
+  "message-file-type__avatar": string;
+  "message-file-type__avatar-box": string;
+  "message-file-type__content": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

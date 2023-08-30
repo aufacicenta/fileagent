@@ -1,25 +1,29 @@
 import { Form as RFForm } from "react-final-form";
-import { useState } from "react";
 import { FormApi } from "final-form";
-import { ChatCompletionMessage } from "openai/resources/chat";
+import { useEffect } from "react";
 
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
+import { useMessageContext } from "context/message/useMessageContext";
 
 import { DropboxChat } from "./DropboxChat";
 import { ChatFormValues } from "./DropboxChat.types";
 
 export const DropboxChatContainer = () => {
-  const [messages, setMessages] = useState<Array<ChatCompletionMessage>>([]);
-
   const routes = useRoutes();
 
   const toast = useToastContext();
 
+  const messageContext = useMessageContext();
+
+  useEffect(() => {
+    messageContext.displayInitialMessage();
+  }, []);
+
   const onSubmit = async (values: ChatFormValues, form: FormApi<ChatFormValues>) => {
     try {
-      setMessages((prev) => [...prev, { content: values.message, role: "user" }]);
+      messageContext.appendMessage({ content: values.message, role: "user", type: "text" });
 
       const result = await fetch(routes.api.chat.dropboxESign(), {
         method: "POST",
@@ -34,7 +38,7 @@ export const DropboxChatContainer = () => {
         throw new Error(json.error);
       }
 
-      setMessages((prev) => [...prev, json.choices[0].message]);
+      messageContext.appendMessage({ content: json.choices[0].message.content, role: "assistant", type: "text" });
 
       form.reset();
     } catch (error) {
@@ -48,10 +52,5 @@ export const DropboxChatContainer = () => {
     }
   };
 
-  return (
-    <RFForm
-      onSubmit={onSubmit}
-      render={({ handleSubmit }) => <DropboxChat onSubmit={handleSubmit} messages={messages} />}
-    />
-  );
+  return <RFForm onSubmit={onSubmit} render={({ handleSubmit }) => <DropboxChat onSubmit={handleSubmit} />} />;
 };
