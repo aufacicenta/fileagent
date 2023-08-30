@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { Field, Form as RFForm } from "react-final-form";
-import { useEffect } from "react";
+import { Field, useForm } from "react-final-form";
 
 import { Card } from "ui/card/Card";
 import { Icon } from "ui/icon/Icon";
@@ -10,76 +9,52 @@ import { Button } from "ui/button/Button";
 import { DropboxChatProps } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
 
-const data = [
-  {
-    id: 1,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-  {
-    id: 2,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-  {
-    id: 3,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-  {
-    id: 4,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-  {
-    id: 5,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-  {
-    id: 6,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam ac tincidunt facilisis, nunc",
-  },
-];
+export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit, messages }) => {
+  const form = useForm();
 
-const onSubmit = () => undefined;
+  const onKeyDown = async (event: KeyboardEvent) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
 
-export const DropboxChat: React.FC<DropboxChatProps> = ({ className }) => {
-  useEffect(() => undefined, []);
+      await form.submit();
+    }
+  };
 
   return (
-    <RFForm
-      onSubmit={onSubmit}
-      render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit} className={clsx(styles["dropbox-chat"], className)}>
-          <div className={styles["dropbox-chat__messages"]}>
-            {data.map((item) => (
-              <div className={styles["dropbox-chat__messages--item"]} key={item.id}>
-                <div>
-                  <div className={styles["dropbox-chat__messages--item-avatar"]}>
-                    <div className={styles["dropbox-chat__messages--item-avatar-box"]}>
-                      <Icon name="icon-user" />
-                    </div>
-                  </div>
-                  <div className={styles["dropbox-chat__messages--item-content"]}>
-                    <Typography.Text>{item.message}</Typography.Text>
-                  </div>
+    <form onSubmit={onSubmit} className={clsx(styles["dropbox-chat"], className)}>
+      <div className={styles["dropbox-chat__messages"]}>
+        {messages.map((message) => (
+          <div className={styles["dropbox-chat__messages--item"]} key={message.content?.slice(0, 5).trim()}>
+            <div>
+              <div className={styles["dropbox-chat__messages--item-avatar"]}>
+                <div className={styles["dropbox-chat__messages--item-avatar-box"]}>
+                  <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />
                 </div>
               </div>
-            ))}
+              <div className={styles["dropbox-chat__messages--item-content"]}>
+                <Typography.Text>{message.content}</Typography.Text>
+              </div>
+            </div>
           </div>
+        ))}
+      </div>
 
-          <div className={styles["dropbox-chat__textarea"]}>
-            <Card className={styles["dropbox-chat__textarea--card"]} withSpotlightEffect>
-              <Card.Content>
-                <Field
-                  name="prompt"
-                  component="textarea"
-                  className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
-                />
-              </Card.Content>
-              <Card.Actions>
-                <Button type="submit">Send</Button>
-              </Card.Actions>
-            </Card>
-          </div>
-        </form>
-      )}
-    />
+      <div className={styles["dropbox-chat__textarea"]}>
+        <Card className={styles["dropbox-chat__textarea--card"]} withSpotlightEffect>
+          <Card.Content>
+            <Field
+              name="message"
+              component="textarea"
+              className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
+              id="prompt"
+              onKeyDown={onKeyDown}
+            />
+          </Card.Content>
+          <Card.Actions>
+            <Button type="submit">Send</Button>
+          </Card.Actions>
+        </Card>
+      </div>
+    </form>
   );
 };

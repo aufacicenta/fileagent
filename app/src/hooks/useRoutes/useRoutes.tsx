@@ -9,6 +9,9 @@ type RouteMap = {
       reveal: () => string;
       resolve: () => string;
     };
+    chat: {
+      dropboxESign: () => string;
+    };
   };
   dashboard: {
     latestTrends: () => string;
@@ -31,6 +34,9 @@ export const routes: RouteMap = {
       create: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/create`,
       reveal: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/reveal`,
       resolve: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve`,
+    },
+    chat: {
+      dropboxESign: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/dropbox-e-sign`,
     },
   },
   dashboard: {
