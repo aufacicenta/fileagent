@@ -1,5 +1,6 @@
 export type Styles = {
   "dropbox-chat": string;
+  "dropbox-chat__filedrop-message": string;
   "dropbox-chat__messages": string;
   "dropbox-chat__messages--item": string;
   "dropbox-chat__messages--item-avatar": string;

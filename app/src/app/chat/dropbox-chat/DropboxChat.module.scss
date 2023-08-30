@@ -83,4 +83,20 @@
       padding: $space-default;
     }
   }
+
+  &__filedrop-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    text-align: left;
+
+    p {
+      color: var(--color-typography-description);
+
+      span {
+        font-size: $font-size-headline-3 !important;
+      }
+    }
+  }
 }

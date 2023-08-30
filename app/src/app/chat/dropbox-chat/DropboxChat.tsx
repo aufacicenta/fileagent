@@ -5,6 +5,7 @@ import { Card } from "ui/card/Card";
 import { Icon } from "ui/icon/Icon";
 import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
+import { Dropzone } from "ui/dropzone/Dropzone";
 
 import { DropboxChatProps } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
@@ -51,6 +52,8 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit, m
             />
           </Card.Content>
           <Card.Actions>
+            <Dropzone />
+
             <Button type="submit">Send</Button>
           </Card.Actions>
         </Card>
