@@ -20,54 +20,35 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
     try {
       await supabase.uploadFile("user", file);
 
-      // let progress = 0;
-
-      // const interval = setInterval(() => {
-      //   progress += 10;
-
-      //   file.setProgress(file.upload!.uuid, progress);
-
-      //   if (progress === 100) {
-      //     messageContext.updateMessage({
-      //       role: "assistant",
-      //       content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
-      //       type: "file",
-      //       file,
-      //       id: file.upload!.uuid,
-      //     });
-
-      //     clearInterval(interval);
-
-      //     queue();
-
-      //     return;
-      //   }
-
-      //   console.log({ progress, file: file.name });
-      // }, 1000);
-
-      // const result = await minty.addFileToIPFS<IPFSFile>(
-      //   file,
-      //   { path: file.name },
-      //   {
-      //     progress: (bytes: number) => {
-      //       file.setProgress(file.upload.uuid, (bytes / file.upload.total) * 100);
-      //     },
-      //   },
-      // );
-
-      // if (result.path) {
-      //   file.setProgress(file.upload.uuid, 100);
-      //   file.setIpfsResult(`${file.upload.uuid}-ipfs-result`, result);
-      // }
-
-      // result.name = file.name;
-
-      // const files = ls.get<IPFSFile[]>("files", "[]");
-      // files.push(result);
-      // ls.set("files", files);
+      messageContext.updateMessage({
+        role: "assistant",
+        content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
+        type: "file",
+        file,
+        id: file.upload!.uuid,
+      });
     } catch (error) {
       console.error(error);
+
+      if ((error as Error).message === "ERR_FILE_EXISTS") {
+        messageContext.updateMessage({
+          role: "assistant",
+          content: `File "${file.name}" already exists.`,
+          type: "file",
+          file,
+          id: file.upload!.uuid,
+        });
+      }
+
+      if ((error as Error).message === "ERR_NETWORK_ERROR") {
+        messageContext.updateMessage({
+          role: "assistant",
+          content: `File "${file.name}" failed to upload. Is your wi-fi on?`,
+          type: "file",
+          file,
+          id: file.upload!.uuid,
+        });
+      }
     }
   }, []);
 

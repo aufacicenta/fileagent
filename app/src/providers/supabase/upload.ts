@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
@@ -25,6 +25,14 @@ async function uploadFile(bucketName: string, file: DropzoneFileExtended) {
     console.log(result);
   } catch (error) {
     console.log(error);
+
+    if ((error as AxiosError<{ statusCode: string }>).response?.data?.statusCode === "409") {
+      throw new Error("ERR_FILE_EXISTS");
+    }
+
+    if ((error as AxiosError).code === "ERR_NETWORK") {
+      throw new Error("ERR_NETWORK_ERROR");
+    }
   }
 }
 

@@ -4,22 +4,20 @@ import { v4 as uuidv4 } from "uuid";
 import { MessageContext } from "./MessageContext";
 import { ChatContextMessage, MessageContextControllerProps } from "./MessageContext.types";
 
+const transformId = (id: string) => `x${id}`;
+
 export const MessageContextController = ({ children }: MessageContextControllerProps) => {
   const [messages, setMessages] = useState<Array<ChatContextMessage>>([]);
 
   const appendMessage = (message: ChatContextMessage) => {
-    setMessages((prev) => [...prev, { ...message, id: message.id || uuidv4() }]);
+    setMessages((prev) => [...prev, { ...message, id: message.id ? transformId(message.id) : transformId(uuidv4()) }]);
   };
 
   const updateMessage = (message: ChatContextMessage) => {
     setMessages((prev) => {
-      const $prev = prev;
+      const i = prev.findIndex((item) => item.id === transformId(message.id!));
 
-      const i = prev.findIndex((item) => item.id === message.id);
-
-      $prev[i] = message;
-
-      return [...$prev];
+      return Object.assign([], { ...prev, [i]: { ...message, id: transformId(message.id!) } });
     });
   };
 

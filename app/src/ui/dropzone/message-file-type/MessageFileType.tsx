@@ -4,11 +4,16 @@ import { Typography } from "ui/typography/Typography";
 import { CircularProgress } from "ui/circular-progress/CircularProgress";
 import { useSubscription } from "hooks/useSubscription/useSubscription";
 import { Icon } from "ui/icon/Icon";
+import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 
 import { MessageFileTypeProps } from "./MessageFileType.types";
 import styles from "./MessageFileType.module.scss";
 
 export const MessageFileType: React.FC<MessageFileTypeProps> = ({ message, className }) => {
+  const isSimulationEnabled = message.role === "assistant";
+
+  useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+
   const progress: number = useSubscription(0, message.file.progressObservable);
 
   return (
@@ -24,7 +29,11 @@ export const MessageFileType: React.FC<MessageFileTypeProps> = ({ message, class
           </div>
         </div>
         <div className={styles["message-file-type__content"]}>
-          <Typography.Text>{message.content}</Typography.Text>
+          {!isSimulationEnabled ? (
+            <Typography.Text>{message.content}</Typography.Text>
+          ) : (
+            <Typography.Text id={message.id} />
+          )}
         </div>
       </div>
     </div>

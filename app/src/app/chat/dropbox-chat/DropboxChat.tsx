@@ -6,8 +6,8 @@ import { Button } from "ui/button/Button";
 import { Dropzone } from "ui/dropzone/Dropzone";
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
-import { MessageTextType } from "ui/dropzone/message-text-type/MessageTextType";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
+import { MessageTextType } from "ui/dropzone/message-text-type/MessageTextType";
 
 import { DropboxChatProps } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
@@ -56,6 +56,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
               className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
               id="prompt"
               onKeyDown={onKeyDown}
+              placeholder="Type your message here..."
             />
           </Card.Content>
           <Card.Actions>
