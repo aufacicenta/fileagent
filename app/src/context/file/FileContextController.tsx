@@ -5,6 +5,9 @@ import { useObservable } from "hooks/useObservable/useObservable";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 import { useMessageContext } from "context/message/useMessageContext";
 import supabase from "providers/supabase";
+import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
+import { Button } from "ui/button/Button";
+import { Typography } from "ui/typography/Typography";
 
 import { FileContext } from "./FileContext";
 import { FileContextControllerProps } from "./FileContext.types";
@@ -23,6 +26,31 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
       messageContext.updateMessage({
         role: "assistant",
         content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
+        beforeContentComponent: (
+          <Typography.Description>
+            NOTE: This file is assigned to a temporary user.{" "}
+            <Typography.Link href="#">Create an account</Typography.Link> to keep it.
+          </Typography.Description>
+        ),
+        afterContentComponent: (
+          <MessageFileType.Options>
+            <Button color="secondary" variant="outlined" size="s">
+              Download
+            </Button>
+            <Button color="secondary" variant="outlined" size="s">
+              Extract content
+            </Button>
+            <Button color="secondary" variant="outlined" size="s">
+              Send
+            </Button>
+            <Button color="secondary" variant="outlined" size="s">
+              Get file details
+            </Button>
+            <Button color="danger" variant="outlined" size="s">
+              Delete
+            </Button>
+          </MessageFileType.Options>
+        ),
         type: "file",
         file,
         id: file.upload!.uuid,

@@ -5,6 +5,8 @@ import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
 export type ChatMessageBase = ChatCompletionMessage & {
   id?: string;
+  beforeContentComponent?: ReactNode;
+  afterContentComponent?: ReactNode;
 };
 
 export type TextChatCompletionMessage = {

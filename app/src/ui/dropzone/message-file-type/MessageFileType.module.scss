@@ -5,4 +5,21 @@
   @include avatar;
   @include content;
   display: block;
+
+  &__options {
+    @include atLargeTablet {
+      button {
+        &:nth-child(n + 2) {
+          margin-left: $space-default;
+        }
+      }
+    }
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+      margin-right: $space-default;
+      margin-bottom: $space-default;
+    }
+  }
 }

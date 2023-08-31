@@ -1,9 +1,15 @@
 /* eslint-disable no-param-reassign */
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export const useTypingSimulation = (content: string | null, enabled: boolean = true, selector: string) => {
+  const [simulationEnded, setSimulationEnded] = useState(false);
+
   const simulateTyping = (words: string[], index: number, element: Element): void => {
-    if (index === words.length) return;
+    if (index === words.length) {
+      setSimulationEnded(true);
+
+      return;
+    }
 
     const word = words[index];
 
@@ -22,7 +28,12 @@ export const useTypingSimulation = (content: string | null, enabled: boolean = t
     if (!element) return;
 
     element.textContent = "";
+    setSimulationEnded(false);
 
     simulateTyping(content?.split(" ") || [], 0, element!);
   }, [content]);
+
+  return {
+    simulationEnded,
+  };
 };
