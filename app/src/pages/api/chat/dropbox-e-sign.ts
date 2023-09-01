@@ -1,24 +1,29 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { ChatFormValues } from "app/chat/dropbox-chat/DropboxChat.types";
 import logger from "providers/logger";
 import { FunctionCallName } from "providers/chat/chat.types";
 import chat from "providers/chat";
 import openai from "providers/openai";
 
+import { DropboxESignRequest } from "./types";
+
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
     logger.info(`getting chat completion from model ${openai.model}`);
 
-    const data: ChatFormValues = JSON.parse(request.body);
+    const data: DropboxESignRequest = JSON.parse(request.body);
 
     const chatCompletion = await openai.client.chat.completions.create({
-      messages: [{ role: "user", content: data.message }],
+      messages: [
+        { role: "system", content: "You are an intelligent file reader. You can understand the content of any file." },
+        ...data.messages,
+        data.currentMessage,
+      ],
       model: openai.model,
       functions: [
         {
           name: FunctionCallName.extract_content_from_pdf_file,
-          description: data.message,
+          description: "Only if there is a .pdf extension, get the full text of the file and explain it.",
           parameters: {
             type: "object",
             properties: {

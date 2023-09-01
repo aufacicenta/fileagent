@@ -23,7 +23,7 @@ const extract_content_from_pdf_file = async (
       messages: [
         {
           role: "user",
-          content: `Please explain this text:
+          content: `${choice.message.content}
 
             ${raw_text}`,
         },

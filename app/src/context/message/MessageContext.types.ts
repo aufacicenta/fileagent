@@ -29,4 +29,6 @@ export type MessageContextType = {
   displayInitialMessage: () => void;
   appendMessage: (message: ChatContextMessage) => void;
   updateMessage: (message: ChatContextMessage) => void;
+  getPlainMessages: () => Array<Pick<ChatContextMessage, "role" | "content">>;
+  extractApiRequestValues: (message: ChatContextMessage) => Pick<ChatContextMessage, "role" | "content">;
 };

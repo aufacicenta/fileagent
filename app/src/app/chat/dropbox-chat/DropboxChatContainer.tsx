@@ -1,19 +1,17 @@
 import { Form as RFForm } from "react-final-form";
 import { FormApi } from "final-form";
 import { useEffect } from "react";
+import { DropboxESignRequest } from "api/chat/types";
 
 import { useRoutes } from "hooks/useRoutes/useRoutes";
-import { useToastContext } from "hooks/useToastContext/useToastContext";
-import { Typography } from "ui/typography/Typography";
 import { useMessageContext } from "context/message/useMessageContext";
+import { ChatContextMessage } from "context/message/MessageContext.types";
 
 import { DropboxChat } from "./DropboxChat";
 import { ChatFormValues } from "./DropboxChat.types";
 
 export const DropboxChatContainer = () => {
   const routes = useRoutes();
-
-  const toast = useToastContext();
 
   const messageContext = useMessageContext();
 
@@ -23,11 +21,18 @@ export const DropboxChatContainer = () => {
 
   const onSubmit = async (values: ChatFormValues, form: FormApi<ChatFormValues>) => {
     try {
-      messageContext.appendMessage({ content: values.message, role: "user", type: "text" });
+      const message: ChatContextMessage = { content: values.message, role: "user", type: "text" };
+
+      messageContext.appendMessage(message);
+
+      const messages = messageContext.getPlainMessages();
 
       const result = await fetch(routes.api.chat.dropboxESign(), {
         method: "POST",
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          messages,
+          currentMessage: messageContext.extractApiRequestValues(message),
+        } as DropboxESignRequest),
       });
 
       const json = await result.json();
@@ -44,10 +49,10 @@ export const DropboxChatContainer = () => {
     } catch (error) {
       console.log(error);
 
-      toast.trigger({
-        variant: "error",
-        title: "Message not sent",
-        children: <Typography.Text>Check your internet connection and try again.</Typography.Text>,
+      messageContext.appendMessage({
+        content: "Apologies, I wasn't able to complete your request.",
+        role: "assistant",
+        type: "text",
       });
     }
   };

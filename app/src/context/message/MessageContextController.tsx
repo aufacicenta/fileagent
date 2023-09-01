@@ -9,6 +9,13 @@ const transformId = (id: string) => `x${id}`;
 export const MessageContextController = ({ children }: MessageContextControllerProps) => {
   const [messages, setMessages] = useState<Array<ChatContextMessage>>([]);
 
+  const extractApiRequestValues = (message: ChatContextMessage) => ({
+    role: message.role,
+    content: message.content,
+  });
+
+  const getPlainMessages = () => messages.map((message) => extractApiRequestValues(message));
+
   const appendMessage = (message: ChatContextMessage) => {
     setMessages((prev) => [...prev, { ...message, id: message.id ? transformId(message.id) : transformId(uuidv4()) }]);
   };
@@ -36,6 +43,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     displayInitialMessage,
     appendMessage,
     updateMessage,
+    getPlainMessages,
+    extractApiRequestValues,
   };
 
   return <MessageContext.Provider value={props}>{children}</MessageContext.Provider>;
