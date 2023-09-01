@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Field, useForm } from "react-final-form";
+import { useEffect } from "react";
 
 import { Card } from "ui/card/Card";
 import { Button } from "ui/button/Button";
@@ -16,6 +17,14 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
   const form = useForm();
 
   const { messages } = useMessageContext();
+
+  useEffect(() => {
+    const element = document.querySelector(`#messages`);
+
+    if (!element) return;
+
+    element.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages]);
 
   const onKeyDown = async (event: KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -43,7 +52,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
 
   return (
     <form onSubmit={onSubmit} className={clsx(styles["dropbox-chat"], className)}>
-      <div className={styles["dropbox-chat__messages"]}>
+      <div className={styles["dropbox-chat__messages"]} id="messages">
         {messages.map((message) => getMessageTypeComponent(message))}
       </div>
 
