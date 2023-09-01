@@ -11,7 +11,7 @@ const extract_content_from_pdf_file = async (
   choice: OpenAI.Chat.ChatCompletion.Choice,
 ): Promise<OpenAI.Chat.ChatCompletion.Choice> => {
   try {
-    console.log("extract_content_from_pdf_file", args);
+    logger.info("extract_content_from_pdf_file", args);
 
     const { signedUrl } = await supabase.createSignedURL("user", args.file_name, 60);
 
@@ -23,7 +23,7 @@ const extract_content_from_pdf_file = async (
       messages: [
         {
           role: "user",
-          content: `${choice.message.content}
+          content: `Please explain this text:
 
             ${raw_text}`,
         },
