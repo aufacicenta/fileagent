@@ -10,6 +10,10 @@ const createSignedURL = async (bucket: string, path: string, expiresIn: number =
       throw error;
     }
 
+    if (!data) {
+      throw new Error("ERR_NO_DATA");
+    }
+
     console.log({ data });
 
     return data;

@@ -13,11 +13,6 @@ const extract_content_from_pdf_file = async (
   try {
     console.log("extract_content_from_pdf_file", args);
 
-    // @TODO download file from storage and upload to nanonets
-    // labels: 500 USDT, P1
-    // const file =
-    //   "https://blockchainassetregistry.infura-ipfs.io/ipfs/bafybeidxxuzx6ht6qz3chhxtmyo2dhya7ykes2mo7gqptpwphvnkzptx3y/DERECHOS-INSCRIPCION-35295_249_184_3_9_22-08-2023%2016.21.06.pdf.pdf";
-
     const { signedUrl } = await supabase.createSignedURL("user", args.file_name, 60);
 
     const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
