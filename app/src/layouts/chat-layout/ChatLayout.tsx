@@ -9,6 +9,7 @@ import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
 import { FileContextController } from "context/file/FileContextController";
 import { MessageContextController } from "context/message/MessageContextController";
 import { FormContextController } from "context/form/FormContextController";
+import { Navbar } from "ui/fileagent/navbar/Navbar";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
@@ -37,6 +38,8 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
               <div id="modal-root" />
               <div id="dropdown-portal" />
               <div className={clsx(styles["chat-layout"])}>
+                <Navbar />
+
                 <LocaleSelector />
 
                 <MainPanel>{children}</MainPanel>

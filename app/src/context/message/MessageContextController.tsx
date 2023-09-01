@@ -23,7 +23,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
   const displayInitialMessage = () => {
     appendMessage({
-      content: `Hello, I'm an intelligent File Agent. You can upload PDF files (more file types in the way) and I'll try to understand them and do things with them if you ask me to.
+      content: `Hello, I'm an intelligent File Agent. You can upload PDF files (more file types in the way) and I'll try to understand and do things with them if you ask me to.
 
         Try uploading your first file by dragging and dropping it in the box below or by clicking the box and selecting a file from your computer.`,
       role: "assistant",

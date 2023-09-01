@@ -1,5 +1,6 @@
 @import "src/theme/base";
 @import "src/theme/forms/variables";
+@import "src/ui/fileagent/navbar/variables";
 
 @mixin width {
   @include atLargeTablet {
@@ -40,8 +41,10 @@
 
   &__messages {
     @include atLargeTablet {
+      padding-top: $navbar-height;
       padding-bottom: 320px;
     }
+    padding-top: $navbar-height-mobile;
     padding-bottom: 260px;
     overflow-y: scroll;
 

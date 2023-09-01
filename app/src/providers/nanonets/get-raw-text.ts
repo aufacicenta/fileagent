@@ -6,8 +6,6 @@ const getRawText = (result: NanonetsResults) => {
   try {
     logger.info(`Getting nanonets raw text from ${result.results[0].page_data.length} pages`);
 
-    logger.info({ result });
-
     const raw_text = result.results[0].page_data.map((data) => data.raw_text).join("\n");
 
     return raw_text;
