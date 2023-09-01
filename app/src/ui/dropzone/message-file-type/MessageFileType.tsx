@@ -6,8 +6,9 @@ import { useSubscription } from "hooks/useSubscription/useSubscription";
 import { Icon } from "ui/icon/Icon";
 import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 import { Button } from "ui/button/Button";
+import { useFormContext } from "context/form/useFormContext";
 
-import { MessageFileTypeProps } from "./MessageFileType.types";
+import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileType.types";
 import styles from "./MessageFileType.module.scss";
 
 export const MessageFileType = ({ message, className }: MessageFileTypeProps) => {
@@ -45,24 +46,32 @@ export const MessageFileType = ({ message, className }: MessageFileTypeProps) =>
   );
 };
 
-const Options = () => (
-  <div className={styles["message-file-type__options"]}>
-    <Button color="secondary" variant="outlined" size="s">
-      Download
-    </Button>
-    <Button color="secondary" variant="outlined" size="s">
-      Extract content
-    </Button>
-    <Button color="secondary" variant="outlined" size="s">
-      Send
-    </Button>
-    <Button color="secondary" variant="outlined" size="s">
-      Get file details
-    </Button>
-    <Button color="danger" variant="outlined" size="s">
-      Delete
-    </Button>
-  </div>
-);
+const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
+  const formContext = useFormContext();
+
+  const onClickExtractContent = () => {
+    formContext.setFieldValue(fieldName, `Extract content from file ${file.name}`);
+  };
+
+  return (
+    <div className={styles["message-file-type__options"]}>
+      <Button color="secondary" variant="outlined" size="s">
+        Download
+      </Button>
+      <Button color="secondary" variant="outlined" size="s" onClick={onClickExtractContent}>
+        Extract content
+      </Button>
+      <Button color="secondary" variant="outlined" size="s">
+        Send
+      </Button>
+      <Button color="secondary" variant="outlined" size="s">
+        Get file details
+      </Button>
+      <Button color="danger" variant="outlined" size="s">
+        Delete
+      </Button>
+    </div>
+  );
+};
 
 MessageFileType.Options = Options;

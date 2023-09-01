@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Field, useForm } from "react-final-form";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 import { Card } from "ui/card/Card";
 import { Button } from "ui/button/Button";
@@ -9,14 +9,22 @@ import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 import { MessageTextType } from "ui/dropzone/message-text-type/MessageTextType";
+import { useFormContext } from "context/form/useFormContext";
 
-import { DropboxChatProps } from "./DropboxChat.types";
+import { DropboxChatProps, FieldNames } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
 
 export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit }) => {
   const form = useForm();
+  const formContext = useFormContext();
 
   const { messages } = useMessageContext();
+
+  useLayoutEffect(() => {
+    if (!form) return;
+
+    formContext.setForm(form);
+  }, [form]);
 
   useEffect(() => {
     const element = document.querySelector(`#messages`);
@@ -60,7 +68,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
         <Card className={styles["dropbox-chat__textarea--card"]} withSpotlightEffect>
           <Card.Content>
             <Field
-              name="message"
+              name={FieldNames.message}
               component="textarea"
               className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
               id="prompt"

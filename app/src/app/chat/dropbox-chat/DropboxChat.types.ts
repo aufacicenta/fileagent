@@ -1,5 +1,9 @@
 import { ReactNode } from "react";
 
+export enum FieldNames {
+  message = "message",
+}
+
 export type ChatFormValues = {
   message: string;
 };

@@ -52,5 +52,15 @@ export const DropboxChatContainer = () => {
     }
   };
 
-  return <RFForm onSubmit={onSubmit} render={({ handleSubmit }) => <DropboxChat onSubmit={handleSubmit} />} />;
+  return (
+    <RFForm
+      mutators={{
+        setValue: ([field, value], state, { changeValue }) => {
+          changeValue(state, field, () => value);
+        },
+      }}
+      onSubmit={onSubmit}
+      render={({ handleSubmit }) => <DropboxChat onSubmit={handleSubmit} />}
+    />
+  );
 };

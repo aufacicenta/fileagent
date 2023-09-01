@@ -7,6 +7,7 @@ import { useMessageContext } from "context/message/useMessageContext";
 import supabase from "providers/supabase";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 import { Typography } from "ui/typography/Typography";
+import { FieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 
 import { FileContext } from "./FileContext";
 import { FileContextControllerProps } from "./FileContext.types";
@@ -31,7 +32,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
             <Typography.Link href="#">Create an account</Typography.Link> to keep it.
           </Typography.Description>
         ),
-        afterContentComponent: <MessageFileType.Options />,
+        afterContentComponent: <MessageFileType.Options file={file} fieldName={FieldNames.message} />,
         type: "file",
         file,
         id: file.upload!.uuid,
@@ -43,7 +44,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
         messageContext.updateMessage({
           role: "assistant",
           content: `File "${file.name}" already exists.`,
-          afterContentComponent: <MessageFileType.Options />,
+          afterContentComponent: <MessageFileType.Options file={file} fieldName={FieldNames.message} />,
           type: "file",
           file,
           id: file.upload!.uuid,
