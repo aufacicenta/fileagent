@@ -18,7 +18,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       functions: [
         {
           name: FunctionCallName.extract_content_from_pdf_file,
-          description: "Get the full text of a PDF file and explain it",
+          description: data.message,
           parameters: {
             type: "object",
             properties: {

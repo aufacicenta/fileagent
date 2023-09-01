@@ -17,7 +17,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
   const { locale } = useRouter();
 
   useEffect(() => {
-    document.body.dataset.theme = "dark";
+    document.body.dataset.theme = "fileagent";
   }, []);
 
   return (
