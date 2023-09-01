@@ -3,8 +3,8 @@ import OpenAI from "openai";
 import { extract_content_from_pdf_file_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
 import openai from "providers/openai";
-
-import { NanonetsResults } from "./extract_content_from_pdf_file.types";
+import supabase from "providers/supabase";
+import nanonets from "providers/nanonets";
 
 const extract_content_from_pdf_file = async (
   args: extract_content_from_pdf_file_args,
@@ -13,30 +13,16 @@ const extract_content_from_pdf_file = async (
   try {
     console.log("extract_content_from_pdf_file", args);
 
-    const file =
-      "https://blockchainassetregistry.infura-ipfs.io/ipfs/bafybeidxxuzx6ht6qz3chhxtmyo2dhya7ykes2mo7gqptpwphvnkzptx3y/DERECHOS-INSCRIPCION-35295_249_184_3_9_22-08-2023%2016.21.06.pdf.pdf";
+    // @TODO download file from storage and upload to nanonets
+    // labels: 500 USDT, P1
+    // const file =
+    //   "https://blockchainassetregistry.infura-ipfs.io/ipfs/bafybeidxxuzx6ht6qz3chhxtmyo2dhya7ykes2mo7gqptpwphvnkzptx3y/DERECHOS-INSCRIPCION-35295_249_184_3_9_22-08-2023%2016.21.06.pdf.pdf";
 
-    logger.info(`Getting nanonets full text of file ${file}`);
+    const { signedUrl } = await supabase.createSignedURL("user", args.file_name, 60);
 
-    const body = new URLSearchParams();
+    const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
 
-    body.append("urls", file);
-    body.append("file", file);
-
-    const key = Buffer.from(`${process.env.NANONETS_API_KEY}:`).toString("base64");
-    const Authorization = `Basic ${key}`;
-
-    const result = await fetch("https://app.nanonets.com/api/v2/OCR/FullText", {
-      method: "POST",
-      headers: {
-        Authorization,
-      },
-      body,
-    });
-
-    const json: NanonetsResults = await result.json();
-
-    const raw_text = json.results[0].page_data.map((data) => data.raw_text).join("\n");
+    const raw_text = nanonets.getRawText(ocrResult);
 
     const chatCompletion = await openai.client.chat.completions.create({
       messages: [

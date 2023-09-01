@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Field, useForm } from "react-final-form";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 import { Card } from "ui/card/Card";
 import { Button } from "ui/button/Button";
@@ -20,7 +20,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
 
   const { messages } = useMessageContext();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!form) return;
 
     formContext.setForm(form);

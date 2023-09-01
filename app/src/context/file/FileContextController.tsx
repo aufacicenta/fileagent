@@ -28,7 +28,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
         content: `File "${file.name}" uploaded successfully. What would you like to do with it?`,
         beforeContentComponent: (
           <Typography.Description>
-            NOTE: This file is assigned to a temporary user.{" "}
+            NOTE: This file is assigned to a temporary account.{" "}
             <Typography.Link href="#">Create an account</Typography.Link> to keep it.
           </Typography.Description>
         ),

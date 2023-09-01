@@ -30,6 +30,7 @@
     "@near-wallet-selector/sender": "^8.2.0",
     "@near-wallet-selector/wallet-connect": "^8.2.0",
     "@popperjs/core": "^2.11.5",
+    "@supabase/supabase-js": "^2.33.1",
     "ag-grid-community": "^27.3.0",
     "ag-grid-react": "^27.3.0",
     "axios": "^1.5.0",
