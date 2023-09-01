@@ -11,8 +11,8 @@ import {
   PromptWarsMarketContractStatus,
   PromptWarsMarketContractValues,
 } from "providers/near/contracts/prompt-wars/prompt-wars.types";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { FungibleTokenContract } from "providers/near/contracts/fungible-token";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
+import { FungibleTokenContract } from "providers/near/contracts/fungible-token/contract";
 import currency from "providers/currency";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 
@@ -202,6 +202,14 @@ export const NearPromptWarsMarketContractContextController = ({
         },
       );
 
+      setActions((prev) => ({
+        ...prev,
+        ftTransferCall: {
+          ...prev.ftTransferCall,
+          isLoading: false,
+        },
+      }));
+
       toast.trigger({
         variant: "confirmation",
         withTimeout: false,
@@ -257,15 +265,8 @@ export const NearPromptWarsMarketContractContextController = ({
       const outcomeToken = await marketContract.get_outcome_token(args);
 
       return outcomeToken;
-    } catch {
-      toast.trigger({
-        variant: "error",
-        withTimeout: true,
-        title: "Failed to get outcome token",
-        children: (
-          <Typography.Text>Check your internet connection, your NEAR wallet connection and try again.</Typography.Text>
-        ),
-      });
+    } catch (error) {
+      console.log(error);
     }
 
     return undefined;

@@ -9,6 +9,9 @@ import { useRoutes } from "hooks/useRoutes/useRoutes";
 import styles from "./PulseSidebar.module.scss";
 import { PulseSidebarProps } from "./PulseSidebar.types";
 
+// @TODO Create game tiers and add them to the sidebar
+// labels: 500 USDT, P1
+
 export const PulseSidebar: React.FC<PulseSidebarProps> = ({ className, isOpen, handleOpen, handleClose }) => {
   const { t } = useTranslation(["common"]);
 

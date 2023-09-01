@@ -4,7 +4,7 @@ import Countdown from "react-countdown";
 
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
 import { Typography } from "ui/typography/Typography";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import currency from "providers/currency";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 

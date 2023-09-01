@@ -5,9 +5,9 @@ import { useTranslation } from "next-i18next";
 import { Button } from "../button/Button";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
-import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import { useNearWalletSelectorContext } from "context/near/wallet-selector/useNearWalletSelectorContext";
 import near from "providers/near";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import pulse from "providers/pulse";
 import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
 import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars-market-contract/useNearPromptWarsMarketContractContext";
@@ -52,11 +52,12 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
   return (
     <div className={clsx(styles["wallet-selector"], className)}>
       <Button
-        color="primary"
+        color={wallet.actions.isGettingGuestWallet ? "success" : "primary"}
         variant="outlined"
         onClick={handleOnDisplayWidgetClick}
         rightIcon={<Icon name={wallet.address ? "icon-power" : "icon-power-crossed"} />}
         className={styles["wallet-selector__button"]}
+        animate={wallet.actions.isGettingGuestWallet ? "pulse" : undefined}
         size="s"
       >
         {wallet.isConnected ? (
@@ -64,7 +65,11 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ className }) => 
             {wallet.address}
           </Typography.Text>
         ) : (
-          t("promptWars.connectWallet")
+          <>
+            {wallet.actions.isGettingGuestWallet
+              ? t("promptWars.walletSelector.isSettingGuestWallet")
+              : t("promptWars.connectWallet")}
+          </>
         )}
       </Button>
       {isWidgetVisible && (

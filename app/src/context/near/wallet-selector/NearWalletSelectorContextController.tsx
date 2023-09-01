@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NetworkId, setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
+import { BrowserWallet, NetworkId, setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
 import { setupModal, WalletSelectorModal } from "@near-wallet-selector/modal-ui";
 import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupNearFi } from "@near-wallet-selector/nearfi";
@@ -13,8 +13,11 @@ import { setupCoin98Wallet } from "@near-wallet-selector/coin98-wallet";
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 import near from "providers/near";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { WalletSelectorChain } from "context/wallet-selector/WalletSelectorContext.types";
+import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { setupGuestWallet } from "providers/near/wallet-selector/setupGuestWallet";
+import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 
 import { NearWalletSelectorContextControllerProps } from "./NearWalletSelectorContext.types";
 import { NearWalletSelectorContext } from "./NearWalletSelectorContext";
@@ -24,6 +27,49 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
   const [modal, setModal] = useState<WalletSelectorModal>();
 
   const walletStateContext = useWalletStateContext();
+
+  const routes = useRoutes();
+  const ls = useLocalStorage();
+
+  const initGuestConnection = async (accountId: string) => {
+    console.log(`initGuestConnection: ${accountId}`);
+
+    try {
+      const connection = await near.initWalletConnection();
+
+      const { near: nearAPI, wallet: nearWalletConnection } = connection;
+
+      const wallet = await selector?.wallet("guest-wallet");
+
+      await (wallet as BrowserWallet)?.signIn({ contractId: near.getConfig().factoryWalletId });
+
+      walletStateContext.setContext({
+        wallet,
+        connection: nearWalletConnection,
+        provider: nearAPI,
+        guest: {
+          address: accountId,
+        },
+      });
+
+      walletStateContext.setIsConnected(true);
+      walletStateContext.setAddress(accountId);
+      walletStateContext.setNetwork(near.getConfig().networkId as NetworkId);
+      walletStateContext.setChain(WalletSelectorChain.near);
+      walletStateContext.setExplorer(near.getConfig().explorerUrl);
+
+      const accountBalance = await near.getAccountBalance(nearAPI, accountId);
+
+      walletStateContext.setBalance(near.formatAccountBalance(accountBalance.available, 8));
+    } catch (error) {
+      console.log(error);
+    }
+
+    walletStateContext.setActions((prev) => ({
+      ...prev,
+      isGettingGuestWallet: false,
+    }));
+  };
 
   const onSignedIn = async (s: WalletSelector) => {
     try {
@@ -63,6 +109,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       walletStateContext.setExplorer(near.getConfig().explorerUrl);
 
       const accountBalance = await near.getAccountBalance(nearAPI, account.accountId);
+
       walletStateContext.setBalance(near.formatAccountBalance(accountBalance.available, 8));
     } catch (error) {
       console.log(error);
@@ -74,11 +121,11 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       const wallet = await selector?.wallet()!;
 
       await wallet.signOut();
-
-      walletStateContext.reset();
     } catch (error) {
       console.log(error);
     }
+
+    walletStateContext.reset();
   };
 
   useEffect(() => {
@@ -89,6 +136,7 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
         const walletSelector = await setupWalletSelector({
           network,
           modules: [
+            setupGuestWallet(),
             setupNearWallet(),
             setupMyNearWallet(),
             setupNearFi(),
@@ -136,6 +184,55 @@ export const NearWalletSelectorContextController = ({ children }: NearWalletSele
       }
     })();
   }, [selector]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (ls.get("near_app_wallet_auth_key") !== null) {
+          console.log(`existing non-guest wallet connected`);
+
+          return;
+        }
+
+        walletStateContext.setActions((prev) => ({
+          ...prev,
+          isGettingGuestWallet: true,
+        }));
+
+        const walletAuthKey = ls.get<{
+          accountId: string;
+          allKeys: Array<string>;
+        }>("promptwars_wallet_auth_key");
+
+        if (walletAuthKey !== null && /^guest-/i.test(walletAuthKey?.accountId)) {
+          initGuestConnection(walletAuthKey.accountId);
+
+          return;
+        }
+
+        const response = await fetch(routes.api.promptWars.createGuestAccount());
+        const result = await response.json();
+
+        ls.set("near-wallet-selector:selectedWalletId", JSON.stringify("guest-wallet"));
+        ls.set(Object.keys(result)[0], result[Object.keys(result)[0]]);
+        ls.set(Object.keys(result)[1], result[Object.keys(result)[1]]);
+        ls.set(Object.keys(result)[2], result[Object.keys(result)[2]]);
+
+        console.log(result);
+
+        const { accountId } = result.promptwars_wallet_auth_key;
+
+        initGuestConnection(accountId);
+      } catch (error) {
+        console.log(error);
+
+        walletStateContext.setActions((prev) => ({
+          ...prev,
+          isGettingGuestWallet: false,
+        }));
+      }
+    })();
+  }, []);
 
   const initModal = (contractId: string) => {
     setModal(

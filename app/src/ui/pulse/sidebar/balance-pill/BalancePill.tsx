@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useTranslation } from "next-i18next";
 
 import { Typography } from "ui/typography/Typography";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import pulse from "providers/pulse";
 import { CollateralTokenBalance } from "ui/pulse/market-card/collateral-token-balance/CollateralTokenBalance";
 

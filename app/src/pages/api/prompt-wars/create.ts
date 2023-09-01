@@ -1,16 +1,3 @@
-// NEAR keys .near-credentials/testnet/pw-server.pulsemarkets.testnet.json'
-
-// Read the IPFS images uploaded by generate-random-image.ts and create a new Prompt Wars Market contract
-// Use the server NEAR wallet credentials to sign the create_market transaction in market-factory
-
-// Start a cronjob to call the reveal method of the market contract when market.ends_at is reached
-// Start a cronjob to call the resolve method of the market contract when resolution.reveal_window ends
-
-// Start a websockets server to let clients know the status of the market?
-
-// This server NEAR wallet is the only one that can call "reveal" when ready
-// This server NEAR wallet is the only one that can call "resolve" when ready
-
 import { v4 as uuidv4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
 

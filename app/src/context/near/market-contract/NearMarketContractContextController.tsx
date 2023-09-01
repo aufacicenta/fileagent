@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import {
   BalanceOfArgs,
   GetAmountMintableArgs,

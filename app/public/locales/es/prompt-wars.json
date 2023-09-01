@@ -9,7 +9,7 @@
   "promptWars.status.description.status": "Estatus",
   "promptWars.status.description.totalPriceBag": "Precio total",
   "promptWars.status.description.contract": "Contrato",
-  "promptWars.status.Revealing": "Revelar",
+  "promptWars.status.Revealing": "Revelando",
   "promptWars.status.Unresolved": "No resuelto",
   "promptWars.status.Resolved": "Resuelto",
   "promptWars.status.Loading": "Cargando",
@@ -23,6 +23,7 @@
   "promptWars.button.connectToPlay": "Conéctate para jugar",
   "promptWars.button.createNewGame": "Crear un nuevo juego",
   "promptWars.button.submitPrompt": "Enviar Prompt",
+  "promptWars.button.submitPrompt.loading": "Enviando",
   "promptWars.description.usdt": "USDT",
   "promptWars.negativePrompt.add": "Añade un prompt negativo",
   "promptWars.description.coverStorageFee": "desde su wallet. Esto cubrirá los gastos de almacenamiento y la comisión de participación.",
@@ -65,5 +66,6 @@
   "promptWars.footer.madeByAufacicenta": "Hecho por Aufacicenta,",
   "promptWars.footer.poweredByPulseProtocol": "Impulsado por Pulse Protocol",
   "promptWars.OutcomeTokensPosition.miniDescription": "Conecta tu wallet para cargar los balances",
-  "promptWars.walletSelector.nativeBalance": "Balance Nativo"
+  "promptWars.walletSelector.nativeBalance": "Balance Nativo",
+  "promptWars.walletSelector.isSettingGuestWallet": "Creando Cuenta de Prueba"
 }

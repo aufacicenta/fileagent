@@ -66,10 +66,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
     await sell();
   };
 
-  const onClaimDepositResolved = async () => {
-    await sell();
-  };
-
   const onClickCloseFAQsModal = () => {
     displayFAQsModal(false);
   };
@@ -115,7 +111,6 @@ export const PromptWars: React.FC<PromptWarsProps> = ({ marketId, className }) =
                   datesElement={<></>}
                   onClaimDepositUnresolved={onClaimDepositUnresolved}
                   onClickSeeResults={onClickSeeResults}
-                  onClaimDepositResolved={onClaimDepositResolved}
                   onClickCreateNewGame={onClickCreateNewGame}
                 />
               </Grid.Col>

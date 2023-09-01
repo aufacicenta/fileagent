@@ -8,10 +8,11 @@ import { Typography } from "ui/typography/Typography";
 import { Button } from "ui/button/Button";
 import { Icon } from "ui/icon/Icon";
 import { PromptWarsMarketContractStatus } from "providers/near/contracts/prompt-wars/prompt-wars.types";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
-import { useNearWalletSelectorContext } from "hooks/useNearWalletSelectorContext/useNearWalletSelectorContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
+import { useNearWalletSelectorContext } from "context/near/wallet-selector/useNearWalletSelectorContext";
 import currency from "providers/currency";
 import pulse from "providers/pulse";
+import { useNearPromptWarsMarketContractContext } from "context/near/prompt-wars-market-contract/useNearPromptWarsMarketContractContext";
 
 import { PromptInputCardProps } from "./PromptInputCard.types";
 import styles from "./PromptInputCard.module.scss";
@@ -26,6 +27,8 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
 
   const wallet = useWalletStateContext();
   const nearWalletSelectorContext = useNearWalletSelectorContext();
+
+  const { actions } = useNearPromptWarsMarketContractContext();
 
   const { status, fees, collateralToken } = marketContractValues;
 
@@ -88,7 +91,9 @@ export const PromptInputCard: React.FC<PromptInputCardProps> = ({
                   </Button>
                 ) : (
                   <Button type="submit" disabled={isDisabled}>
-                    {t("promptWars.button.submitPrompt")}
+                    {actions.ftTransferCall.isLoading
+                      ? t("promptWars.button.submitPrompt.loading")
+                      : t("promptWars.button.submitPrompt")}
                   </Button>
                 )}
                 <Typography.Description flat>

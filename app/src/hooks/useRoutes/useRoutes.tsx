@@ -5,6 +5,7 @@ type RouteMap = {
   };
   api: {
     promptWars: {
+      createGuestAccount: () => string;
       create: () => string;
       reveal: () => string;
       resolve: () => string;
@@ -31,6 +32,7 @@ export const routes: RouteMap = {
   },
   api: {
     promptWars: {
+      createGuestAccount: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/create-guest-account`,
       create: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/create`,
       reveal: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/reveal`,
       resolve: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/prompt-wars/resolve`,
