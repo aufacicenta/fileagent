@@ -50,22 +50,16 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
   const formContext = useFormContext();
 
   const onClickExtractContent = () => {
-    formContext.setFieldValue(fieldName, `Extract content from file ${file.name}`);
+    formContext.setFieldValue(fieldName, `Extract and explain the content from the file "${file.name}"`);
   };
 
   return (
     <div className={styles["message-file-type__options"]}>
-      <Button color="secondary" variant="outlined" size="s">
-        Download
-      </Button>
       <Button color="secondary" variant="outlined" size="s" onClick={onClickExtractContent}>
         Extract content
       </Button>
       <Button color="secondary" variant="outlined" size="s">
-        Send
-      </Button>
-      <Button color="secondary" variant="outlined" size="s">
-        Get file details
+        Share
       </Button>
       <Button color="danger" variant="outlined" size="s">
         Delete
