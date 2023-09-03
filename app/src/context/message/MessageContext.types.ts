@@ -1,5 +1,5 @@
 import { ChatCompletionMessage } from "openai/resources/chat";
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
@@ -24,12 +24,18 @@ export type FileChatCompletionMessage = {
 
 export type ChatContextMessage = FileChatCompletionMessage | TextChatCompletionMessage | ReadOnlyChatCompletionMessage;
 
+export type MessageContextActions = {
+  isProcessingRequest: boolean;
+};
+
 export type MessageContextControllerProps = {
   children: ReactNode;
 };
 
 export type MessageContextType = {
   messages: Array<ChatContextMessage>;
+  actions: MessageContextActions;
+  setActions: Dispatch<SetStateAction<MessageContextActions>>;
   displayInitialMessage: () => void;
   appendMessage: (message: ChatContextMessage) => ChatContextMessage;
   updateMessage: (message: ChatContextMessage) => ChatContextMessage;

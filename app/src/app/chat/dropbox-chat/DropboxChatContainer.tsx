@@ -20,18 +20,20 @@ export const DropboxChatContainer = () => {
   }, []);
 
   const onSubmit = async (values: ChatFormValues, form: FormApi<ChatFormValues>) => {
+    messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: true }));
+
+    const message: ChatContextMessage = { content: values.message, role: "user", type: "text" };
+
+    messageContext.appendMessage(message);
+
+    const loadingMessage = messageContext.appendMessage({
+      type: "readonly",
+      content: "Processing...",
+      role: "assistant",
+    });
+
     try {
-      const message: ChatContextMessage = { content: values.message, role: "user", type: "text" };
-
-      messageContext.appendMessage(message);
-
       form.reset();
-
-      const loadingMessage = messageContext.appendMessage({
-        type: "readonly",
-        content: "Processing...",
-        role: "assistant",
-      });
 
       const messages = messageContext.getPlainMessages();
 
@@ -57,14 +59,22 @@ export const DropboxChatContainer = () => {
     } catch (error) {
       console.log(error);
 
+      messageContext.deleteMessage(loadingMessage.id!);
+
       messageContext.appendMessage({
-        content: "Apologies, I wasn't able to complete your request.",
+        content: `Apologies, I wasn't able to complete your request.
+
+        - Maybe the file is too large?
+        - The content may be unreadable
+        - Check your internet connection`,
         role: "assistant",
         type: "text",
       });
 
       form.mutators.setValue(FieldNames.message, values.message);
     }
+
+    messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: false }));
   };
 
   return (

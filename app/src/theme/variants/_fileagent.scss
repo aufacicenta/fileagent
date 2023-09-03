@@ -54,6 +54,7 @@ body[data-theme="fileagent"] {
   --color-button-primary-text: var(--color-white);
   --color-button-primary-hover: var(--color-primary);
   --color-button-primary-hover-text: var(--color-white);
+  --color-button-primary-disabled: var(--color-dark-5);
   --color-button-secondary: var(--color-dark-8);
   --color-button-secondary-text: var(--color-dark-8);
   --color-button-secondary-hover: var(--color-dark-10);
@@ -117,6 +118,7 @@ body[data-theme="fileagent"] {
   // Forms
   --color-input-text: var(--color-typography-text);
   --color-input-text-disabled: var(--color-typography-description);
+  --color-input-background-disabled: var(--color-background-contrast);
   --color-input-border: var(--color-black);
   --color-input-label: rgba(255, 255, 255, 0.7);
   --color-input-placeholder: var(--color-typography-description);

@@ -18,7 +18,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
   const form = useForm();
   const formContext = useFormContext();
 
-  const { messages } = useMessageContext();
+  const { messages, actions } = useMessageContext();
 
   useEffect(() => {
     if (!form) return;
@@ -87,13 +87,16 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
               id="message"
               onKeyDown={onKeyDown}
               placeholder="Type your message here..."
+              disabled={actions.isProcessingRequest}
             />
           </Card.Content>
           <Card.Actions className={styles["dropbox-chat__textarea--card-actions"]}>
             <Dropzone />
 
             <div className={styles["dropbox-chat__textarea--card-actions-button"]}>
-              <Button type="submit">Send</Button>
+              <Button type="submit" disabled={actions.isProcessingRequest}>
+                Send
+              </Button>
             </div>
           </Card.Actions>
         </Card>

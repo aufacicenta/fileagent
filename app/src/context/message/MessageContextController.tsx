@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { MessageContext } from "./MessageContext";
-import { ChatContextMessage, MessageContextControllerProps } from "./MessageContext.types";
+import { ChatContextMessage, MessageContextActions, MessageContextControllerProps } from "./MessageContext.types";
 
 const transformId = (id: string) => `x${id}`;
 
 export const MessageContextController = ({ children }: MessageContextControllerProps) => {
   const [messages, setMessages] = useState<Array<ChatContextMessage>>([]);
+  const [actions, setActions] = useState<MessageContextActions>({
+    isProcessingRequest: false,
+  });
 
   const extractApiRequestValues = (message: ChatContextMessage) => ({
     role: message.role,
@@ -71,6 +74,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     deleteMessage,
     getPlainMessages,
     extractApiRequestValues,
+    setActions,
+    actions,
   };
 
   return <MessageContext.Provider value={props}>{children}</MessageContext.Provider>;
