@@ -16,6 +16,8 @@ export type Styles = {
   "navbar__dropdown--item-icon": string;
   "navbar__dropdown--item-text": string;
   "navbar__language-selector": string;
+  navbar__left: string;
+  "navbar__left--item": string;
   navbar__logo: string;
   "navbar__logo-desktop": string;
   "navbar__logo-mobile": string;

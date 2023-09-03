@@ -2,13 +2,17 @@
 @import "src/ui/typography/variables";
 
 .dropzone {
+  @include atLargeTablet {
+    margin-bottom: 0;
+  }
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
   min-height: auto;
+  margin-bottom: $space-default;
   border: 2px dotted var(--color-dropzone-border);
-  border-radius: $border-radius;
+  border-radius: $border-radius-input;
   padding: $space-s;
   text-align: left;
   background: transparent;

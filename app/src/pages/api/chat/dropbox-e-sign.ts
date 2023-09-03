@@ -44,7 +44,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
     const { choices, promises } = chat.processFunctionCalls(chatCompletion.choices);
 
     if (promises.length > 0) {
-      const responses = await Promise.all(promises.map((promise) => promise()));
+      const responses = await Promise.all(promises.map((promise) => promise(data.currentMessage)));
 
       response.status(200).json({ choices: responses });
 

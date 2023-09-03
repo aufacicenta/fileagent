@@ -8,7 +8,7 @@ import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 
 import { DropboxChat } from "./DropboxChat";
-import { ChatFormValues } from "./DropboxChat.types";
+import { ChatFormValues, FieldNames } from "./DropboxChat.types";
 
 export const DropboxChatContainer = () => {
   const routes = useRoutes();
@@ -25,6 +25,14 @@ export const DropboxChatContainer = () => {
 
       messageContext.appendMessage(message);
 
+      form.reset();
+
+      const loadingMessage = messageContext.appendMessage({
+        type: "readonly",
+        content: "Processing...",
+        role: "assistant",
+      });
+
       const messages = messageContext.getPlainMessages();
 
       const result = await fetch(routes.api.chat.dropboxESign(), {
@@ -39,13 +47,13 @@ export const DropboxChatContainer = () => {
 
       console.log(json);
 
+      messageContext.deleteMessage(loadingMessage.id!);
+
       if (json.error) {
         throw new Error(json.error);
       }
 
       messageContext.appendMessage({ content: json.choices[0].message.content, role: "assistant", type: "text" });
-
-      form.reset();
     } catch (error) {
       console.log(error);
 
@@ -54,6 +62,8 @@ export const DropboxChatContainer = () => {
         role: "assistant",
         type: "text",
       });
+
+      form.mutators.setValue(FieldNames.message, values.message);
     }
   };
 

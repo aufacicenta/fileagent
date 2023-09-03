@@ -31,8 +31,23 @@
       @include width;
     }
 
+    &--card-actions {
+      @include atLargeTablet {
+        flex-direction: row;
+      }
+      flex-direction: column;
+      padding-top: 0;
+
+      &-button {
+        @include atLargeTablet {
+          margin-left: $space-default;
+        }
+        margin-left: auto;
+      }
+    }
+
     &--card-field {
-      min-height: 98px;
+      min-height: 63px;
       padding: $space-default !important;
       font-size: $input-font-size !important;
       background-color: var(--color-market-card-background);
@@ -42,10 +57,10 @@
   &__messages {
     @include atLargeTablet {
       padding-top: $navbar-height;
-      padding-bottom: 320px;
+      padding-bottom: 270px;
     }
     padding-top: $navbar-height-mobile;
-    padding-bottom: 260px;
+    padding-bottom: 246px;
     overflow-y: scroll;
 
     &--item {

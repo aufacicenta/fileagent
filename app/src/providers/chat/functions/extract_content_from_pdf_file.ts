@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { DropboxESignRequest } from "api/chat/types";
 
 import { extract_content_from_pdf_file_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
@@ -9,6 +10,7 @@ import nanonets from "providers/nanonets";
 const extract_content_from_pdf_file = async (
   args: extract_content_from_pdf_file_args,
   choice: OpenAI.Chat.ChatCompletion.Choice,
+  currentMessage: DropboxESignRequest["currentMessage"],
 ): Promise<OpenAI.Chat.ChatCompletion.Choice> => {
   try {
     logger.info("extract_content_from_pdf_file", args);
@@ -23,7 +25,7 @@ const extract_content_from_pdf_file = async (
       messages: [
         {
           role: "user",
-          content: `Please explain this text:
+          content: `${currentMessage.content}
 
             ${raw_text}`,
         },

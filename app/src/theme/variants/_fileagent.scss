@@ -38,8 +38,8 @@ body[data-theme="fileagent"] {
   --color-secondary-shade-low: #f7c352;
 
   // Background
-  --color-background: #e0e8fd;
-  --color-background-contrast: #cedcff;
+  --color-background: #fff;
+  --color-background-contrast: #f3f2f2;
 
   // Sidebar
   --color-sidebar-item: var(--color-white);
@@ -47,6 +47,7 @@ body[data-theme="fileagent"] {
 
   // Navbar
   --color-navbar-logo: var(--color-primary);
+  --color-navbar-background: #fff;
 
   // Button
   --color-button-primary: var(--color-primary);
@@ -105,7 +106,7 @@ body[data-theme="fileagent"] {
   --color-market-fees-card-text: #fff;
 
   // Horizontal Line
-  --color-horizontal-line-background: #fff;
+  --color-horizontal-line-background: var(--color-background-contrast);
 
   // Data Visualization colors
   --color-value-increase: #00d3a1;

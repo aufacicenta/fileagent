@@ -35,16 +35,29 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
   }, [messages]);
 
   const onKeyDown = async (event: KeyboardEvent) => {
+    const textarea = document.querySelector(`#message`)! as HTMLTextAreaElement;
+
+    const defaultHeight = "63px";
+
+    textarea.style.height = defaultHeight;
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
 
       await form.submit();
+
+      textarea.style.height = defaultHeight;
     }
   };
 
   const getMessageTypeComponent = (message: ChatContextMessage) => {
     switch (message.type) {
       case "text":
+        return (
+          <MessageTextType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
+        );
+      case "readonly":
         return (
           <MessageTextType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
         );
@@ -65,21 +78,23 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
       </div>
 
       <div className={styles["dropbox-chat__textarea"]}>
-        <Card className={styles["dropbox-chat__textarea--card"]} withSpotlightEffect>
+        <Card className={styles["dropbox-chat__textarea--card"]} shadow>
           <Card.Content>
             <Field
               name={FieldNames.message}
               component="textarea"
               className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
-              id="prompt"
+              id="message"
               onKeyDown={onKeyDown}
               placeholder="Type your message here..."
             />
           </Card.Content>
-          <Card.Actions>
+          <Card.Actions className={styles["dropbox-chat__textarea--card-actions"]}>
             <Dropzone />
 
-            <Button type="submit">Send</Button>
+            <div className={styles["dropbox-chat__textarea--card-actions-button"]}>
+              <Button type="submit">Send</Button>
+            </div>
           </Card.Actions>
         </Card>
       </div>

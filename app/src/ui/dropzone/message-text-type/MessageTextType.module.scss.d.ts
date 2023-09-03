@@ -3,6 +3,7 @@ export type Styles = {
   "message-text-type__avatar": string;
   "message-text-type__avatar-box": string;
   "message-text-type__content": string;
+  "message-text-type__loading-spinner": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

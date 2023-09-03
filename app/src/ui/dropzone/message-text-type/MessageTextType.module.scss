@@ -5,4 +5,9 @@
   @include avatar;
   @include content;
   display: block;
+
+  &__loading-spinner {
+    width: 21px;
+    height: 21px;
+  }
 }

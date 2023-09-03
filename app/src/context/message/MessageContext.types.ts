@@ -13,12 +13,16 @@ export type TextChatCompletionMessage = {
   type: "text";
 } & ChatMessageBase;
 
+export type ReadOnlyChatCompletionMessage = {
+  type: "readonly";
+} & ChatMessageBase;
+
 export type FileChatCompletionMessage = {
   type: "file";
   file: DropzoneFileExtended;
 } & ChatMessageBase;
 
-export type ChatContextMessage = FileChatCompletionMessage | TextChatCompletionMessage;
+export type ChatContextMessage = FileChatCompletionMessage | TextChatCompletionMessage | ReadOnlyChatCompletionMessage;
 
 export type MessageContextControllerProps = {
   children: ReactNode;
@@ -27,8 +31,9 @@ export type MessageContextControllerProps = {
 export type MessageContextType = {
   messages: Array<ChatContextMessage>;
   displayInitialMessage: () => void;
-  appendMessage: (message: ChatContextMessage) => void;
-  updateMessage: (message: ChatContextMessage) => void;
+  appendMessage: (message: ChatContextMessage) => ChatContextMessage;
+  updateMessage: (message: ChatContextMessage) => ChatContextMessage;
+  deleteMessage: (id: ChatContextMessage["id"]) => void;
   getPlainMessages: () => Array<Pick<ChatContextMessage, "role" | "content">>;
   extractApiRequestValues: (message: ChatContextMessage) => Pick<ChatContextMessage, "role" | "content">;
 };
