@@ -1,7 +1,7 @@
 @mixin avatar {
   &__avatar {
     padding: $space-default;
-    color: var(--color-background);
+    color: var(--color-primary);
 
     &-box {
       @extend .z-depth-3;
@@ -12,7 +12,16 @@
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background-color: var(--color-primary);
+      background-color: var(--color-background);
+
+      svg {
+        stroke: var(--color-primary);
+      }
+
+      span {
+        font-size: 21px;
+        font-weight: 400;
+      }
     }
   }
 }
