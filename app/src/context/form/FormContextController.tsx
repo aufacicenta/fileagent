@@ -14,6 +14,12 @@ const updateTextareaHeight = (id: string = "#message") => {
   return { textarea, defaultHeight };
 };
 
+const resetTextareaHeight = () => {
+  setTimeout(() => {
+    updateTextareaHeight();
+  }, 100);
+};
+
 export const FormContextController = ({ children }: FormContextControllerProps) => {
   const [form, setForm] = useState<FormState | undefined>(undefined);
 
@@ -25,6 +31,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     setForm,
     setFieldValue,
     updateTextareaHeight,
+    resetTextareaHeight,
   };
 
   return <FormContext.Provider value={props}>{children}</FormContext.Provider>;

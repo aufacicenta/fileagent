@@ -2,10 +2,12 @@ import { Form as RFForm } from "react-final-form";
 import { FormApi } from "final-form";
 import { useEffect } from "react";
 import { DropboxESignRequest } from "api/chat/types";
+import { sample } from "lodash";
 
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
+import { useFormContext } from "context/form/useFormContext";
 
 import { DropboxChat } from "./DropboxChat";
 import { ChatFormValues, FieldNames } from "./DropboxChat.types";
@@ -14,6 +16,8 @@ export const DropboxChatContainer = () => {
   const routes = useRoutes();
 
   const messageContext = useMessageContext();
+
+  const formContext = useFormContext();
 
   useEffect(() => {
     messageContext.displayInitialMessage();
@@ -26,14 +30,35 @@ export const DropboxChatContainer = () => {
 
     messageContext.appendMessage(message);
 
+    const processingMessages = [
+      "Processing...",
+      "Please wait...",
+      "Still on it...",
+      "Hold on...",
+      "Almost there...",
+      "Huge file?",
+      "Please be patient...",
+    ];
+
     const loadingMessage = messageContext.appendMessage({
       type: "readonly",
-      content: "Processing...",
+      content: processingMessages[0],
       role: "assistant",
     });
 
+    const processingInterval = setInterval(() => {
+      const content = sample(processingMessages)!;
+
+      messageContext.updateMessage({
+        ...loadingMessage,
+        content,
+      });
+    }, 10000);
+
     try {
       form.reset();
+
+      formContext.resetTextareaHeight();
 
       const messages = messageContext.getPlainMessages();
 
@@ -75,6 +100,8 @@ export const DropboxChatContainer = () => {
     }
 
     messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: false }));
+
+    clearInterval(processingInterval);
   };
 
   return (

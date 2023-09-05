@@ -1,4 +1,5 @@
 import { DropboxESignRequest } from "api/chat/types";
+import { CreateChatCompletionRequestMessage } from "openai/resources/chat";
 
 import { ChatCompletionChoice, extract_content_from_pdf_file_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
@@ -12,30 +13,60 @@ const extract_content_from_pdf_file = async (
   currentMessage: DropboxESignRequest["currentMessage"],
 ): Promise<ChatCompletionChoice> => {
   try {
-    logger.info("extract_content_from_pdf_file", args);
+    logger.info(`extract_content_from_pdf_file; ${args}`);
 
     const { signedUrl } = await supabase.createSignedURL("user", args.file_name, 60);
 
     const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
 
-    const raw_text = nanonets.getRawText(ocrResult);
+    let maxTokens = 0;
 
-    // @TODO throw a max tokens error when length is above 4097
-    // OpenAI limits this model to 4097 tokens and will throw
-    // labels: 100 USDT
-    const chatCompletion = await openai.client.chat.completions.create({
-      messages: [
-        {
+    logger.info(`extract_content_from_pdf_file; mapping messages. maxTokens: ${maxTokens}`);
+
+    const messages = ocrResult.results[0].page_data
+      .map((data) => {
+        maxTokens += data.words.length;
+
+        if (maxTokens > 70000) {
+          return null;
+        }
+
+        return {
           role: "user",
-          content: `${currentMessage.content}
+          content: data.raw_text,
+        };
+      })
+      .filter(Boolean) as CreateChatCompletionRequestMessage[];
 
-            ${raw_text}`,
-        },
-      ],
-      model: openai.model,
-    });
+    logger.info(`extract_content_from_pdf_file; getting chatCompletions. maxTokens: ${maxTokens}`);
 
-    return chatCompletion.choices[0];
+    const chatCompletions = await Promise.all(
+      messages.map((message) =>
+        openai.client.chat.completions.create({
+          messages: [
+            {
+              role: "user",
+              content: `${currentMessage.content}
+
+      ${message.content}`,
+            },
+          ],
+          model: openai.model,
+        }),
+      ),
+    );
+
+    logger.info(`extract_content_from_pdf_file; got chatCompletions. choices: ${chatCompletions.length}`);
+
+    const content = chatCompletions.map((chatCompletion) => chatCompletion.choices[0].message.content).join("\n");
+
+    return {
+      ...chatCompletions[0].choices[0],
+      message: {
+        role: "assistant",
+        content,
+      },
+    };
   } catch (error) {
     logger.error(error);
 

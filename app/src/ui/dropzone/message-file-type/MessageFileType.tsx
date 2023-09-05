@@ -51,6 +51,8 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
 
   const onClickExtractContent = () => {
     formContext.setFieldValue(fieldName, `Extract and explain the content from the file "${file.name}"`);
+
+    formContext.resetTextareaHeight();
   };
 
   const onClickDropboxESign = () => {
@@ -63,23 +65,29 @@ Subject: Please sign this document
 Message: A message`,
     );
 
-    formContext.updateTextareaHeight();
+    formContext.resetTextareaHeight();
   };
 
   return (
     <div className={styles["message-file-type__options"]}>
+      <Button
+        className={styles["message-file-type__options--dropbox-button"]}
+        color="secondary"
+        variant="outlined"
+        size="s"
+        onClick={onClickDropboxESign}
+      >
+        E-Sign with Dropbox
+      </Button>
       <Button color="secondary" variant="outlined" size="s" onClick={onClickExtractContent}>
         Extract content
       </Button>
-      <Button color="secondary" variant="outlined" size="s" onClick={onClickDropboxESign}>
-        E-Sign with Dropbox Sign
-      </Button>
-      <Button color="secondary" variant="outlined" size="s">
+      {/* <Button color="secondary" variant="outlined" size="s">
         Share
       </Button>
       <Button color="danger" variant="outlined" size="s">
         Delete
-      </Button>
+      </Button> */}
     </div>
   );
 };

@@ -35,7 +35,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
         afterContentComponent: <MessageFileType.Options file={file} fieldName={FieldNames.message} />,
         type: "file",
         file,
-        id: file.upload!.uuid,
+        id: messageContext.transformId(file.upload!.uuid),
       });
     } catch (error) {
       console.error(error);
@@ -47,7 +47,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
           afterContentComponent: <MessageFileType.Options file={file} fieldName={FieldNames.message} />,
           type: "file",
           file,
-          id: file.upload!.uuid,
+          id: messageContext.transformId(file.upload!.uuid),
         });
       }
 
@@ -57,7 +57,7 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
           content: `File "${file.name}" failed to upload. Is your wi-fi on?`,
           type: "file",
           file,
-          id: file.upload!.uuid,
+          id: messageContext.transformId(file.upload!.uuid),
         });
       }
     }

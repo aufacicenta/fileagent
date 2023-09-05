@@ -29,14 +29,18 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       .filter(Boolean) as Array<Pick<ChatContextMessage, "role" | "content">>;
 
   const appendMessage = (message: ChatContextMessage) => {
-    setMessages((prev) => [...prev, { ...message, id: message.id ? transformId(message.id) : transformId(uuidv4()) }]);
+    const id = message.id ? transformId(message.id) : transformId(uuidv4());
 
-    return message;
+    const msg = { ...message, id };
+
+    setMessages((prev) => [...prev, msg]);
+
+    return msg;
   };
 
   const deleteMessage = (id: ChatContextMessage["id"]) => {
     setMessages((prev) => {
-      const i = prev.findIndex((item) => item.id === transformId(id!));
+      const i = prev.findIndex((item) => item.id === id!);
 
       const $prev = prev;
 
@@ -48,9 +52,9 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
   const updateMessage = (message: ChatContextMessage) => {
     setMessages((prev) => {
-      const i = prev.findIndex((item) => item.id === transformId(message.id!));
+      const i = prev.findIndex((item) => item.id === message.id!);
 
-      return Object.assign([], { ...prev, [i]: { ...message, id: transformId(message.id!) } });
+      return Object.assign([], { ...prev, [i]: { ...message, id: message.id! } });
     });
 
     return message;
@@ -76,6 +80,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     extractApiRequestValues,
     setActions,
     actions,
+    transformId,
   };
 
   return <MessageContext.Provider value={props}>{children}</MessageContext.Provider>;

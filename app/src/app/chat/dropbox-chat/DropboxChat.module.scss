@@ -51,6 +51,7 @@
       padding: $space-default !important;
       font-size: $input-font-size !important;
       background-color: var(--color-market-card-background);
+      transition: height 0.2s ease-in-out;
     }
   }
 

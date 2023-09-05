@@ -21,5 +21,13 @@
       margin-right: $space-default;
       margin-bottom: $space-default;
     }
+
+    &--dropbox-button {
+      background-color: #0061fe;
+
+      > div {
+        color: #fff;
+      }
+    }
   }
 }

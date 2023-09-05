@@ -29,7 +29,7 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
           {!isSimulationEnabled ? (
             <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
           ) : (
-            <Typography.Text id={message.id} dangerouslySetInnerHTML={{ __html: message.content! }} />
+            <Typography.Text id={message.id} />
           )}
         </div>
       </div>

@@ -41,6 +41,7 @@ export type MessageContextType = {
   appendMessage: (message: ChatContextMessage) => ChatContextMessage;
   updateMessage: (message: ChatContextMessage) => ChatContextMessage;
   deleteMessage: (id: ChatContextMessage["id"]) => void;
+  transformId: (id: string) => string;
   getPlainMessages: () => Array<Pick<ChatContextMessage, "role" | "content">>;
   extractApiRequestValues: (message: ChatContextMessage) => Pick<ChatContextMessage, "role" | "content">;
 };
