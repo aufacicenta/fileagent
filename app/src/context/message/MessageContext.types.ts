@@ -8,6 +8,7 @@ export type ChatMessageBase = ChatCompletionMessage & {
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
   hasInnerHtml?: boolean;
+  type?: "text" | "readonly" | "file";
 };
 
 export type TextChatCompletionMessage = {

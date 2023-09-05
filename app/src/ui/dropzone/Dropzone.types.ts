@@ -9,7 +9,5 @@ export type DropzoneProps = {
 
 export type DropzoneFileExtended = {
   progressObservable: Observable<number>;
-  // ipfsResultObservable: Observable<UnixFSEntry>;
-  // setIpfsResult: (key: string, value: IPFSResponse) => void;
   setProgress: (key: string, value: number) => void;
 } & DropzoneFile;

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev -p 3003",
-    "dev:debug": "NODE_OPTIONS='--inspect=9300' next dev -p 3003 & npm run scss:class-types:watch & yarn ts:watch",
+    "dev:debug": "next dev -p 3003 & npm run scss:class-types:watch & yarn ts:watch",
     "ts": "tsc --noEmit --incremental",
     "ts:watch": "yarn ts --watch",
     "build": "next build",

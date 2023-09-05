@@ -12,7 +12,7 @@ import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileT
 import styles from "./MessageFileType.module.scss";
 
 export const MessageFileType = ({ message, className }: MessageFileTypeProps) => {
-  const isSimulationEnabled = message.role === "assistant";
+  const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
   const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
 
@@ -51,8 +51,6 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
 
   const onClickExtractContent = () => {
     formContext.setFieldValue(fieldName, `Extract and explain the content from the file "${file.name}"`);
-
-    formContext.resetTextareaHeight();
   };
 
   const onClickDropboxESign = () => {
@@ -64,8 +62,6 @@ Title: My Signature Request
 Subject: Please sign this document
 Message: A message`,
     );
-
-    formContext.resetTextareaHeight();
   };
 
   return (

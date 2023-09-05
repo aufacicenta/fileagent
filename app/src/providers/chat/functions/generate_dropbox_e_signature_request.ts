@@ -41,6 +41,8 @@ const generate_dropbox_e_signature_request = async (
         content: `A signature request was created.
 
         Review it at <a href="${result.body.signatureRequest?.detailsUrl}" target="_blank">${result.body.signatureRequest?.detailsUrl}</a>.`,
+        type: "text",
+        hasInnerHtml: true,
       },
     };
   } catch (error) {
@@ -50,8 +52,11 @@ const generate_dropbox_e_signature_request = async (
       ...choice,
       message: {
         ...choice.message,
-        content: `You need to connect your Dropbox account first: <a href="https://app.hellosign.com/oauth/authorize?response_type=code&client_id=6b7001dcc9628cbaab796f85d698e5f6&state=416c212f" target="_blank">Click to authorize</a>.`,
+        content: `You need to connect your Dropbox account first: <a href="https://app.hellosign.com/oauth/authorize?response_type=code&client_id=${
+          process.env.DROPBOX_CLIENT_ID
+        }&state=${Date.now()}&redirect_uri=${process.env.DROPBOX_REDIRECT_URI}">Click to authorize</a>.`,
         hasInnerHtml: true,
+        type: "readonly",
       },
     };
   }

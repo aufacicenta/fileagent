@@ -11,14 +11,14 @@ import styles from "./MessageTextType.module.scss";
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
-  useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+  const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
 
   return (
     <div className={clsx(styles["message-text-type"], className)}>
       <div>
         <div className={styles["message-text-type__avatar"]}>
           <div className={styles["message-text-type__avatar-box"]}>
-            {message.type === "readonly" ? (
+            {message.type === "readonly" && !simulationEnded ? (
               <LoadingSpinner className={styles["message-text-type__loading-spinner"]} />
             ) : (
               <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />
@@ -26,11 +26,15 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
           </div>
         </div>
         <div className={styles["message-text-type__content"]}>
+          {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}
+
           {!isSimulationEnabled ? (
             <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
           ) : (
             <Typography.Text id={message.id} />
           )}
+
+          {message.afterContentComponent && simulationEnded && message.afterContentComponent}
         </div>
       </div>
     </div>

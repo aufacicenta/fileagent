@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
+import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
+import { FieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
+import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
+
 import { MessageContext } from "./MessageContext";
 import { ChatContextMessage, MessageContextActions, MessageContextControllerProps } from "./MessageContext.types";
 
@@ -12,10 +17,30 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     isProcessingRequest: false,
   });
 
+  const ls = useLocalStorage();
+
   const extractApiRequestValues = (message: ChatContextMessage) => ({
     role: message.role,
     content: message.content,
   });
+
+  const extractLocalStorageValues = (message: ChatContextMessage) => {
+    const val = {
+      id: message.id,
+      role: message.role,
+      content: message.content,
+      type: message.type,
+      hasInnerHtml: message.hasInnerHtml,
+    };
+
+    if (message.type === "file") {
+      (val as any).file = {
+        name: message.file.name,
+      } as Pick<DropzoneFileExtended, "name">;
+    }
+
+    return val;
+  };
 
   const getPlainMessages = () =>
     messages
@@ -26,14 +51,31 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
         return extractApiRequestValues(message);
       })
-      .filter(Boolean) as Array<Pick<ChatContextMessage, "role" | "content">>;
+      .filter(Boolean) as ChatContextMessage[];
+
+  const getLocalStorageMessages = (value: ChatContextMessage[]) =>
+    value
+      .map((message) => {
+        if (message.type === "readonly") {
+          return null;
+        }
+
+        return extractLocalStorageValues(message);
+      })
+      .filter(Boolean) as ChatContextMessage[];
 
   const appendMessage = (message: ChatContextMessage) => {
     const id = message.id ? transformId(message.id) : transformId(uuidv4());
 
     const msg = { ...message, id };
 
-    setMessages((prev) => [...prev, msg]);
+    setMessages((prev) => {
+      const val = [...prev, msg];
+
+      ls.set("messages", getLocalStorageMessages(val));
+
+      return val;
+    });
 
     return msg;
   };
@@ -46,7 +88,11 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
       $prev.splice(i, 1);
 
-      return Object.assign([], { ...$prev });
+      const val = Object.assign([], { ...$prev });
+
+      ls.set("messages", getLocalStorageMessages(val));
+
+      return val;
     });
   };
 
@@ -54,19 +100,52 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     setMessages((prev) => {
       const i = prev.findIndex((item) => item.id === message.id!);
 
-      return Object.assign([], { ...prev, [i]: { ...message, id: message.id! } });
+      const val = Object.assign([], { ...prev, [i]: { ...message, id: message.id! } });
+
+      ls.set("messages", getLocalStorageMessages(val));
+
+      return val;
     });
 
     return message;
   };
 
   const displayInitialMessage = () => {
+    const lsMessages = ls.get<ChatContextMessage[]>("messages");
+
+    if (lsMessages && lsMessages?.length > 0) {
+      ls.set("messages", []);
+
+      appendMessage({
+        content: `Welcome back!`,
+        role: "assistant",
+        type: "readonly",
+      });
+
+      lsMessages.forEach((message) => {
+        appendMessage({
+          ...message,
+          id: undefined,
+          type: message.type === "file" ? "text" : message.type,
+          afterContentComponent:
+            message.type === "file" ? (
+              <MessageFileType.Options
+                file={{ name: message.file.name } as DropzoneFileExtended}
+                fieldName={FieldNames.message}
+              />
+            ) : undefined,
+        });
+      });
+
+      return;
+    }
+
     appendMessage({
       content: `Hello, I'm an intelligent File Agent. You can upload PDF files (more file types in the way) and I'll try to understand and do things with them if you ask me to.
 
         Try uploading your first file by dragging and dropping it in the box below or by clicking the box and selecting a file from your computer.`,
       role: "assistant",
-      type: "text",
+      type: "readonly",
     });
   };
 
