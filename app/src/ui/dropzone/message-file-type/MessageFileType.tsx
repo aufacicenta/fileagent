@@ -56,7 +56,7 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
   const onClickDropboxESign = () => {
     formContext.setFieldValue(
       fieldName,
-      `Generate an embedded Dropbox Signature™ request for "${file.name}":
+      `Generate an embedded Dropbox Sign™ request for "${file.name}":
 
 Title: My Signature Request
 Subject: Please sign this document

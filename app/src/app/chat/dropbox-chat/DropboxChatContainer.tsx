@@ -8,6 +8,7 @@ import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 import { useFormContext } from "context/form/useFormContext";
+import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
 import { DropboxChat } from "./DropboxChat";
 import { ChatFormValues, FieldNames } from "./DropboxChat.types";
@@ -19,8 +20,14 @@ export const DropboxChatContainer = () => {
 
   const formContext = useFormContext();
 
+  const authContext = useAuthorizationContext();
+
   useEffect(() => {
     messageContext.displayInitialMessage();
+  }, []);
+
+  useEffect(() => {
+    authContext.verifyDropboxESignAuthorization();
   }, []);
 
   const onSubmit = async (values: ChatFormValues, form: FormApi<ChatFormValues>) => {

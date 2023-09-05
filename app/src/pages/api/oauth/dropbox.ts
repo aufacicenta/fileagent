@@ -4,6 +4,8 @@ import { OAuthTokenResponse } from "@dropbox/sign";
 
 import logger from "providers/logger";
 
+import { OAuthTokenStoreKey } from "./oauth.types";
+
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
     logger.info(`processing dropbox authorization callback`);
@@ -25,9 +27,9 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       data,
     });
 
-    logger.info(`setting cookie dropbox_esign and redirecting`);
+    logger.info(`setting cookie ${OAuthTokenStoreKey.dropbox_esign} and redirecting`);
 
-    response.setHeader("Set-Cookie", [`dropbox_esign=${JSON.stringify(result.data)}; Path=/; HttpOnly; Secure`]);
+    response.setHeader("Set-Cookie", [`${OAuthTokenStoreKey.dropbox_esign}=${JSON.stringify(result.data)}; Path=/`]);
 
     response.redirect(301, `/`);
   } catch (error) {
