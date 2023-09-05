@@ -65,6 +65,7 @@ const extract_content_from_pdf_file = async (
       message: {
         role: "assistant",
         content,
+        type: "text",
       },
     };
   } catch (error) {

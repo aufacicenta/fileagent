@@ -34,7 +34,12 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
   functionCalls.forEach((choice) => {
     const { arguments: args, name } = choice.message.function_call!;
 
-    promises.push(functions[name as FunctionCallName](JSON.parse(args) as any, choice));
+    promises.push(
+      functions[name as FunctionCallName](JSON.parse(args) as any, {
+        ...choice,
+        message: { ...choice.message, type: "text" },
+      }),
+    );
   });
 
   return { choices, promises };
