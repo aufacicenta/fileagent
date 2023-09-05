@@ -16,6 +16,7 @@ import styles from "./DropboxChat.module.scss";
 
 export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit }) => {
   const form = useForm();
+
   const formContext = useFormContext();
 
   const { messages, actions } = useMessageContext();
@@ -35,12 +36,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
   }, [messages]);
 
   const onKeyDown = async (event: KeyboardEvent) => {
-    const textarea = document.querySelector(`#message`)! as HTMLTextAreaElement;
-
-    const defaultHeight = "63px";
-
-    textarea.style.height = defaultHeight;
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    const { textarea, defaultHeight } = formContext.updateTextareaHeight();
 
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();

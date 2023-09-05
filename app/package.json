@@ -17,6 +17,7 @@
     "plop": "plop"
   },
   "dependencies": {
+    "@dropbox/sign": "^1.1.3",
     "@near-wallet-selector/coin98-wallet": "^8.5.1",
     "@near-wallet-selector/core": "^8.5.1",
     "@near-wallet-selector/here-wallet": "^8.5.1",

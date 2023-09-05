@@ -3,6 +3,17 @@ import React, { useState } from "react";
 import { FormContext } from "./FormContext";
 import { FormContextControllerProps, FormState } from "./FormContext.types";
 
+const updateTextareaHeight = (id: string = "#message") => {
+  const textarea = document.querySelector(id)! as HTMLTextAreaElement;
+
+  const defaultHeight = "63px";
+
+  textarea.style.height = defaultHeight;
+  textarea.style.height = `${textarea.scrollHeight}px`;
+
+  return { textarea, defaultHeight };
+};
+
 export const FormContextController = ({ children }: FormContextControllerProps) => {
   const [form, setForm] = useState<FormState | undefined>(undefined);
 
@@ -13,6 +24,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
   const props = {
     setForm,
     setFieldValue,
+    updateTextareaHeight,
   };
 
   return <FormContext.Provider value={props}>{children}</FormContext.Provider>;

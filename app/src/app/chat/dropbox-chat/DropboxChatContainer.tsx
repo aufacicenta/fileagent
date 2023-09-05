@@ -55,7 +55,7 @@ export const DropboxChatContainer = () => {
         throw new Error(json.error);
       }
 
-      messageContext.appendMessage({ content: json.choices[0].message.content, role: "assistant", type: "text" });
+      messageContext.appendMessage({ ...json.choices[0].message, type: "text" });
     } catch (error) {
       console.log(error);
 

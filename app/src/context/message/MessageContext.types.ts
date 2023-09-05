@@ -7,6 +7,7 @@ export type ChatMessageBase = ChatCompletionMessage & {
   id?: string;
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
+  hasInnerHtml?: boolean;
 };
 
 export type TextChatCompletionMessage = {

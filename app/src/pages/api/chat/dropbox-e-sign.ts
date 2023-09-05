@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import logger from "providers/logger";
-import { FunctionCallName } from "providers/chat/chat.types";
 import chat from "providers/chat";
 import openai from "providers/openai";
 
+import functions from "./functions";
 import { DropboxESignRequest } from "./types";
 
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
@@ -20,23 +20,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
         data.currentMessage,
       ],
       model: openai.model,
-      functions: [
-        {
-          name: FunctionCallName.extract_content_from_pdf_file,
-          description: "Only if there is a .pdf extension, get the full text of the file and explain it.",
-          parameters: {
-            type: "object",
-            properties: {
-              file_name: {
-                type: "string",
-                description: "The name of a PDF file, e.g. a-file.pdf",
-              },
-              unit: { type: "string" },
-            },
-            required: ["file_name"],
-          },
-        },
-      ],
+      functions,
     });
 
     logger.info(chatCompletion);
@@ -44,7 +28,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
     const { choices, promises } = chat.processFunctionCalls(chatCompletion.choices);
 
     if (promises.length > 0) {
-      const responses = await Promise.all(promises.map((promise) => promise(data.currentMessage)));
+      const responses = await Promise.all(promises.map((promise) => promise(data.currentMessage, request)));
 
       response.status(200).json({ choices: responses });
 

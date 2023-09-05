@@ -9,7 +9,7 @@ import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
 
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
-  const isSimulationEnabled = message.role === "assistant";
+  const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
   useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
 
@@ -27,9 +27,9 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
         </div>
         <div className={styles["message-text-type__content"]}>
           {!isSimulationEnabled ? (
-            <Typography.Text>{message.content}</Typography.Text>
+            <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
           ) : (
-            <Typography.Text id={message.id} />
+            <Typography.Text id={message.id} dangerouslySetInnerHTML={{ __html: message.content! }} />
           )}
         </div>
       </div>
