@@ -18,7 +18,11 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
     (currentMessage: DropboxESignRequest["currentMessage"], request: NextApiRequest) => Promise<ChatCompletionChoice>
   > = [];
 
-  if (functionCalls.length === 0) return { choices, promises };
+  if (functionCalls.length === 0)
+    return {
+      choices: choices.map((choice) => ({ ...choice, message: { ...choice.message, type: "text" } })),
+      promises,
+    };
 
   const functions = {
     [FunctionCallName.extract_content_from_pdf_file]:

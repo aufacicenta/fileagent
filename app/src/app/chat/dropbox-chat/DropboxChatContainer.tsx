@@ -11,7 +11,7 @@ import { useFormContext } from "context/form/useFormContext";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
 import { DropboxChat } from "./DropboxChat";
-import { ChatFormValues, FieldNames } from "./DropboxChat.types";
+import { ChatFormValues, FormFieldNames } from "./DropboxChat.types";
 
 export const DropboxChatContainer = () => {
   const routes = useRoutes();
@@ -103,7 +103,7 @@ export const DropboxChatContainer = () => {
         type: "text",
       });
 
-      form.mutators.setValue(FieldNames.message, values.message);
+      form.mutators.setValue(FormFieldNames.message, values.message);
     }
 
     messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: false }));

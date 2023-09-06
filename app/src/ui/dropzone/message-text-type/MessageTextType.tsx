@@ -4,6 +4,9 @@ import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
 import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 import { LoadingSpinner } from "ui/icons/LoadingSpinner";
+import { Button } from "ui/button/Button";
+import { useFormContext } from "context/form/useFormContext";
+import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
@@ -12,6 +15,12 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
   const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+
+  const formContext = useFormContext();
+
+  const onClickEdit = () => {
+    formContext.setFieldValue(FormFieldNames.message, message.content!);
+  };
 
   return (
     <div className={clsx(styles["message-text-type"], className)}>
@@ -32,6 +41,14 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
             <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
           ) : (
             <Typography.Text id={message.id} />
+          )}
+
+          {message.role === "user" && (
+            <div className={styles["message-text-type__static-options"]}>
+              <Button variant="text" size="xs" color="secondary" onClick={onClickEdit}>
+                Edit
+              </Button>
+            </div>
           )}
 
           {message.afterContentComponent && simulationEnded && message.afterContentComponent}

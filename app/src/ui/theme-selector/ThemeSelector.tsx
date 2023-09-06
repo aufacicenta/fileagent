@@ -48,7 +48,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
       role="button"
       tabIndex={0}
     >
-      <Icon name={theme === "fileagent" ? "icon-sun" : "icon-moon-2"} />
+      <Icon name={theme === "fileagent" ? "icon-moon-2" : "icon-sun"} />
     </div>
   );
 };

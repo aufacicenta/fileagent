@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export enum FieldNames {
+export enum FormFieldNames {
   message = "message",
 }
 

@@ -11,7 +11,7 @@ import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 import { MessageTextType } from "ui/dropzone/message-text-type/MessageTextType";
 import { useFormContext } from "context/form/useFormContext";
 
-import { DropboxChatProps, FieldNames } from "./DropboxChat.types";
+import { DropboxChatProps, FormFieldNames } from "./DropboxChat.types";
 import styles from "./DropboxChat.module.scss";
 
 export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit }) => {
@@ -77,7 +77,7 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
         <Card className={styles["dropbox-chat__textarea--card"]} shadow>
           <Card.Content>
             <Field
-              name={FieldNames.message}
+              name={FormFieldNames.message}
               component="textarea"
               className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
               id="message"

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
-import { FieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
+import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
 import { MessageContext } from "./MessageContext";
@@ -131,7 +131,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
             message.type === "file" ? (
               <MessageFileType.Options
                 file={{ name: message.file.name } as DropzoneFileExtended}
-                fieldName={FieldNames.message}
+                fieldName={FormFieldNames.message}
               />
             ) : undefined,
         });
