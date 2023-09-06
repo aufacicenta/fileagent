@@ -60,7 +60,8 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
 
 Title: My Signature Request
 Subject: Please sign this document
-Message: A message`,
+Message: A message
+Signers: First Last <email@email.com>, First Last <email@email.com>`,
     );
   };
 

@@ -38,6 +38,10 @@ export default [
           type: "string",
           description: "The message of the embedded signature request.",
         },
+        signers: {
+          type: "string",
+          description: "Comma separated emails of signers. eg. Name Lastname <email@email.com>",
+        },
         unit: { type: "string" },
       },
       required: ["file_name"],

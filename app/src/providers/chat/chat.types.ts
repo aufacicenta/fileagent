@@ -22,4 +22,5 @@ export type generate_dropbox_e_signature_request_args = {
   title: DropboxSign.SignatureRequestCreateEmbeddedRequest["title"];
   subject: DropboxSign.SignatureRequestCreateEmbeddedRequest["subject"];
   message: DropboxSign.SignatureRequestCreateEmbeddedRequest["message"];
+  signers: string;
 };

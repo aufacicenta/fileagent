@@ -30,9 +30,9 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
       </Head>
       <MessageContextController>
         <FileContextController>
-          <FormContextController>
-            <ToastContextController>
-              <AuthorizationContextController>
+          <ToastContextController>
+            <AuthorizationContextController>
+              <FormContextController>
                 <div id="modal-root" />
                 <div id="dropdown-portal" />
                 <div className={clsx(styles["chat-layout"])}>
@@ -44,9 +44,9 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
 
                   <MainPanel>{children}</MainPanel>
                 </div>
-              </AuthorizationContextController>
-            </ToastContextController>
-          </FormContextController>
+              </FormContextController>
+            </AuthorizationContextController>
+          </ToastContextController>
         </FileContextController>
       </MessageContextController>
     </>

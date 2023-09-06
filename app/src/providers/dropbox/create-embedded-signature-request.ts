@@ -2,46 +2,41 @@ import * as DropboxSign from "@dropbox/sign";
 
 import logger from "providers/logger";
 
+import { CreateEmbeddedSignatureRequestArgs } from "./dropbox.types";
+
 const createEmbeddedSignatureRequest = async (
   accessToken: string,
-  args: Pick<DropboxSign.SignatureRequestCreateEmbeddedRequest, "title" | "subject" | "message">,
+  args: CreateEmbeddedSignatureRequestArgs,
   fileUrls: DropboxSign.SignatureRequestCreateEmbeddedRequest["fileUrls"],
 ) => {
-  try {
-    logger.info(`createEmbeddedSignatureRequest`, { args });
+  logger.info(`createEmbeddedSignatureRequest`);
 
-    const signatureRequestApi = new DropboxSign.SignatureRequestApi();
+  const signatureRequestApi = new DropboxSign.SignatureRequestApi();
 
-    signatureRequestApi.accessToken = accessToken;
+  signatureRequestApi.accessToken = accessToken;
 
-    const signingOptions: DropboxSign.SubSigningOptions = {
-      draw: true,
-      type: true,
-      upload: true,
-      phone: true,
-      defaultType: DropboxSign.SubSigningOptions.DefaultTypeEnum.Draw,
-    };
+  const signingOptions: DropboxSign.SubSigningOptions = {
+    draw: true,
+    type: true,
+    upload: true,
+    phone: true,
+    defaultType: DropboxSign.SubSigningOptions.DefaultTypeEnum.Draw,
+  };
 
-    const data: DropboxSign.SignatureRequestCreateEmbeddedRequest = {
-      clientId: process.env.DROPBOX_CLIENT_ID!,
-      title: args.title,
-      subject: args.subject,
-      message: args.message,
-      fileUrls,
-      signingOptions,
-      testMode: true,
-    };
+  const data: DropboxSign.SignatureRequestCreateEmbeddedRequest = {
+    clientId: process.env.DROPBOX_CLIENT_ID!,
+    title: args.title,
+    subject: args.subject,
+    message: args.message,
+    signers: args.signers,
+    fileUrls,
+    signingOptions,
+    testMode: true,
+  };
 
-    const result = await signatureRequestApi.signatureRequestCreateEmbedded(data);
+  const result = await signatureRequestApi.signatureRequestCreateEmbedded(data);
 
-    logger.info(result);
-
-    return result;
-  } catch (error) {
-    logger.error(error);
-
-    throw error;
-  }
+  return result;
 };
 
 export default createEmbeddedSignatureRequest;

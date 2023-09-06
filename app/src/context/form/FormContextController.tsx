@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { setTimeout } from "timers";
+import { sample } from "lodash";
+import { APIChatHeaderKeyNames, DropboxESignRequest } from "api/chat/types";
+import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 
-import { FormContext } from "./FormContext";
+import { useMessageContext } from "context/message/useMessageContext";
+import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
+import { ChatContextMessage } from "context/message/MessageContext.types";
+import { useRoutes } from "hooks/useRoutes/useRoutes";
+import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
+
 import { FormContextControllerProps, FormState } from "./FormContext.types";
+import { FormContext } from "./FormContext";
 
 const defaultHeight = "63px";
 
@@ -26,6 +35,12 @@ const resetTextareaHeight = (id: string = "#message") => {
 export const FormContextController = ({ children }: FormContextControllerProps) => {
   const [form, setForm] = useState<FormState | undefined>(undefined);
 
+  const messageContext = useMessageContext();
+
+  const routes = useRoutes();
+
+  const authContext = useAuthorizationContext();
+
   const setFieldValue = (field: string, text: string) => {
     form?.mutators.setValue(field, text);
 
@@ -36,11 +51,103 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     }, 100);
   };
 
+  const submit = async (values: ChatFormValues) => {
+    if (!form) return;
+
+    messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: true }));
+
+    const message: ChatContextMessage = { content: values.message, role: "user", type: "text" };
+
+    messageContext.appendMessage(message);
+
+    const processingMessages = [
+      "Processing...",
+      "Please wait...",
+      "Still on it...",
+      "Hold on...",
+      "Almost there...",
+      "Huge file?",
+      "Please be patient...",
+    ];
+
+    const loadingMessage = messageContext.appendMessage({
+      type: "readonly",
+      content: processingMessages[0],
+      role: "assistant",
+    });
+
+    const processingInterval = setInterval(() => {
+      const content = sample(processingMessages)!;
+
+      messageContext.updateMessage({
+        ...loadingMessage,
+        content,
+      });
+    }, 10000);
+
+    try {
+      form.reset();
+
+      resetTextareaHeight();
+
+      const messages = messageContext.getPlainMessages();
+
+      const headers: Record<any, string> = {};
+
+      if (authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]) {
+        headers[APIChatHeaderKeyNames.x_dropbox_access_token] =
+          authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]!;
+      }
+
+      const result = await fetch(routes.api.chat.dropboxESign(), {
+        method: "POST",
+        body: JSON.stringify({
+          messages,
+          currentMessage: messageContext.extractApiRequestValues(message),
+        } as DropboxESignRequest),
+        headers,
+      });
+
+      const json = await result.json();
+
+      console.log(json);
+
+      messageContext.deleteMessage(loadingMessage.id!);
+
+      if (json.error) {
+        throw new Error(json.error);
+      }
+
+      messageContext.appendMessage({ ...json.choices[0].message });
+    } catch (error) {
+      console.log(error);
+
+      messageContext.deleteMessage(loadingMessage.id!);
+
+      messageContext.appendMessage({
+        content: `Apologies, I wasn't able to complete your request.
+
+        - Maybe the file is too large?
+        - The content may be unreadable
+        - Check your internet connection`,
+        role: "assistant",
+        type: "text",
+      });
+
+      form.mutators.setValue(FormFieldNames.message, values.message);
+    }
+
+    messageContext.setActions((prev) => ({ ...prev, isProcessingRequest: false }));
+
+    clearInterval(processingInterval);
+  };
+
   const props = {
     setForm,
     setFieldValue,
     updateTextareaHeight,
     resetTextareaHeight,
+    submit,
   };
 
   return <FormContext.Provider value={props}>{children}</FormContext.Provider>;
