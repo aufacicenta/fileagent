@@ -7,56 +7,48 @@ import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 import styles from "./ThemeSelector.module.scss";
 import { ThemeSelectorProps, Theme } from "./ThemeSelector.types";
 
+const themes: Theme[] = ["fileagent", "fileagent-dark"];
+
 export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className }) => {
+  const [theme, setTheme] = useState<Theme>("fileagent");
+
   const localStorage = useLocalStorage();
-  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     const localTheme = localStorage.get<Theme>("theme");
 
     if (!localTheme) {
       localStorage.set("theme", theme);
+
       document.body.dataset.theme = theme;
 
       return;
     }
 
     document.body.dataset.theme = localTheme;
+
     setTheme(localTheme);
   }, [localStorage, theme]);
 
-  const handleOnThemeChange = (newTheme: Theme) => {
-    localStorage.set("theme", newTheme);
+  const handleOnThemeChange = () => {
+    const currentThemeIndex = themes.indexOf(theme);
+
+    const newTheme = themes[currentThemeIndex + 1] ? themes[currentThemeIndex + 1] : themes[0];
+
     setTheme(newTheme);
+
+    localStorage.set("theme", newTheme);
   };
 
   return (
-    <div className={clsx(className, styles["theme-selector"])}>
-      <div className={styles["theme-selector__wrapper"]}>
-        <div
-          className={clsx(styles["theme-selector__moon"], {
-            [styles["theme-selector__moon--active"]]: theme === "dark",
-          })}
-          onClick={() => handleOnThemeChange("dark")}
-          onKeyDown={() => handleOnThemeChange("dark")}
-          role="button"
-          tabIndex={0}
-        >
-          <Icon name="icon-moon-2" />
-        </div>
-        <div className={styles["theme-selector__divider"]} />
-        <div
-          className={clsx(styles["theme-selector__sun"], {
-            [styles["theme-selector__sun--active"]]: theme === "light",
-          })}
-          onClick={() => handleOnThemeChange("light")}
-          onKeyDown={() => handleOnThemeChange("light")}
-          role="button"
-          tabIndex={0}
-        >
-          <Icon name="icon-sun" />
-        </div>
-      </div>
+    <div
+      className={clsx(className, styles["theme-selector"])}
+      onClick={handleOnThemeChange}
+      onKeyPress={handleOnThemeChange}
+      role="button"
+      tabIndex={0}
+    >
+      <Icon name={theme === "fileagent" ? "icon-sun" : "icon-moon-2"} />
     </div>
   );
 };

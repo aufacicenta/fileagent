@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import Head from "next/head";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
@@ -11,16 +10,13 @@ import { MessageContextController } from "context/message/MessageContextControll
 import { FormContextController } from "context/form/FormContextController";
 import { Navbar } from "ui/fileagent/navbar/Navbar";
 import { AuthorizationContextController } from "context/authorization/AuthorizationContextController";
+import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
 
 export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
   const { locale } = useRouter();
-
-  useEffect(() => {
-    document.body.dataset.theme = "fileagent";
-  }, []);
 
   return (
     <>
@@ -43,6 +39,8 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                   <Navbar />
 
                   <LocaleSelector />
+
+                  <ThemeSelector />
 
                   <MainPanel>{children}</MainPanel>
                 </div>

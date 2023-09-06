@@ -5,4 +5,4 @@ export type ThemeSelectorProps = {
   className?: string;
 };
 
-export type Theme = "light" | "dark";
+export type Theme = "fileagent" | "fileagent-dark";

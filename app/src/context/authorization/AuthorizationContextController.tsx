@@ -15,8 +15,6 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
     try {
       const dropboxESignAuthResponse = Cookies.get(OAuthTokenStoreKey.dropbox_esign);
 
-      console.log({ dropboxESignAuthResponse });
-
       JSON.parse(dropboxESignAuthResponse!);
 
       toast.trigger({
