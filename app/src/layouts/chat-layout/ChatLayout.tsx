@@ -11,6 +11,7 @@ import { FormContextController } from "context/form/FormContextController";
 import { Navbar } from "ui/fileagent/navbar/Navbar";
 import { AuthorizationContextController } from "context/authorization/AuthorizationContextController";
 import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
+import { ThemeContextController } from "context/theme/ThemeContextController";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
@@ -28,27 +29,29 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
       </Head>
-      <MessageContextController>
-        <FileContextController>
-          <ToastContextController>
-            <AuthorizationContextController>
-              <FormContextController>
-                <div id="modal-root" />
-                <div id="dropdown-portal" />
-                <div className={clsx(styles["chat-layout"])}>
-                  <Navbar />
+      <ThemeContextController>
+        <MessageContextController>
+          <FileContextController>
+            <ToastContextController>
+              <AuthorizationContextController>
+                <FormContextController>
+                  <div id="modal-root" />
+                  <div id="dropdown-portal" />
+                  <div className={clsx(styles["chat-layout"])}>
+                    <Navbar />
 
-                  <LocaleSelector />
+                    <LocaleSelector />
 
-                  <ThemeSelector />
+                    <ThemeSelector />
 
-                  <MainPanel>{children}</MainPanel>
-                </div>
-              </FormContextController>
-            </AuthorizationContextController>
-          </ToastContextController>
-        </FileContextController>
-      </MessageContextController>
+                    <MainPanel>{children}</MainPanel>
+                  </div>
+                </FormContextController>
+              </AuthorizationContextController>
+            </ToastContextController>
+          </FileContextController>
+        </MessageContextController>
+      </ThemeContextController>
     </>
   );
 };
