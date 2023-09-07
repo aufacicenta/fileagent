@@ -3,12 +3,26 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
+export enum DropboxESignLabel {
+  dropbox_esign_request_success = "dropbox:esign:request:success",
+  dropbox_esign_request_error = "dropbox:esign:request:error",
+  dropbox_esign_unauthorized = "dropbox:esign:unauthorized",
+}
+
+export enum ChatLabel {
+  chat_extract_pdf_success = "chat:extract:pdf:success",
+  chat_extract_pdf_error = "chat:extract:pdf:error",
+  chat_completion_success = "chat:completion:success",
+  chat_completion_error = "chat:completion:error",
+}
+
 export type ChatMessageBase = ChatCompletionMessage & {
   id?: string;
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
   hasInnerHtml?: boolean;
   type?: "text" | "readonly" | "file";
+  label?: DropboxESignLabel | ChatLabel;
 };
 
 export type TextChatCompletionMessage = {

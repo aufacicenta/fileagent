@@ -4,6 +4,7 @@
 .message-text-type {
   @include avatar;
   @include content;
+  @include options;
   display: block;
 
   &__loading-spinner {

@@ -10,7 +10,7 @@ export enum FunctionCallName {
 }
 
 export type ChatCompletionChoice = OpenAI.Chat.ChatCompletion.Choice & {
-  message: ChatCompletionMessage & Pick<ChatContextMessage, "hasInnerHtml" | "type">;
+  message: ChatCompletionMessage & Pick<ChatContextMessage, "hasInnerHtml" | "type" | "label">;
 };
 
 export type extract_content_from_pdf_file_args = {

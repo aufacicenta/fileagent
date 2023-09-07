@@ -1,15 +1,15 @@
 import clsx from "clsx";
 
-import { Typography } from "ui/typography/Typography";
-import { CircularProgress } from "ui/circular-progress/CircularProgress";
+import { useFormContext } from "context/form/useFormContext";
 import { useSubscription } from "hooks/useSubscription/useSubscription";
-import { Icon } from "ui/icon/Icon";
 import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 import { Button } from "ui/button/Button";
-import { useFormContext } from "context/form/useFormContext";
+import { CircularProgress } from "ui/circular-progress/CircularProgress";
+import { Icon } from "ui/icon/Icon";
+import { Typography } from "ui/typography/Typography";
 
-import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileType.types";
 import styles from "./MessageFileType.module.scss";
+import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileType.types";
 
 export const MessageFileType = ({ message, className }: MessageFileTypeProps) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
@@ -56,12 +56,12 @@ const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
   const onClickDropboxESign = () => {
     formContext.setFieldValue(
       fieldName,
-      `Generate an embedded Dropbox Sign™ request for "${file.name}":
+      `Generate an embedded Dropbox Sign™ request for "${file.name}" with the following details:
 
 Title: My Signature Request
 Subject: Please sign this document
 Message: A message
-Signers: First Last <email@email.com>, First Last <email@email.com>`,
+Signers: First Last [email@email.com], First Last [email@email.com]`,
     );
   };
 

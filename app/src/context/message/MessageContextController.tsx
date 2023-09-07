@@ -31,6 +31,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       content: message.content,
       type: message.type,
       hasInnerHtml: message.hasInnerHtml,
+      label: message.label,
     };
 
     if (message.type === "file") {

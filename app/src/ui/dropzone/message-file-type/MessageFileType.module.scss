@@ -4,30 +4,6 @@
 .message-file-type {
   @include avatar;
   @include content;
+  @include options;
   display: block;
-
-  &__options {
-    @include atLargeTablet {
-      button {
-        &:nth-child(n + 2) {
-          margin-left: $space-default;
-        }
-      }
-    }
-    display: flex;
-    flex-wrap: wrap;
-
-    button {
-      margin-right: $space-default;
-      margin-bottom: $space-default;
-    }
-
-    &--dropbox-button {
-      background-color: #0061fe;
-
-      > div {
-        color: #fff;
-      }
-    }
-  }
 }

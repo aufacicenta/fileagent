@@ -7,6 +7,7 @@ import { LoadingSpinner } from "ui/icons/LoadingSpinner";
 import { Button } from "ui/button/Button";
 import { useFormContext } from "context/form/useFormContext";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
+import { DropboxESignLabel } from "context/message/MessageContext.types";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
@@ -20,6 +21,26 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
 
   const onClickEdit = () => {
     formContext.setFieldValue(FormFieldNames.message, message.content!);
+  };
+
+  const getOptionComponentsByLabel = () => {
+    if (!message.label) return null;
+
+    switch (message.label) {
+      case DropboxESignLabel.dropbox_esign_request_success:
+        return (
+          <div className={styles["message-text-type__options"]}>
+            <Button variant="outlined" color="secondary" size="s">
+              List my signature requests
+            </Button>
+            <Button variant="outlined" color="secondary" size="s">
+              Send a reminder
+            </Button>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -50,6 +71,8 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
               </Button>
             </div>
           )}
+
+          {message.role === "assistant" && getOptionComponentsByLabel()}
 
           {message.afterContentComponent && simulationEnded && message.afterContentComponent}
         </div>

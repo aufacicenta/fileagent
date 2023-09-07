@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import logger from "providers/logger";
 import chat from "providers/chat";
 import openai from "providers/openai";
+import { ChatLabel } from "context/message/MessageContext.types";
 
 import functions from "./functions";
 import { DropboxESignRequest } from "./types";
@@ -46,6 +47,8 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
           message: {
             role: "assistant",
             content: "Apologies, I couldn't resolve this request. Try again.",
+            label: ChatLabel.chat_completion_error,
+            type: "readonly",
           },
         },
       ],

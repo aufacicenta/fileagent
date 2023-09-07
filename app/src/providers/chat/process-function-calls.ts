@@ -2,6 +2,8 @@ import OpenAI from "openai";
 import { DropboxESignRequest } from "api/chat/types";
 import { NextApiRequest } from "next";
 
+import { ChatLabel } from "context/message/MessageContext.types";
+
 import {
   ChatCompletionChoice,
   FunctionCallName,
@@ -18,11 +20,15 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
     (currentMessage: DropboxESignRequest["currentMessage"], request: NextApiRequest) => Promise<ChatCompletionChoice>
   > = [];
 
-  if (functionCalls.length === 0)
+  if (functionCalls.length === 0) {
     return {
-      choices: choices.map((choice) => ({ ...choice, message: { ...choice.message, type: "text" } })),
+      choices: choices.map((choice) => ({
+        ...choice,
+        message: { ...choice.message, type: "text", label: ChatLabel.chat_completion_success },
+      })),
       promises,
     };
+  }
 
   const functions = {
     [FunctionCallName.extract_content_from_pdf_file]:

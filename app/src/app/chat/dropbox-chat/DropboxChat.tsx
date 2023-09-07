@@ -38,6 +38,12 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
   const onKeyDown = async (event: KeyboardEvent) => {
     const { textarea, defaultHeight } = formContext.updateTextareaHeight();
 
+    if (event.key === "Backspace" && !textarea.textContent) {
+      event.preventDefault();
+
+      textarea.style.height = defaultHeight;
+    }
+
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
 

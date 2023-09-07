@@ -7,6 +7,7 @@ import logger from "providers/logger";
 import supabase from "providers/supabase";
 import dropbox from "providers/dropbox";
 import { CreateEmbeddedSignatureRequestArgs } from "providers/dropbox/dropbox.types";
+import { DropboxESignLabel } from "context/message/MessageContext.types";
 
 const generate_dropbox_e_signature_request = async (
   args: generate_dropbox_e_signature_request_args,
@@ -24,11 +25,11 @@ const generate_dropbox_e_signature_request = async (
       subject: args.subject,
       message: args.message,
       signers: args.signers.split(",").map((signer) => {
-        const [name, email] = signer.split("<");
+        const [name, email] = signer.split("[");
 
         return {
           name: name.trim(),
-          emailAddress: email.replace(">", "").trim(),
+          emailAddress: email.replace("]", "").trim(),
         };
       }),
     };
@@ -44,11 +45,14 @@ const generate_dropbox_e_signature_request = async (
       index: 0,
       message: {
         role: "assistant",
-        content: `A signature request was created for ${args.file_name}.
+        content: `A Dropbox Sign™ request was created for <u>${args.file_name}</u>.
 
-        Review it at <a href="${result.body.signatureRequest?.detailsUrl}" target="_blank">${result.body.signatureRequest?.detailsUrl}</a>.`,
+        <a href="${result.body.signatureRequest?.detailsUrl}" target="_blank">Click to manage this request</a>.
+
+        Is there anything else I can do for you?`,
         type: "text",
         hasInnerHtml: true,
+        label: DropboxESignLabel.dropbox_esign_request_success,
       },
     };
   } catch (error) {
@@ -64,6 +68,7 @@ const generate_dropbox_e_signature_request = async (
           }&state=${Date.now()}&redirect_uri=${process.env.DROPBOX_REDIRECT_URI}">Click to authorize</a>.`,
           hasInnerHtml: true,
           type: "readonly",
+          label: DropboxESignLabel.dropbox_esign_unauthorized,
         },
       };
     }
@@ -75,6 +80,7 @@ const generate_dropbox_e_signature_request = async (
           ...choice.message,
           content: (error as HttpError)?.body?.error?.errorMsg,
           type: "readonly",
+          label: DropboxESignLabel.dropbox_esign_request_error,
         },
       };
     }

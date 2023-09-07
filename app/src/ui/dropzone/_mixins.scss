@@ -34,6 +34,36 @@
       white-space: pre-line;
       word-break: break-word;
       hyphens: auto;
+
+      a {
+        color: var(--color-primary);
+      }
+    }
+  }
+}
+@mixin options {
+  &__options {
+    @include atLargeTablet {
+      button {
+        &:nth-child(n + 2) {
+          margin-left: $space-default;
+        }
+      }
+    }
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+      margin-right: $space-default;
+      margin-bottom: $space-default;
+    }
+
+    &--dropbox-button {
+      background-color: #0061fe;
+
+      > div {
+        color: #fff;
+      }
     }
   }
 }

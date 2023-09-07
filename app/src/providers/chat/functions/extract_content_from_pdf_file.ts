@@ -6,6 +6,7 @@ import logger from "providers/logger";
 import openai from "providers/openai";
 import supabase from "providers/supabase";
 import nanonets from "providers/nanonets";
+import { ChatLabel } from "context/message/MessageContext.types";
 
 const extract_content_from_pdf_file = async (
   args: extract_content_from_pdf_file_args,
@@ -66,6 +67,7 @@ const extract_content_from_pdf_file = async (
         role: "assistant",
         content,
         type: "text",
+        label: ChatLabel.chat_extract_pdf_success,
       },
     };
   } catch (error) {
@@ -76,6 +78,7 @@ const extract_content_from_pdf_file = async (
       message: {
         ...choice.message,
         content: "Sorry, I couldn't extract the content from the PDF file.",
+        label: ChatLabel.chat_extract_pdf_error,
       },
     };
   }
