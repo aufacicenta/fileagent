@@ -40,7 +40,7 @@ export default [
         },
         signers: {
           type: "string",
-          description: "Comma separated emails of signers. eg. Name Lastname <email@email.com>",
+          description: "Comma separated emails of signers. eg. Name Lastname [email@email.com]",
         },
         unit: { type: "string" },
       },
