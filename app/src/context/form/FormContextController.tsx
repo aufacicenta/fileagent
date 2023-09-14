@@ -99,6 +99,10 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
           authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]!;
       }
 
+      if (authContext.accessTokens[OAuthTokenStoreKey.square_api]) {
+        headers[APIChatHeaderKeyNames.x_square_access_token] = authContext.accessTokens[OAuthTokenStoreKey.square_api]!;
+      }
+
       const options = {
         method: "POST",
         body: JSON.stringify({

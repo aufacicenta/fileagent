@@ -35,8 +35,31 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
     }
   };
 
+  const verifySquareAPIAuthorization = async () => {
+    try {
+      const squareApiAuthResponse = Cookies.get(OAuthTokenStoreKey.square_api);
+
+      const value = JSON.parse(squareApiAuthResponse!);
+
+      setAccessTokens((prev) => ({
+        ...prev,
+        [OAuthTokenStoreKey.square_api]: value.accessToken,
+      }));
+
+      toast.trigger({
+        title: "Authorization successful",
+        children: <Typography.Text>You are now authorized to use Square™.</Typography.Text>,
+        variant: "confirmation",
+        withTimeout: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const props = {
     verifyDropboxESignAuthorization,
+    verifySquareAPIAuthorization,
     accessTokens,
   };
 

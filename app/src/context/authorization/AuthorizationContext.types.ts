@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 export type AccessTokens = {
   [OAuthTokenStoreKey.dropbox_esign]?: string;
+  [OAuthTokenStoreKey.square_api]?: string;
 };
 
 export type AuthorizationContextControllerProps = {
@@ -12,4 +13,5 @@ export type AuthorizationContextControllerProps = {
 export type AuthorizationContextType = {
   accessTokens: AccessTokens;
   verifyDropboxESignAuthorization: () => Promise<void>;
+  verifySquareAPIAuthorization: () => Promise<void>;
 };

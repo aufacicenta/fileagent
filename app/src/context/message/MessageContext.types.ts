@@ -6,6 +6,7 @@ import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 export enum SquareAPILabel {
   square_get_locations_request_success = "square:get_locations:request:success",
   square_get_locations_request_error = "square:get_locations:request:error",
+  square_request_auth_error = "square:request:auth:error",
 }
 
 export enum DropboxESignLabel {

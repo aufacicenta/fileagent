@@ -21,6 +21,7 @@ export const DropboxChatContainer = () => {
 
   useEffect(() => {
     authContext.verifyDropboxESignAuthorization();
+    authContext.verifySquareAPIAuthorization();
   }, []);
 
   const onSubmit = async (values: ChatFormValues) => {

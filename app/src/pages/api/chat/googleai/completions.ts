@@ -28,6 +28,11 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
     const predictionServiceClient = new PredictionServiceClient(clientOptions);
 
     const messages = data.messages.map((message) => ({ author: message.role, content: message.content }));
+
+    if (messages[messages.length - 1].author === "user" && data.currentMessage.role === "user") {
+      messages.push({ author: "assistant", content: "Continue the conversation..." });
+    }
+
     messages.push({ author: data.currentMessage.role, content: data.currentMessage.content });
 
     const prompt = {
