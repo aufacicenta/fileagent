@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { DropboxESignRequest } from "api/chat/types";
+import { FileAgentRequest } from "api/chat/types";
 import { NextApiRequest } from "next";
 
 import { ChatLabel } from "context/message/MessageContext.types";
@@ -9,15 +9,24 @@ import {
   FunctionCallName,
   extract_content_from_pdf_file_args,
   generate_dropbox_e_signature_request_args,
+  get_square_locations_args,
 } from "./chat.types";
-import extract_content_from_pdf_file from "./functions/extract_content_from_pdf_file";
-import generate_dropbox_e_signature_request from "./functions/generate_dropbox_e_signature_request";
+import extract_content_from_pdf_file from "./functions/nanonets/extract_content_from_pdf_file";
+import generate_dropbox_e_signature_request from "./functions/dropbox/generate_dropbox_e_signature_request";
+import get_square_locations from "./functions/square/get_square_locations";
+
+const dummyFn = async (
+  _args: generate_dropbox_e_signature_request_args,
+  choice: ChatCompletionChoice,
+  _currentMessage: FileAgentRequest["currentMessage"],
+  _request: NextApiRequest,
+) => Promise.resolve(choice);
 
 const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["choices"]) => {
   const functionCalls = choices.filter((choice) => !!choice.message.function_call);
 
   const promises: Array<
-    (currentMessage: DropboxESignRequest["currentMessage"], request: NextApiRequest) => Promise<ChatCompletionChoice>
+    (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) => Promise<ChatCompletionChoice>
   > = [];
 
   if (functionCalls.length === 0) {
@@ -33,19 +42,27 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
   const functions = {
     [FunctionCallName.extract_content_from_pdf_file]:
       (args: extract_content_from_pdf_file_args, choice: ChatCompletionChoice) =>
-      (currentMessage: DropboxESignRequest["currentMessage"]) =>
+      (currentMessage: FileAgentRequest["currentMessage"]) =>
         extract_content_from_pdf_file(args, choice, currentMessage),
     [FunctionCallName.generate_dropbox_e_signature_request]:
       (args: generate_dropbox_e_signature_request_args, choice: ChatCompletionChoice) =>
-      (currentMessage: DropboxESignRequest["currentMessage"], request: NextApiRequest) =>
+      (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
         generate_dropbox_e_signature_request(args, choice, currentMessage, request),
+    [FunctionCallName.get_square_locations]:
+      (args: get_square_locations_args, choice: ChatCompletionChoice) =>
+      (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
+        get_square_locations(args, choice, currentMessage, request),
+    [FunctionCallName.get_square_orders]:
+      (args: generate_dropbox_e_signature_request_args, choice: ChatCompletionChoice) =>
+      (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
+        dummyFn(args, choice, currentMessage, request),
   };
 
   functionCalls.forEach((choice) => {
     const { arguments: args, name } = choice.message.function_call!;
 
     promises.push(
-      functions[name as FunctionCallName](JSON.parse(args) as any, {
+      functions[name as FunctionCallName](typeof args === "object" ? args : (JSON.parse(args) as any), {
         ...choice,
         message: { ...choice.message, type: "text" },
       }),

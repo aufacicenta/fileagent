@@ -12,6 +12,12 @@ type RouteMap = {
     };
     chat: {
       dropboxESign: () => string;
+      openai: {
+        completionsAPI: () => string;
+      };
+      googleai: {
+        completionsAPI: () => string;
+      };
     };
   };
   dashboard: {
@@ -39,6 +45,12 @@ export const routes: RouteMap = {
     },
     chat: {
       dropboxESign: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/dropbox-e-sign`,
+      openai: {
+        completionsAPI: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/openai/completions`,
+      },
+      googleai: {
+        completionsAPI: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/googleai/completions`,
+      },
     },
   },
   dashboard: {

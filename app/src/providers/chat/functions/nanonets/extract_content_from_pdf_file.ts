@@ -1,4 +1,4 @@
-import { DropboxESignRequest } from "api/chat/types";
+import { FileAgentRequest } from "api/chat/types";
 import { CreateChatCompletionRequestMessage } from "openai/resources/chat";
 
 import { ChatCompletionChoice, extract_content_from_pdf_file_args } from "providers/chat/chat.types";
@@ -11,7 +11,7 @@ import { ChatLabel } from "context/message/MessageContext.types";
 const extract_content_from_pdf_file = async (
   args: extract_content_from_pdf_file_args,
   choice: ChatCompletionChoice,
-  currentMessage: DropboxESignRequest["currentMessage"],
+  currentMessage: FileAgentRequest["currentMessage"],
 ): Promise<ChatCompletionChoice> => {
   try {
     logger.info(`extract_content_from_pdf_file; ${args}`);

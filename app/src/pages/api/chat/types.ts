@@ -4,7 +4,7 @@ export enum APIChatHeaderKeyNames {
   x_dropbox_access_token = "x-dropbox-access-token",
 }
 
-export type DropboxESignRequest = {
+export type FileAgentRequest = {
   messages: ChatContextMessage[];
   currentMessage: ChatContextMessage;
 };

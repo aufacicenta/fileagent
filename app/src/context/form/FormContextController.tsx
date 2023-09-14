@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { setTimeout } from "timers";
 import { sample } from "lodash";
-import { APIChatHeaderKeyNames, DropboxESignRequest } from "api/chat/types";
+import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 
 import { useMessageContext } from "context/message/useMessageContext";
@@ -99,14 +99,18 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
           authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]!;
       }
 
-      const result = await fetch(routes.api.chat.dropboxESign(), {
+      const options = {
         method: "POST",
         body: JSON.stringify({
           messages,
           currentMessage: messageContext.extractApiRequestValues(message),
-        } as DropboxESignRequest),
+        } as FileAgentRequest),
         headers,
-      });
+      };
+
+      const result = await (process.env.NEXT_PUBLIC_CHAT_AI_API === "openai"
+        ? fetch(routes.api.chat.openai.completionsAPI(), options)
+        : fetch(routes.api.chat.googleai.completionsAPI(), options));
 
       const json = await result.json();
 
@@ -131,7 +135,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         - The content may be unreadable
         - Check your internet connection`,
         role: "assistant",
-        type: "text",
+        type: "readonly",
       });
 
       form.mutators.setValue(FormFieldNames.message, values.message);

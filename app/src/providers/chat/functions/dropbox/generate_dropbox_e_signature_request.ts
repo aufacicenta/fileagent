@@ -1,4 +1,4 @@
-import { APIChatHeaderKeyNames, DropboxESignRequest } from "api/chat/types";
+import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
 import { NextApiRequest } from "next";
 import { HttpError } from "@dropbox/sign";
 
@@ -12,7 +12,7 @@ import { DropboxESignLabel } from "context/message/MessageContext.types";
 const generate_dropbox_e_signature_request = async (
   args: generate_dropbox_e_signature_request_args,
   choice: ChatCompletionChoice,
-  _currentMessage: DropboxESignRequest["currentMessage"],
+  _currentMessage: FileAgentRequest["currentMessage"],
   request: NextApiRequest,
 ): Promise<ChatCompletionChoice> => {
   try {

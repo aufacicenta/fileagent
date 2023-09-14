@@ -3,6 +3,11 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
+export enum SquareAPILabel {
+  square_get_locations_request_success = "square:get_locations:request:success",
+  square_get_locations_request_error = "square:get_locations:request:error",
+}
+
 export enum DropboxESignLabel {
   dropbox_esign_request_success = "dropbox:esign:request:success",
   dropbox_esign_request_error = "dropbox:esign:request:error",
@@ -22,7 +27,7 @@ export type ChatMessageBase = ChatCompletionMessage & {
   afterContentComponent?: ReactNode;
   hasInnerHtml?: boolean;
   type?: "text" | "readonly" | "file";
-  label?: DropboxESignLabel | ChatLabel;
+  label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
 };
 
 export type TextChatCompletionMessage = {

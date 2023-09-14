@@ -4,15 +4,14 @@ import logger from "providers/logger";
 import chat from "providers/chat";
 import openai from "providers/openai";
 import { ChatLabel } from "context/message/MessageContext.types";
-
-import functions from "./functions";
-import { DropboxESignRequest } from "./types";
+import functions from "../functions";
+import { FileAgentRequest } from "../types";
 
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
     logger.info(`getting chat completion from model ${openai.model}`);
 
-    const data: DropboxESignRequest = JSON.parse(request.body);
+    const data: FileAgentRequest = JSON.parse(request.body);
 
     const chatCompletion = await openai.client.chat.completions.create({
       messages: [
