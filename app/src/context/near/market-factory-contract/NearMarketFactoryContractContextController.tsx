@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState } from "react";
 
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
 import { Typography } from "ui/typography/Typography";
 import date from "providers/date";

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { AccountId } from "../market/market.types";
 import currency from "providers/currency";
 
-import { FungibleTokenContract } from ".";
+import { FungibleTokenContract } from "./contract";
 import { FungibleTokenMetadata } from "./fungible-token.types";
 
 export default ({ contractAddress }: { contractAddress?: string }) => {

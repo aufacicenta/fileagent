@@ -66,26 +66,22 @@ export class PromptWarsMarketContract {
       const gas = new BN("300000000000000");
       const deposit = "0";
 
-      const response = await wallet.signAndSendTransactions({
-        transactions: [
+      const response = await wallet.signAndSendTransaction({
+        receiverId: contractAddress,
+        actions: [
           {
-            receiverId: contractAddress,
-            actions: [
-              {
-                type: "FunctionCall",
-                params: {
-                  methodName: "sell",
-                  args: {},
-                  gas: gas.toString(),
-                  deposit,
-                },
-              },
-            ],
+            type: "FunctionCall",
+            params: {
+              methodName: "sell",
+              args: {},
+              gas: gas.toString(),
+              deposit,
+            },
           },
         ],
       });
 
-      near.unwrapFinalExecutionOutcome(response as Array<FinalExecutionOutcome>);
+      near.unwrapFinalExecutionOutcome(response as FinalExecutionOutcome);
     } catch (error) {
       console.log(error);
       throw new Error("ERR_MARKET_CONTRACT_SELL");

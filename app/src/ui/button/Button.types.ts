@@ -10,6 +10,7 @@ export type ButtonCommonProps = {
   rightIcon?: ReactNode;
   leftIcon?: ReactNode;
   fullWidth?: boolean;
+  animate?: "pulse";
 };
 
 export type LinkButtonProps = Omit<

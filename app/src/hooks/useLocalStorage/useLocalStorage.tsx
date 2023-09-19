@@ -1,21 +1,19 @@
-import _ from "lodash";
+function get<T>(key: string): T | null {
+  const item = localStorage.getItem(key);
 
-function get<T>(key: string, type: string = "{}", chain: string = "", fallback?: string | number): T {
-  const value = JSON.parse(localStorage.getItem(key) || type);
-
-  if (Array.isArray(value)) {
-    return value as unknown as T;
+  if (item === null) {
+    return null;
   }
 
-  if (typeof value === "object") {
-    return _.get(value, chain, fallback || "");
-  }
+  const value = JSON.parse(item);
 
   return value;
 }
 
 const set = (key: string, value: unknown = {}) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  const val = typeof value === "object" ? JSON.stringify(value) : value;
+
+  localStorage.setItem(key, val as string);
 };
 
 export const useLocalStorage = () => ({

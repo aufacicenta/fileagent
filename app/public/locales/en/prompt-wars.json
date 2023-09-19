@@ -10,7 +10,7 @@
   "promptWars.status.description.totalPriceBag": "Total Price Bag",
   "promptWars.status.description.contract": "Contract",
   "promptWars.status.description.youReIn": "You're in!",
-  "promptWars.status.Revealing": "Reveal",
+  "promptWars.status.Revealing": "Revealing",
   "promptWars.status.Unresolved": "Unresolved",
   "promptWars.status.Resolved": "Resolved",
   "promptWars.status.Loading": "Loading",
@@ -24,6 +24,7 @@
   "promptWars.description.submittingChargesUsdt": "Submitting your prompt will charge USDT",
   "promptWars.button.connectToPlay": "Connect to play",
   "promptWars.button.submitPrompt": "Submit Prompt",
+  "promptWars.button.submitPrompt.loading": "Submitting",
   "promptWars.button.createNewGame": "Create a new game",
   "promptWars.description.usdt": "USDT",
   "promptWars.negativePrompt.add": "Add a negative prompt",
@@ -65,5 +66,6 @@
   "promptWars.footer.madeByAufacicenta": "Made by Aufacicenta,",
   "promptWars.footer.poweredByPulseProtocol": "powered by Pulse Protocol",
   "promptWars.OutcomeTokensPosition.miniDescription": "Connect wallet to load balances",
-  "promptWars.walletSelector.nativeBalance": "Native Balance"
+  "promptWars.walletSelector.nativeBalance": "Native Balance",
+  "promptWars.walletSelector.isSettingGuestWallet": "Initializing Guest Account"
 }

@@ -12,7 +12,7 @@ export default async (network?: NetworkId) => {
     ...nearConfig,
   });
 
-  const wallet = new nearAPI.WalletConnection(near, "pulse");
+  const wallet = new nearAPI.WalletConnection(near, "promptwars");
 
   return { near, wallet };
 };

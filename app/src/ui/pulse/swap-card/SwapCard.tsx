@@ -14,7 +14,7 @@ import pulse from "providers/pulse";
 import useNearFungibleTokenContract from "providers/near/contracts/fungible-token/useNearFungibleTokenContract";
 import currency from "providers/currency";
 import { useToastContext } from "hooks/useToastContext/useToastContext";
-import { useWalletStateContext } from "hooks/useWalletStateContext/useWalletStateContext";
+import { useWalletStateContext } from "context/wallet/state/useWalletStateContext";
 import { WrappedBalance } from "providers/near/contracts/market/market.types";
 import date from "providers/date";
 import { useNearMarketContractContext } from "context/near/market-contract/useNearMarketContractContext";
