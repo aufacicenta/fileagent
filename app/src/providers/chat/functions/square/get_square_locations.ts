@@ -30,7 +30,6 @@ const get_square_locations = async (
           role: "assistant",
           content: `You have no Square locations.`,
           type: "text",
-          hasInnerHtml: true,
           label: SquareAPILabel.square_get_locations_request_success,
         },
       };
@@ -48,9 +47,8 @@ ${response.result.locations
     (location) =>
       `${location.businessName} (${location.id})\n${location.address?.addressLine1}, ${location.address?.locality} ${location.address?.administrativeDistrictLevel1}, ${location.address?.country} ${location.address?.postalCode}.\n${location.status}`,
   )
-  .join("\n")}`,
+  .join("\n\n")}`,
         type: "text",
-        hasInnerHtml: true,
         label: SquareAPILabel.square_get_locations_request_success,
       },
     };
