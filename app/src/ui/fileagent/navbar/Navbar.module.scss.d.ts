@@ -26,6 +26,7 @@ export type Styles = {
   "navbar__right--cta": string;
   "navbar__right--item": string;
   "navbar__right--trigger": string;
+  "navbar__sidebar-toggle": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

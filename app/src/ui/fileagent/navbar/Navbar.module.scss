@@ -11,6 +11,12 @@
   width: 100%;
   background-color: var(--color-navbar-background);
 
+  &__sidebar-toggle {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   &__dropdown {
     @extend .z-depth-1-half;
     position: absolute;
@@ -148,6 +154,11 @@
       justify-content: center;
       height: $navbar-height-mobile;
     }
+  }
+
+  &__left {
+    justify-content: flex-start;
+    align-items: center;
   }
 
   &__center {

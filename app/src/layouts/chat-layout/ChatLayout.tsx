@@ -12,6 +12,8 @@ import { Navbar } from "ui/fileagent/navbar/Navbar";
 import { AuthorizationContextController } from "context/authorization/AuthorizationContextController";
 import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { ThemeContextController } from "context/theme/ThemeContextController";
+import { ChatSidebar } from "ui/fileagent/chat-sidebar/ChatSidebar";
+import { ChatSidebarContextController } from "context/chat-sidebar/ChatSidebarContextController";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
@@ -35,17 +37,23 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
             <ToastContextController>
               <AuthorizationContextController>
                 <FormContextController>
-                  <div id="modal-root" />
-                  <div id="dropdown-portal" />
-                  <div className={clsx(styles["chat-layout"])}>
-                    <Navbar />
+                  <ChatSidebarContextController>
+                    <div id="modal-root" />
+                    <div id="dropdown-portal" />
+                    <div className={clsx(styles["chat-layout"])}>
+                      <Navbar />
 
-                    <LocaleSelector />
+                      <LocaleSelector />
 
-                    <ThemeSelector />
+                      <ThemeSelector />
 
-                    <MainPanel>{children}</MainPanel>
-                  </div>
+                      <MainPanel className={styles["chat-layout__main-panel"]}>
+                        <ChatSidebar />
+
+                        {children}
+                      </MainPanel>
+                    </div>
+                  </ChatSidebarContextController>
                 </FormContextController>
               </AuthorizationContextController>
             </ToastContextController>

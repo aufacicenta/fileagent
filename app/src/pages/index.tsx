@@ -12,7 +12,6 @@ const Index: NextPage<{ marketId: AccountId }> = () => {
 
   return (
     <ChatLayout>
-      <DropboxChatContainer />
       <Head>
         <title>{t("head.og.title")}</title>
         <meta name="description" content={t("head.og.description")} />
@@ -20,6 +19,8 @@ const Index: NextPage<{ marketId: AccountId }> = () => {
         <meta property="og:description" content={t("head.og.description")} />
         <meta property="og:url" content="https://fileagent.ai/" />
       </Head>
+
+      <DropboxChatContainer />
     </ChatLayout>
   );
 };
