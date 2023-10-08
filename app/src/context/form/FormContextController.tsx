@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { setTimeout } from "timers";
 import { sample } from "lodash";
-import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
+import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest } from "api/chat/types";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 
 import { useMessageContext } from "context/message/useMessageContext";
@@ -10,7 +10,7 @@ import { ChatContextMessage } from "context/message/MessageContext.types";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
-import { FormContextControllerProps, FormState } from "./FormContext.types";
+import { FormContextControllerProps, FormContextType, FormState } from "./FormContext.types";
 import { FormContext } from "./FormContext";
 
 const defaultHeight = "63px";
@@ -34,6 +34,7 @@ const resetTextareaHeight = (id: string = "#message") => {
 
 export const FormContextController = ({ children }: FormContextControllerProps) => {
   const [form, setForm] = useState<FormState | undefined>(undefined);
+  const [currentMessageMetadata, setCurrentMessageMetadata] = useState<CurrentMessageMetadata>({});
 
   const messageContext = useMessageContext();
 
@@ -108,6 +109,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         body: JSON.stringify({
           messages,
           currentMessage: messageContext.extractApiRequestValues(message),
+          currentMessageMetadata,
         } as FileAgentRequest),
         headers,
       };
@@ -150,9 +152,10 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     clearInterval(processingInterval);
   };
 
-  const props = {
+  const props: FormContextType = {
     setForm,
     setFieldValue,
+    setCurrentMessageMetadata,
     updateTextareaHeight,
     resetTextareaHeight,
     submit,

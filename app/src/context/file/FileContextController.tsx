@@ -11,7 +11,7 @@ import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
 import { FileContext } from "./FileContext";
-import { FileContextControllerProps } from "./FileContext.types";
+import { FileContextControllerProps, FileContextType } from "./FileContext.types";
 
 export const FileContextController = ({ children }: FileContextControllerProps) => {
   const observable = useObservable();
@@ -22,11 +22,14 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
 
   const authContext = useAuthorizationContext();
 
+  const getStorageBucketName = () =>
+    authContext.getGuestId() === null ? authContext.generateGuestId() : authContext.getGuestId()!;
+
   const upload = useCallback(async (file: DropzoneFileExtended) => {
     try {
-      const bucketName = authContext.getGuestId() === null ? authContext.generateGuestId() : authContext.getGuestId()!;
+      const bucketName = getStorageBucketName();
 
-      await supabase.uploadFile(bucketName, file);
+      await supabase.storage.uploadFile(bucketName, file);
 
       messageContext.updateMessage({
         role: "assistant",
@@ -54,6 +57,8 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
           file,
           id: messageContext.transformId(file.upload!.uuid),
         });
+
+        return;
       }
 
       if ((error as Error).message === "ERR_NETWORK_ERROR") {
@@ -64,7 +69,17 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
           file,
           id: messageContext.transformId(file.upload!.uuid),
         });
+
+        return;
       }
+
+      messageContext.updateMessage({
+        role: "assistant",
+        content: `File "${file.name}" failed to upload. Please, try again.`,
+        type: "file",
+        file,
+        id: messageContext.transformId(file.upload!.uuid),
+      });
     }
   }, []);
 
@@ -110,10 +125,11 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
     return $files;
   };
 
-  const props = {
+  const props: FileContextType = {
     extendFileObjects,
     upload,
     queue,
+    getStorageBucketName,
   };
 
   return <FileContext.Provider value={props}>{children}</FileContext.Provider>;

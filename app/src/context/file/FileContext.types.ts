@@ -10,4 +10,5 @@ export type FileContextType = {
   extendFileObjects: (files: Array<DropzoneFileExtended>) => Array<DropzoneFileExtended>;
   upload: (file: DropzoneFileExtended) => void;
   queue: () => void;
+  getStorageBucketName: () => string;
 };

@@ -34,7 +34,7 @@ const generate_dropbox_e_signature_request = async (
       }),
     };
 
-    const { signedUrl } = await supabase.createSignedURL("user", args.file_name, 60);
+    const { signedUrl } = await supabase.storage.createSignedURL("user", args.file_name, 60);
 
     const fileUrls = [signedUrl];
 

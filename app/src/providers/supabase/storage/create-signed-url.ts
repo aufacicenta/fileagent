@@ -1,4 +1,4 @@
-import client from "./client";
+import client from "../client";
 
 const createSignedURL = async (bucket: string, path: string, expiresIn: number = 60) => {
   try {

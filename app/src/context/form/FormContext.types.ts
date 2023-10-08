@@ -11,6 +11,7 @@ export type FormContextControllerProps = {
 
 export type FormContextType = {
   setForm: Dispatch<SetStateAction<FormState | undefined>>;
+  setCurrentMessageMetadata: Dispatch<SetStateAction<Record<string, any>>>;
   setFieldValue: (field: string, text: string) => void;
   updateTextareaHeight: (id?: string) => { textarea: HTMLTextAreaElement; defaultHeight: string };
   resetTextareaHeight: () => void;

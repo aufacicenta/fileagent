@@ -42,8 +42,8 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
   const functions = {
     [FunctionCallName.extract_content_from_pdf_file]:
       (args: extract_content_from_pdf_file_args, choice: ChatCompletionChoice) =>
-      (currentMessage: FileAgentRequest["currentMessage"]) =>
-        extract_content_from_pdf_file(args, choice, currentMessage),
+      (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
+        extract_content_from_pdf_file(args, choice, currentMessage, request),
     [FunctionCallName.generate_dropbox_e_signature_request]:
       (args: generate_dropbox_e_signature_request_args, choice: ChatCompletionChoice) =>
       (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>

@@ -7,6 +7,7 @@ import { Button } from "ui/button/Button";
 import { CircularProgress } from "ui/circular-progress/CircularProgress";
 import { Icon } from "ui/icon/Icon";
 import { Typography } from "ui/typography/Typography";
+import { useFileContext } from "context/file/useFileContext";
 
 import styles from "./MessageFileType.module.scss";
 import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileType.types";
@@ -49,11 +50,17 @@ export const MessageFileType = ({ message, className }: MessageFileTypeProps) =>
 const Options = ({ fieldName, file }: MessageFilTypeOptionsProps) => {
   const formContext = useFormContext();
 
+  const fileContext = useFileContext();
+
   const onClickExtractContent = () => {
+    formContext.setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
+
     formContext.setFieldValue(fieldName, `Extract and explain the content from the file "${file.name}"`);
   };
 
   const onClickDropboxESign = () => {
+    formContext.setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
+
     formContext.setFieldValue(
       fieldName,
       `Generate an embedded Dropbox Sign™ request for "${file.name}" with the following details:
