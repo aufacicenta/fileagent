@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { setTimeout } from "timers";
 import { sample } from "lodash";
 import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest } from "api/chat/types";
@@ -9,6 +9,7 @@ import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxCha
 import { ChatContextMessage } from "context/message/MessageContext.types";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
+import { useFileContext } from "context/file/useFileContext";
 
 import { FormContextControllerProps, FormContextType, FormState } from "./FormContext.types";
 import { FormContext } from "./FormContext";
@@ -51,6 +52,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
   const routes = useRoutes();
 
   const authContext = useAuthorizationContext();
+
+  const fileContext = useFileContext();
+
+  useEffect(() => {
+    setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
+  }, []);
 
   const setFieldValue = (field: string, text: string) => {
     form?.mutators.setValue(field, text);

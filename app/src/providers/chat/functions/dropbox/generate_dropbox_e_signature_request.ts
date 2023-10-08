@@ -34,7 +34,11 @@ const generate_dropbox_e_signature_request = async (
       }),
     };
 
-    const { signedUrl } = await supabase.storage.createSignedURL("user", args.file_name, 60);
+    const body = JSON.parse(request.body);
+
+    const bucketName = body.currentMessageMetadata?.bucketName;
+
+    const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
 
     const fileUrls = [signedUrl];
 
@@ -58,7 +62,10 @@ const generate_dropbox_e_signature_request = async (
   } catch (error) {
     logger.error(error);
 
-    if ((error as HttpError)?.body?.error?.errorName === "unauthorized") {
+    if (
+      (error as HttpError)?.body?.error?.errorName === "unauthorized" ||
+      (error as HttpError)?.body?.error?.errorName === "invalid_grant"
+    ) {
       return {
         ...choice,
         message: {
