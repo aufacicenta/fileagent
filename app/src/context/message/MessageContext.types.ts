@@ -59,6 +59,9 @@ export type MessageContextType = {
   actions: MessageContextActions;
   setActions: Dispatch<SetStateAction<MessageContextActions>>;
   displayInitialMessage: () => void;
+  clearMessages: () => void;
+  saveMessageThread: () => void;
+  loadMessageThread: (index: number) => void;
   appendMessage: (message: ChatContextMessage) => ChatContextMessage;
   updateMessage: (message: ChatContextMessage) => ChatContextMessage;
   deleteMessage: (id: ChatContextMessage["id"]) => void;

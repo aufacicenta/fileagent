@@ -17,6 +17,7 @@
   &__textarea {
     @include atLargeTablet {
       padding: $space-l;
+      padding-top: 0;
     }
     position: fixed;
     right: 0;
@@ -26,6 +27,17 @@
     border-top: 1px solid var(--color-horizontal-line-background);
     padding: $space-default;
     background-color: var(--color-background);
+
+    &--actions {
+      @include width;
+      display: flex;
+      justify-content: flex-end;
+      padding: $space-s;
+
+      button {
+        margin-left: $space-default;
+      }
+    }
 
     &--card {
       @include width;

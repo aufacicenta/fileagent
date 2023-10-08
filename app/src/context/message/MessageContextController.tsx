@@ -5,9 +5,16 @@ import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
+import { useChatSidebarContext } from "context/chat-sidebar/useChatSidebarContext";
+import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
 
 import { MessageContext } from "./MessageContext";
-import { ChatContextMessage, MessageContextActions, MessageContextControllerProps } from "./MessageContext.types";
+import {
+  ChatContextMessage,
+  MessageContextActions,
+  MessageContextControllerProps,
+  MessageContextType,
+} from "./MessageContext.types";
 
 const transformId = (id: string) => `x${id}`;
 
@@ -18,6 +25,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
   });
 
   const ls = useLocalStorage();
+
+  const chatSidebarContext = useChatSidebarContext();
 
   const extractApiRequestValues = (message: ChatContextMessage) => ({
     role: message.role,
@@ -73,7 +82,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     setMessages((prev) => {
       const val = [...prev, msg];
 
-      ls.set("messages", getLocalStorageMessages(val));
+      ls.set(LocalStorageKeys.messages, getLocalStorageMessages(val));
 
       return val;
     });
@@ -91,7 +100,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
       const val = Object.assign([], { ...$prev });
 
-      ls.set("messages", getLocalStorageMessages(val));
+      ls.set(LocalStorageKeys.messages, getLocalStorageMessages(val));
 
       return val;
     });
@@ -103,7 +112,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
       const val = Object.assign([], { ...prev, [i]: { ...message, id: message.id! } });
 
-      ls.set("messages", getLocalStorageMessages(val));
+      ls.set(LocalStorageKeys.messages, getLocalStorageMessages(val));
 
       return val;
     });
@@ -111,11 +120,82 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     return message;
   };
 
+  const clearMessages = () => {
+    setMessages([]);
+
+    ls.set(LocalStorageKeys.messages, []);
+
+    appendMessage({
+      content: `Chat history cleared!`,
+      role: "assistant",
+      type: "readonly",
+    });
+  };
+
+  const saveMessageThread = () => {
+    try {
+      const threads = ls.get<ChatContextMessage[][]>(LocalStorageKeys.threads) || [];
+
+      threads?.push(messages);
+
+      ls.set(LocalStorageKeys.threads, threads);
+
+      chatSidebarContext.open();
+
+      appendMessage({
+        content: `Thread saved!`,
+        role: "assistant",
+        type: "readonly",
+      });
+    } catch {
+      appendMessage({
+        content: `I couldn't save the thread. Please, try again.`,
+        role: "assistant",
+        type: "readonly",
+      });
+    }
+  };
+
+  const loadMessageThread = (index: number) => {
+    try {
+      setMessages([]);
+
+      const threads = ls.get<ChatContextMessage[][]>(LocalStorageKeys.threads) || [];
+
+      const lsMessages = threads[index];
+
+      ls.set(LocalStorageKeys.messages, lsMessages);
+
+      lsMessages.forEach((message) => {
+        appendMessage({
+          ...message,
+          id: undefined,
+          type: message.type === "file" ? "text" : message.type,
+          afterContentComponent:
+            message.type === "file" ? (
+              <MessageFileType.Options
+                file={{ name: message.file.name } as DropzoneFileExtended}
+                fieldName={FormFieldNames.message}
+              />
+            ) : undefined,
+        });
+      });
+
+      chatSidebarContext.close();
+    } catch {
+      appendMessage({
+        content: `I couldn't load the thread. Please, try again.`,
+        role: "assistant",
+        type: "readonly",
+      });
+    }
+  };
+
   const displayInitialMessage = () => {
-    const lsMessages = ls.get<ChatContextMessage[]>("messages");
+    const lsMessages = ls.get<ChatContextMessage[]>(LocalStorageKeys.messages);
 
     if (lsMessages && lsMessages?.length > 0) {
-      ls.set("messages", []);
+      ls.set(LocalStorageKeys.messages, []);
 
       appendMessage({
         content: `Welcome back!`,
@@ -150,9 +230,12 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     });
   };
 
-  const props = {
+  const props: MessageContextType = {
     messages,
     displayInitialMessage,
+    clearMessages,
+    saveMessageThread,
+    loadMessageThread,
     appendMessage,
     updateMessage,
     deleteMessage,

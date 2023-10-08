@@ -15,6 +15,16 @@ import { FormContext } from "./FormContext";
 
 const defaultHeight = "63px";
 
+const processingMessages = [
+  "Processing...",
+  "Please wait...",
+  "Still on it...",
+  "Hold on...",
+  "Almost there...",
+  "Huge file?",
+  "Please be patient...",
+];
+
 const updateTextareaHeight = (id: string = "#message") => {
   const textarea = document.querySelector(id)! as HTMLTextAreaElement;
 
@@ -60,16 +70,6 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     const message: ChatContextMessage = { content: values.message, role: "user", type: "text" };
 
     messageContext.appendMessage(message);
-
-    const processingMessages = [
-      "Processing...",
-      "Please wait...",
-      "Still on it...",
-      "Hold on...",
-      "Almost there...",
-      "Huge file?",
-      "Please be patient...",
-    ];
 
     const loadingMessage = messageContext.appendMessage({
       type: "readonly",

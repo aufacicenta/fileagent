@@ -1,17 +1,32 @@
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 
 import { useChatSidebarContext } from "context/chat-sidebar/useChatSidebarContext";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
+import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
+import { ChatContextMessage } from "context/message/MessageContext.types";
+import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
+import { useMessageContext } from "context/message/useMessageContext";
 
 import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
 
 export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
+  const [threads, setThreads] = useState<ChatContextMessage[][]>([]);
+
   const authContext = useAuthorizationContext();
 
   const chatSidebarContext = useChatSidebarContext();
+
+  const messageContext = useMessageContext();
+
+  const ls = useLocalStorage();
+
+  useEffect(() => {
+    setThreads(ls.get<ChatContextMessage[][]>(LocalStorageKeys.threads) || []);
+  }, [chatSidebarContext.isOpen]);
 
   return (
     <div
@@ -51,6 +66,25 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
           </div>
         ))}
       </section>
+      {threads.length && (
+        <section id="threads">
+          <Typography.Headline3>Threads</Typography.Headline3>
+          {threads.map((item, index) => (
+            <div
+              className={styles["chat-sidebar__thread--item"]}
+              key={item[0].id}
+              onClick={() => messageContext.loadMessageThread(index)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={() => undefined}
+            >
+              <Typography.Text flat truncate>
+                {item[1].content}
+              </Typography.Text>
+            </div>
+          ))}
+        </section>
+      )}
     </div>
   );
 };

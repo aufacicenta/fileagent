@@ -3,6 +3,7 @@ export type Styles = {
   "dropbox-chat__messages": string;
   "dropbox-chat__messages--item": string;
   "dropbox-chat__textarea": string;
+  "dropbox-chat__textarea--actions": string;
   "dropbox-chat__textarea--card": string;
   "dropbox-chat__textarea--card-actions": string;
   "dropbox-chat__textarea--card-actions-button": string;

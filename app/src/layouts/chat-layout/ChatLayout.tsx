@@ -32,12 +32,12 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
         <meta property="og:locale" content={locale} />
       </Head>
       <ThemeContextController>
-        <MessageContextController>
-          <ToastContextController>
-            <AuthorizationContextController>
-              <FileContextController>
-                <FormContextController>
-                  <ChatSidebarContextController>
+        <ToastContextController>
+          <ChatSidebarContextController>
+            <MessageContextController>
+              <AuthorizationContextController>
+                <FileContextController>
+                  <FormContextController>
                     <div id="modal-root" />
                     <div id="dropdown-portal" />
                     <div className={clsx(styles["chat-layout"])}>
@@ -53,12 +53,12 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                         {children}
                       </MainPanel>
                     </div>
-                  </ChatSidebarContextController>
-                </FormContextController>
-              </FileContextController>
-            </AuthorizationContextController>
-          </ToastContextController>
-        </MessageContextController>
+                  </FormContextController>
+                </FileContextController>
+              </AuthorizationContextController>
+            </MessageContextController>
+          </ChatSidebarContextController>
+        </ToastContextController>
       </ThemeContextController>
     </>
   );

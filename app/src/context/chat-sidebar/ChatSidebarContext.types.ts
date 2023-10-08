@@ -7,4 +7,6 @@ export type ChatSidebarContextControllerProps = {
 export type ChatSidebarContextType = {
   isOpen: boolean;
   toggle: () => void;
+  open: () => void;
+  close: () => void;
 };
