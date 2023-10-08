@@ -48,7 +48,7 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
       <div>
         <div className={styles["message-text-type__avatar"]}>
           <div className={styles["message-text-type__avatar-box"]}>
-            {message.type === "readonly" && !simulationEnded ? (
+            {message.readOnly && !simulationEnded ? (
               <LoadingSpinner className={styles["message-text-type__loading-spinner"]} />
             ) : (
               <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />

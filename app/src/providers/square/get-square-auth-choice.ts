@@ -15,7 +15,8 @@ const getSquareAuthChoice = (choice: ChatCompletionChoice): ChatCompletionChoice
       process.env.SQUARE_APP_ID
     }&scope=${scopes}&session=false&state=${Date.now()}">Click to authorize</a>.`,
     hasInnerHtml: true,
-    type: "readonly",
+    readOnly: true,
+    type: "text",
     label: SquareAPILabel.square_request_auth_error,
   },
 });

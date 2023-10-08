@@ -72,7 +72,8 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     messageContext.appendMessage(message);
 
     const loadingMessage = messageContext.appendMessage({
-      type: "readonly",
+      readOnly: true,
+      type: "text",
       content: processingMessages[0],
       role: "assistant",
     });
@@ -141,7 +142,8 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         - The content may be unreadable
         - Check your internet connection`,
         role: "assistant",
-        type: "readonly",
+        readOnly: true,
+        type: "text",
       });
 
       form.mutators.setValue(FormFieldNames.message, values.message);

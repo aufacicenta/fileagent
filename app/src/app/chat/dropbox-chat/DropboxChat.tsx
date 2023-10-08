@@ -59,10 +59,6 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
         return (
           <MessageTextType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
         );
-      case "readonly":
-        return (
-          <MessageTextType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />
-        );
       case "file":
         return (
           <MessageFileType message={message} className={styles["dropbox-chat__messages--item"]} key={message.id} />

@@ -27,6 +27,7 @@ export type ChatMessageBase = ChatCompletionMessage & {
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
   hasInnerHtml?: boolean;
+  readOnly?: boolean;
   type?: "text" | "readonly" | "file";
   label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
 };

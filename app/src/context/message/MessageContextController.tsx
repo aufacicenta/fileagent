@@ -40,6 +40,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       content: message.content,
       type: message.type,
       hasInnerHtml: message.hasInnerHtml,
+      readOnly: message.readOnly,
       label: message.label,
     };
 
@@ -55,7 +56,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
   const getPlainMessages = () =>
     messages
       .map((message) => {
-        if (message.type === "readonly") {
+        if (message.readOnly) {
           return null;
         }
 
@@ -66,7 +67,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
   const getLocalStorageMessages = (value: ChatContextMessage[]) =>
     value
       .map((message) => {
-        if (message.type === "readonly") {
+        if (message.readOnly) {
           return null;
         }
 
@@ -128,7 +129,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     appendMessage({
       content: `Chat history cleared!`,
       role: "assistant",
-      type: "readonly",
+      readOnly: true,
+      type: "text",
     });
   };
 
@@ -136,22 +138,24 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     try {
       const threads = ls.get<ChatContextMessage[][]>(LocalStorageKeys.threads) || [];
 
-      threads?.push(messages);
+      threads?.push(getLocalStorageMessages(messages));
 
       ls.set(LocalStorageKeys.threads, threads);
-
-      chatSidebarContext.open();
 
       appendMessage({
         content: `Thread saved!`,
         role: "assistant",
-        type: "readonly",
+        readOnly: true,
+        type: "text",
       });
-    } catch {
+    } catch (error) {
+      console.log(error);
+
       appendMessage({
         content: `I couldn't save the thread. Please, try again.`,
         role: "assistant",
-        type: "readonly",
+        readOnly: true,
+        type: "text",
       });
     }
   };
@@ -186,7 +190,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       appendMessage({
         content: `I couldn't load the thread. Please, try again.`,
         role: "assistant",
-        type: "readonly",
+        readOnly: true,
+        type: "text",
       });
     }
   };
@@ -200,7 +205,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       appendMessage({
         content: `Welcome back!`,
         role: "assistant",
-        type: "readonly",
+        readOnly: true,
+        type: "text",
       });
 
       lsMessages.forEach((message) => {
@@ -226,7 +232,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
         Try uploading your first file by dragging and dropping it in the box below or by clicking the box and selecting a file from your computer.`,
       role: "assistant",
-      type: "readonly",
+      readOnly: true,
+      type: "text",
     });
   };
 

@@ -67,7 +67,8 @@ const generate_dropbox_e_signature_request = async (
             process.env.DROPBOX_CLIENT_ID
           }&state=${Date.now()}&redirect_uri=${process.env.DROPBOX_REDIRECT_URI}">Click to authorize</a>.`,
           hasInnerHtml: true,
-          type: "readonly",
+          readOnly: true,
+          type: "text",
           label: DropboxESignLabel.dropbox_esign_unauthorized,
         },
       };
@@ -79,7 +80,8 @@ const generate_dropbox_e_signature_request = async (
         message: {
           ...choice.message,
           content: (error as HttpError)?.body?.error?.errorMsg,
-          type: "readonly",
+          readOnly: true,
+          type: "text",
           label: DropboxESignLabel.dropbox_esign_request_error,
         },
       };
