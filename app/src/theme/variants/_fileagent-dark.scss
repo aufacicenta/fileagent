@@ -120,4 +120,8 @@ body[data-theme="fileagent-dark"] {
   // Dropzone
   --color-dropzone-border: #3c3c3c;
   --color-dropzone-border-hover: var(--color-input-label);
+
+  // Chat Sidebar
+  --color-chat-sidebar-background: var(--color-background-contrast);
+  --color-chat-sidebar-background-hover: var(--color-background);
 }

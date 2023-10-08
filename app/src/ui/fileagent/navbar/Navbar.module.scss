@@ -12,6 +12,8 @@
   background-color: var(--color-navbar-background);
 
   &__sidebar-toggle {
+    color: var(--color-typography-text);
+
     &:hover {
       cursor: pointer;
     }

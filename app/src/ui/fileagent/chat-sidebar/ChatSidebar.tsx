@@ -3,11 +3,14 @@ import clsx from "clsx";
 import { useChatSidebarContext } from "context/chat-sidebar/useChatSidebarContext";
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
+import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
 import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
 
 export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
+  const authContext = useAuthorizationContext();
+
   const chatSidebarContext = useChatSidebarContext();
 
   return (
@@ -37,6 +40,16 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
       </section>
       <section id="authorizations">
         <Typography.Headline3>Authorizations</Typography.Headline3>
+        {authContext.authItems.map((item) => (
+          <div className={styles["chat-sidebar__file--item"]} key={item.name.trim()}>
+            <Typography.Text flat>{item.name}</Typography.Text>
+            <div className={styles["chat-sidebar__file--item-options"]}>
+              <Typography.MiniDescription flat>
+                {item.isAuthorized ? "Authorized" : <span>Authorize</span>}
+              </Typography.MiniDescription>
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

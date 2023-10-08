@@ -20,6 +20,8 @@
     padding: $space-default;
 
     &--toggle {
+      color: var(--color-typography-text);
+
       &:hover {
         cursor: pointer;
       }
@@ -39,6 +41,7 @@
   section {
     width: $chat-sidebar-width;
     margin-top: $space-default;
+    border-bottom: 1px solid var(--color-chat-sidebar-background-hover);
 
     h3 {
       padding: 0 $space-default;

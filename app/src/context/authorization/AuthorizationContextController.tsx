@@ -1,17 +1,37 @@
 import React, { useState } from "react";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 import Cookies from "js-cookie";
+import { v4 as uuidv4 } from "uuid";
 
-import { useToastContext } from "hooks/useToastContext/useToastContext";
-import { Typography } from "ui/typography/Typography";
+import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
+import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
 
-import { AccessTokens, AuthorizationContextControllerProps } from "./AuthorizationContext.types";
+import {
+  AccessTokens,
+  AuthItem,
+  AuthorizationContextControllerProps,
+  AuthorizationContextType,
+} from "./AuthorizationContext.types";
 import { AuthorizationContext } from "./AuthorizationContext";
 
 export const AuthorizationContextController = ({ children }: AuthorizationContextControllerProps) => {
   const [accessTokens, setAccessTokens] = useState<AccessTokens>({});
+  const [authItems, setAuthItems] = useState<Array<AuthItem>>([
+    { name: "Dropbox Sign™", isAuthorized: false, key: OAuthTokenStoreKey.dropbox_esign },
+    { name: "Square™", isAuthorized: false, key: OAuthTokenStoreKey.square_api },
+  ]);
 
-  const toast = useToastContext();
+  const ls = useLocalStorage();
+
+  const generateGuestId = () => {
+    const id = `guest-${uuidv4().slice(0, 4)}`;
+
+    ls.set(LocalStorageKeys.guestId, id);
+
+    return id;
+  };
+
+  const getGuestId = () => ls.get<string>(LocalStorageKeys.guestId);
 
   const verifyDropboxESignAuthorization = async () => {
     try {
@@ -24,11 +44,12 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
         [OAuthTokenStoreKey.dropbox_esign]: value.access_token,
       }));
 
-      toast.trigger({
-        title: "Authorization successful",
-        children: <Typography.Text>You are now authorized to use Dropbox Sign™.</Typography.Text>,
-        variant: "confirmation",
-        withTimeout: true,
+      setAuthItems((prev) => {
+        const i = prev.findIndex((item) => item.key === OAuthTokenStoreKey.dropbox_esign);
+
+        const item = prev[i];
+
+        return Object.assign([], { ...prev, [i]: { ...item, isAuthorized: true } });
       });
     } catch (error) {
       console.log(error);
@@ -46,21 +67,25 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
         [OAuthTokenStoreKey.square_api]: value.accessToken,
       }));
 
-      toast.trigger({
-        title: "Authorization successful",
-        children: <Typography.Text>You are now authorized to use Square™.</Typography.Text>,
-        variant: "confirmation",
-        withTimeout: true,
+      setAuthItems((prev) => {
+        const i = prev.findIndex((item) => item.key === OAuthTokenStoreKey.square_api);
+
+        const item = prev[i];
+
+        return Object.assign([], { ...prev, [i]: { ...item, isAuthorized: true } });
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const props = {
+  const props: AuthorizationContextType = {
     verifyDropboxESignAuthorization,
     verifySquareAPIAuthorization,
     accessTokens,
+    getGuestId,
+    generateGuestId,
+    authItems,
   };
 
   return <AuthorizationContext.Provider value={props}>{children}</AuthorizationContext.Provider>;

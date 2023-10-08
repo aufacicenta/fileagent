@@ -6,12 +6,21 @@ export type AccessTokens = {
   [OAuthTokenStoreKey.square_api]?: string;
 };
 
+export type AuthItem = {
+  name: string;
+  isAuthorized: boolean;
+  key: OAuthTokenStoreKey;
+};
+
 export type AuthorizationContextControllerProps = {
   children: ReactNode;
 };
 
 export type AuthorizationContextType = {
   accessTokens: AccessTokens;
+  authItems: Array<AuthItem>;
+  getGuestId: () => string | null;
+  generateGuestId: () => string;
   verifyDropboxESignAuthorization: () => Promise<void>;
   verifySquareAPIAuthorization: () => Promise<void>;
 };

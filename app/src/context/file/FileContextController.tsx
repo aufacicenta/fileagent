@@ -8,6 +8,7 @@ import supabase from "providers/supabase";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
 import { Typography } from "ui/typography/Typography";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
+import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 
 import { FileContext } from "./FileContext";
 import { FileContextControllerProps } from "./FileContext.types";
@@ -19,9 +20,13 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
 
   const messageContext = useMessageContext();
 
+  const authContext = useAuthorizationContext();
+
   const upload = useCallback(async (file: DropzoneFileExtended) => {
     try {
-      await supabase.uploadFile("user", file);
+      const bucketName = authContext.getGuestId() === null ? authContext.generateGuestId() : authContext.getGuestId()!;
+
+      await supabase.uploadFile(bucketName, file);
 
       messageContext.updateMessage({
         role: "assistant",

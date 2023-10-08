@@ -33,9 +33,9 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
       </Head>
       <ThemeContextController>
         <MessageContextController>
-          <FileContextController>
-            <ToastContextController>
-              <AuthorizationContextController>
+          <ToastContextController>
+            <AuthorizationContextController>
+              <FileContextController>
                 <FormContextController>
                   <ChatSidebarContextController>
                     <div id="modal-root" />
@@ -47,7 +47,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
 
                       <ThemeSelector />
 
-                      <MainPanel className={styles["chat-layout__main-panel"]}>
+                      <MainPanel>
                         <ChatSidebar />
 
                         {children}
@@ -55,9 +55,9 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                     </div>
                   </ChatSidebarContextController>
                 </FormContextController>
-              </AuthorizationContextController>
-            </ToastContextController>
-          </FileContextController>
+              </FileContextController>
+            </AuthorizationContextController>
+          </ToastContextController>
         </MessageContextController>
       </ThemeContextController>
     </>
