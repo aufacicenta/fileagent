@@ -1,6 +1,7 @@
 import { appWithTranslation } from "next-i18next";
 import { AppProps } from "next/app";
 import { setConfiguration } from "react-grid-system";
+import "../theme/globals.css";
 import "../theme/globals.scss";
 import Script from "next/script";
 import { useEffect } from "react";

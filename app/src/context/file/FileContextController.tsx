@@ -40,7 +40,6 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
         throw error;
       }
 
-      console.log(data);
       setUserFiles(data || []);
     } catch (error) {
       console.log(error);

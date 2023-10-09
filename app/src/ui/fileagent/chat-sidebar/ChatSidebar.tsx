@@ -11,6 +11,16 @@ import { ChatContextMessage } from "context/message/MessageContext.types";
 import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
 import { useMessageContext } from "context/message/useMessageContext";
 import { useFileContext } from "context/file/useFileContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "ui/shadcn/dropdown-menu";
+import { Button } from "ui/button/Button";
 
 import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
@@ -68,14 +78,28 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
           <div className={styles["chat-sidebar__files"]}>
             {fileContext.userFiles.map((item) => (
               <div className={styles["chat-sidebar__file--item"]} key={item.id}>
-                <Typography.Text flat truncate>
+                <Typography.Description flat truncate>
                   {item.name}
-                </Typography.Text>
+                </Typography.Description>
                 <div className={styles["chat-sidebar__file--item-options"]}>
-                  <Typography.MiniDescription flat>
-                    {filesize(item.metadata.size)} — <span>Inquire</span> · <span>Download</span> · <span>Share</span> ·{" "}
-                    <span>Delete</span>
-                  </Typography.MiniDescription>
+                  <Typography.MiniDescription flat>{filesize(item.metadata.size)} </Typography.MiniDescription>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="text" size="xs" color="secondary">
+                        Options
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuLabel>File Options</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem>Download</DropdownMenuItem>
+                        <DropdownMenuItem>Share</DropdownMenuItem>
+                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem>Inquire</DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             ))}
@@ -87,7 +111,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
           </Typography.Headline6>
           {authContext.authItems.map((item) => (
             <div className={styles["chat-sidebar__file--item"]} key={item.name.trim()}>
-              <Typography.Text flat>{item.name}</Typography.Text>
+              <Typography.Description flat>{item.name}</Typography.Description>
               <div className={styles["chat-sidebar__file--item-options"]}>
                 <Typography.MiniDescription flat>
                   {item.isAuthorized ? "Authorized" : <span>Authorize</span>}
@@ -110,9 +134,9 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ className }) => {
                 tabIndex={0}
                 onKeyPress={() => undefined}
               >
-                <Typography.Text flat truncate>
+                <Typography.Description flat truncate>
                   {item[1].content}
-                </Typography.Text>
+                </Typography.Description>
               </div>
             ))}
           </section>

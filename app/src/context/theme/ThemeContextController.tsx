@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useLocalStorage } from "hooks/useLocalStorage/useLocalStorage";
 import { Theme } from "ui/theme-selector/ThemeSelector.types";
+import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
 
 import { ThemeContext } from "./ThemeContext";
 import { ThemeContextControllerProps } from "./ThemeContext.types";
@@ -14,10 +15,10 @@ export const ThemeContextController = ({ children }: ThemeContextControllerProps
   const localStorage = useLocalStorage();
 
   useEffect(() => {
-    const localTheme = localStorage.get<Theme>("theme");
+    const localTheme = localStorage.get<Theme>(LocalStorageKeys.theme);
 
     if (!localTheme) {
-      localStorage.set("theme", theme);
+      localStorage.set(LocalStorageKeys.theme, theme);
 
       document.body.dataset.theme = theme;
 
@@ -36,7 +37,7 @@ export const ThemeContextController = ({ children }: ThemeContextControllerProps
 
     setTheme(newTheme);
 
-    localStorage.set("theme", newTheme);
+    localStorage.set(LocalStorageKeys.theme, newTheme);
   };
 
   const props = {
