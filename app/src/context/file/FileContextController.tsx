@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+import { FileObject } from "@supabase/storage-js/src/lib/types";
 
 import { useObservable } from "hooks/useObservable/useObservable";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
@@ -14,6 +15,8 @@ import { FileContext } from "./FileContext";
 import { FileContextControllerProps, FileContextType } from "./FileContext.types";
 
 export const FileContextController = ({ children }: FileContextControllerProps) => {
+  const [userFiles, setUserFiles] = useState<FileObject[]>([]);
+
   const observable = useObservable();
 
   const queuedFiles: DropzoneFileExtended[] = [];
@@ -24,6 +27,25 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
 
   const getStorageBucketName = () =>
     authContext.getGuestId() === null ? authContext.generateGuestId() : authContext.getGuestId()!;
+
+  const getUserFiles = async () => {
+    try {
+      const { data, error } = await supabase.client.storage.from(getStorageBucketName()!).list(undefined, {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: "name", order: "asc" },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log(data);
+      setUserFiles(data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const upload = useCallback(async (file: DropzoneFileExtended) => {
     try {
@@ -130,6 +152,8 @@ export const FileContextController = ({ children }: FileContextControllerProps) 
     upload,
     queue,
     getStorageBucketName,
+    getUserFiles,
+    userFiles,
   };
 
   return <FileContext.Provider value={props}>{children}</FileContext.Provider>;

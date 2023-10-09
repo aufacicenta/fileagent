@@ -1,6 +1,7 @@
 @import "src/theme/base";
 @import "src/ui/fileagent/chat-sidebar/variables";
 @import "src/ui/fileagent/navbar/variables";
+@import "src/ui/typography/variables";
 
 .chat-sidebar {
   @extend .z-depth-1;
@@ -11,6 +12,18 @@
   height: 100vh;
   overflow: hidden;
   background-color: var(--color-chat-sidebar-background);
+
+  &__dismiss-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z-index-modal;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+  }
 
   &__header {
     display: flex;
@@ -40,11 +53,16 @@
 
   section {
     width: $chat-sidebar-width;
-    margin-top: $space-default;
     border-bottom: 1px solid var(--color-chat-sidebar-background-hover);
 
-    h3 {
-      padding: 0 $space-default;
+    h6 {
+      margin: 0;
+      padding: $space-xs $space-default;
+      background-color: var(--color-background);
+
+      span {
+        font-size: $font-size-mini-description;
+      }
     }
   }
 
@@ -57,6 +75,11 @@
         cursor: pointer;
       }
     }
+  }
+
+  &__files {
+    max-height: 240px;
+    overflow-y: scroll;
   }
 
   &__file {
