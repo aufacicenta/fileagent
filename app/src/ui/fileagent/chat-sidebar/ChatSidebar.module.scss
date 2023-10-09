@@ -4,25 +4,8 @@
 @import "src/ui/typography/variables";
 
 .chat-sidebar {
-  @extend .z-depth-1;
-  position: fixed;
-  z-index: $chat-sidebar-z-index;
-  display: block;
-  width: 0;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--color-chat-sidebar-background);
-
-  &__dismiss-overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: $z-index-modal;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+  &__sheet-content {
+    padding: 0;
   }
 
   &__header {
@@ -41,18 +24,7 @@
     }
   }
 
-  &__open {
-    width: $chat-sidebar-width;
-    transition: width 0.2s ease-in-out;
-  }
-
-  &__closed {
-    width: 0;
-    transition: width 0.2s ease-in-out;
-  }
-
   section {
-    width: $chat-sidebar-width;
     border-bottom: 1px solid var(--color-chat-sidebar-background-hover);
 
     h6 {

@@ -1,13 +1,11 @@
 export type Styles = {
   "chat-sidebar": string;
-  "chat-sidebar__closed": string;
-  "chat-sidebar__dismiss-overlay": string;
   "chat-sidebar__file--item": string;
   "chat-sidebar__file--item-options": string;
   "chat-sidebar__files": string;
   "chat-sidebar__header": string;
   "chat-sidebar__header--toggle": string;
-  "chat-sidebar__open": string;
+  "chat-sidebar__sheet-content": string;
   "chat-sidebar__thread--item": string;
   "z-depth-0": string;
   "z-depth-1": string;

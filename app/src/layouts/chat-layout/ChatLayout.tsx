@@ -14,6 +14,7 @@ import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { ThemeContextController } from "context/theme/ThemeContextController";
 import { ChatSidebar } from "ui/fileagent/chat-sidebar/ChatSidebar";
 import { ChatSidebarContextController } from "context/chat-sidebar/ChatSidebarContextController";
+import { Sheet } from "ui/shadcn/sheet/Sheet";
 
 import { ChatLayoutProps } from "./ChatLayout.types";
 import styles from "./ChatLayout.module.scss";
@@ -41,17 +42,19 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                     <div id="modal-root" />
                     <div id="dropdown-portal" />
                     <div className={clsx(styles["chat-layout"])}>
-                      <Navbar />
+                      <Sheet>
+                        <Navbar />
 
-                      <LocaleSelector />
+                        <LocaleSelector />
 
-                      <ThemeSelector />
+                        <ThemeSelector />
 
-                      <MainPanel>
-                        <ChatSidebar />
+                        <MainPanel>
+                          <ChatSidebar />
 
-                        {children}
-                      </MainPanel>
+                          {children}
+                        </MainPanel>
+                      </Sheet>
                     </div>
                   </FormContextController>
                 </FileContextController>

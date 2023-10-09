@@ -6,6 +6,7 @@ import { FileAgentLogo } from "ui/icons/FileAgentLogo";
 import { useThemeContext } from "context/theme/useThemeContext";
 import { useChatSidebarContext } from "context/chat-sidebar/useChatSidebarContext";
 import { Icon } from "ui/icon/Icon";
+import { SheetTrigger } from "ui/shadcn/sheet/Sheet";
 
 import { NavbarProps } from "./Navbar.types";
 import styles from "./Navbar.module.scss";
@@ -22,11 +23,13 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
           <Grid.Col lg={4} sm={4} xs={4}>
             <div className={styles.navbar__left}>
               <div className={styles["navbar__left--item"]}>
-                <Icon
-                  name="icon-menu-circle"
-                  onClick={chatSidebarContext.toggle}
-                  className={styles["navbar__sidebar-toggle"]}
-                />
+                <SheetTrigger asChild>
+                  <Icon
+                    name="icon-menu-circle"
+                    onClick={chatSidebarContext.toggle}
+                    className={styles["navbar__sidebar-toggle"]}
+                  />
+                </SheetTrigger>
               </div>
             </div>
           </Grid.Col>
