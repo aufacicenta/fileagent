@@ -6,6 +6,7 @@ export type Styles = {
   "chat-sidebar__header": string;
   "chat-sidebar__header--toggle": string;
   "chat-sidebar__sheet-content": string;
+  "chat-sidebar__sheet-footer": string;
   "chat-sidebar__thread--item": string;
   "z-depth-0": string;
   "z-depth-1": string;

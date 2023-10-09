@@ -19,9 +19,11 @@ import { LocalStorageKeys } from "hooks/useLocalStorage/useLocalStorage.types";
 import { useMessageContext } from "context/message/useMessageContext";
 import { useFileContext } from "context/file/useFileContext";
 import { Button } from "ui/button/Button";
-import { SheetContent } from "ui/shadcn/sheet/Sheet";
+import { SheetContent, SheetFooter } from "ui/shadcn/sheet/Sheet";
 import { Typography } from "ui/typography/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "ui/shadcn/accordion/Accordion";
+import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
+import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 
 import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
@@ -134,6 +136,11 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+
+      <SheetFooter className={styles["chat-sidebar__sheet-footer"]}>
+        <LocaleSelector />
+        <ThemeSelector />
+      </SheetFooter>
     </SheetContent>
   );
 };

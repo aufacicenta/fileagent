@@ -77,10 +77,10 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
 
       <div className={styles["dropbox-chat__textarea"]}>
         <div className={styles["dropbox-chat__textarea--actions"]}>
-          <Button variant="text" color="secondary" onClick={clearMessages}>
+          <Button variant="text" color="secondary" size="s" onClick={clearMessages}>
             Clear
           </Button>
-          <Button variant="text" color="secondary" onClick={saveMessageThread}>
+          <Button variant="text" color="secondary" size="s" onClick={saveMessageThread}>
             Save this thread
           </Button>
         </div>

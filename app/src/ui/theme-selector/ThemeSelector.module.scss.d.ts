@@ -1,5 +1,7 @@
 export type Styles = {
   "theme-selector": string;
+  "theme-selector__fixed": string;
+  "theme-selector__icon": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

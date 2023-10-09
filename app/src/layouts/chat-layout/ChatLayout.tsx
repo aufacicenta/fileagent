@@ -4,13 +4,11 @@ import { useRouter } from "next/router";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { ToastContextController } from "context/toast/ToastContextController";
-import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
 import { FileContextController } from "context/file/FileContextController";
 import { MessageContextController } from "context/message/MessageContextController";
 import { FormContextController } from "context/form/FormContextController";
 import { Navbar } from "ui/fileagent/navbar/Navbar";
 import { AuthorizationContextController } from "context/authorization/AuthorizationContextController";
-import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { ThemeContextController } from "context/theme/ThemeContextController";
 import { ChatSidebar } from "ui/fileagent/chat-sidebar/ChatSidebar";
 import { ChatSidebarContextController } from "context/chat-sidebar/ChatSidebarContextController";
@@ -44,10 +42,6 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                     <div className={clsx(styles["chat-layout"])}>
                       <Sheet>
                         <Navbar />
-
-                        <LocaleSelector />
-
-                        <ThemeSelector />
 
                         <MainPanel>
                           <ChatSidebar />

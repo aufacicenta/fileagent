@@ -1,22 +1,28 @@
 @import "src/theme/base";
 
 .theme-selector {
-  @extend .z-depth-1;
-
-  @include atLargeTablet {
-    top: $navbar-height * 1.8;
+  &__icon {
+    color: var(--color-typography-text);
   }
-  position: fixed;
-  top: $navbar-height-mobile * 2.1;
-  right: 0;
-  z-index: $z-index-content;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-top-left-radius: $border-radius;
-  border-bottom-left-radius: $border-radius;
-  padding: $space-s;
-  background-color: var(--color-white);
+
+  &__fixed {
+    @extend .z-depth-1;
+
+    @include atLargeTablet {
+      top: $navbar-height * 1.8;
+    }
+    position: fixed;
+    top: $navbar-height-mobile * 2.1;
+    right: 0;
+    z-index: $z-index-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+    padding: $space-s;
+    background-color: var(--color-white);
+  }
 
   &:hover {
     cursor: pointer;
