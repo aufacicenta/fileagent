@@ -33,6 +33,20 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
 
   const getGuestId = () => ls.get<string>(LocalStorageKeys.guestId);
 
+  const revokeAuth = (key: OAuthTokenStoreKey) => {
+    Cookies.remove(key);
+
+    setAccessTokens((prev) => ({ ...prev, [key]: null }));
+
+    setAuthItems((prev) => {
+      const i = prev.findIndex((item) => item.key === key);
+
+      const item = prev[i];
+
+      return Object.assign([], { ...prev, [i]: { ...item, isAuthorized: false } });
+    });
+  };
+
   const verifyDropboxESignAuthorization = async () => {
     try {
       const dropboxESignAuthResponse = Cookies.get(OAuthTokenStoreKey.dropbox_esign);
@@ -86,6 +100,7 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
     getGuestId,
     generateGuestId,
     authItems,
+    revokeAuth,
   };
 
   return <AuthorizationContext.Provider value={props}>{children}</AuthorizationContext.Provider>;

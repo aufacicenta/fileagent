@@ -23,13 +23,19 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
   try {
     logger.info(`getting googleai chat completion from model ${model}`);
 
-    const data: FileAgentRequest = JSON.parse(request.body);
+    const data: FileAgentRequest = JSON.parse(request.body, (_key, value) => {
+      if (typeof value === "string" && value.startsWith("BIGINT::")) {
+        return BigInt(value.slice(0, 8));
+      }
+
+      return value;
+    });
 
     const predictionServiceClient = new PredictionServiceClient(clientOptions);
 
     const messages = data.messages.map((message) => ({ author: message.role, content: message.content }));
 
-    if (messages[messages.length - 1].author === "user" && data.currentMessage.role === "user") {
+    if (messages.length && messages[messages.length - 1].author === "user" && data.currentMessage.role === "user") {
       messages.push({ author: "assistant", content: "Continue the conversation..." });
     }
 
@@ -49,6 +55,12 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
           input: { content: "Get all my square orders of this month" },
           output: {
             content: `{"function_call": { "name": "${FunctionCallName.get_square_orders}", "arguments": { "date_time_filter": { "created_at": "YYYYMMDD" } } } }`,
+          },
+        },
+        {
+          input: { content: "Get all my square payments of this year" },
+          output: {
+            content: `{"function_call": { "name": "${FunctionCallName.get_square_payments}", "arguments": { "begin_time": "YYYYMMDD", "end_time": "YYYYMMDD" } } }`,
           },
         },
       ],

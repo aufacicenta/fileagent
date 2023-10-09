@@ -12,6 +12,7 @@ export enum FunctionCallName {
   // Square
   get_square_locations = "get_square_locations",
   get_square_orders = "get_square_orders",
+  get_square_payments = "get_square_payments",
 }
 
 export type ChatCompletionChoice = OpenAI.Chat.ChatCompletion.Choice & {
@@ -24,6 +25,11 @@ export type extract_content_from_pdf_file_args = {
 
 export type get_square_locations_args = {
   file_name: string;
+};
+
+export type get_square_payments_args = {
+  begin_time: string;
+  end_time: string;
 };
 
 export type generate_dropbox_e_signature_request_args = {

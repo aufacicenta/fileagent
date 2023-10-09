@@ -26,8 +26,6 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
   } catch (error) {
     logger.error(error);
 
-    response.status(500).json({
-      error: (error as Error).message,
-    });
+    response.redirect(301, `/`);
   }
 }

@@ -19,6 +19,7 @@ export type AuthorizationContextControllerProps = {
 export type AuthorizationContextType = {
   accessTokens: AccessTokens;
   authItems: Array<AuthItem>;
+  revokeAuth: (key: OAuthTokenStoreKey) => void;
   getGuestId: () => string | null;
   generateGuestId: () => string;
   verifyDropboxESignAuthorization: () => Promise<void>;

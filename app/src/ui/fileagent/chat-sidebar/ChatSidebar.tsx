@@ -109,6 +109,18 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
                   <Typography.MiniDescription flat>
                     {item.isAuthorized ? "Authorized" : <span>Authorize</span>}
                   </Typography.MiniDescription>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="text" size="xs" color="secondary">
+                        Options
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem onClick={() => authContext.revokeAuth(item.key)}>Revoke</DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             ))}

@@ -6,6 +6,8 @@ import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 export enum SquareAPILabel {
   square_get_locations_request_success = "square:get_locations:request:success",
   square_get_locations_request_error = "square:get_locations:request:error",
+  square_get_payments_request_success = "square:get_payments:request:success",
+  square_get_payments_request_error = "square:get_payments:request:error",
   square_request_auth_error = "square:request:auth:error",
 }
 
@@ -28,7 +30,7 @@ export type ChatMessageBase = ChatCompletionMessage & {
   afterContentComponent?: ReactNode;
   hasInnerHtml?: boolean;
   readOnly?: boolean;
-  type?: "text" | "readonly" | "file";
+  type?: "text" | "file";
   label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
 };
 
@@ -36,16 +38,12 @@ export type TextChatCompletionMessage = {
   type: "text";
 } & ChatMessageBase;
 
-export type ReadOnlyChatCompletionMessage = {
-  type: "readonly";
-} & ChatMessageBase;
-
 export type FileChatCompletionMessage = {
   type: "file";
   file: DropzoneFileExtended;
 } & ChatMessageBase;
 
-export type ChatContextMessage = FileChatCompletionMessage | TextChatCompletionMessage | ReadOnlyChatCompletionMessage;
+export type ChatContextMessage = FileChatCompletionMessage | TextChatCompletionMessage;
 
 export type MessageContextActions = {
   isProcessingRequest: boolean;

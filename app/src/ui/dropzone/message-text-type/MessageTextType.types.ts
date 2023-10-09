@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
-import { ReadOnlyChatCompletionMessage, TextChatCompletionMessage } from "context/message/MessageContext.types";
+import { TextChatCompletionMessage } from "context/message/MessageContext.types";
 
 export type MessageTextTypeProps = {
-  message: TextChatCompletionMessage | ReadOnlyChatCompletionMessage;
+  message: TextChatCompletionMessage;
   children?: ReactNode;
   className?: string;
 };

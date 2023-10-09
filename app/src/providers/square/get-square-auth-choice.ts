@@ -1,11 +1,8 @@
 import { SquareAPILabel } from "context/message/MessageContext.types";
 import { ChatCompletionChoice } from "providers/chat/chat.types";
 
-const scopes = ["MERCHANT_PROFILE_READ", "ORDERS_READ"].join("+");
-const endpoint =
-  process.env.NODE_ENV === "production"
-    ? `https://connect.squareup.com/oauth2/authorize`
-    : `https://connect.squareupsandbox.com/oauth2/authorize`;
+const scopes = ["MERCHANT_PROFILE_READ", "ORDERS_READ", "PAYMENTS_READ"].join("+");
+const endpoint = process.env.SQUARE_OAUTH_ENDPOINT as string;
 
 const getSquareAuthChoice = (choice: ChatCompletionChoice): ChatCompletionChoice => ({
   ...choice,
