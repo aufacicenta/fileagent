@@ -24,17 +24,11 @@
     }
   }
 
-  section {
-    border-bottom: 1px solid var(--color-chat-sidebar-background-hover);
+  h6 {
+    margin: 0;
 
-    h6 {
-      margin: 0;
-      padding: $space-xs $space-default;
-      background-color: var(--color-background);
-
-      span {
-        font-size: $font-size-mini-description;
-      }
+    span {
+      font-size: $font-size-mini-description;
     }
   }
 
