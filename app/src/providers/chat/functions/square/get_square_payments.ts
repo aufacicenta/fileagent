@@ -1,6 +1,7 @@
 import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
 import { NextApiRequest } from "next";
 import { ApiError } from "square";
+import { helpers } from "@google-cloud/aiplatform";
 
 import { ChatCompletionChoice, get_square_payments_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
@@ -8,7 +9,9 @@ import { SquareAPILabel } from "context/message/MessageContext.types";
 import square from "providers/square";
 import date from "providers/date";
 import json from "providers/json";
-import openai from "providers/openai";
+import googleai from "providers/googleai";
+import transformGoogleAIPredictionResponseToStandardChoice from "providers/chat/normalize-googleai-prediction-response";
+import { GoogleAIPrediction } from "providers/googleai/googleai.types";
 
 const get_square_payments = async (
   args: get_square_payments_args,
@@ -55,28 +58,28 @@ const get_square_payments = async (
       };
     }
 
-    const filteredPaymentsFields = response.result.payments;
+    const prompt = {
+      prompt: `Given this JSON data:
 
-    const chatCompletion = await openai.client.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: `Given this JSON data:
-
-${JSON.stringify(filteredPaymentsFields, json.replacer, 2)}
+${JSON.stringify(response.result.payments, json.replacer, 2)}
 
 What is the total amount of all payments?`,
-        },
-      ],
-      model: openai.model,
-    });
+    };
 
-    const [prediction] = chatCompletion.choices;
+    const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }));
+
+    if (!predictionResponse?.predictions) {
+      throw new Error("No prediction response");
+    }
+
+    const prediction = helpers.fromValue((predictionResponse.predictions as protobuf.common.IValue[])[0]);
+
+    const [normalizedChoice] = transformGoogleAIPredictionResponseToStandardChoice(prediction as GoogleAIPrediction);
 
     return {
-      ...prediction,
+      ...normalizedChoice,
       message: {
-        ...prediction.message,
+        ...normalizedChoice.message,
         type: "text",
         label: SquareAPILabel.square_get_payments_request_success,
       },
