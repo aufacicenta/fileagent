@@ -20,4 +20,10 @@ export const examples: Example[] = [
       content: `{"function_call": { "name": "${FunctionCallName.get_square_payments}", "arguments": { "begin_time": "YYYYMMDD", "end_time": "YYYYMMDD" } } }`,
     },
   },
+  {
+    input: { content: "What's the total amount of my last square payments of this month" },
+    output: {
+      content: `{"function_call": { "name": "${FunctionCallName.get_square_payments}", "arguments": { "begin_time": "YYYYMMDD", "end_time": "YYYYMMDD" } } }`,
+    },
+  },
 ];
