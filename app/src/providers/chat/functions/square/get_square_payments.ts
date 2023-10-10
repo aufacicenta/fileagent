@@ -1,14 +1,17 @@
-import { APIChatHeaderKeyNames, FileAgentRequest, FileAgentResponse } from "api/chat/types";
+import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
 import { NextApiRequest } from "next";
 import { ApiError } from "square";
-import axios from "axios";
+import { helpers } from "@google-cloud/aiplatform";
 
 import { ChatCompletionChoice, get_square_payments_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
 import { SquareAPILabel } from "context/message/MessageContext.types";
 import square from "providers/square";
-import { routes } from "hooks/useRoutes/useRoutes";
 import date from "providers/date";
+import json from "providers/json";
+import googleai from "providers/googleai";
+import { GoogleAIPrediction } from "providers/googleai/googleai.types";
+import transformGoogleAIPredictionResponseToStandardChoice from "../../normalize-googleai-prediction-response";
 
 const get_square_payments = async (
   args: get_square_payments_args,
@@ -43,32 +46,29 @@ const get_square_payments = async (
       };
     }
 
-    const { messages } = JSON.parse(request.body);
+    const prompt = {
+      prompt: `Given this JSON data:
 
-    const parsePaymentsRequest = await axios.post<FileAgentResponse, FileAgentResponse, FileAgentRequest>(
-      routes.api.chat.googleai.completionsAPI(),
-      {
-        messages,
-        currentMessage: {
-          role: "user",
-          type: "text",
-          content: `Given this JSON data: ${JSON.stringify(response.result.payments, (_key, value) =>
-            typeof value === "bigint" ? `BIGINT::${value}` : value,
-          )}, what is the total amount of all payments?`,
-        },
-      },
-      {
-        headers: {
-          [APIChatHeaderKeyNames.x_square_access_token]: accessToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+${JSON.stringify(response.result.payments, json.replacer, 2)}
+
+What is the total amount of all payments?`,
+    };
+
+    const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }));
+
+    if (!predictionResponse?.predictions) {
+      throw new Error("No prediction response");
+    }
+
+    const prediction = helpers.fromValue((predictionResponse.predictions as protobuf.common.IValue[])[0]);
+
+    const [normalizedChoice] = transformGoogleAIPredictionResponseToStandardChoice(prediction as GoogleAIPrediction);
 
     return {
-      ...parsePaymentsRequest.choices[0],
+      ...normalizedChoice,
       message: {
-        ...parsePaymentsRequest.choices[0].message,
+        ...normalizedChoice.message,
+        type: "text",
         label: SquareAPILabel.square_get_payments_request_success,
       },
     };

@@ -4,8 +4,9 @@ import logger from "providers/logger";
 import chat from "providers/chat";
 import openai from "providers/openai";
 import { ChatLabel } from "context/message/MessageContext.types";
-import functions from "../functions";
 import { FileAgentRequest } from "../types";
+
+import functions from "./functions";
 
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {

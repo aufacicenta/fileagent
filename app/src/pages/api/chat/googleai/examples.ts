@@ -1,0 +1,23 @@
+import { FunctionCallName } from "providers/chat/chat.types";
+import { Example } from "providers/googleai/googleai.types";
+
+export const examples: Example[] = [
+  {
+    input: { content: "List all my Square locations" },
+    output: {
+      content: `{"function_call": { "name": "${FunctionCallName.get_square_locations}", "arguments": { "file_name": "filename" } } }`,
+    },
+  },
+  {
+    input: { content: "Get all my square orders of this month" },
+    output: {
+      content: `{"function_call": { "name": "${FunctionCallName.get_square_orders}", "arguments": { "date_time_filter": { "created_at": "YYYYMMDD" } } } }`,
+    },
+  },
+  {
+    input: { content: "Get all my square payments of this year" },
+    output: {
+      content: `{"function_call": { "name": "${FunctionCallName.get_square_payments}", "arguments": { "begin_time": "YYYYMMDD", "end_time": "YYYYMMDD" } } }`,
+    },
+  },
+];
