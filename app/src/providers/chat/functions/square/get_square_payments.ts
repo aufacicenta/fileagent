@@ -61,9 +61,9 @@ const get_square_payments = async (
     const prompt = {
       prompt: `Given this JSON data:
 
-${JSON.stringify(response.result.payments, json.replacer, 2)}
+${JSON.stringify(response.result.payments, json.replacer)}
 
-What is the total amount of all payments?`,
+${JSON.parse(request.body).currentMessage.content}}`,
     };
 
     const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }));
