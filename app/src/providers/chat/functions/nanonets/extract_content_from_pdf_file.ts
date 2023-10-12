@@ -24,6 +24,8 @@ const extract_content_from_pdf_file = async (
 
     const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
 
+    // @TODO Store getFullTextOCR result in the database, linked to the user
+    // labels: 500 USDT, P1
     const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
 
     let maxTokens = 0;

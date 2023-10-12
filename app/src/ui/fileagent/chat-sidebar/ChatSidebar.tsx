@@ -28,6 +28,8 @@ import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
 import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
 
+// @TODO Add an "extractions" section
+// labels: 250 USDT, P1
 export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
   const [threads, setThreads] = useState<ChatContextMessage[][]>([]);
 
@@ -57,6 +59,8 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
     fileContext.getUserFiles();
   }, [chatSidebarContext.isOpen]);
 
+  // @TODO Implement the files.inquire option
+  // labels: 100 USDT, P1
   return (
     <SheetContent side="left" className={clsx(styles["chat-sidebar"], styles["chat-sidebar__sheet-content"])}>
       <div className={styles["chat-sidebar__header"]} />
