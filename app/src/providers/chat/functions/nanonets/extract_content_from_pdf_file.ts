@@ -25,39 +25,71 @@ const extract_content_from_pdf_file = async (
 
     logger.info(`extract_content_from_pdf_file; ${fileName}`);
 
-    const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
-
-    // @TODO Store getFullTextOCR result in the database, linked to the user
-    // labels: 500 USDT, P1
-    const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
-
-    const rawText = ocrResult.results[0].page_data.map((data) => data.raw_text).join("\n");
-
     const { ContentExtraction } = await sequelize.load();
 
-    await ContentExtraction.create({
-      fileName,
-      content: rawText,
+    const contentExtractionRecord = await ContentExtraction.findOne({
+      where: {
+        fileName,
+      },
     });
 
     let maxTokens = 0;
 
     logger.info(`extract_content_from_pdf_file; mapping messages. maxTokens: ${maxTokens}`);
 
-    const messages = ocrResult.results[0].page_data
-      .map((data) => {
-        maxTokens += data.words.length;
+    let messages: CreateChatCompletionRequestMessage[] = [];
 
-        if (maxTokens > 70000) {
-          return null;
-        }
+    if (contentExtractionRecord?.content) {
+      logger.info(`extract_content_from_pdf_file; ${fileName} content exists.`);
 
+      maxTokens = contentExtractionRecord.content.length;
+
+      if (maxTokens > openai.MAX_TOKENS) {
         return {
-          role: "user",
-          content: data.raw_text,
+          ...choice,
+          message: {
+            ...choice.message,
+            content: `Sorry, I couldn't extract the content from the PDF file. The file is too large and I can only handle files up to ${openai.MAX_TOKENS} characters.`,
+            label: ChatLabel.chat_extract_pdf_error,
+          },
         };
-      })
-      .filter(Boolean) as CreateChatCompletionRequestMessage[];
+      }
+
+      messages = [
+        {
+          role: "user",
+          content: contentExtractionRecord.content,
+        },
+      ];
+    } else {
+      const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
+
+      // @TODO Store getFullTextOCR result in the database, linked to the user
+      // labels: 500 USDT, P1
+      const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
+
+      const rawText = ocrResult.results[0].page_data.map((data) => data.raw_text).join("\n");
+
+      await ContentExtraction.create({
+        fileName,
+        content: rawText,
+      });
+
+      messages = ocrResult.results[0].page_data
+        .map((data) => {
+          maxTokens += data.words.length;
+
+          if (maxTokens > openai.MAX_TOKENS) {
+            return null;
+          }
+
+          return {
+            role: "user",
+            content: data.raw_text,
+          };
+        })
+        .filter(Boolean) as CreateChatCompletionRequestMessage[];
+    }
 
     logger.info(`extract_content_from_pdf_file; getting chatCompletions. maxTokens: ${maxTokens}`);
 
