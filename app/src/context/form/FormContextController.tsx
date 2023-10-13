@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { setTimeout } from "timers";
 import { sample } from "lodash";
-import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest } from "api/chat/types";
+import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest, FileAgentResponse } from "api/chat/types";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
+import axios from "axios";
 
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
-import { ChatContextMessage } from "context/message/MessageContext.types";
+import { ChatContextMessage, TextChatCompletionMessage } from "context/message/MessageContext.types";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 import { useFileContext } from "context/file/useFileContext";
@@ -120,23 +121,18 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
           currentMessageMetadata,
         } as FileAgentRequest),
         headers,
+        timeout: 600000,
       };
 
       const result = await (process.env.NEXT_PUBLIC_CHAT_AI_API === "openai"
-        ? fetch(routes.api.chat.openai.completionsAPI(), options)
-        : fetch(routes.api.chat.googleai.completionsAPI(), options));
+        ? axios.post<FileAgentResponse>(routes.api.chat.openai.completionsAPI(), options)
+        : axios.post<FileAgentResponse>(routes.api.chat.googleai.completionsAPI(), options));
 
-      const json = await result.json();
-
-      console.log(json);
+      console.log(result);
 
       messageContext.deleteMessage(loadingMessage.id!);
 
-      if (json.error) {
-        throw new Error(json.error);
-      }
-
-      messageContext.appendMessage({ ...json.choices[0].message });
+      messageContext.appendMessage({ ...result.data.choices[0].message } as TextChatCompletionMessage);
     } catch (error) {
       console.log(error);
 

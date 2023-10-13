@@ -34,7 +34,7 @@ const generate_dropbox_e_signature_request = async (
       }),
     };
 
-    const body = JSON.parse(request.body);
+    const body = JSON.parse(request.body.body);
 
     const bucketName = body.currentMessageMetadata?.bucketName;
 

@@ -5,6 +5,7 @@ import chat from "providers/chat";
 import openai from "providers/openai";
 import { ChatLabel } from "context/message/MessageContext.types";
 import { FileAgentRequest } from "../types";
+import json from "providers/json";
 
 import functions from "./functions";
 
@@ -12,7 +13,8 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
   try {
     logger.info(`getting chat completion from model ${openai.model}`);
 
-    const data: FileAgentRequest = JSON.parse(request.body);
+    const data: FileAgentRequest =
+      typeof request.body.body === "string" ? JSON.parse(request.body.body, json.reviver) : request.body.body;
 
     const chatCompletion = await openai.client.chat.completions.create({
       messages: [

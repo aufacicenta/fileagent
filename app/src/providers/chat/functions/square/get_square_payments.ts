@@ -63,7 +63,7 @@ const get_square_payments = async (
 
 ${JSON.stringify(response.result.payments, json.replacer)}
 
-${JSON.parse(request.body).currentMessage.content}}`,
+${JSON.parse(request.body.body).currentMessage.content}}`,
     };
 
     const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }));

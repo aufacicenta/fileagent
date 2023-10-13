@@ -8,6 +8,7 @@ import openai from "providers/openai";
 import supabase from "providers/supabase";
 import nanonets from "providers/nanonets";
 import { ChatLabel } from "context/message/MessageContext.types";
+import sequelize from "providers/sequelize";
 
 const extract_content_from_pdf_file = async (
   args: extract_content_from_pdf_file_args,
@@ -16,17 +17,28 @@ const extract_content_from_pdf_file = async (
   request: NextApiRequest,
 ): Promise<ChatCompletionChoice> => {
   try {
-    const body = JSON.parse(request.body);
+    const body = JSON.parse(request.body.body);
 
     const bucketName = body.currentMessageMetadata?.bucketName;
 
-    logger.info(`extract_content_from_pdf_file; ${bucketName}/${args.file_name}`);
+    const fileName = `${bucketName}/${args.file_name}`;
+
+    logger.info(`extract_content_from_pdf_file; ${fileName}`);
 
     const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
 
     // @TODO Store getFullTextOCR result in the database, linked to the user
     // labels: 500 USDT, P1
     const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
+
+    const rawText = ocrResult.results[0].page_data.map((data) => data.raw_text).join("\n");
+
+    const { ContentExtraction } = await sequelize.load();
+
+    await ContentExtraction.create({
+      fileName,
+      content: rawText,
+    });
 
     let maxTokens = 0;
 
