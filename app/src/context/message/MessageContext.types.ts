@@ -1,6 +1,7 @@
 import { ChatCompletionMessage } from "openai/resources/chat";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
+import { SquareGetLocationsMetadata } from "providers/chat/functions/square/square.types";
 import { DropzoneFileExtended } from "ui/dropzone/Dropzone.types";
 
 export enum SquareAPILabel {
@@ -8,6 +9,8 @@ export enum SquareAPILabel {
   square_get_locations_request_error = "square:get_locations:request:error",
   square_get_payments_request_success = "square:get_payments:request:success",
   square_get_payments_request_error = "square:get_payments:request:error",
+  square_search_orders_request_success = "square:search_orders:request:success",
+  square_search_orders_request_error = "square:search_orders:request:error",
   square_request_auth_error = "square:request:auth:error",
 }
 
@@ -28,10 +31,11 @@ export type ChatMessageBase = ChatCompletionMessage & {
   id?: string;
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
-  hasInnerHtml?: boolean;
+  hasInnerHtml?: boolean; // Setting this to true will render text with Markdown parsing and or HTML parsing such as anchor elements
   readOnly?: boolean;
   type?: "text" | "file";
   label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
+  metadata?: SquareGetLocationsMetadata;
 };
 
 export type TextChatCompletionMessage = {
@@ -57,6 +61,7 @@ export type MessageContextType = {
   messages: Array<ChatContextMessage>;
   actions: MessageContextActions;
   setActions: Dispatch<SetStateAction<MessageContextActions>>;
+  last: () => ChatContextMessage;
   displayInitialMessage: () => void;
   clearMessages: () => void;
   saveMessageThread: () => void;

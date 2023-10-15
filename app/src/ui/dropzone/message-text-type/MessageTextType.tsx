@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { marked } from "marked";
 
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
@@ -7,7 +8,8 @@ import { LoadingSpinner } from "ui/icons/LoadingSpinner";
 import { Button } from "ui/button/Button";
 import { useFormContext } from "context/form/useFormContext";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
-import { DropboxESignLabel } from "context/message/MessageContext.types";
+import { DropboxESignLabel, SquareAPILabel } from "context/message/MessageContext.types";
+import date from "providers/date";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
@@ -23,6 +25,15 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
     formContext.setFieldValue(FormFieldNames.message, message.content!);
   };
 
+  const onClickSearchSquareOrders = () => {
+    formContext.setFieldValue(
+      FormFieldNames.message,
+      `Get my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
+        message.metadata?.locationIds ? message.metadata?.locationIds[0] : "LOCATION_ID"
+      }`,
+    );
+  };
+
   const getOptionComponentsByLabel = () => {
     if (!message.label) return null;
 
@@ -35,6 +46,14 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
             </Button>
             <Button variant="outlined" color="secondary" size="s">
               Send a reminder
+            </Button>
+          </div>
+        );
+      case SquareAPILabel.square_get_locations_request_success:
+        return (
+          <div className={styles["message-text-type__options"]}>
+            <Button variant="outlined" color="secondary" size="s" onClick={onClickSearchSquareOrders}>
+              Get my Square orders
             </Button>
           </div>
         );
@@ -59,7 +78,7 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
           {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}
 
           {!isSimulationEnabled ? (
-            <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
+            <Typography.Text dangerouslySetInnerHTML={{ __html: marked.parse(message.content!) }} />
           ) : (
             <Typography.Text id={message.id} />
           )}

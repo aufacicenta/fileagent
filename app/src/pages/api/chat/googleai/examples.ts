@@ -5,13 +5,13 @@ export const examples: Example[] = [
   {
     input: { content: "List all my Square locations" },
     output: {
-      content: `{"function_call": { "name": "${FunctionCallName.get_square_locations}", "arguments": { "file_name": "filename" } } }`,
+      content: `{"function_call": { "name": "${FunctionCallName.get_square_locations}", "arguments": {} }`,
     },
   },
   {
     input: { content: "Get all my square orders of this month" },
     output: {
-      content: `{"function_call": { "name": "${FunctionCallName.get_square_orders}", "arguments": { "date_time_filter": { "created_at": "YYYYMMDD" } } } }`,
+      content: `{"function_call": { "name": "${FunctionCallName.search_square_orders}", "arguments": { "date_time_filter": { "created_at": { "start_at": "YYYYMMDD" } } } } }`,
     },
   },
   {

@@ -28,6 +28,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
 
   const chatSidebarContext = useChatSidebarContext();
 
+  const last = () => messages[messages.length - 1];
+
   const extractApiRequestValues = (message: ChatContextMessage) => ({
     role: message.role,
     content: message.content,
@@ -42,6 +44,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       hasInnerHtml: message.hasInnerHtml,
       readOnly: message.readOnly,
       label: message.label,
+      metadata: message.metadata,
     };
 
     if (message.type === "file") {
@@ -251,6 +254,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     setActions,
     actions,
     transformId,
+    last,
   };
 
   return <MessageContext.Provider value={props}>{children}</MessageContext.Provider>;

@@ -56,9 +56,22 @@ const transformGoogleAIPredictionResponseToStandardChoice = (
   } catch (error) {
     logger.error(error);
     logger.error("Content is not a function call. Continue with default content.");
-  }
 
-  return [];
+    const choice: OpenAI.Chat.ChatCompletion.Choice = {
+      index: 0,
+      finish_reason: "stop",
+      message: {
+        role: "assistant",
+        content,
+      },
+    };
+
+    logger.info(choice);
+
+    choices.push(choice);
+
+    return choices;
+  }
 };
 
 export default transformGoogleAIPredictionResponseToStandardChoice;

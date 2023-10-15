@@ -7,6 +7,8 @@ export class ContentExtraction extends Model<
   declare id: CreationOptional<string>;
   declare fileName: string;
   declare content: string;
+  declare isPublic: boolean;
+  declare bucketName: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -27,6 +29,15 @@ export class ContentExtraction extends Model<
         },
         content: {
           type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        isPublic: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
+        bucketName: {
+          type: DataTypes.STRING,
           allowNull: false,
         },
         createdAt: {

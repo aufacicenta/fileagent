@@ -18,7 +18,7 @@ const generate_dropbox_e_signature_request = async (
   try {
     logger.info(`generate_dropbox_e_signature_request: ${args}`);
 
-    const accessToken = request.headers[APIChatHeaderKeyNames.x_dropbox_access_token] as string;
+    const accessToken = request.body.headers[APIChatHeaderKeyNames.x_dropbox_access_token] as string;
 
     const embeddedSignatureRequestArgs: CreateEmbeddedSignatureRequestArgs = {
       title: args.title,

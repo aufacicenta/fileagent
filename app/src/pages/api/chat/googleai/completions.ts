@@ -19,7 +19,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       typeof request.body.body === "string" ? JSON.parse(request.body.body, json.reviver) : request.body.body;
 
     const prompt = googleai.convertFileAgentRequestMessagesToValidPrompt(data, {
-      context: `You are an intelligent file reader. You can understand the content of any file. If the prompt matches the examples, you should format the reply as a JSON function_call. If the prompt implies a date, replace YYYYMMDD with the implied date and format the date as YYYYMMDD.`,
+      context: `You are an intelligent file reader. You can understand the content of any file. If the prompt matches the examples in more than 90%, you should format the reply as a JSON function_call. If the prompt implies a date, replace YYYYMMDD with the implied date and format the date as YYYYMMDD.`,
       examples,
     });
 

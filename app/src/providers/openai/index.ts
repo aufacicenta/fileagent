@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-const MAX_TOKENS = 70000;
+const MAX_TOKENS = 4097;
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

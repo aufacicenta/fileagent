@@ -7,6 +7,8 @@ import logger from "providers/logger";
 import { SquareAPILabel } from "context/message/MessageContext.types";
 import square from "providers/square";
 
+import { SquareGetLocationsMetadata } from "./square.types";
+
 const get_square_locations = async (
   _args: get_square_locations_args,
   choice: ChatCompletionChoice,
@@ -14,9 +16,13 @@ const get_square_locations = async (
   request: NextApiRequest,
 ): Promise<ChatCompletionChoice> => {
   try {
-    logger.info(`get_square_locations: ${_args}`);
+    logger.info(`get_square_locations: ${JSON.stringify(_args)}`);
 
-    const accessToken = request.headers[APIChatHeaderKeyNames.x_square_access_token] as string;
+    const accessToken = request.body.headers[APIChatHeaderKeyNames.x_square_access_token] as string;
+
+    if (!accessToken) {
+      return square.getSquareAuthChoice(choice);
+    }
 
     const response = await square.getClient(accessToken).locationsApi.listLocations();
 
@@ -40,16 +46,23 @@ const get_square_locations = async (
       index: 0,
       message: {
         role: "assistant",
+        type: "text",
+        label: SquareAPILabel.square_get_locations_request_success,
+        metadata: {
+          locationIds: response.result.locations.map((location) => location.id),
+        } as SquareGetLocationsMetadata,
         content: `Here are your all your Square locations:
 
 ${response.result.locations
   .map(
     (location) =>
-      `${location.businessName} (${location.id})\n${location.address?.addressLine1}, ${location.address?.locality} ${location.address?.administrativeDistrictLevel1}, ${location.address?.country} ${location.address?.postalCode}.\n${location.status}`,
+      `${location.businessName} (${location.id})\n${location.address?.addressLine1 || ""}, ${
+        location.address?.locality || ""
+      } ${location.address?.administrativeDistrictLevel1 || ""}, ${location.address?.country || ""} ${
+        location.address?.postalCode || ""
+      }.\n${location.status}`,
   )
   .join("\n\n")}`,
-        type: "text",
-        label: SquareAPILabel.square_get_locations_request_success,
       },
     };
   } catch (error) {

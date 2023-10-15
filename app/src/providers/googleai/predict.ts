@@ -1,5 +1,7 @@
 import { helpers } from "@google-cloud/aiplatform";
 
+import logger from "providers/logger";
+
 import predictionServiceClient from "./prediction-service-client";
 import { Prompt } from "./googleai.types";
 
@@ -16,6 +18,8 @@ const predict = async (prompt: Prompt, endpoint: string) => {
   };
 
   const parameters = helpers.toValue(parameter);
+
+  logger.info(`predict: ${endpoint}`);
 
   return predictionServiceClient.predict({
     endpoint,

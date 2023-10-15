@@ -21,15 +21,18 @@ const extract_content_from_pdf_file = async (
 
     const bucketName = body.currentMessageMetadata?.bucketName;
 
-    const fileName = `${bucketName}/${args.file_name}`;
+    const fileName = args.file_name;
 
-    logger.info(`extract_content_from_pdf_file; ${fileName}`);
+    const filePath = `${bucketName}/${fileName}`;
+
+    logger.info(`extract_content_from_pdf_file; ${filePath}`);
 
     const { ContentExtraction } = await sequelize.load();
 
     const contentExtractionRecord = await ContentExtraction.findOne({
       where: {
         fileName,
+        bucketName,
       },
     });
 
@@ -40,39 +43,28 @@ const extract_content_from_pdf_file = async (
     let messages: CreateChatCompletionRequestMessage[] = [];
 
     if (contentExtractionRecord?.content) {
-      logger.info(`extract_content_from_pdf_file; ${fileName} content exists.`);
+      logger.info(`extract_content_from_pdf_file; ${filePath} content exists.`);
 
       maxTokens = contentExtractionRecord.content.length;
-
-      if (maxTokens > openai.MAX_TOKENS) {
-        return {
-          ...choice,
-          message: {
-            ...choice.message,
-            content: `Sorry, I couldn't extract the content from the PDF file. The file is too large and I can only handle files up to ${openai.MAX_TOKENS} characters.`,
-            label: ChatLabel.chat_extract_pdf_error,
-          },
-        };
-      }
 
       messages = [
         {
           role: "user",
-          content: contentExtractionRecord.content,
+          content: contentExtractionRecord.content.slice(0, openai.MAX_TOKENS - 100),
         },
       ];
     } else {
-      const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, args.file_name, 60);
+      const { signedUrl } = await supabase.storage.createSignedURL(bucketName!, fileName, 60);
 
-      // @TODO Store getFullTextOCR result in the database, linked to the user
-      // labels: 500 USDT, P1
       const ocrResult = await nanonets.getFullTextOCR(signedUrl, signedUrl);
 
       const rawText = ocrResult.results[0].page_data.map((data) => data.raw_text).join("\n");
 
       await ContentExtraction.create({
         fileName,
+        bucketName,
         content: rawText,
+        isPublic: false,
       });
 
       messages = ocrResult.results[0].page_data

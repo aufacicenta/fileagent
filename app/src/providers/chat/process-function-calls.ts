@@ -10,19 +10,14 @@ import {
   extract_content_from_pdf_file_args,
   generate_dropbox_e_signature_request_args,
   get_square_locations_args,
+  search_square_orders_args,
   get_square_payments_args,
 } from "./chat.types";
 import extract_content_from_pdf_file from "./functions/nanonets/extract_content_from_pdf_file";
 import generate_dropbox_e_signature_request from "./functions/dropbox/generate_dropbox_e_signature_request";
 import get_square_locations from "./functions/square/get_square_locations";
 import get_square_payments from "./functions/square/get_square_payments";
-
-const dummyFn = async (
-  _args: generate_dropbox_e_signature_request_args,
-  choice: ChatCompletionChoice,
-  _currentMessage: FileAgentRequest["currentMessage"],
-  _request: NextApiRequest,
-) => Promise.resolve(choice);
+import search_square_orders from "./functions/square/search_square_orders";
 
 const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["choices"]) => {
   const functionCalls = choices.filter((choice) => !!choice.message.function_call);
@@ -58,10 +53,10 @@ const processFunctionCalls = (choices: OpenAI.Chat.Completions.ChatCompletion["c
       (args: get_square_payments_args, choice: ChatCompletionChoice) =>
       (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
         get_square_payments(args, choice, currentMessage, request),
-    [FunctionCallName.get_square_orders]:
-      (args: generate_dropbox_e_signature_request_args, choice: ChatCompletionChoice) =>
+    [FunctionCallName.search_square_orders]:
+      (args: search_square_orders_args, choice: ChatCompletionChoice) =>
       (currentMessage: FileAgentRequest["currentMessage"], request: NextApiRequest) =>
-        dummyFn(args, choice, currentMessage, request),
+        search_square_orders(args, choice, currentMessage, request),
   };
 
   functionCalls.forEach((choice) => {
