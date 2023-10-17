@@ -2,18 +2,19 @@
 
 ![AI File Agent screenshot](https://blockchainassetregistry.infura-ipfs.io/ipfs/bafybeigtxmjowf7efxar3lel3kw63hsnogkimmb6azwqcrli55ekswifr4/Screenshot%202023-10-15%20at%2011.52.51.png)
 
-Analyze API and file data with natural language with a nice UI.
+Analyze API and file data with natural language and a nice UI.
 
 - [Features](#features)
 - [Development](#development)
 - [Launching-client](#launching-client)
+- [Debugging](#debugging)
 - [Contributing](#contributing)
 
 <a name="features"/>
 
 ## Features
 
-AI File Agent is not only another AI chat UI, it allows you to create custom components to render with each message, for example:
+AI File Agent is not only another AI chat UI, it allows you to upload any file and create custom components to render with each message, for example:
 
 ```typescript
 messageContext.updateMessage({
@@ -73,6 +74,8 @@ export const MessageFileType = ({ message, className }: MessageFileTypeProps) =>
 
 ### Plus
 
+- ✅ Upload any file of any size, display a nice uploading animation all within the chat interface
+- ✅ Standard GoogleAI and OpenAI choice responses. Should work with more LM's in the future
 - ✅ Animated assistant replies (typing animation)
 - ✅ Variable height `textarea`
 - ✅ API authentication handler
@@ -89,13 +92,13 @@ export const MessageFileType = ({ message, className }: MessageFileTypeProps) =>
 
 ## Development
 
-Follow app/README.md for a detailed explanation of launching the dev environment.
+Follow `app/README.md` for a detailed explanation of launching the dev environment.
 
 <a name="launching-client"/>
 
 ### Launching the frontend client
 
-The client is a NextJS application that connects to the NEAR Protocol Rust smart-contracts with `near-api-js`.
+The client is a NextJS application.
 
 To launch on `localhost:3003`, first clone this repo and run:
 
@@ -148,6 +151,12 @@ export POSTGRES_DB_PASSWORD=...
 export POSTGRES_DB_HOST=...
 export POSTGRES_DB_PORT=5432
 ```
+
+<a name="debugging"/>
+
+### Optional VSCode debugging
+
+Instead of `yarn dev:debug`, hit the `F5` key, it should launch the VSCode Debugger in a new terminal session. You may create debug breakpoints on API endpoints, for example.
 
 <a name="contributing"/>
 
