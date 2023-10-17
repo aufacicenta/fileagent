@@ -48,6 +48,7 @@ const get_square_locations = async (
         role: "assistant",
         type: "text",
         label: SquareAPILabel.square_get_locations_request_success,
+        hasInnerHtml: true,
         metadata: {
           locationIds: response.result.locations.map((location) => location.id),
         } as SquareGetLocationsMetadata,
@@ -56,11 +57,11 @@ const get_square_locations = async (
 ${response.result.locations
   .map(
     (location) =>
-      `${location.businessName} (${location.id})\n${location.address?.addressLine1 || ""}, ${
-        location.address?.locality || ""
-      } ${location.address?.administrativeDistrictLevel1 || ""}, ${location.address?.country || ""} ${
-        location.address?.postalCode || ""
-      }.\n${location.status}`,
+      `### ${location.businessName} (${location.id})
+${location.address?.addressLine1 || ""}, ${location.address?.locality || ""} ${
+        location.address?.administrativeDistrictLevel1 || ""
+      }, ${location.address?.country || ""} ${location.address?.postalCode || ""}.
+Status: **${location.status}**`,
   )
   .join("\n\n")}`,
       },

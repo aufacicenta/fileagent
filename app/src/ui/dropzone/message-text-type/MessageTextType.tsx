@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import { marked } from "marked";
+import { Marked, Renderer } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
 
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
@@ -13,6 +15,27 @@ import date from "providers/date";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
+
+const renderer = new Renderer();
+renderer.link = (href, title, text) => `<a target="_blank" href="${href}" title="${title}">${text}</a>`;
+renderer.code = (code, _infostring, _escaped) => `<pre><code class="hljs">${code}</code></pre>`;
+
+const markedOptions = {
+  breaks: true,
+  renderer,
+};
+
+const marked = new Marked(
+  markedHighlight({
+    langPrefix: "hljs language-",
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : "plaintext";
+
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  markedOptions,
+);
 
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
@@ -28,9 +51,11 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
   const onClickSearchSquareOrders = () => {
     formContext.setFieldValue(
       FormFieldNames.message,
-      `Get my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
+      `Search my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
         message.metadata?.locationIds ? message.metadata?.locationIds[0] : "LOCATION_ID"
-      }`,
+      }
+
+Tell me what's the most sold product:`,
     );
   };
 
@@ -78,7 +103,12 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
           {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}
 
           {!isSimulationEnabled ? (
-            <Typography.Text dangerouslySetInnerHTML={{ __html: marked.parse(message.content!) }} />
+            <div
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(message.content!, markedOptions) as string,
+              }}
+            />
           ) : (
             <Typography.Text id={message.id} />
           )}

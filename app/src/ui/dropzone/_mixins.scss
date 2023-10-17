@@ -1,3 +1,7 @@
+@import "src/ui/typography/mixins";
+@import "src/ui/table/variables";
+@import "src/ui/table/mixins";
+
 @mixin avatar {
   &__avatar {
     padding: $space-default;
@@ -30,7 +34,45 @@
     width: 100%;
     padding: $space-default;
 
+    > div {
+      @include tableResponsive;
+    }
+
+    table {
+      @include table;
+      @include tableStripped;
+      @include tableSm;
+      border-radius: $border-radius;
+      color: var(--color-background);
+      background-color: var(--color-table-background);
+    }
+
+    h1 {
+      @include headline1();
+    }
+
+    h2 {
+      @include headline2();
+    }
+
+    h3 {
+      @include headline3();
+    }
+
+    h4 {
+      @include headline4();
+    }
+
+    h5 {
+      @include headline5();
+    }
+
+    h6 {
+      @include headline6();
+    }
+
     p {
+      @include text();
       white-space: pre-line;
       word-break: break-word;
       hyphens: auto;

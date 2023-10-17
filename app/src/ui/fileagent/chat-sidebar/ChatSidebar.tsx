@@ -24,9 +24,12 @@ import { Typography } from "ui/typography/Typography";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "ui/shadcn/accordion/Accordion";
 import { LocaleSelector } from "ui/locale-selector/LocaleSelector";
 import { ThemeSelector } from "ui/theme-selector/ThemeSelector";
+import { FileObject } from "context/file/FileContext.types";
+import { useFormContext } from "context/form/useFormContext";
+import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 
-import { ChatSidebarProps } from "./ChatSidebar.types";
 import styles from "./ChatSidebar.module.scss";
+import { ChatSidebarProps } from "./ChatSidebar.types";
 
 // @TODO Add an "extractions" section
 // labels: 250 USDT, P1
@@ -38,6 +41,8 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
   const chatSidebarContext = useChatSidebarContext();
 
   const messageContext = useMessageContext();
+
+  const formContext = useFormContext();
 
   const fileContext = useFileContext();
 
@@ -59,8 +64,12 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
     fileContext.getUserFiles();
   }, [chatSidebarContext.isOpen]);
 
-  // @TODO Implement the files.inquire option
-  // labels: 100 USDT, P1
+  const onClickFileInquire = (file: FileObject) => {
+    formContext.setFieldValue(FormFieldNames.message, `Let's work with this file: "${file.name}"`);
+
+    chatSidebarContext.close();
+  };
+
   return (
     <SheetContent side="left" className={clsx(styles["chat-sidebar"], styles["chat-sidebar__sheet-content"])}>
       <div className={styles["chat-sidebar__header"]} />
@@ -71,13 +80,13 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
           </AccordionTrigger>
           <AccordionContent>
             <div className={styles["chat-sidebar__files"]}>
-              {fileContext.userFiles.map((item) => (
-                <div className={styles["chat-sidebar__file--item"]} key={item.id}>
+              {fileContext.userFiles.map((file) => (
+                <div className={styles["chat-sidebar__file--item"]} key={file.id}>
                   <Typography.Description flat truncate>
-                    {item.name}
+                    {file.name}
                   </Typography.Description>
                   <div className={styles["chat-sidebar__file--item-options"]}>
-                    <Typography.MiniDescription flat>{filesize(item.metadata.size)} </Typography.MiniDescription>
+                    <Typography.MiniDescription flat>{filesize(file.metadata.size)} </Typography.MiniDescription>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="text" size="xs" color="secondary">
@@ -88,10 +97,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = () => {
                         <DropdownMenuLabel>File Options</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                          <DropdownMenuItem>Download</DropdownMenuItem>
-                          <DropdownMenuItem>Share</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                          <DropdownMenuItem>Inquire</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onClickFileInquire(file)}>Inquire</DropdownMenuItem>
                         </DropdownMenuGroup>
                       </DropdownMenuContent>
                     </DropdownMenu>

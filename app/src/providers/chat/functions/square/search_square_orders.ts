@@ -62,14 +62,16 @@ const search_square_orders = async (
     }
 
     const prompt = {
-      prompt: `Given this JSON data:
+      prompt: `Given this JSON data (DO NOT RETURN THE JSON DATA IN YOUR RESPONSE) only analyze it and reply with what's needed:
 
 ${JSON.stringify(response.result.orders, json.replacer)}
 
 ${JSON.parse(request.body.body).currentMessage.content}}`,
     };
 
-    const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }));
+    const [predictionResponse] = await googleai.predict(prompt, googleai.getEndpoint({ model: "text-bison-32k" }), {
+      maxOutputTokens: 8000,
+    });
 
     if (!predictionResponse?.predictions) {
       throw new Error("No prediction response");
