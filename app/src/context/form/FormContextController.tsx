@@ -102,6 +102,8 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
 
       const messages = messageContext.getPlainMessages();
 
+      const currentMessage = messageContext.extractApiRequestValues(message);
+
       const headers: Record<any, string> = {};
 
       if (authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]) {

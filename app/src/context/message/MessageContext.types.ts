@@ -66,6 +66,7 @@ export type MessageContextType = {
   clearMessages: () => void;
   saveMessageThread: () => void;
   loadMessageThread: (index: number) => void;
+  getMessageById: (id: string) => ChatContextMessage | undefined;
   appendMessage: (message: ChatContextMessage) => ChatContextMessage;
   updateMessage: (message: ChatContextMessage) => ChatContextMessage;
   deleteMessage: (id: ChatContextMessage["id"]) => void;

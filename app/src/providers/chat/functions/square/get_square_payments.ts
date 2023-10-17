@@ -59,7 +59,7 @@ const get_square_payments = async (
     }
 
     const prompt = {
-      prompt: `Given this JSON data:
+      prompt: `Given this JSON data (DO NOT RETURN THE JSON DATA IN YOUR RESPONSE) only analyze it and reply with what's needed:
 
 ${JSON.stringify(response.result.payments, json.replacer)}
 
