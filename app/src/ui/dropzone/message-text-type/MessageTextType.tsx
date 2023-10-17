@@ -1,4 +1,7 @@
 import clsx from "clsx";
+import { Marked, Renderer } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
 
 import { Typography } from "ui/typography/Typography";
 import { Icon } from "ui/icon/Icon";
@@ -7,10 +10,32 @@ import { LoadingSpinner } from "ui/icons/LoadingSpinner";
 import { Button } from "ui/button/Button";
 import { useFormContext } from "context/form/useFormContext";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
-import { DropboxESignLabel } from "context/message/MessageContext.types";
+import { DropboxESignLabel, SquareAPILabel } from "context/message/MessageContext.types";
+import date from "providers/date";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
+
+const renderer = new Renderer();
+renderer.link = (href, title, text) => `<a target="_blank" href="${href}" title="${title}">${text}</a>`;
+renderer.code = (code, _infostring, _escaped) => `<pre><code class="hljs">${code}</code></pre>`;
+
+const markedOptions = {
+  breaks: true,
+  renderer,
+};
+
+const marked = new Marked(
+  markedHighlight({
+    langPrefix: "hljs language-",
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : "plaintext";
+
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  markedOptions,
+);
 
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
@@ -21,6 +46,17 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
 
   const onClickEdit = () => {
     formContext.setFieldValue(FormFieldNames.message, message.content!);
+  };
+
+  const onClickSearchSquareOrders = () => {
+    formContext.setFieldValue(
+      FormFieldNames.message,
+      `Search my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
+        message.metadata?.locationIds ? message.metadata?.locationIds[0] : "LOCATION_ID"
+      }
+
+Tell me what's the most sold product:`,
+    );
   };
 
   const getOptionComponentsByLabel = () => {
@@ -35,6 +71,14 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
             </Button>
             <Button variant="outlined" color="secondary" size="s">
               Send a reminder
+            </Button>
+          </div>
+        );
+      case SquareAPILabel.square_get_locations_request_success:
+        return (
+          <div className={styles["message-text-type__options"]}>
+            <Button variant="outlined" color="secondary" size="s" onClick={onClickSearchSquareOrders}>
+              Get my Square orders
             </Button>
           </div>
         );
@@ -59,7 +103,12 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
           {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}
 
           {!isSimulationEnabled ? (
-            <Typography.Text dangerouslySetInnerHTML={{ __html: message.content! }} />
+            <div
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(message.content!, markedOptions) as string,
+              }}
+            />
           ) : (
             <Typography.Text id={message.id} />
           )}

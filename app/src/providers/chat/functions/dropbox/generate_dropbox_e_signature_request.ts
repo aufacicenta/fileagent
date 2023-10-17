@@ -18,7 +18,7 @@ const generate_dropbox_e_signature_request = async (
   try {
     logger.info(`generate_dropbox_e_signature_request: ${args}`);
 
-    const accessToken = request.headers[APIChatHeaderKeyNames.x_dropbox_access_token] as string;
+    const accessToken = request.body.headers[APIChatHeaderKeyNames.x_dropbox_access_token] as string;
 
     const embeddedSignatureRequestArgs: CreateEmbeddedSignatureRequestArgs = {
       title: args.title,
@@ -34,7 +34,7 @@ const generate_dropbox_e_signature_request = async (
       }),
     };
 
-    const body = JSON.parse(request.body);
+    const body = JSON.parse(request.body.body);
 
     const bucketName = body.currentMessageMetadata?.bucketName;
 
@@ -49,11 +49,11 @@ const generate_dropbox_e_signature_request = async (
       index: 0,
       message: {
         role: "assistant",
-        content: `A Dropbox Sign™ request was created for <u>${args.file_name}</u>.
+        content: `A Dropbox Sign™ request was created for "**${args.file_name}**".
 
-        <a href="${result.body.signatureRequest?.detailsUrl}" target="_blank">Click to manage this request</a>.
+[Click to manage this request](${result.body.signatureRequest?.detailsUrl}).
 
-        Is there anything else I can do for you?`,
+Is there anything else I can do for you?`,
         type: "text",
         hasInnerHtml: true,
         label: DropboxESignLabel.dropbox_esign_request_success,

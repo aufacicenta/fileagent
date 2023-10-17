@@ -8,7 +8,14 @@ const convertFileAgentRequestMessagesToValidPrompt = (
 ): Prompt => {
   const messages = data.messages.map((message) => ({ author: message.role, content: message.content! }));
 
-  if (messages.length && messages[messages.length - 1].author === "user" && data.currentMessage.role === "user") {
+  const isEvenNumberOfMessages = messages.length % 2 === 0;
+
+  if (
+    messages.length &&
+    isEvenNumberOfMessages &&
+    ((messages.length === 1 && messages[0].author === "user") || messages[messages.length - 1].author === "user") &&
+    data.currentMessage.role === "user"
+  ) {
     messages.push({ author: "assistant", content: "Continue the conversation..." });
   }
 

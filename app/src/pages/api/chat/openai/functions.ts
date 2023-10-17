@@ -44,7 +44,7 @@ export default [
         },
         unit: { type: "string" },
       },
-      required: ["file_name"],
+      required: ["file_name", "title", "subject", "message", "signers"],
     },
   },
 ];
