@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { FileAgentRequest } from "api/chat/types";
 
 import { ChatPrompt, Prompt } from "./googleai.types";
@@ -8,22 +9,38 @@ const convertFileAgentRequestMessagesToValidPrompt = (
 ): Prompt => {
   const messages = data.messages.map((message) => ({ author: message.role, content: message.content! }));
 
-  const isEvenNumberOfMessages = messages.length % 2 === 0;
+  messages.push({ author: data.currentMessage.role, content: data.currentMessage.content! });
 
-  if (
-    messages.length &&
-    isEvenNumberOfMessages &&
-    ((messages.length === 1 && messages[0].author === "user") || messages[messages.length - 1].author === "user") &&
-    data.currentMessage.role === "user"
-  ) {
-    messages.push({ author: "assistant", content: "Continue the conversation..." });
+  if (messages.length === 1) {
+    return {
+      ...partialPrompt,
+      messages,
+    } as ChatPrompt;
   }
 
-  messages.push({ author: data.currentMessage.role, content: data.currentMessage.content! });
+  const inputMessages: Array<{ author: string; content: string }> = [];
+
+  messages.reduce((acc, curr, index, arr) => {
+    inputMessages.push(curr);
+
+    const next = arr[index + 1];
+
+    if (!next) {
+      return acc;
+    }
+
+    const bothAreUsers = curr.author === "user" && next.author === "user";
+
+    if (bothAreUsers) {
+      inputMessages.push({ author: "assistant", content: "Continue the conversation..." });
+    }
+
+    return curr;
+  }, messages[0]);
 
   return {
     ...partialPrompt,
-    messages,
+    messages: inputMessages,
   } as ChatPrompt;
 };
 

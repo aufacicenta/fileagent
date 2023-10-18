@@ -102,6 +102,8 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
 
       const messages = messageContext.getPlainMessages();
 
+      const currentMessage = messageContext.extractApiRequestValues(message);
+
       const headers: Record<any, string> = {};
 
       if (authContext.accessTokens[OAuthTokenStoreKey.dropbox_esign]) {
@@ -117,7 +119,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         method: "POST",
         body: JSON.stringify({
           messages,
-          currentMessage: messageContext.extractApiRequestValues(message),
+          currentMessage,
           currentMessageMetadata,
         } as FileAgentRequest),
         headers,

@@ -78,6 +78,8 @@ export const MessageContextController = ({ children }: MessageContextControllerP
       })
       .filter(Boolean) as ChatContextMessage[];
 
+  const getMessageById = (id: string) => messages.find((message) => message.id === id);
+
   const appendMessage = (message: ChatContextMessage) => {
     const id = message.id ? transformId(message.id) : transformId(uuidv4());
 
@@ -246,6 +248,7 @@ export const MessageContextController = ({ children }: MessageContextControllerP
     clearMessages,
     saveMessageThread,
     loadMessageThread,
+    getMessageById,
     appendMessage,
     updateMessage,
     deleteMessage,
