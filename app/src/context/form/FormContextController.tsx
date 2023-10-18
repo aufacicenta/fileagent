@@ -119,7 +119,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         method: "POST",
         body: JSON.stringify({
           messages,
-          currentMessage: messageContext.extractApiRequestValues(message),
+          currentMessage,
           currentMessageMetadata,
         } as FileAgentRequest),
         headers,
