@@ -81,6 +81,13 @@
         color: var(--color-primary);
       }
     }
+
+    ul,
+    ol {
+      li {
+        @include text();
+      }
+    }
   }
 }
 @mixin options {
