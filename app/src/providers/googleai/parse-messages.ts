@@ -11,15 +11,28 @@ const convertFileAgentRequestMessagesToValidPrompt = (
 
   messages.push({ author: data.currentMessage.role, content: data.currentMessage.content! });
 
-  messages.reduce((acc, curr, index, arr) => {
-    const prev = index > 0 && arr[index - 1];
+  if (messages.length === 1) {
+    return {
+      ...partialPrompt,
+      messages,
+    } as ChatPrompt;
+  }
 
-    if (!prev) {
+  const inputMessages: Array<{ author: string; content: string }> = [];
+
+  messages.reduce((acc, curr, index, arr) => {
+    inputMessages.push(curr);
+
+    const next = arr[index + 1];
+
+    if (!next) {
       return acc;
     }
 
-    if (prev.author === "user" && curr.author === "user") {
-      arr.splice(index, 0, { author: "assistant", content: "Continue the conversation..." });
+    const bothAreUsers = curr.author === "user" && next.author === "user";
+
+    if (bothAreUsers) {
+      inputMessages.push({ author: "assistant", content: "Continue the conversation..." });
     }
 
     return curr;
@@ -27,7 +40,7 @@ const convertFileAgentRequestMessagesToValidPrompt = (
 
   return {
     ...partialPrompt,
-    messages,
+    messages: inputMessages,
   } as ChatPrompt;
 };
 
