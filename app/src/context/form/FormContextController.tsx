@@ -4,6 +4,7 @@ import { sample } from "lodash";
 import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest, FileAgentResponse } from "api/chat/types";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
@@ -11,6 +12,7 @@ import { ChatContextMessage, TextChatCompletionMessage } from "context/message/M
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 import { useFileContext } from "context/file/useFileContext";
+import { X_PUBLIC_BUCKET_NAME } from "providers/chat/constants";
 
 import { FormContextControllerProps, FormContextType, FormState } from "./FormContext.types";
 import { FormContext } from "./FormContext";
@@ -55,6 +57,8 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
   const authContext = useAuthorizationContext();
 
   const fileContext = useFileContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
@@ -113,6 +117,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
 
       if (authContext.accessTokens[OAuthTokenStoreKey.square_api]) {
         headers[APIChatHeaderKeyNames.x_square_access_token] = authContext.accessTokens[OAuthTokenStoreKey.square_api]!;
+      }
+
+      const fileName = router.query?.fileName;
+
+      if (fileName) {
+        headers[APIChatHeaderKeyNames.x_public_bucket_name] = X_PUBLIC_BUCKET_NAME;
       }
 
       const options = {
