@@ -10,6 +10,7 @@ export type FormContextControllerProps = {
 };
 
 export type FormContextType = {
+  form?: FormState;
   setForm: Dispatch<SetStateAction<FormState | undefined>>;
   setCurrentMessageMetadata: Dispatch<SetStateAction<Record<string, any>>>;
   setFieldValue: (field: string, text: string) => void;

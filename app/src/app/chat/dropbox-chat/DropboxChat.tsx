@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Field, useForm } from "react-final-form";
+import { Field, useForm, useFormState } from "react-final-form";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -17,6 +17,7 @@ import styles from "./DropboxChat.module.scss";
 
 export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit }) => {
   const form = useForm();
+  const formState = useFormState();
 
   const formContext = useFormContext();
 
@@ -28,18 +29,20 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
     if (!form) return;
 
     formContext.setForm(form);
+  }, [form]);
+
+  useEffect(() => {
+    if (!formContext.form) return;
 
     const fileName = router.query?.fileName;
 
     if (fileName) {
-      setTimeout(() => {
-        formContext.setFieldValue(
-          FormFieldNames.message,
-          `Extra el contenido de "${fileName}" y responde: ¿cuántos artículos tiene la Constitución Política de Guatemala?`,
-        );
-      }, 1000);
+      formContext.setFieldValue(
+        FormFieldNames.message,
+        `Extra el contenido de "${fileName}" y responde: ¿cuántos artículos tiene la Constitución Política de Guatemala?`,
+      );
     }
-  }, [form]);
+  }, [formContext.form]);
 
   useEffect(() => {
     const element = document.querySelector(`#messages`);

@@ -176,6 +176,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     updateTextareaHeight,
     resetTextareaHeight,
     submit,
+    form,
   };
 
   return <FormContext.Provider value={props}>{children}</FormContext.Provider>;
