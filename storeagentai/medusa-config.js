@@ -51,10 +51,16 @@ const plugins = [
         open: process.env.OPEN_BROWSER !== "false",
       },
     },
-  },
+  }
 ];
 
 const modules = {
+  inventoryService: {
+    resolve: "@medusajs/inventory",
+  },
+  stockLocationService: {
+    resolve: "@medusajs/stock-location",
+  },
   /*eventBus: {
     resolve: "@medusajs/event-bus-redis",
     options: {
@@ -67,6 +73,10 @@ const modules = {
       redisUrl: REDIS_URL
     }
   },*/
+};
+
+const featureFlags = {
+  product_categories: true,
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
@@ -85,4 +95,5 @@ module.exports = {
   projectConfig,
   plugins,
   modules,
+  featureFlags
 };

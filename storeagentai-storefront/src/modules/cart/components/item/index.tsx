@@ -60,7 +60,7 @@ const Item = ({ item, region, type = "full" }: ItemProps) => {
       </Table.Cell>
 
       <Table.Cell className="text-left">
-        <Text className="txt-medium-plus text-ui-fg-base">{item.title}</Text>
+        <Text className="txt-medium-plus text-ui-fg-base">{item.title}: {item.metadata?.plot_id}</Text>
         <LineItemOptions variant={item.variant} />
       </Table.Cell>
 

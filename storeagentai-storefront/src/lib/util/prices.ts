@@ -240,6 +240,10 @@ const convertToLocale = ({
   maximumFractionDigits,
   locale = "en-US",
 }: ConvertToLocaleParams) => {
+  if (currency_code === "eth") {
+    return `ETH 0.${amount.toString()}`
+  }
+
   return currency_code && !isEmpty(currency_code)
     ? new Intl.NumberFormat(locale, {
         style: "currency",

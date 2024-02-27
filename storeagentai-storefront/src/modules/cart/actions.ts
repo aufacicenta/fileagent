@@ -183,6 +183,9 @@ export async function enrichLineItems(
     // If product and variant are found, enrich the item
     return {
       ...item,
+      metadata: {
+        ...product.metadata,
+      },
       variant: {
         ...variant,
         product: omit(product, "variants"),

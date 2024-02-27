@@ -54,4 +54,5 @@ export const noDivisionCurrencies = [
   "xag",
   "xdr",
   "xau",
+  "eth",
 ]

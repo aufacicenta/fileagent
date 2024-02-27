@@ -12,6 +12,7 @@ export type FeaturedProduct = {
 export type ProductPreviewType = {
   id: string
   title: string
+  subtitle?: string | null
   handle: string | null
   thumbnail: string | null
   created_at?: Date

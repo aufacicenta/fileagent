@@ -15,18 +15,18 @@ type ProductTabsProps = {
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = [
     {
-      label: "Product Information",
+      label: "About",
       component: <ProductInfoTab product={product} />,
     },
-    {
-      label: "Shipping & Returns",
-      component: <ShippingInfoTab />,
-    },
+    // {
+    //   label: "Shipping & Returns",
+    //   component: <ShippingInfoTab />,
+    // },
   ]
 
   return (
     <div className="w-full">
-      <Accordion type="multiple">
+      <Accordion type="multiple" defaultValue={[tabs[0].label]}>
         {tabs.map((tab, i) => (
           <Accordion.Item
             key={i}
@@ -48,19 +48,19 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
       <div className="grid grid-cols-2 gap-x-8">
         <div className="flex flex-col gap-y-4">
           <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
+            <span className="font-semibold">Coordinates</span>
+            <p>{product.metadata?.coordinates ? product.metadata?.coordinates : "-"}</p>
           </div>
           <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
+            <span className="font-semibold">Owned By</span>
+            <p>{product.metadata?.owned_by ? product.metadata?.owned_by : "-"}</p>
           </div>
-          <div>
+          {/* <div>
             <span className="font-semibold">Type</span>
             <p>{product.type ? product.type.value : "-"}</p>
-          </div>
+          </div> */}
         </div>
-        <div className="flex flex-col gap-y-4">
+        {/* <div className="flex flex-col gap-y-4">
           <div>
             <span className="font-semibold">Weight</span>
             <p>{product.weight ? `${product.weight} g` : "-"}</p>
@@ -73,7 +73,7 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
                 : "-"}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       {product.tags?.length ? (
         <div>
