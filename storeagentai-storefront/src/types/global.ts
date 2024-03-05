@@ -13,6 +13,7 @@ export type ProductPreviewType = {
   id: string
   title: string
   subtitle?: string | null
+  metadata?: Record<string, unknown> | null
   handle: string | null
   thumbnail: string | null
   created_at?: Date
