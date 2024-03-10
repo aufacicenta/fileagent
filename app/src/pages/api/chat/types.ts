@@ -12,6 +12,9 @@ export enum APIChatHeaderKeyNames {
 export type CurrentMessageMetadata = {
   bucketName?: string;
   source?: "messagebird" | "app";
+  messagebird?: {
+    participantId?: string;
+  };
 };
 
 export type FileAgentRequest = {
