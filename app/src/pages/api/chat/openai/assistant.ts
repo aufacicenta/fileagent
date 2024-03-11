@@ -8,10 +8,11 @@ import { ChatLabel } from "context/message/MessageContext.types";
 import { FileAgentRequest } from "../types";
 import json from "providers/json";
 import supabase from "providers/supabase";
+import chat from "providers/chat";
 
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
-    logger.info(`getting chat assitant from model ${openai.model}`);
+    logger.info(`calling chat assitant from ID asst_Ukvy8hXlI6s0uR36XLQO3vrN`);
 
     const data: FileAgentRequest = (() => {
       if (request.body?.currentMessageMetadata?.source === "messagebird") {
@@ -57,7 +58,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       thread = await openai.client.beta.threads.retrieve(user.data![0].openai_thread_id);
     }
 
-    const message = await openai.client.beta.threads.messages.create(thread.id, {
+    await openai.client.beta.threads.messages.create(thread.id, {
       role: "user",
       content: data.currentMessage.content!,
     });
@@ -85,39 +86,28 @@ Categoría:
 `,
     });
 
-    const awaitRun = new Promise((resolve, reject) => {
-      const interval = setInterval(async () => {
-        const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
+    const runStatusCompleted = () =>
+      new Promise((resolve, reject) => {
+        const interval = setInterval(async () => {
+          const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
 
-        // this is where we check for identified function_call arguments
-        if (currentRun.status === "requires_action") {
-          const requiredAction = currentRun.required_action?.submit_tool_outputs.tool_calls[0];
+          if (currentRun.status === "requires_action") {
+            const requiredActions = currentRun.required_action?.submit_tool_outputs.tool_calls;
 
-          await openai.client.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
-            tool_outputs: [
-              {
-                tool_call_id: requiredAction!.id,
-                output: "{success: true}",
-              },
-            ],
-          });
+            await chat.processFunctionToolCalls(requiredActions!, data, request, thread, run);
+          }
 
-          // clearInterval(interval);
+          if (currentRun.status === "completed") {
+            clearInterval(interval);
 
-          // resolve(currentRun);
-        }
+            resolve(currentRun);
+          }
+        }, 500);
+      });
 
-        if (currentRun.status === "completed") {
-          clearInterval(interval);
+    await runStatusCompleted();
 
-          resolve(currentRun);
-        }
-      }, 500);
-    });
-
-    await awaitRun;
-
-    const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
+    // const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
 
     const messages = await openai.client.beta.threads.messages.list(thread.id);
 
@@ -146,7 +136,7 @@ Categoría:
   } catch (error) {
     logger.error(error);
 
-    response.status(500).json({
+    response.status(200).json({
       error: (error as Error).message,
       choices: [
         {

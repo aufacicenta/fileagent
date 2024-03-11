@@ -5,6 +5,8 @@ import { ChatCompletionMessage } from "openai/resources/chat";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 
 export enum FunctionCallName {
+  // Database
+  get_full_name = "get_full_name",
   // Nanonets
   extract_content_from_pdf_file = "extract_content_from_pdf_file",
   // Dropbox
@@ -15,9 +17,18 @@ export enum FunctionCallName {
   get_square_payments = "get_square_payments",
 }
 
+export type FunctionCallToolActionOutput = {
+  success: boolean;
+};
+
 export type ChatCompletionChoice = OpenAI.Chat.ChatCompletion.Choice & {
   message: ChatCompletionMessage &
     Pick<ChatContextMessage, "hasInnerHtml" | "type" | "label" | "readOnly" | "metadata">;
+};
+
+export type get_full_name_args = {
+  name?: string;
+  lastname?: string;
 };
 
 export type extract_content_from_pdf_file_args = {
