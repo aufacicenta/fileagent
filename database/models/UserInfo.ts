@@ -5,7 +5,7 @@ export class UserInfo extends Model<InferAttributes<UserInfo>, InferCreationAttr
   declare user_id: string;
   declare name: string;
   declare lastname: string;
-  declare messagebird_participant_id: string;
+  declare openai_thread_id: string;
   declare created_at: CreationOptional<Date>;
   declare updated_at: CreationOptional<Date>;
 
@@ -20,7 +20,7 @@ export class UserInfo extends Model<InferAttributes<UserInfo>, InferCreationAttr
         },
         user_id: {
           type: DataTypes.UUID,
-          allowNull: false,
+          allowNull: true,
         },
         name: {
           type: new DataTypes.STRING(128),
@@ -30,7 +30,7 @@ export class UserInfo extends Model<InferAttributes<UserInfo>, InferCreationAttr
           type: new DataTypes.STRING(128),
           allowNull: false,
         },
-        messagebird_participant_id: {
+        openai_thread_id: {
           type: DataTypes.STRING,
           allowNull: true,
         },

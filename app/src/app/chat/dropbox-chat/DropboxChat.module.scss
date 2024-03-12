@@ -18,8 +18,8 @@
 
   &__textarea {
     @include atLargeTablet {
-      padding: $space-l;
       padding-top: 0;
+      padding-left: $navbar-height * 1.5;
     }
     position: fixed;
     right: 0;
@@ -27,9 +27,15 @@
     left: 0;
     width: 100%;
     border-top: 1px solid var(--color-horizontal-line-background);
-    padding: $space-default;
     padding-top: 0;
-    background-color: white;
+    background-color: var(--color-background);
+
+    > div {
+      @extend .z-depth-1;
+      padding: $space-default;
+      padding-bottom: $space-l;
+      background-color: white;
+    }
 
     &--actions {
       @include width;

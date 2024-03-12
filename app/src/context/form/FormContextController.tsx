@@ -72,7 +72,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     if (authContext.getOpenAISessionID()) {
       setCurrentMessageMetadata((prev) => ({ ...prev, openai: { threadId: authContext.getOpenAISessionID() } }));
     }
-  }, []);
+  }, [messageContext.messages]);
 
   const setFieldValue = (field: string, text: string) => {
     form?.mutators.setValue(field, text);

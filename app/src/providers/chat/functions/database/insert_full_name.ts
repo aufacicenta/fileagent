@@ -3,7 +3,7 @@ import { NextApiRequest } from "next";
 
 import { FunctionCallToolActionOutput, get_full_name_args } from "providers/chat/chat.types";
 import logger from "providers/logger";
-import supabase from "providers/supabase";
+import sequelize from "providers/sequelize";
 
 const insert_full_name = async (
   args: get_full_name_args,
@@ -13,16 +13,15 @@ const insert_full_name = async (
   try {
     const { name, lastname } = args;
 
-    // keep track of a potential user setting different names from same number
-    const { error } = await supabase.client.from("user_info").insert({
-      name,
-      lastname,
-      messagebird_participant_id: agentRequest.currentMessageMetadata?.messagebird?.participantId,
-    });
+    const { UserInfo } = await sequelize.load();
 
-    if (error) {
-      throw new Error(error.message);
-    }
+    const userInfo = UserInfo.build();
+
+    userInfo.name = name || "";
+    userInfo.lastname = lastname || "";
+    userInfo.openai_thread_id = agentRequest.currentMessageMetadata?.openai?.threadId || "";
+
+    await userInfo.save();
 
     return {
       success: true,

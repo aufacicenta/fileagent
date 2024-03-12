@@ -103,6 +103,8 @@ Categoría:
           if (currentRun.status === "requires_action") {
             const requiredActions = currentRun.required_action?.submit_tool_outputs.tool_calls;
 
+            logger.info(`requiredActions: ${JSON.stringify(requiredActions)}`);
+
             await chat.processFunctionToolCalls(requiredActions!, data, request, thread, run);
           }
 
@@ -116,19 +118,7 @@ Categoría:
 
     await runStatusCompleted();
 
-    // const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
-
     const messages = await openai.client.beta.threads.messages.list(thread.id);
-
-    // const { choices, promises } = chat.processFunctionCalls(messages.data[0].content choices);
-
-    // if (promises.length > 0) {
-    //   const responses = await Promise.all(promises.map((promise) => promise(data.currentMessage, request)));
-
-    //   response.status(200).json({ choices: responses });
-
-    //   return;
-    // }
 
     response.status(200).json({
       choices: [

@@ -88,8 +88,9 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
     <form onSubmit={onSubmit} className={clsx(styles["dropbox-chat"], className)}>
       <div className={styles["dropbox-chat__messages"]} id="messages">
         {messages.map((message) => getMessageTypeComponent(message))}
-
-        <div className={styles["dropbox-chat__textarea"]}>
+      </div>
+      <div className={styles["dropbox-chat__textarea"]}>
+        <div>
           <div className={styles["dropbox-chat__textarea--actions"]}>
             <Button variant="text" color="secondary" size="s" onClick={clearMessages}>
               Clear

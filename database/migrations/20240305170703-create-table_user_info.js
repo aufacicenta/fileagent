@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      messagebird_participant_id: {
+      openai_thread_id: {
         type: Sequelize.STRING,
         allowNull: true,
       },
