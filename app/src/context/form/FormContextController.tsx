@@ -4,13 +4,19 @@ import { sample } from "lodash";
 import { APIChatHeaderKeyNames, CurrentMessageMetadata, FileAgentRequest, FileAgentResponse } from "api/chat/types";
 import { OAuthTokenStoreKey } from "api/oauth/oauth.types";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
-import { ChatContextMessage, TextChatCompletionMessage } from "context/message/MessageContext.types";
+import {
+  ChatContextMessage,
+  OpenAIAssistantMetadata,
+  TextChatCompletionMessage,
+} from "context/message/MessageContext.types";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 import { useFileContext } from "context/file/useFileContext";
+import { X_PUBLIC_BUCKET_NAME } from "providers/chat/constants";
 
 import { FormContextControllerProps, FormContextType, FormState } from "./FormContext.types";
 import { FormContext } from "./FormContext";
@@ -56,9 +62,17 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
 
   const fileContext = useFileContext();
 
+  const router = useRouter();
+
   useEffect(() => {
     setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
   }, []);
+
+  useEffect(() => {
+    if (authContext.getOpenAISessionID()) {
+      setCurrentMessageMetadata((prev) => ({ ...prev, openai: { threadId: authContext.getOpenAISessionID() } }));
+    }
+  }, [messageContext.messages]);
 
   const setFieldValue = (field: string, text: string) => {
     form?.mutators.setValue(field, text);
@@ -115,6 +129,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
         headers[APIChatHeaderKeyNames.x_square_access_token] = authContext.accessTokens[OAuthTokenStoreKey.square_api]!;
       }
 
+      const fileName = router.query?.fileName;
+
+      if (fileName) {
+        headers[APIChatHeaderKeyNames.x_public_bucket_name] = X_PUBLIC_BUCKET_NAME;
+      }
+
       const options = {
         method: "POST",
         body: JSON.stringify({
@@ -127,7 +147,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
       };
 
       const result = await (process.env.NEXT_PUBLIC_CHAT_AI_API === "openai"
-        ? axios.post<FileAgentResponse>(routes.api.chat.openai.completionsAPI(), options)
+        ? axios.post<FileAgentResponse>(routes.api.chat.openai.assistantsAPI(), options)
         : axios.post<FileAgentResponse>(routes.api.chat.googleai.completionsAPI(), options));
 
       console.log(result);
@@ -135,6 +155,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
       messageContext.deleteMessage(loadingMessage.id!);
 
       messageContext.appendMessage({ ...result.data.choices[0].message } as TextChatCompletionMessage);
+
+      const openAIThreadID = (result.data.choices[0].message.metadata as OpenAIAssistantMetadata)?.openai?.threadId;
+
+      if (openAIThreadID) {
+        authContext.setOpenAISessionID(openAIThreadID!);
+      }
     } catch (error) {
       console.log(error);
 
@@ -166,6 +192,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
     updateTextareaHeight,
     resetTextareaHeight,
     submit,
+    form,
   };
 
   return <FormContext.Provider value={props}>{children}</FormContext.Provider>;

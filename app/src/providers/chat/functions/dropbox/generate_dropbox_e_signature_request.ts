@@ -45,6 +45,7 @@ const generate_dropbox_e_signature_request = async (
     const result = await dropbox.createEmbeddedSignatureRequest(accessToken, embeddedSignatureRequestArgs, fileUrls);
 
     return {
+      logprobs: null,
       finish_reason: "function_call",
       index: 0,
       message: {

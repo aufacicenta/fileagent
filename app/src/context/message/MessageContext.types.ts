@@ -1,4 +1,4 @@
-import { ChatCompletionMessage } from "openai/resources/chat";
+import { ChatCompletionMessageParam } from "openai/resources/chat";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { SquareGetLocationsMetadata } from "providers/chat/functions/square/square.types";
@@ -27,7 +27,13 @@ export enum ChatLabel {
   chat_completion_error = "chat:completion:error",
 }
 
-export type ChatMessageBase = ChatCompletionMessage & {
+export type OpenAIAssistantMetadata = {
+  openai?: {
+    threadId?: string;
+  };
+};
+
+export type ChatMessageBase = ChatCompletionMessageParam & {
   id?: string;
   beforeContentComponent?: ReactNode;
   afterContentComponent?: ReactNode;
@@ -35,7 +41,8 @@ export type ChatMessageBase = ChatCompletionMessage & {
   readOnly?: boolean;
   type?: "text" | "file";
   label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
-  metadata?: SquareGetLocationsMetadata;
+  metadata?: SquareGetLocationsMetadata | OpenAIAssistantMetadata;
+  role: "user" | "assistant";
 };
 
 export type TextChatCompletionMessage = {

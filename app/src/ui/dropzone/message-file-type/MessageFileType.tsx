@@ -14,7 +14,7 @@ import { MessageFilTypeOptionsProps, MessageFileTypeProps } from "./MessageFileT
 export const MessageFileType = ({ message, className }: MessageFileTypeProps) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
-  const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+  const { simulationEnded } = useTypingSimulation(message.content as string, isSimulationEnabled, `#${message.id}`);
 
   const progress: number = useSubscription(0, message.file.progressObservable);
 

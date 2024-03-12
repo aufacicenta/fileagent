@@ -21,7 +21,7 @@ const convertFileAgentRequestMessagesToValidPrompt = (
   const inputMessages: Array<{ author: string; content: string }> = [];
 
   messages.reduce((acc, curr, index, arr) => {
-    inputMessages.push(curr);
+    inputMessages.push(curr as { author: string; content: string });
 
     const next = arr[index + 1];
 

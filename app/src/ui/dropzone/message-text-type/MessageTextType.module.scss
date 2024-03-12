@@ -2,6 +2,7 @@
 @import "src/ui/dropzone/mixins";
 
 .message-text-type {
+  @include role-text;
   @include avatar;
   @include content;
   @include options;

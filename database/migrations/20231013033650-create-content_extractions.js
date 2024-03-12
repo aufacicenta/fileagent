@@ -22,13 +22,15 @@ module.exports = {
         field: "content",
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: "created_at",
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: "updated_at",
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },

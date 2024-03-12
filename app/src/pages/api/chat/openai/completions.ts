@@ -13,8 +13,25 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
   try {
     logger.info(`getting chat completion from model ${openai.model}`);
 
-    const data: FileAgentRequest =
-      typeof request.body.body === "string" ? JSON.parse(request.body.body, json.reviver) : request.body.body;
+    const data: FileAgentRequest = (() => {
+      if (request.body?.currentMessageMetadata?.source === "messagebird") {
+        return {
+          ...request.body,
+          messages: [
+            {
+              role: "user",
+              content: "",
+            },
+          ],
+        };
+      }
+
+      if (typeof request.body.body === "string") {
+        return JSON.parse(request.body.body, json.reviver);
+      }
+
+      return request.body.body;
+    })();
 
     const chatCompletion = await openai.client.chat.completions.create({
       messages: [

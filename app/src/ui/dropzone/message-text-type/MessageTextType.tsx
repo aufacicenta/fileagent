@@ -4,7 +4,6 @@ import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 
 import { Typography } from "ui/typography/Typography";
-import { Icon } from "ui/icon/Icon";
 import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 import { LoadingSpinner } from "ui/icons/LoadingSpinner";
 import { Button } from "ui/button/Button";
@@ -12,6 +11,7 @@ import { useFormContext } from "context/form/useFormContext";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 import { DropboxESignLabel, SquareAPILabel } from "context/message/MessageContext.types";
 import date from "providers/date";
+import { SquareGetLocationsMetadata } from "providers/chat/functions/square/square.types";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
@@ -40,19 +40,21 @@ const marked = new Marked(
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
-  const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+  const { simulationEnded } = useTypingSimulation(message.content as string, isSimulationEnabled, `#${message.id}`);
 
   const formContext = useFormContext();
 
   const onClickEdit = () => {
-    formContext.setFieldValue(FormFieldNames.message, message.content!);
+    formContext.setFieldValue(FormFieldNames.message, message.content as string);
   };
 
   const onClickSearchSquareOrders = () => {
     formContext.setFieldValue(
       FormFieldNames.message,
       `Search my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
-        message.metadata?.locationIds ? message.metadata?.locationIds[0] : "LOCATION_ID"
+        (message.metadata as SquareGetLocationsMetadata)?.locationIds
+          ? (message.metadata as SquareGetLocationsMetadata)?.locationIds[0]
+          : "LOCATION_ID"
       }
 
 Tell me what's the most sold product:`,
@@ -90,14 +92,28 @@ Tell me what's the most sold product:`,
   return (
     <div className={clsx(styles["message-text-type"], className)}>
       <div>
-        <div className={styles["message-text-type__avatar"]}>
-          <div className={styles["message-text-type__avatar-box"]}>
-            {message.readOnly && !simulationEnded ? (
-              <LoadingSpinner className={styles["message-text-type__loading-spinner"]} />
-            ) : (
-              <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />
-            )}
-          </div>
+        <div className={styles["message-text-type__role-text"]}>
+          {message.readOnly && !simulationEnded ? (
+            <Typography.Description
+              flat
+              className={clsx({
+                [styles["message-text-type__role-text--user"]]: message.role === "user",
+                [styles["message-text-type__role-text--assistant"]]: message.role === "assistant",
+              })}
+            >
+              <LoadingSpinner className={styles["message-text-type__loading-spinner"]} /> Thinking
+            </Typography.Description>
+          ) : (
+            <Typography.Description
+              flat
+              className={clsx({
+                [styles["message-text-type__role-text--user"]]: message.role === "user",
+                [styles["message-text-type__role-text--assistant"]]: message.role === "assistant",
+              })}
+            >
+              {message.role === "user" ? "You" : "Assistant"}
+            </Typography.Description>
+          )}
         </div>
         <div className={styles["message-text-type__content"]}>
           {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}
@@ -106,7 +122,7 @@ Tell me what's the most sold product:`,
             <div
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
-                __html: marked.parse(message.content!, markedOptions) as string,
+                __html: marked.parse(message.content as string, markedOptions) as string,
               }}
             />
           ) : (

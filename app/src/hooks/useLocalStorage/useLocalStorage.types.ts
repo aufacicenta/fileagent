@@ -3,4 +3,5 @@ export enum LocalStorageKeys {
   threads = "threads",
   messages = "messages",
   theme = "theme",
+  openAISessionID = "openAISessionID",
 }

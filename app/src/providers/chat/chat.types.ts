@@ -15,9 +15,23 @@ export enum FunctionCallName {
   get_square_payments = "get_square_payments",
 }
 
+export enum FunctionToolCallName {
+  // Database
+  get_full_name = "get_full_name",
+}
+
+export type FunctionCallToolActionOutput = {
+  success: boolean;
+};
+
 export type ChatCompletionChoice = OpenAI.Chat.ChatCompletion.Choice & {
   message: ChatCompletionMessage &
     Pick<ChatContextMessage, "hasInnerHtml" | "type" | "label" | "readOnly" | "metadata">;
+};
+
+export type get_full_name_args = {
+  name?: string;
+  lastname?: string;
 };
 
 export type extract_content_from_pdf_file_args = {

@@ -21,7 +21,9 @@ export type AuthorizationContextType = {
   authItems: Array<AuthItem>;
   revokeAuth: (key: OAuthTokenStoreKey) => void;
   getGuestId: () => string | null;
+  getOpenAISessionID: () => string | undefined;
   generateGuestId: () => string;
+  setOpenAISessionID: (threadId: string) => void;
   verifyDropboxESignAuthorization: () => Promise<void>;
   verifySquareAPIAuthorization: () => Promise<void>;
 };

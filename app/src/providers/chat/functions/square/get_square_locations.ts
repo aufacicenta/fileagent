@@ -30,6 +30,7 @@ const get_square_locations = async (
 
     if (!response.result.locations) {
       return {
+        logprobs: null,
         finish_reason: "function_call",
         index: 0,
         message: {
@@ -42,6 +43,7 @@ const get_square_locations = async (
     }
 
     return {
+      logprobs: null,
       finish_reason: "function_call",
       index: 0,
       message: {

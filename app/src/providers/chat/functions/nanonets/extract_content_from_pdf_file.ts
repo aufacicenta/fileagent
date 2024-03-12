@@ -1,4 +1,4 @@
-import { FileAgentRequest } from "api/chat/types";
+import { APIChatHeaderKeyNames, FileAgentRequest } from "api/chat/types";
 import { CreateChatCompletionRequestMessage } from "openai/resources/chat";
 import { NextApiRequest } from "next";
 
@@ -19,7 +19,9 @@ const extract_content_from_pdf_file = async (
   try {
     const body = JSON.parse(request.body.body);
 
-    const bucketName = body.currentMessageMetadata?.bucketName;
+    const bucketName = request.body.headers[APIChatHeaderKeyNames.x_public_bucket_name]
+      ? (request.body.headers[APIChatHeaderKeyNames.x_public_bucket_name] as string)
+      : body.currentMessageMetadata?.bucketName;
 
     const fileName = args.file_name;
 

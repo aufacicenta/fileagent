@@ -47,6 +47,7 @@ const get_square_payments = async (
 
     if (!response.result.payments) {
       return {
+        logprobs: null,
         finish_reason: "function_call",
         index: 0,
         message: {
