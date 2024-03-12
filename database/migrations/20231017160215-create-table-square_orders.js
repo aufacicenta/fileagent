@@ -1,7 +1,7 @@
 const DataTypes = require("sequelize").DataTypes;
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("orders", {
+    await queryInterface.createTable("square_orders", {
       id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -73,17 +73,19 @@ module.exports = {
         type: DataTypes.JSONB,
         allowNull: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: "created_at",
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: "updated_at",
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("orders");
+    await queryInterface.dropTable("square_orders");
   },
 };

@@ -5,6 +5,7 @@ export class UserInfo extends Model<InferAttributes<UserInfo>, InferCreationAttr
   declare user_id: string;
   declare name: string;
   declare lastname: string;
+  declare messagebird_participant_id: string;
   declare created_at: CreationOptional<Date>;
   declare updated_at: CreationOptional<Date>;
 
@@ -28,6 +29,10 @@ export class UserInfo extends Model<InferAttributes<UserInfo>, InferCreationAttr
         lastname: {
           type: new DataTypes.STRING(128),
           allowNull: false,
+        },
+        messagebird_participant_id: {
+          type: DataTypes.STRING,
+          allowNull: true,
         },
         created_at: {
           type: DataTypes.DATE,

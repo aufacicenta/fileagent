@@ -1,7 +1,9 @@
+"use strict";
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("user_info", {
+    await queryInterface.createTable("user_session", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -22,15 +24,11 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      lastname: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       messagebird_participant_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      openai_thread_id: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -48,6 +46,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("user_info");
+    await queryInterface.dropTable("user_session");
   },
 };

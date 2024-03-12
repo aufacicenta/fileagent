@@ -4,13 +4,24 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("user_address", {
       id: {
-        type: Sequelize.UUIDV4,
-        allowNull: false,
+        type: Sequelize.UUID,
         primaryKey: true,
+        unique: true,
+        allowNull: false,
+        defaultValue: Sequelize.literal("gen_random_uuid()"),
       },
       user_id: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: {
+            tableName: "users",
+            schema: "auth",
+          },
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       country: {
         type: Sequelize.STRING,
@@ -33,12 +44,14 @@ module.exports = {
         allowNull: false,
       },
       created_at: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
