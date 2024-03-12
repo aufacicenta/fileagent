@@ -15,6 +15,9 @@ export type CurrentMessageMetadata = {
   messagebird?: {
     participantId?: string;
   };
+  openai?: {
+    threadId?: string;
+  };
 };
 
 export type FileAgentRequest = {

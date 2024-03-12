@@ -14,6 +14,7 @@ type RouteMap = {
       dropboxESign: () => string;
       openai: {
         completionsAPI: () => string;
+        assistantsAPI: () => string;
       };
       googleai: {
         completionsAPI: () => string;
@@ -47,6 +48,7 @@ export const routes: RouteMap = {
       dropboxESign: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/dropbox-e-sign`,
       openai: {
         completionsAPI: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/openai/completions`,
+        assistantsAPI: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/openai/assistant`,
       },
       googleai: {
         completionsAPI: () => `${process.env.NEXT_PUBLIC_ORIGIN}/api/chat/googleai/completions`,

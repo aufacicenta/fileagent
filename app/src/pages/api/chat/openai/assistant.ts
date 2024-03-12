@@ -7,8 +7,9 @@ import openai from "providers/openai";
 import { ChatLabel } from "context/message/MessageContext.types";
 import { FileAgentRequest } from "../types";
 import json from "providers/json";
-import supabase from "providers/supabase";
 import chat from "providers/chat";
+import { ChatCompletionChoice } from "providers/chat/chat.types";
+import sequelize from "providers/sequelize";
 
 export default async function Fn(request: NextApiRequest, response: NextApiResponse) {
   try {
@@ -26,26 +27,40 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       return request.body.body;
     })();
 
-    const user = await supabase.client
-      .from("user_contact")
-      .select("id, openai_thread_id, messagebird_participant_id")
-      .eq("messagebird_participant_id", data.currentMessageMetadata?.messagebird?.participantId);
+    const { UserSession } = await sequelize.load();
+
+    let userSession;
+
+    if (data.currentMessageMetadata?.messagebird?.participantId) {
+      userSession = await UserSession.findOne({
+        where: {
+          messagebird_participant_id: data.currentMessageMetadata?.messagebird?.participantId,
+        },
+      });
+    } else if (data.currentMessageMetadata?.openai?.threadId) {
+      userSession = await UserSession.findOne({
+        where: {
+          openai_thread_id: data.currentMessageMetadata?.openai?.threadId,
+        },
+      });
+    } else {
+      userSession = UserSession.build();
+    }
 
     let thread: Thread;
 
-    if (!user.error && user.data.length === 0) {
+    if (!userSession?.openai_thread_id) {
       thread = await openai.client.beta.threads.create();
 
-      const { error } = await supabase.client.from("user_contact").insert({
-        messagebird_participant_id: data.currentMessageMetadata?.messagebird?.participantId,
-        openai_thread_id: thread.id,
-      });
+      userSession?.set("openai_thread_id", thread.id);
 
-      if (error) {
-        throw new Error(error.message);
+      if (data.currentMessageMetadata?.messagebird?.participantId) {
+        userSession?.set("messagebird_participant_id", data.currentMessageMetadata?.messagebird?.participantId);
       }
+
+      await userSession?.save();
     } else {
-      thread = await openai.client.beta.threads.retrieve(user.data![0].openai_thread_id);
+      thread = await openai.client.beta.threads.retrieve(userSession.openai_thread_id);
     }
 
     await openai.client.beta.threads.messages.create(thread.id, {
@@ -123,10 +138,15 @@ Categoría:
             content: (messages.data[0].content[0] as MessageContentText).text.value,
             label: ChatLabel.chat_completion_success,
             type: "text",
+            metadata: {
+              openai: {
+                threadId: thread.id,
+              },
+            },
           },
         },
       ],
-    });
+    } as { choices: ChatCompletionChoice[] });
   } catch (error) {
     logger.error(error);
 

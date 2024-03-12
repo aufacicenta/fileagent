@@ -8,7 +8,11 @@ import { useRouter } from "next/router";
 
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatFormValues, FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
-import { ChatContextMessage, TextChatCompletionMessage } from "context/message/MessageContext.types";
+import {
+  ChatContextMessage,
+  OpenAIAssistantMetadata,
+  TextChatCompletionMessage,
+} from "context/message/MessageContext.types";
 import { useRoutes } from "hooks/useRoutes/useRoutes";
 import { useAuthorizationContext } from "context/authorization/useAuthorizationContext";
 import { useFileContext } from "context/file/useFileContext";
@@ -62,6 +66,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
 
   useEffect(() => {
     setCurrentMessageMetadata({ bucketName: fileContext.getStorageBucketName() });
+  }, []);
+
+  useEffect(() => {
+    if (authContext.getOpenAISessionID()) {
+      setCurrentMessageMetadata((prev) => ({ ...prev, openai: { threadId: authContext.getOpenAISessionID() } }));
+    }
   }, []);
 
   const setFieldValue = (field: string, text: string) => {
@@ -137,7 +147,7 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
       };
 
       const result = await (process.env.NEXT_PUBLIC_CHAT_AI_API === "openai"
-        ? axios.post<FileAgentResponse>(routes.api.chat.openai.completionsAPI(), options)
+        ? axios.post<FileAgentResponse>(routes.api.chat.openai.assistantsAPI(), options)
         : axios.post<FileAgentResponse>(routes.api.chat.googleai.completionsAPI(), options));
 
       console.log(result);
@@ -145,6 +155,12 @@ export const FormContextController = ({ children }: FormContextControllerProps) 
       messageContext.deleteMessage(loadingMessage.id!);
 
       messageContext.appendMessage({ ...result.data.choices[0].message } as TextChatCompletionMessage);
+
+      const openAIThreadID = (result.data.choices[0].message.metadata as OpenAIAssistantMetadata)?.openai?.threadId;
+
+      if (openAIThreadID) {
+        authContext.setOpenAISessionID(openAIThreadID!);
+      }
     } catch (error) {
       console.log(error);
 

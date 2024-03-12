@@ -25,6 +25,10 @@ export const DropboxChatContainer = () => {
   }, []);
 
   const onSubmit = async (values: ChatFormValues) => {
+    if (!values.message) {
+      return;
+    }
+
     formContext.submit(values);
   };
 

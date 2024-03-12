@@ -27,6 +27,12 @@ export enum ChatLabel {
   chat_completion_error = "chat:completion:error",
 }
 
+export type OpenAIAssistantMetadata = {
+  openai?: {
+    threadId?: string;
+  };
+};
+
 export type ChatMessageBase = ChatCompletionMessageParam & {
   id?: string;
   beforeContentComponent?: ReactNode;
@@ -35,7 +41,7 @@ export type ChatMessageBase = ChatCompletionMessageParam & {
   readOnly?: boolean;
   type?: "text" | "file";
   label?: DropboxESignLabel | ChatLabel | SquareAPILabel;
-  metadata?: SquareGetLocationsMetadata;
+  metadata?: SquareGetLocationsMetadata | OpenAIAssistantMetadata;
   role: "user" | "assistant";
 };
 

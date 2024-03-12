@@ -12,6 +12,7 @@ import { useFormContext } from "context/form/useFormContext";
 import { FormFieldNames } from "app/chat/dropbox-chat/DropboxChat.types";
 import { DropboxESignLabel, SquareAPILabel } from "context/message/MessageContext.types";
 import date from "providers/date";
+import { SquareGetLocationsMetadata } from "providers/chat/functions/square/square.types";
 
 import { MessageTextTypeProps } from "./MessageTextType.types";
 import styles from "./MessageTextType.module.scss";
@@ -52,7 +53,9 @@ export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, class
     formContext.setFieldValue(
       FormFieldNames.message,
       `Search my Square orders of ${date.now().format("MMMM YYYY")}, for location id: ${
-        message.metadata?.locationIds ? message.metadata?.locationIds[0] : "LOCATION_ID"
+        (message.metadata as SquareGetLocationsMetadata)?.locationIds
+          ? (message.metadata as SquareGetLocationsMetadata)?.locationIds[0]
+          : "LOCATION_ID"
       }
 
 Tell me what's the most sold product:`,

@@ -31,7 +31,9 @@ export const Navbar: React.FC<NavbarProps> = ({ className }) => {
               </div>
             </div>
           </Grid.Col>
-          <Grid.Col lg={4} sm={4} xs={4} />
+          <Grid.Col lg={4} sm={4} xs={4}>
+            <div />
+          </Grid.Col>
           <Grid.Col lg={4} sm={4} xs={4}>
             <div className={styles.navbar__right}>
               <div className={styles["navbar__right--item"]} />

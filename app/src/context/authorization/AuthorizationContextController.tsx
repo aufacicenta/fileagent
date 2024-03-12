@@ -23,6 +23,10 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
 
   const ls = useLocalStorage();
 
+  const setOpenAISessionID = (threadId: string) => {
+    ls.set(LocalStorageKeys.openAISessionID, threadId);
+  };
+
   const generateGuestId = () => {
     const id = `guest-${uuidv4().slice(0, 4)}`;
 
@@ -32,6 +36,7 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
   };
 
   const getGuestId = () => ls.get<string>(LocalStorageKeys.guestId);
+  const getOpenAISessionID = () => ls.get<string>(LocalStorageKeys.openAISessionID) || undefined;
 
   const revokeAuth = (key: OAuthTokenStoreKey) => {
     Cookies.remove(key);
@@ -98,9 +103,11 @@ export const AuthorizationContextController = ({ children }: AuthorizationContex
     verifySquareAPIAuthorization,
     accessTokens,
     getGuestId,
+    getOpenAISessionID,
     generateGuestId,
     authItems,
     revokeAuth,
+    setOpenAISessionID,
   };
 
   return <AuthorizationContext.Provider value={props}>{children}</AuthorizationContext.Provider>;
