@@ -18,6 +18,7 @@ const transformGoogleAIPredictionResponseToStandardChoice = (
     }
 
     const choice: OpenAI.Chat.ChatCompletion.Choice = {
+      logprobs: null,
       index: 0,
       finish_reason: "stop",
       message: {
@@ -39,6 +40,7 @@ const transformGoogleAIPredictionResponseToStandardChoice = (
     const { function_call } = JSON.parse(content);
 
     const choice: OpenAI.Chat.ChatCompletion.Choice = {
+      logprobs: null,
       index: 0,
       finish_reason: "function_call",
       message: {
@@ -58,6 +60,7 @@ const transformGoogleAIPredictionResponseToStandardChoice = (
     logger.error("Content is not a function call. Continue with default content.");
 
     const choice: OpenAI.Chat.ChatCompletion.Choice = {
+      logprobs: null,
       index: 0,
       finish_reason: "stop",
       message: {

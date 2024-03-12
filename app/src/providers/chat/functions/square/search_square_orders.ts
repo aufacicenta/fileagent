@@ -50,6 +50,7 @@ const search_square_orders = async (
 
     if (!response.result.orders) {
       return {
+        logprobs: null,
         finish_reason: "function_call",
         index: 0,
         message: {

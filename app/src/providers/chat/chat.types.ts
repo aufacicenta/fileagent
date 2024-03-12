@@ -5,8 +5,6 @@ import { ChatCompletionMessage } from "openai/resources/chat";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 
 export enum FunctionCallName {
-  // Database
-  get_full_name = "get_full_name",
   // Nanonets
   extract_content_from_pdf_file = "extract_content_from_pdf_file",
   // Dropbox
@@ -15,6 +13,11 @@ export enum FunctionCallName {
   get_square_locations = "get_square_locations",
   search_square_orders = "search_square_orders",
   get_square_payments = "get_square_payments",
+}
+
+export enum FunctionToolCallName {
+  // Database
+  get_full_name = "get_full_name",
 }
 
 export type FunctionCallToolActionOutput = {

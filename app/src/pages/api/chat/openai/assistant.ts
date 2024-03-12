@@ -60,11 +60,12 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
 
     await openai.client.beta.threads.messages.create(thread.id, {
       role: "user",
-      content: data.currentMessage.content!,
+      content: data.currentMessage.content as string,
     });
 
     const run = await openai.client.beta.threads.runs.create(thread.id, {
       assistant_id: assistant.id,
+      // TODO pass the data that's already been collected
       instructions: `Eres un asistente que pide información básica para crear una base de datos de proveedores.
 
 Esta es la información que debes consultar y recolectar una por una (IMPORTANTE que sea una por una) para no abrumar al proveedor:
@@ -87,10 +88,11 @@ Categoría:
     });
 
     const runStatusCompleted = () =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         const interval = setInterval(async () => {
           const currentRun = await openai.client.beta.threads.runs.retrieve(thread.id, run.id);
 
+          // TODO data gets inserted multiple times, we need to wait somehow
           if (currentRun.status === "requires_action") {
             const requiredActions = currentRun.required_action?.submit_tool_outputs.tool_calls;
 
@@ -102,7 +104,7 @@ Categoría:
 
             resolve(currentRun);
           }
-        }, 500);
+        }, 1000);
       });
 
     await runStatusCompleted();

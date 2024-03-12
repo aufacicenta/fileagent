@@ -5,18 +5,18 @@ import { Thread } from "openai/resources/beta/threads/threads";
 
 import openai from "providers/openai";
 
-import { FunctionCallName, get_full_name_args, FunctionCallToolActionOutput } from "./chat.types";
+import { get_full_name_args, FunctionCallToolActionOutput, FunctionToolCallName } from "./chat.types";
 import insert_full_name from "./functions/database/insert_full_name";
 
 const functions: Record<
-  FunctionCallName,
+  FunctionToolCallName,
   (
     args: get_full_name_args,
     agentRequest: FileAgentRequest,
     request: NextApiRequest,
   ) => Promise<FunctionCallToolActionOutput>
 > = {
-  [FunctionCallName.get_full_name]: (
+  [FunctionToolCallName.get_full_name]: (
     args: get_full_name_args,
     agentRequest: FileAgentRequest,
     request: NextApiRequest,
@@ -33,7 +33,7 @@ const processFunctionToolCalls = (
   actions.forEach(async (action) => {
     const { arguments: args, name } = action.function;
 
-    const output = await functions[name as FunctionCallName](
+    const output = await functions[name as FunctionToolCallName](
       typeof args === "object" ? args : (JSON.parse(args) as any),
       agentRequest,
       request,

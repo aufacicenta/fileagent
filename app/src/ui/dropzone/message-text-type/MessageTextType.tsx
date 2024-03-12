@@ -40,12 +40,12 @@ const marked = new Marked(
 export const MessageTextType: React.FC<MessageTextTypeProps> = ({ message, className }) => {
   const isSimulationEnabled = message.role === "assistant" && !message.hasInnerHtml;
 
-  const { simulationEnded } = useTypingSimulation(message.content, isSimulationEnabled, `#${message.id}`);
+  const { simulationEnded } = useTypingSimulation(message.content as string, isSimulationEnabled, `#${message.id}`);
 
   const formContext = useFormContext();
 
   const onClickEdit = () => {
-    formContext.setFieldValue(FormFieldNames.message, message.content!);
+    formContext.setFieldValue(FormFieldNames.message, message.content as string);
   };
 
   const onClickSearchSquareOrders = () => {
@@ -106,7 +106,7 @@ Tell me what's the most sold product:`,
             <div
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
-                __html: marked.parse(message.content!, markedOptions) as string,
+                __html: marked.parse(message.content as string, markedOptions) as string,
               }}
             />
           ) : (
