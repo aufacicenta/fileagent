@@ -2,6 +2,24 @@
 @import "src/ui/table/variables";
 @import "src/ui/table/mixins";
 
+@mixin role-text {
+  &__role-text {
+    display: flex;
+    padding-left: $space-default;
+
+    p {
+      font-weight: $font-weight-bold;
+    }
+
+    &--user {
+      color: var(--color-primary);
+    }
+
+    &--assistant {
+      color: var(--color-secondary);
+    }
+  }
+}
 @mixin avatar {
   &__avatar {
     padding: $space-default;

@@ -4,7 +4,6 @@ import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 
 import { Typography } from "ui/typography/Typography";
-import { Icon } from "ui/icon/Icon";
 import { useTypingSimulation } from "hooks/useTypingSimulation/useTypingSimulation";
 import { LoadingSpinner } from "ui/icons/LoadingSpinner";
 import { Button } from "ui/button/Button";
@@ -93,14 +92,28 @@ Tell me what's the most sold product:`,
   return (
     <div className={clsx(styles["message-text-type"], className)}>
       <div>
-        <div className={styles["message-text-type__avatar"]}>
-          <div className={styles["message-text-type__avatar-box"]}>
-            {message.readOnly && !simulationEnded ? (
-              <LoadingSpinner className={styles["message-text-type__loading-spinner"]} />
-            ) : (
-              <Icon name={message.role === "user" ? "icon-user" : "icon-brain"} />
-            )}
-          </div>
+        <div className={styles["message-text-type__role-text"]}>
+          {message.readOnly && !simulationEnded ? (
+            <Typography.Description
+              flat
+              className={clsx({
+                [styles["message-text-type__role-text--user"]]: message.role === "user",
+                [styles["message-text-type__role-text--assistant"]]: message.role === "assistant",
+              })}
+            >
+              <LoadingSpinner className={styles["message-text-type__loading-spinner"]} /> Thinking
+            </Typography.Description>
+          ) : (
+            <Typography.Description
+              flat
+              className={clsx({
+                [styles["message-text-type__role-text--user"]]: message.role === "user",
+                [styles["message-text-type__role-text--assistant"]]: message.role === "assistant",
+              })}
+            >
+              {message.role === "user" ? "You" : "Assistant"}
+            </Typography.Description>
+          )}
         </div>
         <div className={styles["message-text-type__content"]}>
           {message.beforeContentComponent && simulationEnded && message.beforeContentComponent}

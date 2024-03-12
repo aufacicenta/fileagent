@@ -34,6 +34,7 @@
       @extend .z-depth-1;
       padding: $space-default;
       padding-bottom: $space-l;
+      padding-left: $navbar-height;
       background-color: white;
     }
 
@@ -93,16 +94,17 @@
     position: relative;
     height: calc(100vh - $navbar-height * 1.5);
     border-top-left-radius: $border-radius-card;
+    padding-top: $navbar-height;
     padding-bottom: 280px;
     overflow-y: scroll;
     background-color: white;
 
     &--item {
       border-bottom: 1px solid var(--color-horizontal-line-background);
+      padding-left: $navbar-height;
 
       > div {
         @include width;
-        display: flex;
         padding-top: $space-m;
       }
 

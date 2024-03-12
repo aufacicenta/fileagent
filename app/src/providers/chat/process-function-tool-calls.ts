@@ -4,6 +4,7 @@ import { RequiredActionFunctionToolCall, Run } from "openai/resources/beta/threa
 import { Thread } from "openai/resources/beta/threads/threads";
 
 import openai from "providers/openai";
+import logger from "providers/logger";
 
 import { get_full_name_args, FunctionCallToolActionOutput, FunctionToolCallName } from "./chat.types";
 import insert_full_name from "./functions/database/insert_full_name";
@@ -31,22 +32,35 @@ const processFunctionToolCalls = (
   run: Run,
 ) => {
   actions.forEach(async (action) => {
-    const { arguments: args, name } = action.function;
+    try {
+      const { arguments: args, name } = action.function;
 
-    const output = await functions[name as FunctionToolCallName](
-      typeof args === "object" ? args : (JSON.parse(args) as any),
-      agentRequest,
-      request,
-    );
+      const output = await functions[name as FunctionToolCallName](
+        typeof args === "object" ? args : (JSON.parse(args) as any),
+        agentRequest,
+        request,
+      );
 
-    await openai.client.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
-      tool_outputs: [
-        {
-          tool_call_id: action.id,
-          output: JSON.stringify(output),
-        },
-      ],
-    });
+      await openai.client.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
+        tool_outputs: [
+          {
+            tool_call_id: action.id,
+            output: JSON.stringify(output),
+          },
+        ],
+      });
+    } catch (error) {
+      logger.error(error);
+
+      await openai.client.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
+        tool_outputs: [
+          {
+            tool_call_id: action.id,
+            output: JSON.stringify({ success: false, error: (error as Error).message }),
+          },
+        ],
+      });
+    }
   });
 };
 
