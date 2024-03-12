@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 
 import { Card } from "ui/card/Card";
 import { Button } from "ui/button/Button";
-import { Dropzone } from "ui/dropzone/Dropzone";
 import { useMessageContext } from "context/message/useMessageContext";
 import { ChatContextMessage } from "context/message/MessageContext.types";
 import { MessageFileType } from "ui/dropzone/message-file-type/MessageFileType";
@@ -89,39 +88,35 @@ export const DropboxChat: React.FC<DropboxChatProps> = ({ className, onSubmit })
     <form onSubmit={onSubmit} className={clsx(styles["dropbox-chat"], className)}>
       <div className={styles["dropbox-chat__messages"]} id="messages">
         {messages.map((message) => getMessageTypeComponent(message))}
-      </div>
 
-      <div className={styles["dropbox-chat__textarea"]}>
-        <div className={styles["dropbox-chat__textarea--actions"]}>
-          <Button variant="text" color="secondary" size="s" onClick={clearMessages}>
-            Clear
-          </Button>
-          <Button variant="text" color="secondary" size="s" onClick={saveMessageThread}>
-            Save this thread
-          </Button>
+        <div className={styles["dropbox-chat__textarea"]}>
+          <div className={styles["dropbox-chat__textarea--actions"]}>
+            <Button variant="text" color="secondary" size="s" onClick={clearMessages}>
+              Clear
+            </Button>
+            <Button variant="text" color="secondary" size="s" onClick={saveMessageThread}>
+              Save this thread
+            </Button>
+          </div>
+          <Card className={styles["dropbox-chat__textarea--card"]} shadow>
+            <Card.Content className={styles["dropbox-chat__textarea--card-content"]}>
+              <Field
+                name={FormFieldNames.message}
+                component="textarea"
+                className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
+                id="message"
+                onKeyDown={onKeyDown}
+                placeholder="Type your message here..."
+                disabled={actions.isProcessingRequest}
+              />
+              <div className={styles["dropbox-chat__textarea--card-actions-button"]}>
+                <Button type="submit" disabled={actions.isProcessingRequest}>
+                  Send
+                </Button>
+              </div>
+            </Card.Content>
+          </Card>
         </div>
-        <Card className={styles["dropbox-chat__textarea--card"]} shadow>
-          <Card.Content>
-            <Field
-              name={FormFieldNames.message}
-              component="textarea"
-              className={clsx(styles["dropbox-chat__textarea--card-field"], "input-field", "materialize-textarea")}
-              id="message"
-              onKeyDown={onKeyDown}
-              placeholder="Type your message here..."
-              disabled={actions.isProcessingRequest}
-            />
-          </Card.Content>
-          <Card.Actions className={styles["dropbox-chat__textarea--card-actions"]}>
-            <Dropzone />
-
-            <div className={styles["dropbox-chat__textarea--card-actions-button"]}>
-              <Button type="submit" disabled={actions.isProcessingRequest}>
-                Send
-              </Button>
-            </div>
-          </Card.Actions>
-        </Card>
       </div>
     </form>
   );

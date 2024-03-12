@@ -10,7 +10,6 @@ import { FormContextController } from "context/form/FormContextController";
 import { Navbar } from "ui/fileagent/navbar/Navbar";
 import { AuthorizationContextController } from "context/authorization/AuthorizationContextController";
 import { ThemeContextController } from "context/theme/ThemeContextController";
-import { ChatSidebar } from "ui/fileagent/chat-sidebar/ChatSidebar";
 import { ChatSidebarContextController } from "context/chat-sidebar/ChatSidebarContextController";
 import { Sheet } from "ui/shadcn/sheet/Sheet";
 
@@ -43,11 +42,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
                       <Sheet>
                         <Navbar />
 
-                        <MainPanel>
-                          <ChatSidebar />
-
-                          {children}
-                        </MainPanel>
+                        <MainPanel>{children}</MainPanel>
                       </Sheet>
                     </div>
                   </FormContextController>

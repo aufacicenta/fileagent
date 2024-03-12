@@ -5,21 +5,23 @@
 @mixin width {
   @include atLargeTablet {
     max-width: 50vw;
-    margin: 0 auto;
   }
 }
 
 .dropbox-chat {
   position: relative;
   display: block;
-  min-height: 100vh;
+  height: 100vh;
+  padding-top: $navbar-height * 1.5;
+  padding-left: $navbar-height * 1.5;
+  background-color: var(--color-background);
 
   &__textarea {
     @include atLargeTablet {
       padding: $space-l;
       padding-top: 0;
     }
-    position: fixed;
+    position: absolute;
     right: 0;
     bottom: 0;
     left: 0;
@@ -27,7 +29,7 @@
     border-top: 1px solid var(--color-horizontal-line-background);
     padding: $space-default;
     padding-top: 0;
-    background-color: var(--color-background);
+    background-color: white;
 
     &--actions {
       @include width;
@@ -42,6 +44,11 @@
 
     &--card {
       @include width;
+      background-color: var(--color-background);
+    }
+
+    &--card-content {
+      display: flex;
     }
 
     &--card-actions {
@@ -55,6 +62,9 @@
         @include atLargeTablet {
           margin-left: $space-default;
         }
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         margin-left: auto;
       }
     }
@@ -63,19 +73,23 @@
       min-height: 63px;
       padding: $space-default !important;
       font-size: $input-font-size !important;
-      background-color: var(--color-market-card-background);
+      background-color: var(--color-input-background);
       transition: height 0.2s ease-in-out;
     }
   }
 
   &__messages {
     @include atLargeTablet {
-      padding-top: $navbar-height;
       padding-bottom: 270px;
     }
-    padding-top: $navbar-height-mobile;
+
+    @extend .z-depth-1;
+    position: relative;
+    height: calc(100vh - $navbar-height * 1.5);
+    border-top-left-radius: $border-radius-card;
     padding-bottom: 280px;
     overflow-y: scroll;
+    background-color: white;
 
     &--item {
       border-bottom: 1px solid var(--color-horizontal-line-background);
@@ -84,10 +98,6 @@
         @include width;
         display: flex;
         padding-top: $space-m;
-      }
-
-      &:nth-child(odd) {
-        background-color: var(--color-background-contrast);
       }
 
       &:last-child {

@@ -16,15 +16,7 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
 
     const data: FileAgentRequest = (() => {
       if (request.body?.currentMessageMetadata?.source === "messagebird") {
-        return {
-          ...request.body,
-          messages: [
-            {
-              role: "user",
-              content: "",
-            },
-          ],
-        };
+        return request.body;
       }
 
       if (typeof request.body.body === "string") {
@@ -38,8 +30,6 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       .from("user_contact")
       .select("id, openai_thread_id, messagebird_participant_id")
       .eq("messagebird_participant_id", data.currentMessageMetadata?.messagebird?.participantId);
-
-    const assistant = await openai.client.beta.assistants.retrieve("asst_Ukvy8hXlI6s0uR36XLQO3vrN");
 
     let thread: Thread;
 
@@ -62,6 +52,8 @@ export default async function Fn(request: NextApiRequest, response: NextApiRespo
       role: "user",
       content: data.currentMessage.content as string,
     });
+
+    const assistant = await openai.client.beta.assistants.retrieve("asst_Ukvy8hXlI6s0uR36XLQO3vrN");
 
     const run = await openai.client.beta.threads.runs.create(thread.id, {
       assistant_id: assistant.id,
